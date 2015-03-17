@@ -13,7 +13,7 @@
       $scope.numberOfPages  = ->
         Math.ceil $scope.servers.length / $scope.pageSize
 
-      #$timeout tick, 10 * 1000
+      $timeout tick, 10 * 1000
 
   $scope.disabled = (server) ->
     server.state != 'on' && server.state != 'off'    

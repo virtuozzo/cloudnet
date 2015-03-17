@@ -196,18 +196,18 @@ ActiveRecord::Schema.define(version: 20150304163844) do
 
   create_table "invoices", force: :cascade do |t|
     t.integer  "account_id"
-    t.string   "vat_number",      limit: 255
+    t.string   "vat_number",          limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.boolean  "vat_exempt"
     t.integer  "sequential_id"
-    t.string   "state",           limit: 255, default: "unpaid"
-    t.string   "tax_code",        limit: 255
+    t.string   "state",               limit: 255, default: "unpaid"
+    t.string   "tax_code",            limit: 255
     t.text     "billing_address"
     t.integer  "coupon_id"
-    t.string   "invoice_type",    limit: 255
-    t.boolean  "transactions_capped", default: true
+    t.string   "invoice_type",        limit: 255
+    t.boolean  "transactions_capped",             default: true
   end
 
   add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
@@ -241,15 +241,6 @@ ActiveRecord::Schema.define(version: 20150304163844) do
     t.integer  "max_index_bandwidth",             default: 0
     t.float    "max_index_uptime",                default: 0.0
     t.datetime "deleted_at"
-    t.string   "photo_ids"
-    t.integer  "index_cpu",           default: 0
-    t.integer  "index_iops",          default: 0
-    t.integer  "index_bandwidth",     default: 0
-    t.decimal  "price_ip_address",    default: 0.0
-    t.boolean  "budget_vps",          default: false
-    t.integer  "inclusive_bandwidth", default: 100
-    t.boolean  "ssd_disks",           default: false
-
   end
 
   add_index "locations", ["country"], name: "index_locations_on_country", using: :btree
@@ -409,7 +400,7 @@ ActiveRecord::Schema.define(version: 20150304163844) do
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255
     t.string   "identifier",      limit: 255
-    t.integer  "hourly_cost",                 default: 1
+    t.integer  "hourly_cost",     limit: 8,   default: 1
     t.string   "name",            limit: 255
     t.integer  "location_id"
     t.datetime "created_at"
@@ -485,8 +476,8 @@ ActiveRecord::Schema.define(version: 20150304163844) do
     t.integer  "storage_max",                          default: 120
     t.integer  "bandwidth_max",                        default: 1024
     t.datetime "deleted_at"
-    t.boolean  "suspended",                            default: false
     t.integer  "account_id"
+    t.boolean  "suspended",                            default: false
     t.string   "otp_auth_secret",          limit: 255
     t.string   "otp_recovery_secret",      limit: 255
     t.boolean  "otp_enabled",                          default: false,     null: false
