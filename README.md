@@ -1,4 +1,4 @@
-[ ![Codeship Status for onapp/cloudnet-cp](https://codeship.com/projects/60dc88f0-5d41-0132-4110-6a9a57a3d30a/status)](https://codeship.com/projects/51043)
+[ ![Codeship Status for OnApp/cloudnet](https://codeship.com/projects/6e11e150-aeee-0132-a36c-2a23891ee2d0/status?branch=master)](https://codeship.com/projects/69018)
 
 #Control Panel for Cloud.net
 
