@@ -1,0 +1,8 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    - if !@location.budget_vps?
+      %h2.jg-icon.icon-wallet.pure-u= "Packages for #{@location} (Customisable on the next step)" 
+    - else
+      %h2.jg-icon.icon-wallet.pure-u= "Packages for #{@location}" 
+  .jg-widget-body
+    = render "server_wizards/steps/partials/resource_packages", packages: @packages

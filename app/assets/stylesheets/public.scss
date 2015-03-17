@@ -1,0 +1,41 @@
+// Place all the styles related to the public controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "partials/base";
+
+body.public-main{background: none;}
+.public-layout{
+  width: 100%;
+  //background: #f7f7f7;
+  .jg-bring-to-front{z-index: 2;}
+  h2{
+    font-family: $public-font;
+    font-size: 2em;
+    font-weight: 600;
+    color: $public-blue-header;
+    @media (max-width: $container-med) {
+      font-size: 1.5em;
+    }
+  }
+  h3{
+    font-family: $public-font;
+    color: $public-subheader;
+    line-height: 165%;
+    margin-bottom: 30px;
+    font-weight: normal;
+    @media (max-width: $container-med) {
+      line-height: 120%;
+      font-size: 1.1em;
+    }
+  }
+  p{
+    font-family: $public-font;
+    color: $public-paragraph;
+    line-height: 155%;
+    font-weight: normal;
+    @media (max-width: $container-med) {
+      line-height: 140%;
+      font-size: 1em;
+    }
+  }
+}

@@ -1,0 +1,2 @@
+<% admin = User.with_deleted.find(activity.parameters[:admin]) %>
+<%= link_to admin.full_name, admin_user_path(admin) %> (IP: <%= activity.parameters[:ip] %>) logged in as user

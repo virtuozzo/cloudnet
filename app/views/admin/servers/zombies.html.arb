@@ -1,0 +1,16 @@
+table_for assigns[:zombies] do
+  column "id"
+  column "label"
+  column "hostname"
+  column "identifier" do |zombie|
+    link_to zombie["identifier"], "#{ONAPP_CP[:uri]}/virtual_machines/#{zombie["identifier"]}"
+  end
+  column "ip" do |zombie|
+    if zombie["ip_addresses"].length >= 1
+      zombie["ip_addresses"].first["ip_address"]["address"]
+    end
+  end
+  column "location" do |zombie|
+    zombie["self"].location.to_s
+  end
+end

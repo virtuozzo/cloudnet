@@ -1,0 +1,43 @@
+%section.main-transparency
+  .container
+    .pure-g
+      .pure-u-1-3
+        %h2= t('public.transp_head')
+      .pure-u-2-3
+        %p#top-message= t('public.transp_par1')
+    .pure-g
+      .pure-u-1-2
+        .graph-text-wrapper
+          .line-right
+          #graph1=image_tag('main/uptimegraph.png', class: "pure-img")
+          #circle1.circle-small
+      .pure-u-1-2
+        #text1.head= t('public.transp_note1')
+        #graph2= image_tag('main/worldmapdark.png', class: "pure-img")
+    .pure-g
+      .pure-u-1-2
+        #text2
+          .head= t('public.transp_n2_head')
+          .note= t('public.transp_note2')
+      .pure-u-1-12
+        .empty-line
+          #circle2.circle-small
+          #circle3.circle-small
+      .pure-u-5-12
+        .graph-text-wrapper
+          .line-left
+          #text3
+            .head= t('public.transp_n3_head')
+            .note= t('public.transp_note3')
+    .pure-g
+      .pure-u-5-12
+        #graph3= image_tag('main/hextarget.png', class: "pure-img")
+      .pure-u-1-6
+        .text-wrapper
+          #text4.note= t('public.transp_note4')
+          #circle4.circle-small
+      .pure-u-5-12
+        #graph4= image_tag('main/pricecomp.png', class: "pure-img")
+    .pure-g
+      .pure-u-7-12
+        #text5.head= t('public.transp_note5')

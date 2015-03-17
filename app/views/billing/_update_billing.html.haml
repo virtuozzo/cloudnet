@@ -1,0 +1,17 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-tickets Update Billing
+
+  = form_tag update_billing_billing_index_path,  role: 'form', class: 'jg-billing-form' do
+    .jg-widget-body.pure-u-1
+      .jg-widget-form.pure-g-r.clearfix
+        .form-group.jg-inline.pure-g-r.clearfix
+          .pure-u-1.pure-u-md-1-2
+            = label_tag :billing_country, 'Billing Country (determined by your primary card)', class: 'pure-u-1'
+            = text_field_tag :billing_country, country_name(account.billing_country), disabled: true, class: 'form-control'
+          .pure-u-1.pure-u-md-1-2
+            = label_tag :vat_number, 'EU VAT Number', class: 'pure-u-1'
+            = text_field_tag :vat_number, account.vat_number, class: 'form-control'
+    .jg-widget-footer.actions.clearfix
+      %ul.jg-widget-controls
+        %li= button_tag 'Update Billing Account', class: 'btn jg-submit-button'

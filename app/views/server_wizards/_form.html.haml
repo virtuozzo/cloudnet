@@ -1,0 +1,10 @@
+= form_for @wizard_object, url: @wizard_object.submission_path do |f|
+  - if @wizard_object.errors.any?
+    %div.alert.alert-danger
+      %a.close{href: "#", data: {dismiss: "alert"}} &times;
+      %strong Error: 
+      = @wizard_object.errors.full_messages.join(', ')
+
+  - unless params[:all]
+    = f.hidden_field :current_step, value: @wizard_object.current_step
+    = render "server_wizards/steps/#{@wizard_object.current_step_name}", f: f

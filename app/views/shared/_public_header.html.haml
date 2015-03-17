@@ -1,0 +1,26 @@
+#main-menu.pure-g
+  %header.pure-u-1-1
+    %nav.navbar.navbar-default.navbar-static-top{role: "navigation"}
+      .container-fluid
+        %ul.jg-color-row
+          %li
+          %li
+          %li
+          %li
+          %li
+      .container
+        .navbar-header
+          = link_to 'Cloud.net', root_path, {class: 'navbar-brand', id: 'logo'}
+        %ul.nav.navbar-nav.list-unstyled
+          %li
+            =link_to 'FEATURES', public_features_path
+          %li
+            =link_to 'BLOG', "http://blog.cloud.net/"
+          %li
+            =link_to 'FAQ', 'http://feedback.cloud.net/knowledge-base'
+          %li
+            =link_to 'CONTACT', root_path
+        %a.btn.navbar-btn.navbar-right{type: "button",
+                href: new_user_registration_path} Sign up
+        %a.btn.navbar-btn.navbar-right{type: "button",
+                href: new_user_session_path} Login

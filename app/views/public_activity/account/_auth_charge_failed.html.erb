@@ -1,0 +1,2 @@
+<% card = BillingCard.with_deleted.find(activity.parameters[:card]) %>
+Authorize charge failed on Card ID: <%= card.id %> (Last 4: <%= card.last4 %>) for <%= Invoice.pretty_total(activity.parameters[:amount]) %>. Reason: <%= activity.parameters[:reason] %>

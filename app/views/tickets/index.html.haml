@@ -1,0 +1,38 @@
+- breadcrumb :tickets
+- title "Tickets"
+
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-tickets Tickets
+    %ul.pure-u-1-2.jg-widget-controls
+      %li= link_to 'New Ticket', new_ticket_path, {class: 'jg-button-lilac jg-new-button'}
+  .jg-widget-body.pure-u-1
+    %table.table.table-hover.jg-tables.pure-u-1
+      %thead
+        %tr
+          %th.pure-u-1-8 Status
+          %th.pure-u-1-8 Ticket ID
+          %th.pure-u-1-2 Subject
+          %th.pure-u-1-4 Last updated
+          
+      %tbody
+        - @tickets.each do |ticket|
+          %tr
+            %td.pure-u-1-8
+              .tags{class: ticket.status}= ticket.status
+            %td.pure-u-1-8= "#{ticket.reference}"
+            %td.pure-u-1-2= link_to ticket.subject, ticket
+            %td.pure-u-1-4.moment-date= ticket.updated_at.iso8601
+
+        - if @tickets.size == 0 
+          %tr
+            %td.no-data.pure-u-1
+              %p= "You don't have any tickets."
+              .jg-widget-controls= link_to 'New Ticket', new_ticket_path, {class: 'jg-button-lilac jg-new-button'}
+  
+  - if @tickets.size > 0 
+    .jg-widget-footer.jg-pagination
+      .jg-pagination-controls
+        = link_to_previous_page @tickets, '', class: 'jg-previous icon-arrow-left'
+        %span= "Page #{@tickets.current_page} of #{@tickets.total_pages}"
+        = link_to_next_page @tickets, '', class: 'jg-previous icon-arrow-right'

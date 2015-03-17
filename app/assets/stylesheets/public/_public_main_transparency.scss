@@ -1,0 +1,88 @@
+@import "partials/base";
+$public-transparent-middle-line: 1px solid white;
+.public-main{
+  .main-transparency{
+    background: #232A33;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    h2{color: white;}
+    #top-message{margin: 1.5em 4em;}
+    .graph-text-wrapper{
+      position: relative;
+      padding-bottom: 50px;
+      .line-right{
+        border-right: $public-transparent-middle-line;
+        width: 1px;
+        position: absolute;
+        bottom: 0;
+        top: 12px;
+        right: 0px;
+      }
+      .line-left{
+        border-left: $public-transparent-middle-line;
+        width: 1px;
+        position: absolute;
+        bottom: 0;
+        top: 8px;
+      
+      }
+    }
+    .circle-small{
+      position: absolute;
+      border:$public-transparent-middle-line;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #232A33;
+      z-index: 1;
+    }
+    #circle1{
+      right: -4px;
+      top: 12px;
+    }
+    #circle2{
+      left: -4px;
+      top: -6px;
+    }
+    #circle3{
+      right: -7px;
+      top: -6px;
+    }
+    #circle4{ right: -6px; }
+    #graph1{ padding-top: 50px;}
+    #graph2{ margin-left: 30px;}
+    #graph3{ margin-left: 30px;}
+    #graph4{ margin-left: 30px;}
+  
+    .empty-line{
+      border-top: $public-transparent-middle-line; 
+      border-right: $public-transparent-middle-line;
+      position: relative;}
+  
+    .head{
+      font-family: $public-font;
+      font-weight: bold;
+      color: white;
+    }
+    .note{
+      font-size: $thirteen;
+      color: #58616C;
+    }
+    #text1{ margin-left: 10px; }
+    #text2{width: 72%; float: right;} 
+    #text3{
+      width: 80%;
+      margin-top: -8px;
+      padding-left: 1.5em;
+    }
+    #text4{
+      border-right: $public-transparent-middle-line;
+      margin-right: -1px;
+      padding-right: 1em;
+      padding-top: 9em;
+      padding-bottom: 4em;
+    }
+    #text5{ margin-left: 8em; }
+    .text-wrapper{ position: relative; }
+  }
+}

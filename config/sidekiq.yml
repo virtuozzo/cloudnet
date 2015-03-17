@@ -1,0 +1,9 @@
+---
+:verbose: true
+:concurrency: 10
+:logfile: log/sidekiq.log
+:timeout: 30
+:queues:
+  - [create_onapp_user, 2]
+  - [refresh_all_servers, 1]
+  - [default, 2]

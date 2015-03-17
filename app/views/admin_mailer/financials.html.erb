@@ -1,0 +1,16 @@
+<p>Hello</p>
+
+<p>This is the Cloud.net Admin Financial Report for <%= @data[:date] %></p>
+
+<ul>
+  <li>Cloud.net Signups: <%= @data[:signups] %></li>
+  <li>Invoice Totals: <%= Invoice.pretty_total(@data[:invoices]) %></li>
+  <li>Credit Note Totals: <%= Invoice.pretty_total(@data[:credits]) %></li>
+  <li>Card Charges: <%= Invoice.pretty_total(@data[:charges]) %></li>
+  <li>Payment Reciept via Billing Card: <%= Invoice.pretty_total(@data[:payg_cc_charges]) %></li>
+  <li>Payment Reciept via Paypal: <%= Invoice.pretty_total(@data[:payg_paypal_charges]) %></li>
+</ul>
+
+<p>Thanks,</p>
+
+<p>Cloud.net Team</p>

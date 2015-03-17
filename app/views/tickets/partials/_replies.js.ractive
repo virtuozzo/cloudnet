@@ -1,0 +1,71 @@
+{{ #older.total() >= 5 }}
+	{{ #older.visible }}
+		<a class="show-older pure-u-1" on-click='show_older'>
+			Show {{older.length()}} older {{ older.length() === 1 ? "reply" : "replies" }}
+		</a>
+	{{/older.visible}}
+	{{^older.visible}}
+		<a class="show-older pure-u-1" on-click='show_less'>
+			Show less
+		</a>
+	{{/older.visible}}
+{{ /older.total }}
+<ul id="jg-ticket-thread" class="cbp_tmtimeline pure-g pure-u-1">
+		{{#original}}
+			<li class="reply pure-g pure-u initial_ticket">
+				<div class="pure-u-1-4">
+					<time class="cbp_tmtime">
+						<span class="username">{{username}}</span>
+						<span class="time-date">{{created_ordinal}}</span>
+						<span class="moment-date">{{created_at}}</span>
+					</time>
+				</div>
+				<div class="pure-u-3-4">
+					<div class="cbp_tmicon gravatar {{!staff_reply ? "" : "icon-support"}}">
+						{{#!staff_reply}}
+							<img src="{{image}}" height="32" width="32"/>
+						{{/staff_reply}}
+					</div>
+					<div class="cbp_tmlabel pure-u-1">
+						<span class="cbp_arrow">
+							<span class="cbp_arrow_border"></span>
+							<span class="cbp_arrow_inner"></span>
+						</span>
+
+						{{{body}}}
+						
+					</div>
+				</div>
+			</li>
+		{{/original}}
+		{{#replies}}
+			<li class="reply pure-g pure-u">
+				<div class="pure-u-1-4">
+					<time class="cbp_tmtime">
+						<span class="username">{{sender}}</span>
+						<span class="time-date">{{created_ordinal}}</span>
+						<span class="moment-date">{{created_at}}</span>
+					</time>
+				</div>
+				<div class="pure-u-3-4">
+					<div class="cbp_tmicon gravatar {{!staff_reply ? "" : "icon-support"}}">
+						{{#!staff_reply}}
+							<img src="{{image}}" height="32" width="32"/>
+						{{/staff_reply}}
+					</div>
+					<div class="cbp_tmlabel pure-u-1">
+						<span class="cbp_arrow">
+							<span class="cbp_arrow_border"></span>
+							<span class="cbp_arrow_inner"></span>
+						</span>
+						<div class="cbp_header pure-u-1 {{!new ? "hide" : "show"}}">
+
+								<div class="tags new">New</div>
+
+						</div>
+						{{{body}}}
+					</div>
+				</div>
+			</li>
+		{{/replies}}
+</ul>

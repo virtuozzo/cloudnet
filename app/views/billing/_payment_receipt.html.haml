@@ -1,0 +1,14 @@
+%tr
+  %td.pure-u-1-5= link_to "Payment ##{payment_receipt.receipt_number}", billing_payment_receipt_pdf_path(payment_receipt.sequential_id)
+  %td.pure-u-1-5= payment_receipt.created_at.to_formatted_s(:long_ordinal)
+  %td.pure-u-1-5
+    .tags{class: "#{payment_receipt.state.to_s}"}= tag_string(payment_receipt.state)
+  %td.pure-u-1-5= pretty_total(payment_receipt.net_cost)
+  %td.pure-u-1-5
+    .btn-group{class: 'sticky'}
+      %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button", "data-target" => "#"}
+        %span.icon-settings
+        %span.icon-arrow-down
+      %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+        %li
+          = link_to 'Download PDF Payment Receipt', billing_payment_receipt_pdf_path(payment_receipt.sequential_id)

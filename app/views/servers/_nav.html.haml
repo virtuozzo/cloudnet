@@ -1,0 +1,8 @@
+- if development?
+  %nav.jg-navbar.navbar.navbar-default{"role"=>"navigation"}
+    .navbar-header
+      .navbar-collapse.collapse
+        %ul.nav.navbar-nav
+          %li= link_to server.name, server
+          %li= link_to 'Backups', server_backups_path(server)
+          %li= link_to 'Console', console_server_path(server)  

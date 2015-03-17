@@ -1,0 +1,21 @@
+%li#resources-selection
+  .step-header
+    .pure-u-1-12.step-container
+      %span.step-number
+        2
+      %span.icon.icon-cloud
+    .pure-u.step-value
+      - if @wizard_object.template
+        %h4{class: "os x24 os-#{@wizard_object.template.os_distro}"}
+          %b.template-name= "#{@wizard_object.template.name}"
+          %b.resources-memory= "#{@wizard_object.memory} MB Memory,"
+          %b.resources-cpus= "#{@wizard_object.cpus} CPU Core(s),"
+          %b.resources-disk= "#{@wizard_object.disk_size} GB Disk Space,"
+          %b.resources-bandwidth= "#{@wizard_object.bandwidth} GB Bandwidth"
+      - else
+        %h4{class: "os x24"}
+          %b.template-name
+          %b.resources-memory
+          %b.resources-cpus
+          %b.resources-disk
+          %b.resources-bandwidth

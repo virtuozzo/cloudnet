@@ -1,0 +1,15 @@
+<html>
+<head></head>
+<body>
+
+<script type="text/javascript">
+  if (window.opener){
+    window.close();
+  } else if (window.top.pp_flow.isOpen() == true){
+    window.top.pp_responder.cancelHandler();
+    window.top.pp_flow.closeFlow();
+  }
+</script>
+
+</body>
+</html>

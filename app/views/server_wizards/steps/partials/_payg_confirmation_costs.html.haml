@@ -1,0 +1,13 @@
+.resources-cost
+  %span.pure-u
+    Hourly Cost:
+  %span.total-cost.pure-u
+    - coupon = current_user.account.coupon
+    - if coupon.present?
+      %b.pre-coupon-price= billing_cost(costs[:hourly], costs[:hourly_with_vat], '$', 8)
+
+    %b#hourly-price= billing_cost(costs[:hourly] * coupon_multiplier, costs[:hourly_with_vat] * coupon_multiplier, '$', 8)
+    per hour
+
+    - if coupon.present?
+      = "(inclusive of #{coupon.percentage}% coupon discount)"

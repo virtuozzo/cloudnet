@@ -1,0 +1,146 @@
+@import 'partials/base';
+
+$colour: #7f8181;
+
+.wrapper.login {
+  max-width: none;
+  padding: 40px;
+}
+
+#jg-registration-widget {
+
+  @include border-radius(2px);
+  @include box-shadow(0 0 4px rgba( 166, 169, 186, .3));
+  border: 1px solid;
+  border-color: #d6d6d6 #d6d6d6 #cacaca #d6d6d6;
+
+  background: #fbfbfb;
+  width: 380px;
+  margin: 40px auto;
+
+  header.session-logo {
+    background: white;
+    padding:    20px;
+    width: 100%;
+  }
+
+  dl dd, dl dt {
+    float: left;
+  }
+
+  .jg-icon:before {
+    color: $colour;
+    font-size: 1em;
+    @include transition(.2s linear all);
+  }
+
+  .jg-rememberable {
+    font-size: $fourteen;
+    color: $colour;
+  }
+
+  #session-action {
+    padding: 20px 40px;
+  }
+  #session-button {
+    margin: 0 auto;
+  }
+
+  label {
+    color:        $colour;
+    padding:      7px 12px 5px;
+    font-weight:  normal;
+    cursor:       pointer;
+  }
+
+  input.form-control {
+    @include border-radius(0);
+    @include box-shadow(none);
+    color: $colour;
+    border:     none;
+    background: none;
+    outline:    none;
+    font-weight: normal;
+    font-size: $fourteen;
+  }
+
+  dl {
+    margin: 0;
+    border: 1px solid #eeeeee;
+    border-width: 1px 0 0 0 ;
+    // float: left;
+    width: 100%;
+    clear: both;
+    &.active {
+      // border-top-color: $jg-blue;
+      background: #f4f7fa;
+      .jg-icon {
+        &:before {  color: $jg-blue; }
+      }
+    }
+
+    &.info {
+      text-align: center;
+      font-size: 13px;
+      padding: 10px 0px;
+    }
+
+    dt {
+      text-align: center;
+      line-height:  20px;
+      padding:      15px 0;
+    }
+    dd {
+      margin: 0;
+      line-height:  21px;
+      padding:      9px 0 6px;
+    }
+  }
+}
+
+#links {
+  margin: 0 auto;
+  width: 390px;
+
+  ul#links_shared {
+    list-style-type: none;
+    padding: 0 0 0 30px;
+
+    li {
+      list-style-type: none;
+      margin: 5px 0;
+      color: rgba(0,0,0,.4);
+      font-weight: 500;
+      display: block;
+      padding: 10px 0;
+      font-size: $fourteen;
+
+      a {
+        color: rgba(0,0,0,.5);
+        font-weight: 500;
+        &:before {
+          padding: 0 15px 0 0;
+          font-weight: normal;
+          font-size: 1em !important;
+        }
+        &:hover {
+          color: rgba(0,0,0,.7);
+          background:       none;
+          text-decoration:  none;
+        }
+      }
+    }
+  }
+}
+
+.jg-token {
+  text-align: center;
+}
+
+.jg-otp-explain {
+  font-size: 14px;
+}
+
+.jg-token-box {
+  margin: 10px auto !important;
+}

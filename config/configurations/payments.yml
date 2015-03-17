@@ -1,0 +1,20 @@
+defaults: &defaults
+  stripe:
+    api_key: <%= ENV["STRIPE_API_KEY"] %>
+    publishable_key: <%= ENV["STRIPE_PUBLISH_KEY"] %>
+  paypal:
+    api_user: <%= ENV["PAYPAL_USER"] %>
+    api_pass: <%= ENV["PAYPAL_PASS"] %>
+    api_signature: <%= ENV["PAYPAL_SIGNATURE"] %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

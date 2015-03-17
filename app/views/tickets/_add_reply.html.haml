@@ -1,0 +1,10 @@
+= form_for [ticket, TicketReply.new], remote: true, html: { role: 'form' } do |f|
+  %div#add_reply_error.error
+
+  .form-group
+    = f.label :body
+    .editor-wrapper
+      = f.text_area :body, id: 'editor', placeholder: 'Ticket description goes here. Please be descriptive'
+
+  .actions{style: 'float:right; margin-top: 20px;'}
+    = f.button 'Add Reply', class: 'btn jg-submit-button'

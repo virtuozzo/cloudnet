@@ -1,0 +1,200 @@
+@import "base";
+
+.jg-widget {
+
+    @include box-sizing(border-box);
+    padding: 10px 10px;
+}
+
+
+.jg-navbar {
+    background:             white;
+    border: 1px solid       $jg-border-light;
+    border-bottom-color:    $jg-grey;
+    @include border-radius(2px);
+    @include box-shadow(0px 1px 1px rgba(0,0,0,.07));
+    margin: 20px 0 0 0;
+
+    .navbar-collapse.collapse {
+        padding: 0;
+    }
+
+    ul.nav.navbar-nav {
+        font-size: $thirteen;
+        > li {
+            
+            border-right: 1px solid #e7e7e7;
+            &.open {
+              > a {
+                background: $jg-light-grey;
+              }
+            }
+            > a {
+              font-weight: bold;
+                &:hover {
+                    background: $jg-light-grey;
+                }
+            }
+        }
+    }
+}
+
+.jg-widget-content {
+
+    @extend .jg-navbar;
+
+    .breadcrumb {
+        background: white;
+        padding: 4px 20px;
+        font-size: 0.95em;
+        margin-bottom: 15px;
+    }
+
+    ul.jg-widget-controls {
+        float:          right;
+        list-style-type: none;
+        margin:         0;
+        padding:        0;
+        text-align: right;
+    
+        > li {
+            display:    inline-block;
+            margin:     10px 5px 0px 10px;
+            padding: 5px;
+            border: 1px solid transparent;
+            a {
+              text-decoration: none;
+              cursor: pointer;
+            }
+            &.current {
+              border: 1px solid #428bca;
+              border-radius: 3px;
+            }
+        }
+    }
+
+    .jg-widget-header {
+        background:         white;
+        border-bottom:      1px solid #e7e7e7;
+        width: 100%;
+        // display: inline-block;
+        clear: both;
+        padding:            15px 15px;
+        @include border-radius(2px 2px 0 0);
+
+        &.clearfix:before, &.clearfix:after {
+            display: block;
+        }
+
+        &.jg-external-header {
+            padding:            15px 0;
+            margin-bottom: 20px;
+        }
+
+        ul.jg-widget-controls {
+            .jg-new-button {
+                padding: 7px 12px 6px;
+                font-size: $thirteen;
+            }
+        }
+
+        h2 {
+            font-size:      1em;
+            line-height:    1.3em;
+            margin:         10px 0px 7px;
+            padding:        0 5px;
+            color:          #afb1b8;
+            float:          left;
+
+            &.jg-icon {
+
+              &:before {
+                  color:          #6ebd8d;
+                  padding:        0 15px 0 0;
+              }
+
+            }
+
+        }
+
+    }
+
+    .jg-widget-body {
+        background:         white;
+    }
+
+    .jg-widget-footer {
+        padding:    10px 15px;
+        background: $jg-light-grey;
+        border-top: dotted 1px #e7e7e7;
+        @include border-radius(0 0 2px 2px);
+
+        ul.jg-footer-list{
+
+            list-style-type: none;
+            margin:     0;
+            padding:    0;
+            height: 100%;
+        
+            li {
+                height: 100%;
+                border-right: dotted 1px #e7e7e7;
+                line-height: $thirtysix;
+                padding: 12px 15px;
+            }
+        }
+
+
+    }
+
+    a.actions {
+        color:              $jg-grey;
+        cursor:             pointer;
+        line-height:        1.5em;
+        text-decoration:    none;
+    }
+
+    .jg-pagination {
+        width: 100%;
+        margin-bottom: 0;
+        padding: 20px 0;
+        background: white;
+
+        .jg-pagination-controls {
+            text-align: center;
+            font-size:  $fourteen;
+            line-height:   28px;
+
+
+            span {
+                position: relative;
+                top: -3px;
+            }
+
+            a { 
+                font-size: $twentyone;
+                line-height: $fourteen;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .jg-previous {
+                padding: 0 10px 0 0;
+            }
+            .jg-next {
+                padding: 0 0 0 10px;
+            }
+        }
+
+    }
+
+}
+.jg-disabled {
+    // opacity: .8;
+}
+.jg-no-pad {
+    padding: 0 !important;
+}
+.jg-no-margin {
+    margin: 0 !important;
+}

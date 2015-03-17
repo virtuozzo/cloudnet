@@ -1,0 +1,3 @@
+<% invoice = Invoice.with_deleted.find(activity.parameters[:invoice]) %>
+<% card = BillingCard.with_deleted.find(activity.parameters[:card]) %>
+Card Charge created for Invoice #<%= invoice.invoice_number %> for <%= Invoice.pretty_total(activity.parameters[:amount]) %>. Card ID: <%= card.id %> (Last 4: <%= card.last4 %>)

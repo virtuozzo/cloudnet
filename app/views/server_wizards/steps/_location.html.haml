@@ -1,0 +1,212 @@
+%script
+  - r = render file: 'locations/index.json', formats: [:json]
+  = raw "var locations = #{r}" 
+
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.jg-icon.icon-pin-2.pure-u-1.pure-u-md-1-3= "Select #{@wizard_object.current_step_name.capitalize}"
+    #viewTabs.pure-u.pure-u-1.pure-u-md-1-3
+      %ul.nav.nav-tabs#jg-tabs
+        %li.active
+          %a.jg-icon.icon-map{href: "#step-wizard-map"} Map
+        %li
+          %a.jg-icon.icon-list{href: "#step-wizard-list"} List
+    #filterContent.pure-u-1.pure-u-md-1-3
+      %a.btn.btn-default.jg-filter.icon-settings{href: "#step-wizard-filter", id: "filteringButton"}
+        = "Filter"
+        %span.pure-u.icon-arrow-down
+  
+  = cache([location_cache_key, :filter]) do
+    #filteringContent
+      .jg-filter-content.pure-u-1
+  
+        %ul.jg-filter-list{id: ""}
+          %li.pure-u-md-1-2.pure-u-1{"data-index" => "memory"}
+            .filter-holder.pure-u-1
+              %h4.filter-title.pure-u-1 Memory (USD per MB / hour)
+              - min = @locations.min_by(&:price_memory).price_memory
+              - max = @locations.max_by(&:price_memory).price_memory
+              #memory-slider.sliders.pure-u-1{'data-min' => min, 'data-max' => max}
+              #value-memory.pure-u-1.units{'data-min' => min, 'data-max' => max}
+                %input.pure-u-11-24.units-lower{type: "text"}/
+                .pure-u-2-24.units-divider{value: ""} ~
+                %input.pure-u-11-24.units-higher{type: "text"}/
+  
+          %li.pure-u-md-1-2.pure-u-1{"data-index" => "disk"}
+            .filter-holder.pure-u-1
+              %h4.filter-title.pure-u-1 Disk Space (USD per GB / hour)
+              - min = @locations.min_by(&:price_disk).price_disk
+              - max = @locations.max_by(&:price_disk).price_disk
+              #disk-slider.sliders.pure-u-1{'data-min' => min, 'data-max' => max}
+              #value-disk.pure-u-1.units
+                %input.pure-u-11-24.units-lower{type: "text"}/
+                .pure-u-2-24.units-divider{value: ""} ~
+                %input.pure-u-11-24.units-higher{type: "text"}/
+  
+          %li.pure-u-md-1-2.pure-u-1{"data-index" => "cpu"}
+            .filter-holder.pure-u-1
+              %h4.filter-title.pure-u-1 CPU (USD per Core / hour)
+              - min = @locations.min_by(&:price_cpu).price_cpu
+              - max = @locations.max_by(&:price_cpu).price_cpu
+              #cpu-slider.sliders.pure-u-1{'data-min' => min, 'data-max' => max}
+              #value-cpu.pure-u-1.units
+                %input.pure-u-11-24.units-lower{type: "text"}/
+                .pure-u-2-24.units-divider{value: ""} ~
+                %input.pure-u-11-24.units-higher{type: "text"}/
+  
+          %li.pure-u-md-1-2.pure-u-1{"data-index" => "bandwidth"}
+            .filter-holder.pure-u-1
+              %h4.filter-title.pure-u-1 Inclusive Bandwidth (per GB of RAM)
+              - min = @locations.min_by(&:inclusive_bandwidth).inclusive_bandwidth
+              - max = @locations.max_by(&:inclusive_bandwidth).inclusive_bandwidth
+              #bandwidth-slider.sliders.pure-u-1{'data-min' => min, 'data-max' => max}
+              #value-bandwidth.pure-u-1.units
+                %input.pure-u-11-24.units-lower{type: "text"}/
+                .pure-u-2-24.units-divider{value: ""} ~
+                %input.pure-u-11-24.units-higher{type: "text"}/
+  
+          %li.pure-u-md-1-2.pure-u-1{"data-index" => "cloud_index"}
+            .filter-holder.pure-u-1
+              %h4.filter-title.pure-u-1 Cloud Index
+              - min = @locations.min_by(&:cloud_index).cloud_index
+              - max = @locations.max_by(&:cloud_index).cloud_index
+              #cloud_index-slider.sliders.pure-u-1{'data-min' => min, 'data-max' => max}
+              #value-cloud_index.pure-u-1.units
+                %input.pure-u-11-24.units-lower{type: "text"}/
+                .pure-u-2-24.units-divider{value: ""} ~
+                %input.pure-u-11-24.units-higher{type: "text"}/
+
+  #jg-marketplace-map.jg-widget-body
+    #step-wizard-map
+      #jg-map
+      .jg-widget-form
+        .form-group.jg-inline.pure-u-1.pure-g.clearfix
+          - haml_tag_if !@wizard_object.errors[:location].empty?, :div, class: 'field_with_errors' do
+            .pure-u-1.pure-u-md-1-3
+              = label_tag :country, 'Country', {class: 'pure-u'}
+              .pure-u-1
+                = hidden_field_tag :country
+            .pure-u-1.pure-u-md-1-3
+              = label_tag :city, 'City', {class: 'pure-u'}
+              .pure-u-1
+                = hidden_field_tag :city
+            .pure-u-1.pure-u-md-1-3
+              = label_tag :provider, 'Provider', {class: 'pure-u'}
+              .pure-u-1
+                = hidden_field_tag :provider
+                = f.hidden_field :location_id
+
+        #cloud-location-prices.pure-g.pure-u-1.hide
+          %ul.resources-footer.pure-g
+            %li.pure-u-1-4
+              %span.resource-value.price-memory
+              %span.resource Memory / MB / Hour
+            %li.pure-u-1-4
+              %span.resource-value.price-disk
+              %span.resource Disk Space / GB / Hour
+            %li.pure-u-1-4
+              %span.resource-value.price-cpu
+              %span.resource CPU Cores / Core / Hour
+            %li.pure-u-1-4
+              %span.resource-value.inclusive-bw
+              %span.resource Bandwidth per GB of RAM
+
+      #budget-location-prices.pure-g.pure-u-1.hide
+        %ul.resources-footer.pure-g
+          %li.pure-u-1
+            %span.resource-value Starting at $5 USD ($0.0074 per hour)
+            %span.resource Package Only Pricing
+
+    = cache([location_cache_key, :wizard_list]) do
+      #step-wizard-list
+        .jg-widget-form.pure-g.jg-disabled
+          .jg-widget.pure-u-1.pure-g
+            .jg-widget-header.pure-g.jg-external-header.jg-no-margin.clearfix
+              %h2.icon-wallet.jg-icon.pure-u Cloud Locations
+            %table.table.table-hover.jg-tables.jg-filterable#step-wizard-cloud-table
+              %thead
+                %tr
+                  %th.sortable City/Country
+                  %th.sortable Provider
+                  %th.sortable Memory (MB)
+                  %th.sortable Disk (GB)
+                  %th.sortable CPU Cores
+                  %th.sortable Inclusive Bandwidth (GB)
+                  %th.sortable Cloud Index
+              %tbody
+                - @cloud_locations.each do |location|
+                  %tr.selectable{"data-id" => location.id}
+                    %td
+                      %img{src: "/assets/images/flags/flat/16/#{location.country.upcase}.png", alt: location.country}
+                      = "#{location.city}, #{location.country_name}"
+                      - if location.ssd_disks
+                        %img{src: "/assets/images/ssd_disks.png", alt: 'This provider uses SSD Disks'}
+                    %td= location.provider
+                    %td.price= location.price_memory
+                    %td.price= location.price_disk
+                    %td.price= location.price_cpu
+                    %td= location.inclusive_bandwidth
+        
+                    - scores = location.index_scores
+                    %td
+                      .index{"data-toggle" => "tooltip", "data-placement" => "left", "data-html" => "true", "title" => "CPU Index Score: #{scores[:cpu]}<br />IOPS Index Score: #{scores[:iops]}<br />Bandwidth Index Score: #{scores[:bandwidth]}<br />Cloud Index Score: #{scores[:total]}".html_safe}= scores[:total]
+  
+  
+        .jg-widget-form.pure-g.jg-disabled
+          .jg-widget.pure-u-1.pure-g
+            .jg-widget-header.pure-g.jg-external-header.jg-no-margin.clearfix
+              %h2.icon-wallet.jg-icon.pure-u SSD VPS Locations
+            %table.table.table-hover.jg-tables.jg-filterable#step-wizard-budget-table
+              %thead
+                %tr
+                  %th.sortable City/Country
+                  %th.sortable Provider
+                  %th.sortable Price
+                  %th.sortable VPS Index
+              %tbody
+                - @budget_locations.each do |location|
+                  %tr.selectable{"data-id" => location.id}
+                    %td
+                      %img{src: "/assets/images/flags/flat/16/#{location.country.upcase}.png", alt: location.country}
+                      = "#{location.city}, #{location.country_name}"
+                    %td= location.provider
+                    %td= "Starting at $5 USD per month ($0.0074 per hour)"
+                    - scores = location.index_scores
+                    %td
+                      .index{"data-toggle" => "tooltip", "data-placement" => "left", "data-html" => "true", "title" => "CPU Index Score: #{scores[:cpu]}<br />IOPS Index Score: #{scores[:iops]}<br />Bandwidth Index Score: #{scores[:bandwidth]}<br />Cloud Index Score: #{scores[:total]}".html_safe}= scores[:total]
+
+    .jg-widget-footer.actions.clearfix
+      %ul.jg-widget-controls
+        %li= f.button @wizard_object.last_step? ? false: "Go to Step #{@wizard_object.current_step + 1}", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+        %li= link_to 'Cancel', server_wizards_path, class: 'btn jg-back-button'
+        
+#jg-location-packages
+
+/ %ul.jg-step-box.pure-g-r
+/   = render partial: "server_wizards/steps/helpers/location_summary"
+/   %li.disabled
+/     .step-header
+/       .pure-u-1-8.step-container
+/         %span.step-number
+/           2
+/         %span.icon.icon-cloud
+/       .pure-u.icon-arrow-down#toggle
+/     .step-body
+/   %li.disabled
+/     .step-header
+/       .pure-u-1-8.step-container
+/         %span.step-number
+/           3
+/         %span.icon.icon-wallet-2
+/       .pure-u.icon-arrow-down#toggle
+/     .step-body
+
+:javascript
+  var mapbox_key = "#{KEYS[:mapbox][:token]}";
+  var five_hundred_px_key = "#{KEYS[:five_hundred_px][:api_key]}";
+
+  var inactive_pin = "#{asset_path('pins/inactive-pin.png')}";
+  var active_pin = "#{asset_path('pins/active-pin.png')}";
+  var millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR};
+
+= javascript_include_tag "server_wizards/locations"

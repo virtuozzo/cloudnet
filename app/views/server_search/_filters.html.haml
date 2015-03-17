@@ -1,0 +1,31 @@
+.cloud-builder.default-borders
+  %h3 Cloud Builder
+  %cloud-vps-switch
+  %packages-table
+
+  .main-params.jg-sliders
+    .slider-box
+      %span CPU Cores
+      = text_field_tag :cpu, nil, class: 'filter-text-box', :"ng-model" => "ctrl.state.counts.cpu",
+                       :"ng-model-options" => "{ updateOn: 'change blur'}"
+      %slider-widget.wizard-slider.noUi-extended{:"ng-model" => "ctrl.state.counts.cpu", defaults: "cpu"}
+
+    .slider-box
+      %span Memory
+      = text_field_tag :mem, nil, class: 'filter-text-box', :"ng-model" => "ctrl.state.counts.mem",
+                       :"ng-model-options" => "{ updateOn: 'change blur'}"
+      %span.unit MB
+      %slider-widget.wizard-slider.noUi-extended{:"ng-model" => "ctrl.state.counts.mem", defaults: "mem"}
+
+    .slider-box
+      %span Disk size
+      = text_field_tag :disk, nil, class: 'filter-text-box', :"ng-model" => "ctrl.state.counts.disk",
+                       :"ng-model-options" => "{ updateOn: 'change blur'}"
+      %span.unit GB
+      %slider-widget.wizard-slider.noUi-extended{:"ng-model" => "ctrl.state.counts.disk", defaults: "disk"}
+
+.cloud-index.default-borders
+  %cloud-index-filter.jg-sliders
+
+.uptime.default-borders
+  %uptime-filter.jg-sliders

@@ -1,0 +1,15 @@
+%ul#jg-ticket-thread.cbp_tmtimeline.pure-g
+  %li.pure-g.pure-u.initial_ticket
+    .pure-u-1-4
+      %time.cbp_tmtime
+        %span.username= "#{current_user.full_name}"
+        %span.time-date= "#{ticket.created_at.to_formatted_s(:long_ordinal)}"
+        %span.moment-date= "#{ticket.created_at.iso8601}"
+    .pure-u-3-4
+      .cbp_tmicon.gravatar= image_tag(gravatar_image(current_user, 64), size: "32")
+      .cbp_tmlabel.pure-u-1
+        %span.cbp_arrow
+          %span.cbp_arrow_border
+          %span.cbp_arrow_inner
+        = markdown ticket.body
+  = render partial: 'tickets/replies', locals: {replies: ticket_replies}

@@ -1,0 +1,9 @@
+%h3 Cloud Index
+%p<
+  Benchmark for location
+  //=link_to ' Learn More'
+.slider-box
+  %span Index
+  = text_field_tag :index, nil, class: 'filter-text-box', :"ng-model" => "ctrl.state.counts.index",
+                   :"ng-model-options" => "{ updateOn: 'change blur'}"
+  %slider-widget.wizard-slider.noUi-extended{:"ng-model" => "ctrl.state.counts.index", defaults: "index", enable: 'true'}

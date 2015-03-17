@@ -1,0 +1,6 @@
+%h3 Uptime
+.slider-box
+  %span Value
+  = text_field_tag :uptime, nil, class: 'filter-text-box', :"ng-model" => "ctrl.state.counts.uptime",
+                   :"ng-model-options" => "{ updateOn: 'change blur'}"
+  %slider-widget.wizard-slider.noUi-extended{:"ng-model" => "ctrl.state.counts.uptime", defaults: "index", enable: 'true'}

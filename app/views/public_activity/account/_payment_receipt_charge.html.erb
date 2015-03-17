@@ -1,0 +1,3 @@
+<% invoice = Invoice.with_deleted.find(activity.parameters[:invoice]) %>
+<% receipt = PaymentReceipt.with_deleted.find(activity.parameters[:payment_receipt]) %>
+Payment Receipt Charge created for Invoice #<%= invoice.invoice_number %> for <%= Invoice.pretty_total(activity.parameters[:amount]) %>. Payment Receipt Charge Source: <%= receipt.receipt_number %>

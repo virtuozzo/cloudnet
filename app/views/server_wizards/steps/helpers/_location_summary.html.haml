@@ -1,0 +1,49 @@
+%li#location-selection
+  .step-header
+    .pure-u-1-12.step-container
+      %span.step-number
+        1
+      %span.icon.icon-pin-2
+    .pure-u.step-value
+      - if @wizard_object.location
+        %h4
+          %img{src: "/assets/images/flags/flat/24/#{@wizard_object.location.country}.png"}
+          = succeed ',' do
+            %b= "#{@wizard_object.location.country_name}"
+          = succeed ',' do
+            = "#{@wizard_object.location.city}"
+          = @wizard_object.location.provider
+    .pure-u.icon-arrow-down#toggle
+  .step-body#location-summary.pure-u.jg-no-pad
+    %ul#details.nav.nav-tabs
+      %li.active
+        %a{href: '#details-pane', data: {'toggle' => 'tab'}}Details
+    .tab-content
+      #details-pane.tab-pane.active.fade.in
+        .pure-u-1-2#location-prices.jg-widget-form
+          %dl
+            %dt= "Memory"
+            %dd
+              %b.price= @wizard_object.location.present? ? @wizard_object.location.price_memory : ""
+              = " / MB / hour"
+          %dl
+            %dt= "CPU"
+            %dd
+              %b.price= @wizard_object.location.present? ? @wizard_object.location.price_cpu : ""
+              = " / Core / hour"
+          %dl
+            %dt= "Disk Size"
+            %dd
+              %b.price= @wizard_object.location.present? ? @wizard_object.location.price_disk : ""
+              = " / GB / Hour"
+          %dl
+            %dt= "Bandwidth"
+            %dd
+              %b.price= @wizard_object.location.present? ? @wizard_object.location.price_bw : ""
+              = " / GB / month"
+          %dl
+            %dt= "IP Address"
+            %dd
+              %b.price= @wizard_object.location.present? ? @wizard_object.location.price_ip_address : ""
+              = " / IP / hour"
+        .pure-u-1-2

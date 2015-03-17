@@ -1,0 +1,53 @@
+.pure-g
+  .pure-u-2-5
+    .location-details
+      %img.flag{:"ng-src" => "/assets/images/flags/flat/24/{{ location.country }}.png"}
+      %span {{location.city}}, {{location.countryName}}
+  .pure-u-2-5
+    .location-tags
+      %span.square-label.font-11{:"ng-show" => "location.ssdDisks"} SSD
+      %span.square-label.font-11{:"ng-show" => "location.budgetVps"} VPS
+      %span.square-label.font-11{:"ng-hide" => "location.budgetVps"} CLOUD
+  .pure-u-1-5
+    .provider
+      %span.font-11 PROVIDER:
+      %span.provider-name {{location.provider}}
+.pure-g
+  .pure-u-1-5
+    .uptime-chart
+  .pure-u-1-5
+    .cloud-index-graph
+      .border
+    .labelg cloud index {{location.cloudIndex}}
+  .pure-u-2-5
+    .parameters{:"ng-hide" => "location.budgetVps"}
+      %table{class: "table"}
+        %tr
+          %td.pictogram
+            = image_tag('mem-pic.png')
+          %td.descr.font-11 MEMORY (MB) 
+          %td {{memoryPerHour()}} /hour
+        %tr
+          %td.pictogram
+            = image_tag('disk-pic.png')
+          %td.descr.font-11 DISK (GB)
+          %td {{diskPerHour()}} /hour
+        %tr
+          %td.pictogram
+            = image_tag('cpu-pic.png')
+          %td.descr.font-11 CPU (Cores)
+          %td {{cpuPerHour()}} /hour
+  .pure-u-1-5
+    .action{:"ng-hide" => "location.budgetVps && noPackageActive()"}
+      .price-box
+        .text-label Hourly
+        .price-value
+          {{totalPricePerHour()}} 
+      .price-box
+        .text-label Monthly
+        .price-value
+          {{totalPricePerMonth()}} 
+      %button.btn.btn-primary.btn-sm{:"ng-click" => 'provision()'} Deploy Server
+    .no-package-message{:"ng-show" => "location.budgetVps && noPackageActive()"}
+      .action
+        Choose predefined package for VPS pricing

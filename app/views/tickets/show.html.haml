@@ -1,0 +1,66 @@
+- breadcrumb :ticket, @ticket
+- title "Ticket ##{@ticket.reference}"
+
+%script
+  - ticket = render template: "tickets/show.json", formats: [:json]
+  = raw "var ticket = #{ticket}"
+  = raw "var ticket_replies = ticket['replies'];"
+
+%script{id: 'reply_template', type: 'text/ractive'}
+  = raw(render partial: "tickets/partials/replies.js.ractive".html_safe)
+
+.jg-widget-content
+  .jg-widget-header.pure-g.pure-u-1.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-tickets= "##{@ticket.reference}: #{@ticket.subject}"
+    %ul.pure-u-1-2.jg-widget-controls
+      %li
+        .tags{class: @ticket.status}= "#{@ticket.status.to_s.humanize}"
+  .jg-widget-body
+    #jg-show-ticket.pure-g
+
+      // Hide for no JS environment
+      //= render partial: 'tickets/ticket_conversation', locals: {ticket_replies: @ticket_replies, ticket: @ticket}
+
+    %ul.ticket-info.clearfix
+      %li
+        = "Department:"
+        %span= @ticket.department.capitalize
+      %li
+        = "Server:"
+        - if !@ticket.server.nil?
+          %span 
+            = link_to @ticket.server.name_with_ip, server_path(@ticket.server)
+        - else
+          %span No Server Selected
+
+    - if !@ticket.completed?
+      .jg-widget-form.pure-g-r.clearfix.bd-top
+        .form-group.pure-u-1
+          = render partial: 'tickets/add_reply', locals: {ticket: @ticket, reply: @ticket_reply}
+    - elsif @ticket.status == :solved
+      %ul.ticket-info.clearfix.jg-no-margin
+        %li
+          = "This ticket has been marked as solved."
+          You can 
+          = link_to "reopen this ticket", reopen_ticket_path(@ticket.id), method: :post
+          if your request still needs to be answered
+    - else 
+      %ul.ticket-info.clearfix.jg-no-margin
+        %li
+          = "This ticket has been closed and no further replies can be added."
+          = "Not satisifed?"
+          %span= link_to "Email Management", "mailto:ticket-escalate@cloud.net?subject=Ticket%20ID%20#{@ticket.reference}"
+
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      - if !@ticket.completed?
+        %li
+          = button_to close_ticket_path(@ticket), method: :post, data: { confirm: "Are you sure you want to close this ticket?" }, class: 'btn jg-submit-button' do
+            Close Ticket
+      - if @ticket.status == :solved
+        %li
+          = button_to reopen_ticket_path(@ticket), method: :post, class: 'btn jg-submit-button' do
+            Reopen Ticket
+      %li= link_to 'Back', tickets_path, class: 'btn jg-back-button'
+  
+= javascript_include_tag "tickets/reply"

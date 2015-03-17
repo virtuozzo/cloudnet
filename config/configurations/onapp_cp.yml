@@ -1,0 +1,17 @@
+defaults: &defaults
+  uri: <%= ENV["ONAPP_CP"] %>
+  user: <%= ENV["ONAPP_USER"] %>
+  pass: <%= ENV["ONAPP_PASS"] %>
+  user_role: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

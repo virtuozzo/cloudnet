@@ -1,0 +1,12 @@
+- if logged_in_as?
+  %div.alert.alert-warning
+    %strong Warning:
+    = "You are currently logged in as #{current_user.full_name} (#{current_user.email})."
+    = link_to 'Sign out and go back to Admin Panel', login_as_path, method: :delete
+
+- flash.each do |type, message| 
+  - if message.present?
+    %div.alert{class: "alert-#{flash_class(type)}"}
+      %a.close{href: "#", data: {dismiss: "alert"}} &times;
+      %strong= "#{type.capitalize}:"
+      = message

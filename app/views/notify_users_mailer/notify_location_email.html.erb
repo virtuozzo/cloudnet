@@ -1,0 +1,16 @@
+<p>Hello <%= @user.full_name %>!</p>
+
+<%= @body.html_safe %>
+
+<p>Location and Provider: <strong><%= @location.to_s %></strong></p>
+
+<p>Servers that you currently have in this location which may be affected:</p>
+<ul>
+  <% @servers.each do |server| %>
+    <li><%= link_to server.name, server_url(server) %></li>
+  <% end %>
+</ul>
+
+<p>Thanks,</p>
+
+<p>Cloud.net Team</p>

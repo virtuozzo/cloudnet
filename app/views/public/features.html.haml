@@ -1,0 +1,117 @@
+%section
+  .public-features
+    .pure-g.headline
+      .container
+        .pure-u-4-5
+          %h1
+            =t('features.title_box1')
+          %p.text-content
+            =t('features.content_box1')
+    .pure-g.gray-line
+      .container
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox1')
+          %p.text-content
+            =t('features.content_sbox1').html_safe
+        .pure-u-1.pure-u-md-2-5
+          .picanim
+            =image_tag('main/feature-a-1.png', class: "pure-img", id: "fa1")
+          
+    .pure-g.white-line
+      .container
+        .pure-u-1.pure-u-md-2-5
+          .picanim
+            = image_tag('main/main-network.png', class: "pure-img")
+            = image_tag('main/main-small_cloud.png', id: 'fb1', class: "hide-mobile")
+            = image_tag('main/main-small_cloud.png', id: 'fb2', class: "hide-mobile")
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox2')
+          %p.text-content
+            =t('features.content_sbox2').html_safe
+
+    .pure-g.gray-line
+      .container
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox3')
+          %p.text-content
+            =t('features.content_sbox3').html_safe
+        .pure-u-1.pure-u-md-2-5
+          .picanim
+            =image_tag('main/feature-c-1.png', class: "pure-img", id: "fc1")
+            =image_tag('main/feature-c-2.png', class: "pure-img", id: "fc2")
+            =image_tag('main/feature-c-3.png', class: "pure-img", id: "fc3")
+            =image_tag('main/feature-c-4.png', class: "pure-img", id: "fc4")
+          
+.container-fluid
+%ul.jg-color-row
+  %li
+  %li
+  %li
+  %li
+  %li
+%section
+  .textual-info
+    .pure-g.gray-line
+      .container
+        .pure-u-2-5.hide-mobile
+          .picanim
+            =image_tag('main/feature-d-1.png', class: "pure-img", id: "fd1")
+            =image_tag('main/feature-d-2.png', class: "pure-img", id: "fd2")
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox4')
+          %p.text-content
+            =t('features.content_sbox4').html_safe
+        .pure-u-1.show-mobile
+          .picanim
+            =image_tag('main/feature-d-1.png', class: "pure-img", id: "fd1")
+            =image_tag('main/feature-d-2.png', class: "pure-img", id: "fd2")
+.container-fluid
+%ul.jg-color-row
+  %li
+  %li
+  %li
+  %li
+  %li
+%section
+  .textual-info
+    .pure-g.gray-line
+      .container
+        .pure-u-md-2-5.hide-mobile
+          .picanim
+            =image_tag('main/feature-e-2.png', id: "fe2")
+            =image_tag('main/feature-e-1.png', class: "pure-img", id: "fe1")
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox5')
+          %p.text-content
+            =t('features.content_sbox5').html_safe
+        .pure-u-1.show-mobile
+          .picanim
+            =image_tag('main/feature-e-2.png', id: "fe2")
+            =image_tag('main/feature-e-1.png', class: "pure-img", id: "fe1")
+            
+    .pure-g.white-line
+      .container
+        .pure-u-1.pure-u-md-3-5
+          %h2.text-title
+            =t('features.title_sbox6')
+          %p.text-content
+            =t('features.content_sbox6').html_safe
+        .pure-u-1.pure-u-md-2-5
+          .picanim.biling-pic
+            =image_tag('main/feature-f-1.png', id: "ff1")
+            =image_tag('main/feature-f-2.png', id: "ff2")
+            =image_tag('main/feature-f-3.png', id: "ff3")
+            
+    .pure-g.headline-gray.headline
+      .container
+        .pure-u-4-5
+          %h1
+            =t('features.title_box2')
+          %p.text-content
+            =t('features.content_box2')
+          = link_to t('features.deploy_button'), new_user_registration_path, {class: 'btn btn-info btn-lg'}

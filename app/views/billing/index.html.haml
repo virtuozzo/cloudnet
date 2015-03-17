@@ -1,0 +1,51 @@
+- breadcrumb :billing
+- title "Billing"
+
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-tickets Invoices, Credit Notes & Payment Receipts
+    %ul.pure-u-1-2.jg-widget-controls
+      %li.billing-balance
+        Your Balance Due:
+        %b= remaining_balance(current_user)
+
+  .jg-widget-body.pure-u-1
+    %table.table.table-hover.jg-tables.pure-u-1
+      %thead
+        %tr
+          %th.pure-u-1-5 #
+          %th.pure-u-1-5 Date
+          %th.pure-u-1-5 Status
+          %th.pure-u-1-5 Amount
+          %th.pure-u-1-5 Actions
+          
+      %tbody
+        - @billing.each do |billing|
+          - if billing.kind_of?(Invoice)
+            = render 'invoice', invoice: billing
+          - elsif billing.kind_of?(CreditNote)
+            = render 'credit_note', credit_note: billing
+          - elsif billing.kind_of?(PaymentReceipt)
+            = render 'payment_receipt', payment_receipt: billing
+
+        - if @billing.size == 0 
+          %tr
+            %td.no-data.pure-u-1{colspan: 5}
+              %p= "You don't have any invoices, credit notes or payment receipts."
+
+  - if @billing.size > 0 
+    .jg-widget-footer.jg-pagination
+      .jg-pagination-controls
+        = link_to_previous_page @billing, '', class: 'jg-previous icon-arrow-left'
+        %span= "Page #{@billing.current_page} of #{@billing.total_pages}"
+        = link_to_next_page @billing, '', class: 'jg-previous icon-arrow-right'
+
+= render partial: 'update_billing', locals: { account: @account }
+= render partial: 'billing_cards', locals: { cards: @cards }
+
+#jg-payg-widget
+  = render partial: 'payg_details', locals: { payg: @payg }
+= render partial: 'payg/payg_popover'
+= javascript_include_tag "payg/payg_pie"
+
+= javascript_include_tag 'billing/billing_payg'

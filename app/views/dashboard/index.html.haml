@@ -1,0 +1,103 @@
+- breadcrumb :dashboard
+- title "Dashboard"
+
+%script
+  - r = render partial: 'stats.json', formats: [:json], locals: { stats: @stats }
+  = raw "var stats = #{r}" 
+
+%ul.dashboard-stats.pure-g
+  %li.pure-u-1.pure-u-md-1-2
+    #jg-memory.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets Memory
+        %ul.pure-u-1-2.jg-widget-controls
+          %li
+      .jg-widget-body
+        .jg-chart.piechart
+          %svg
+      .jg-widget-footer.jg-no-pad
+        %ul.jg-footer-list.pure-g
+          %li.pure-g.pure-u-1-2
+          %li.pure-g.pure-u-1-2
+            %span.pure-u-1-1.jg-icon.icon-wallet.price.per.month
+              = pretty_total(@costs[:memory][:monthly])
+  %li.pure-u-1.pure-u-md-1-2
+    #jg-disk_size.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets Disk Space
+        %ul.pure-u-1-2.jg-widget-controls
+          %li
+      .jg-widget-body
+        .jg-chart.piechart
+          %svg
+      .jg-widget-footer.jg-no-pad
+        %ul.jg-footer-list.pure-g
+          %li.pure-g.pure-u-1-2
+          %li.pure-g.pure-u-1-2
+            %span.pure-u-1-1.jg-icon.icon-wallet.price.per.month
+              = pretty_total(@costs[:disk_size][:monthly])
+  %li.pure-u-1.pure-u-md-1-2
+    #jg-cpus.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets CPU Cores
+        %ul.pure-u-1-2.jg-widget-controls
+          %li
+      .jg-widget-body
+        .jg-chart.piechart
+          %svg
+      .jg-widget-footer.jg-no-pad
+        %ul.jg-footer-list.pure-g
+          %li.pure-g.pure-u-1-2
+          %li.pure-g.pure-u-1-2
+            %span.pure-u-1-1.jg-icon.icon-wallet.price.per.month
+              = pretty_total(@costs[:cpus][:monthly])
+  %li.pure-u-1.pure-u-md-1-2
+    #jg-bandwidth.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets Prepaid Bandwidth
+        %ul.pure-u-1-2.jg-widget-controls
+          %li
+      .jg-widget-body
+        .jg-chart.piechart
+          %svg
+      .jg-widget-footer.jg-no-pad
+        %ul.jg-footer-list.pure-g
+          %li.pure-g.pure-u-1-2
+          %li.pure-g.pure-u-1-2
+            %span.pure-u-1-1.jg-icon.icon-wallet.price.per.month
+              = pretty_total(@costs[:bandwidth][:monthly])
+
+
+  %li.pure-u-1.no-pad
+    #jg-cpu-usages.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets CPU Usage
+        %ul.pure-u-1-2.jg-widget-controls
+          %li
+            %a 24 Hours
+          %li.current
+            %a 7 Days
+          %li
+            %a 30 Days
+      .jg-widget-body
+        .jg-chart.linechart
+        %div{ :style => "clear:both" }
+        .jg-chart.overview-chart
+        %div{ :style => "clear:both" }
+  %li.pure-u-1-1.no-pad
+    #jg-tickets.jg-widget-content
+      .jg-widget-header.pure-g.clearfix
+        %h2.pure-u-1-2.jg-icon.icon-tickets Tickets
+        %ul.pure-u-1-2.jg-widget-controls
+          %li= link_to 'New Ticket', new_ticket_path, {class: 'jg-button-lilac jg-new-button'}
+      .jg-widget-body
+        %table.table.table-hover.jg-tables.pure-u-1
+          %thead
+            %tr
+              %th.pure-u-1-4 Status
+              %th.pure-u-1-4.visible-md.visible-lg Ticket ID
+              %th.pure-u-1-4 Subject
+              %th.pure-u-1-4 Last updated
+          %tbody
+
+= javascript_include_tag "dashboard/stats"

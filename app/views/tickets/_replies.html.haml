@@ -1,0 +1,19 @@
+- replies.each do |reply|
+  %li.pure-g.pure-u{class: ("admin_reply" if reply.user.nil?)}
+    .pure-u-1-4
+      %time.cbp_tmtime
+        %span.username= !reply.user.nil? ? reply.user.full_name : reply.sender
+        %span.time-date= "#{reply.created_at.to_formatted_s(:long_ordinal)}" 
+        %span.moment-date= "#{reply.created_at.iso8601}"
+          
+    .pure-u-3-4
+      .cbp_tmicon{class:(!reply.user.nil? ? "" : "icon-support")}
+        - if !reply.user.nil?
+          .gravatar= image_tag(gravatar_image(reply.user, 64), size: "32")
+      .cbp_tmlabel.more-or-less.pure-u-1
+        %span.cbp_arrow
+          %span.cbp_arrow_border
+          %span.cbp_arrow_inner
+        .text-content.pure-u-1
+          = markdown reply.body
+        %a.show-more-or-less.icon-ellipsis{href:''}

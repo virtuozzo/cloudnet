@@ -1,0 +1,18 @@
+{{#notifications.visible}}
+	<div class="alert pure-u-1 alert-{{notifications.error ? "danger" : "info"}}">
+		<a class="close" data-dismiss="alert" href="#" on-click='hide_notification'>×</a>
+		<strong>{{notifications.error ? "Error" : "Notice"}}</strong>: {{notifications.message}}
+		{{#notifications.messages.length >= 1}}
+			<ul class="pure-u-1 notifications-list">
+				{{#notifications.messages}}
+
+					<li>
+						{{.}}
+					</li>
+				{{/notifications.messages}}
+
+			</ul>
+
+		{{/notifications.messages.length}}
+	</div>
+{{/notifications.visible}}

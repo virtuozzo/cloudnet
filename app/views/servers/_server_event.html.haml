@@ -1,0 +1,31 @@
+.jg-widget-content{"ng-if" => "events"}
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u Event Log
+    %ul.pure-u.jg-widget-controls
+  
+  .jg-widget-body
+    %table.table.table-hover.jg-tables
+      %thead
+        %tr
+          %th= "Action"
+          %th= "Status"
+          %th= "Last Updated"
+          
+      %tbody
+        %tr{data: {"ng-repeat" => "event in events | startFrom:currentPage * pageSize | limitTo:pageSize"}}
+          %td= "{{ event.action | actionTitleize }}"
+          %td
+            %span{class: "tags {{ event.status }}" }= "{{ event.status | actionTitleize }}"
+          %td
+            %span{"am-time-ago" => "event.updated_at"}  
+
+        %tr{data: {"ng-if" => "events && events.length === 0"}}
+          %td.no-data{colspan: "3"}
+            %div= "We don't have any events for this server"
+            %div= "If you just created it, hold on a sec while we sync with your server"
+  
+  .jg-widget-footer.jg-pagination
+    .jg-pagination-controls{"ng-show" => "events"}
+      %a{class: 'jg-previous icon-arrow-left', "ng-click" => "currentPage = currentPage - 1", "ng-show" => "currentPage > 0"}
+      %span Page {{ currentPage + 1 }} of {{ numberOfPages() }}
+      %a{class: 'jg-next icon-arrow-right', "ng-click" => " currentPage = currentPage + 1", "ng-show" => "currentPage < events.length/pageSize - 1"}

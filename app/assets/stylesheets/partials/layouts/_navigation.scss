@@ -1,0 +1,79 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import '../base';
+
+$jg-header-lilac-border:    #b6b9c5;
+$jg-blue:                   #3c74e5;
+$jg-border-light: #d6d4d4;
+$jg-module-bg-light: #ffffff;
+
+$jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, sans-serif;
+
+#menu {
+
+    #logo {
+        border: 1px solid $jg-header-lilac-border;
+        @include box-shadow(inset -1px 0 0 0 $jg-header-lilac-border);
+        border-width: 0 0 1px 0;
+    }
+
+    nav {
+        border:     none;
+        background: transparent;
+
+        .navbar.navbar-default.navbar-static-top {
+            background: none;
+            border:     none;
+        }
+
+        .navbar-header {
+            float: none;
+        }
+
+        ul {
+            border-top: none;
+            visibility: visible;
+            position:   relative;
+            left:       0;
+            top:        0;
+            z-index:    1;
+            margin:     20px 0;
+
+            li {
+                width: 100%;
+                a {
+                    font-family:    $jg-font-main;
+                    font-size:      $fourteen;
+                    position:       relative;
+                    padding:        0 0 0 20px;
+                    text-indent:    10px;
+                    line-height:    2.75em;
+                    border-right:   1px $jg-border-light solid;
+
+                    &:before {
+                        content:    '';
+                        background: transparent;
+                        position:   absolute;
+                        width:      4px;
+                        height:     100%;
+                        left:       0;
+                    }
+                }
+
+                &.pure-menu-selected, &.active {
+                    a {
+                        color: $jg-blue;
+                        // border-right:    1px $jg-blue solid;
+                        &:before {
+                            background: $jg-blue;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}

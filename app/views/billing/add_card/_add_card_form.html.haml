@@ -1,0 +1,56 @@
+.jg-widget-body#jg-card-form
+  .jg-widget-form.pure-g.pure-u-1
+    %div.cc_card_alert#cc_card_alert
+
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-3-4
+        = label_tag 'cc_number_label', 'Card Number' , {for: '#cc_number', class: 'pure-u-1 jg-mandatory'}
+        %span.jg-relative.field-container
+          = text_field_tag 'cc_number', '' , {class: 'pure-u-1', placeholder: '---- ---- ---- ----'}
+          %span.cardtype.field-status.icon-error{class: 'bs-tooltip', data: {toggle: 'tooltip', title: 'Invalid card number, please check the card number.', placement: 'bottom'}}
+      .pure-u-1.pure-u-md-1-4
+        = label_tag 'cc_cvc_label', 'CVC' , {for: '#cc_cvc', class: 'pure-u-1 jg-mandatory'}
+        %span.jg-relative.field-container
+          = text_field_tag 'cc_cvc', '' , {class: 'pure-u-1', placeholder: '---', maxlength: 4}
+          %span.field-status.icon-error{class: 'bs-tooltip', data: {toggle: 'tooltip', title: 'Invalid CVC, check the last 3-4 digits on the back of your card', placement: 'bottom'}}
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_holder_label', 'Cardholder Name' , {for: '#cc_holder_name', class: 'pure-u-1 jg-mandatory'}
+        = text_field_tag 'cc_holder_name', '' , {class: 'pure-u-1'}
+      .pure-u-1.pure-u-md-8-24.jg-relative
+        = label_tag 'cc_month', 'Expiry Month', {class: 'pure-u-1 jg-mandatory'}
+        %span.jg-relative.field-container
+          = text_field_tag 'cc_month', '' , {class: 'pure-u-1', placeholder: 'MM', maxlength: 2}
+          %span.field-status.icon-error{class: 'bs-tooltip', data: {toggle: 'tooltip', title: 'Invalid month', placement: 'bottom'}}
+      .pure-u-1.pure-u-md-4-24
+        = label_tag 'cc_year', 'Expiry Year' , {class: 'pure-u-1 jg-mandatory'}
+        %span.jg-relative.field-container
+          = text_field_tag 'cc_year', '' , {class: 'pure-u-1', placeholder: 'YY', maxlength: 2}
+          %span.field-status.icon-error{class: 'bs-tooltip', data: {toggle: 'tooltip', title: 'Invalid year', placement: 'bottom'}}
+  .jg-widget-form.pure-g.pure-u-1
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_address1', 'Billing Address Line 1' , {class: 'pure-u-1 jg-mandatory'}
+        = text_field_tag 'cc_address1', '' , {class: 'pure-u-1', placeholder: 'Enter address line 1'}
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_address2', 'Billing Address Line 2' , {class: 'pure-u-1'}
+        = text_field_tag 'cc_address2', '' , {class: 'pure-u-1', placeholder: 'Enter address line 2 (optional)'}
+  .jg-widget-form.pure-g.pure-u-1
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_city', 'Billing City' , {class: 'pure-u-1 jg-mandatory'}
+        = text_field_tag 'cc_city', '' , {class: 'pure-u-1', placeholder: 'Enter city'}
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_region', 'Billing Region/State/County' , {class: 'pure-u-1 jg-mandatory'}
+        = text_field_tag 'cc_region', '', {class: 'pure-u-1', placeholder: 'Enter Region/State/County'}
+  .jg-widget-form.pure-g.pure-u-1
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_postal_code', 'Billing Postal/Zip Code', {class: 'pure-u-1 jg-mandatory'}
+        = text_field_tag 'cc_postal_code', '' , {class: 'pure-u-1', placeholder: 'Enter zipcode or postcode'}
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'cc_country', 'Billing Country' , {class: 'pure-u-1 jg-mandatory'}
+        = country_select_tag 'cc_country', 'US', {priority: ['US', 'GB', 'CA', 'AU']} 
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      %li= button_tag "Add card", {class: 'btn jg-submit-button', id: "cc_card_submit"}

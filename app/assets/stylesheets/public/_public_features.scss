@@ -1,0 +1,200 @@
+@import "partials/base";
+
+.public-features{
+  //margin-top: 20px;
+  h2{font-weight: 400;}
+  h3{font-size: $thirteen;}
+  .gray-line{background: #F5F5F5; margin-top: 2em;}
+  .white-line{background: #FFFFFF; padding-top: 2em;}
+  .headline-gray{ 
+    background: #F5F5F5 !important;
+    color: #747474 !important;
+    p{
+      color: #747474 !important;
+      margin-bottom: 1em !important;
+    }
+    a{margin-bottom: 3em;}
+  }
+  .headline{
+    background: #4383C3; color: #FFF;
+    text-align: center;
+    //height: 200px;
+    p{ 
+      color: #FFF;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 2em;
+    }
+    h1{
+      font-family: $public-font;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 36px;
+      margin-top: 2em;
+    }
+  }
+  .picanim {
+    margin-top: 20px;
+    position: relative;
+    height: 350px;
+    img{position: absolute;}
+    @media (max-width: $container-med) {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      height: 250px;
+    }
+    @media (max-width: $container-sm) {
+      width: 40%;
+    }
+  }
+  .last-textual-info{margin-top: -100px;}
+  @media (max-width: $container-sm) {
+    .hide-mobile {display: none;}
+    .last-textual-info{margin-top: 0px;}
+  }
+  @media (min-width: $container-sm) {
+    .show-mobile {display: none;}
+  }
+  #fb1, #fb2{
+    position: relative;
+    left: 100px;
+    @include animation(cloud-network ease-in-out 4s);
+    @include animation-iteration-count(infinite);
+    @media (max-width: $container-med) {
+      left: 70px;
+      top: 10px;
+      width: 40px;
+    }
+  }
+  
+  #fb2{
+    left: 200px;
+    top: 70px;
+    @include animation-duration(3.5s);
+    @media (max-width: $container-med) {
+      left: 110px;
+    }
+  }
+  
+  @include keyframes(cloud-network){
+    0% { @include transform(translate(0px,0px)); }
+    50% { @include transform(translate(50px,0px)); }
+  }
+  
+  #fc1{
+    left: 30px;
+    top: 30px;
+    @include animation(price-1 ease-in-out 7s);
+    @include animation-iteration-count(infinite);
+    @media (max-width: $container-med) {
+      top: 0;
+      width: 40%;
+    }
+  }
+  #fc2{
+    left: 200px;
+    top: 50px;
+    @include animation(price-2 ease-in-out 8s);
+    @include animation-iteration-count(infinite);
+    @media (max-width: $container-med) {
+      top: 0;
+      left: 160px;
+      width: 28%;
+    }
+  }
+  #fc3{
+    left: 50px;
+    top: 150px;
+    @include animation(price-2 ease-in-out 6s);
+    @include animation-iteration-count(infinite);
+    @media (max-width: $container-med) {
+      top: 100px;
+      left: 60px;
+      width: 28%;
+    }
+  }
+  #fc4{
+    top: 50px;
+    @include animation(price-1 ease-in-out 12s);
+    @include animation-iteration-count(infinite);
+    @media (max-width: $container-med) {
+      left: 20px;
+      top: 0;
+      width: 70%;
+    }
+  }
+}
+
+@include keyframes(price-1){
+  0% { @include transform(translate(0px,0px)); }
+  50% { @include transform(translate(50px,-10px)); }
+}
+@include keyframes(price-2){
+  0% { @include transform(translate(0px,0px)); }
+  50% { @include transform(translate(0px,70px)); }
+}
+
+#fd1{
+  top: 100px;
+}
+#fd2{
+  left: 118px;
+  top: -70px;
+  @include animation(price-2 ease-in-out 6s);
+  @include animation-iteration-count(infinite);
+  @media (max-width: $container-med) {
+    left: 75px;
+    top: -20px;
+    width: 35%;
+  }
+  @media (max-width: $container-sm) {left: 32%;}
+}
+#fe2{
+  left: 65px;
+  top: 35px;
+  @include animation(cloud-network ease-in-out 4s);
+  @include animation-iteration-count(infinite);
+  @media (max-width: $container-med) {
+    left: 20%;
+    top: 15%;
+    width: 40%;
+  }
+}
+
+.biling-pic{
+  margin-left: 35px;
+  min-height: 280px;
+}
+#ff1{
+  left: 135px;
+  top: 70px;
+  @media (max-width: $container-med) {
+    width: 35%;
+    left: 95px;
+    top: 50px;
+  }
+  @media (max-width: $container-sm) {width: 30%; left: 120px;}
+}
+#ff2{
+  left: 10px;
+  @include animation(dangling ease-in-out 2s);
+  @include animation-iteration-count(infinite);
+  @media (max-width: $container-med) {width: 37%;}
+  @media (max-width: $container-sm) {width: 4em; left: 55px; top: 10%;}
+}
+#ff3{ 
+  top: 190px; 
+  @media (max-width: $container-med) {
+    width: 85%;
+    top: 135px;
+  }
+  @media (max-width: $container-sm) {width: 185px; left: 50px;}
+}
+@include keyframes(dangling){
+  0%, 70% { @include transform(rotate(0deg)); }
+  77% { @include transform(rotate(-20deg)); }
+  85% { @include transform(rotate(20deg)); }
+  92% { @include transform(rotate(-10deg)); }
+  97% { @include transform(rotate(10deg)); }
+}

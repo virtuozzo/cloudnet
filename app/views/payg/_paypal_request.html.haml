@@ -1,0 +1,6 @@
+- if @task.errors.present?
+  .jg-widget-form.pure-g-r.clearfix
+    %div
+      %p Could not complete Paypal payment due to the following issues:
+      %p 
+        %strong= @task.errors.join(',')

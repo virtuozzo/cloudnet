@@ -1,0 +1,6 @@
+= semantic_form_for :transaction_report, url: { action: :transaction_report }, method: :post do |f|
+  = f.inputs "Transaction Finance Report | Choose Date Range" do
+    = f.input :start, as: :date_picker, input_html: { value: Date.today - 1.month }
+    = f.input :end, as: :date_picker, input_html: { value: Date.today }
+  = f.actions do
+    = f.action :submit, label: "Download Transaction Report"

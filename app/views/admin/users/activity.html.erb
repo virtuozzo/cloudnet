@@ -1,0 +1,21 @@
+<table>
+  <thead>
+    <th>Timestamp</th>
+    <th>Action</th>
+  </thead>
+
+  <tbody>
+    <% @activities.each do |activity| %>
+      <tr class="activity">
+        <td><%= activity.created_at.to_formatted_s(:long_ordinal) %></td>
+        <td>
+          <%= render_activity activity %>
+          <% if !activity.parameters[:admin].nil? %>
+            <% admin = User.with_deleted.find(activity.parameters[:admin]) %>
+            (via admin: <%= link_to admin.full_name, admin_user_path(admin) %>)
+          <% end %>
+        </td>
+      </div>
+    <% end %>
+  </tbody>
+</table>

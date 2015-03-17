@@ -1,0 +1,17 @@
+- if @task.errors.present?
+  .jg-widget-form.pure-g-r.clearfix
+    %div
+      %p Could not complete card payment due to the following issues:
+      %p 
+        %strong= @task.errors.join(',')
+  
+- else
+  .jg-widget-form.pure-g-r.clearfix
+    %div
+      %p 
+        Thank you for topping up your account using your card. Your new PAYG balance is
+        %strong= payg_balance(current_user)
+      %p= link_to 'Download Payment Receipt', billing_payment_receipt_pdf_path(@task.payment_receipt.sequential_id), target: '_blank'
+  
+.modal-footer
+  %button.btn.jg-back-button{"data-dismiss" => "modal"} Close

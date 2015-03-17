@@ -1,0 +1,5 @@
+%a.widget-tab.widget-tab-right{href: "http://feedback.cloud.net/", id: "feedback-tab", title: "Feedback"}
+  %img{alt: "", src: "https://feedback.cloud.net/public/files/logo/widget-text-default.png", width: "15"}/
+
+:javascript
+  var URWidgetListener = function (event) {  if (event.data.indexOf("redirect") == 0) {    found = event.data.match(/redirect:url\(([^\)]*)\)/);    if (found.length == 2) {      location.href = found[1];    }  }};if (window.addEventListener) {  window.addEventListener("message", URWidgetListener, false);} else {  window.attachEvent("onmessage", URWidgetListener);} var head  = document.getElementsByTagName("head")[0];var link  = document.createElement("link");link.rel  = "stylesheet";link.type = "text/css";link.href = "https://feedback.cloud.net/public/themes/default/assets/css/widget.css";link.media = "all";head.appendChild(link);

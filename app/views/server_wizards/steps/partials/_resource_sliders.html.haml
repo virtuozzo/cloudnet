@@ -1,0 +1,52 @@
+.jg-widget-form.pure-g.clearfix.jg-sliders
+  .form-group.pure-u-1.memory-slider
+    .pure-g
+      .pure-u-1.pure-u-md-1-5
+        .resource-unit
+          = f.label :memory, {class: 'pure-u-1 jg-mandatory'}
+          %span.total-resource-cost
+            %b.price= location.price_memory
+            = " / MB / hour"
+      .pure-u-1.pure-u-md-3-5
+        #memory-slider.wizard-slider
+      .pure-u-1.pure-u-md-1-5
+        %span.unit-box
+          = f.text_field :memory, class: 'form-control wizard-text-box'
+          %span.unit="MB"
+  .form-group.pure-u-1.cpu-slider
+    .pure-g
+      .pure-u-1.pure-u-md-1-5
+        .resource-unit
+          = f.label :cpus, 'CPUs', {class: 'pure-u-1 jg-mandatory'}
+          %span.total-resource-cost
+            %b.price= location.price_cpu
+            = " / Core / hour"
+      .pure-u-1.pure-u-md-3-5
+        #cpus-slider.wizard-slider
+      .pure-u-1.pure-u-md-1-5
+        %span.unit-box
+          = f.text_field :cpus, class: 'form-control wizard-text-box'
+          %span.unit="Core(s)"
+  .form-group.pure-u-1.disk-slider{:class => ("disabled" if @server)}
+    .pure-g
+      .pure-u-1.pure-u-md-1-5
+        .resource-unit
+          = f.label :disk_size, {class: 'pure-u-1 jg-mandatory'}
+          %span.total-resource-cost
+            %b.price= location.price_disk
+            = " / GB / hour"
+      .pure-u-1.pure-u-md-3-5
+        #disk_size-slider.wizard-slider
+      .pure-u-1.pure-u-md-1-5
+        %span.unit-box
+          = f.text_field :disk_size, class: 'form-control wizard-text-box'
+          %span.unit="GB"
+
+  .form-group.pure-u-1
+    %ul.resources-footer.pure-g
+      %li.pure-u-1-2
+        %span.resource-value#inclusive-bandwidth
+        %span.resource Inclusive Bandwidth
+      %li.pure-u-1-2
+        %span.resource-value#inclusive-ip-address 1 IP
+        %span.resource Allocated IP Address

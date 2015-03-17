@@ -1,0 +1,9 @@
+%table{class: "table table-condensed"}
+  %tr
+    %th{colspan: 3} Predefined packages:
+  %tr{:"ng-repeat" => "pack in packages",
+      :"ng-click"  => "activatePackage(pack)",
+      :"ng-class"  => "{ activated: pack.id == ctrl.packages.activePackage.id }"}
+    %td{:"ng-bind" => "pack.cpu + ' ' + pluralize('core', pack.cpu)"}
+    %td{:"ng-bind" => "pack.mem + ' MB'"}
+    %td{:"ng-bind" => "pack.disk + ' GB'"}

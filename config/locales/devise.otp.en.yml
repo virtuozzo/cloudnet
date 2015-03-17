@@ -1,0 +1,70 @@
+en:
+  devise:
+
+    otp:
+      submit_token:
+        title: 'Check Token'
+        explain: "You're getting this because you enabled two-factor authentication on your account"
+        prompt: 'Please enter your two-factor authentication token:'
+        recovery_prompt: 'Please enter your recovery code:'
+        submit: 'Submit Token'
+        recovery_link: "I don't have my device, I want to use a recovery code"
+
+      credentials:
+        token_invalid: 'The token you provided was invalid.'
+        token_blank: 'You need to type in the token you generated with your device.'
+        need_to_refresh_credentials: 'We need to check your credentials before you can change these settings.'
+        valid_refresh: 'Thank you, your credentials were accepted.'
+        valid_refresh_try_again: 'Thank you, your credentials were accepted. Please perform the previous action again'
+        invalid_refresh: 'Sorry, you provided the wrong credentials.'
+
+      credentials_refresh:
+        title: 'Please enter your password again.'
+        explain: 'In order to ensure this is safe, please enter your password again.'
+        go_on: 'Continue...'
+        identity: 'Identity:'
+        token: 'Your two-factor authentication token'
+
+      token_secret:
+        title: 'Your token secret'
+        explain: 'Take a photo of this QR code using the Google Authenticator app on your mobile device (Install the Google Authenticator app from the App Store if you do not have it already)'
+        manual_provisioning: 'Manual provisioning code'
+        reset_otp: 'Reset your Two Factor Authentication status'
+        reset_explain: 'This will reset your credentials, and disable two-factor authentication.'
+        reset_explain_warn: 'You will need to enroll your mobile device again.'
+
+      tokens:
+        title: 'Two-factor Authentication:'
+        explain: 'Two factor authentication adds an additional layer of security to your account. When logging in you will be asked for a code that you can generate on a physical device, like your phone. You will need the Google Authenticator app installed on your phone (download from the Apple App Store or Google Play Store)'
+        enable_request: 'Would you like to enable Two Factor Authenticator?'
+
+        status: 'Enable Two-Factor Authentication.'
+        submit: 'Continue...'
+
+        not_enabled: "Could not validate your authentication token. Please re-enter your Authenticator token to enable two-factor authentication"
+        successfully_enabled: Two-factor authentication has been successfully enabled. Please ensure you download a copy of your recovery codes
+        successfully_disabled: Two-factor authentication has been disabled
+        successfully_updated: 'Your two-factor authentication settings have been updated.'
+        successfully_reset_creds: 'Your two-factor credentials has been reset.'
+        successfully_set_persistence: 'Your device is now trusted.'
+        successfully_cleared_persistence: 'Your device has been removed from the list of trusted devices.'
+        successfully_reset_persistence: 'Your list of trusted devices has been cleared.'
+
+        need_to_refresh_credentials: 'We need to check your credentials before you can change these settings.'
+
+        recovery:
+          title: 'Your Emergency Recovery Codes'
+          explain: 'Take note or print these recovery codes. The will allow you to log back in in case your token device is lost, stolen, or unavailable.'
+          sequence: 'Sequence'
+          code: 'Recovery Code'
+          codes_list: 'View your recovery codes'
+
+
+      trusted_devices:
+        title: 'Trusted Browsers'
+        explain: 'If you set your browser as trusted, you will not be asked to perform a two-factor authentication when logging in from that browser, for a time of one month.'
+        device_trusted: 'Your browser is trusted.'
+        device_not_trusted: 'Your browser is not trusted.'
+        trust_remove: 'Remove this device from the list of trusted browsers'
+        trust_add: 'Trust this browser'
+        trust_clear: 'Clear the list of trusted browser'

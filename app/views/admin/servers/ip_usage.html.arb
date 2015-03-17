@@ -1,0 +1,8 @@
+table_for assigns[:servers] do
+  column :id
+  column :name
+  column :hostname
+  column :user
+  column :deleted_at
+  column :ip_address
+end

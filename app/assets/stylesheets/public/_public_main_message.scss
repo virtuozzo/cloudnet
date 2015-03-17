@@ -1,0 +1,59 @@
+@import "partials/base";
+
+.public-main{
+  .space{
+    position: absolute;
+    @include background(image-url('https://cloud.net/movies/starsbg.jpg') repeat-x);
+    height: 100%;
+    width: 100%;
+    z-index: -2;
+  }
+  .main-message-area{ 
+    min-height: 558px;
+    .jg-main-message{
+      color: $public-light-text;
+      h1{
+        font-family: $public-font;
+        font-weight: bold;
+        padding: 10px;
+        text-align: center;
+        margin-top: 50px;
+        text-transform: uppercase;
+      }
+      .jg-top-message { 
+        font-family: $public-font;
+        padding: 10px;
+        //background-color: rgba(0,0,0,0.5);
+        text-align: center;
+      }
+    }
+  }
+
+  #globe{
+    overflow: hidden;
+    position: absolute; 
+    z-index: -1;
+  }
+
+  .jg-parameters-form{
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    background-color: rgba(0,0,0,0.5);
+    padding: 10px 30px 30px 30px;
+    @media (max-width: 768px) {
+      padding: 10px 30px 14px 30px;
+    }
+  
+    .main-label{
+      box-sizing: border-box;
+      padding: 0 5px;
+      color: $public-light-text;
+      font-size: $thirteen;
+      font-weight: normal;
+    }
+  
+    button{ margin: 27px 0 0 10px;}
+  }
+}

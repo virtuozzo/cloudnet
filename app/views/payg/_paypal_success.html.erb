@@ -1,0 +1,20 @@
+<html>
+<head></head>
+<body>
+
+<script type="text/javascript">
+  if (window.opener){
+    window.close();
+  } else if (window.top.pp_flow.isOpen() == true) {
+    <% if @task.errors.empty? %>
+      window.top.pp_responder.successHandler("<div class=\"jg-widget-form pure-g-r clearfix\"><div><p>Your Paypal Payment has been completed successfully. Your new balance is <strong><%= payg_balance(current_user) %></strong></p><p><a href='<%= billing_payment_receipt_pdf_path(@task.payment_receipt.sequential_id) %>' target='_blank'>Download Payment Receipt</a></p></div></div>");
+    <% else %>
+      window.top.pp_responder.cancelHandler();
+    <% end %>
+
+    window.top.pp_flow.closeFlow();
+  }
+</script>
+
+</body>
+</html>

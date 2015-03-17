@@ -1,0 +1,16 @@
+.jg-widget-body.clearfix
+  .pure-g.clearfix
+    .pure-u-1-24
+    .pure-u-11-12
+      #jg-payg-widget
+        = render partial: 'billing/payg_details', locals: { payg: payg, wizard: @wizard_object }
+      = render partial: 'payg/payg_popover'
+      = javascript_include_tag "payg/payg_pie"
+
+  .jg-widget-footer.actions.clearfix
+    .resources-total.pure-g.no-costs#jg-payg-confirmation-costs
+      = render partial: "server_wizards/steps/partials/payg_confirmation_costs", locals: { costs: costs, coupon_multiplier: coupon_multiplier }
+
+    %ul.jg-widget-controls
+      %li= f.button @submit_button_title, class: 'btn jg-submit-button', id: "jg-payg-create-server"
+      %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button'

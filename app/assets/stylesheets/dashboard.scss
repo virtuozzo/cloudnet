@@ -1,0 +1,212 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "partials/base";
+
+.per {
+  &:after {
+    font-weight: normal;
+    color: #777;
+    padding: 0 0 0 6px;
+  }
+}
+
+.per.hour {
+  &:after {
+    content: 'per hour'
+  }
+}
+.per.month {
+  &:after {
+    content: 'per month';
+  }
+}
+
+.dashboard-stats .jg-widget-content .jg-widget-footer {
+.jg-footer-list {
+  li {
+    position: relative;
+    @include box-sizing(border-box);
+    // padding-right: 80px;
+    > * {
+      float: left;
+    }
+    &:last-child {
+      border-right: none;
+    }
+    span.jg-icon {
+      &:before {
+        position: absolute;
+        left: 0;
+        padding: 10px 0 0 15px;
+        color: #505050;
+        font-size: 16px;
+
+      }
+    }
+    span {
+      font-size: $fourteen;
+    }
+    span.price {
+      background: #fbfbfb;
+      text-align: right;  
+    }
+    span.unit {
+      position: relative;
+      margin-right: -70px;
+      float: right;
+    }
+
+  }
+}
+}
+.d3-tip {
+  .jg-tooltip-body {
+    width: 400px;
+    height: 100%;
+    &.tooltip-linechart {
+      width: auto;
+      padding: 10px;
+      font-size: 10px;
+      strong {
+        font-size: 12px;
+        display: block;
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .server-tooltip-header {
+    padding: 10px;
+
+    font-size: 16px;
+    border-bottom: dotted 1px #e7e7e7;
+    .tags {
+      float: right;
+      margin: 11px 8px;
+    }
+    .jg-icon {
+      &:before {
+        color: $jg-green;
+        padding: 0 10px 0 0;
+      }
+    }
+    h2 {
+      font-size: 14px;
+      color: #afb1b8;
+    }
+  }
+  .server-tooltip-body {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+
+    font-size: 16px;
+    background: $jg-light-grey;
+    ul.server-info {
+      padding: 0  0 0 20px;
+      li {
+        font-weight: normal;
+        color: #a8aab2;
+        &.nation {
+          font-weight: bold;
+          color: #505050;
+        }
+        padding: 2px 8px;
+        font-size: $thirteen;
+        line-height: $twentyeight;
+        float: left;
+        img {
+          margin: -3px 6px 0 0;
+        }
+      }
+    }
+
+    .os {
+      padding: 22px 10px;
+    }
+
+  }
+}
+
+.jg-chart {
+  padding: 20px;
+  @include box-sizing(border-box);
+  &.hide-chart {
+    visibility: hidden;
+  }
+
+  .total-unit, .nv-noData, .nv-legend-text {
+    // @include transform(translate(0px, 100px));
+    font-size:    16px;
+    font-weight:  bold;
+    fill:         #afb1b8;
+  }
+
+  .nv-legend-text {
+    font-size:    13px;
+    font-weight:  normal;
+  }
+
+  svg {
+    text {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      fill: #505050;
+    }
+  }
+
+  .nv-pieWrap {
+      @include transform(translate(0px, -20px) !important);
+  }
+  .nv-legendWrap {
+      @include transform(translate(0px, 165px) !important);
+  }
+
+  &.piechart {
+    svg {
+      height: 240px;
+      width:  100%;
+      path {
+        cursor: pointer;
+      }
+    }
+  }
+  
+  &.linechart {
+    width: 100%;
+    padding-bottom: 5px;
+  }
+  &.overview-chart {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 30px;
+    p {
+      color: #afb1b8;
+      font-size: 16px;
+      line-height: 28px;
+    }
+    a {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+  }
+}
+.dashboard-stats {
+  padding: 0 0 20px 0;
+  margin: 0;
+  list-style-type: none;
+  > li {
+      padding: 0 20px 0 0;
+      @include box-sizing(padding-box);
+      float: left;
+
+      &:nth-child(even), &.no-pad {
+        padding: 0;
+      }
+  }
+}

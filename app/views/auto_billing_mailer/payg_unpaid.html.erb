@@ -1,0 +1,9 @@
+<p>Hi <%= @user.full_name %>!</p>
+
+<p>An automated billing invoice has been generated for your account. The invoice is attached and can also be viewed in the <%= link_to 'billing section', billing_index_url %></p>
+
+<p>Payment could not be deducted from your payment receipts because there was not enough PAYG credit on your account. Please top up your account in the <%= link_to 'billing section', billing_index_url %> to avoid automatic shutdown of your servers.</p>
+
+<p>Thanks,</p>
+
+<p>The Cloud.net Team</p>

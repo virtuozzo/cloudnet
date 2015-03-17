@@ -1,0 +1,5 @@
+= semantic_form_for :notify_users, url: { action: :send_users_notification } do |f|
+  = f.inputs "Notification Details" do
+    = f.input :subject, input_html: { placeholder: "Notification Email Subject" }
+    = f.input :message, as: :text, input_html: { placeholder: "Enter message here (user greeting will be automatically added as well as the list of servers affected at the end, you just need to write the meat of the message). This box uses Markdown parsing so write your email body in Markdown format" }
+  = f.actions

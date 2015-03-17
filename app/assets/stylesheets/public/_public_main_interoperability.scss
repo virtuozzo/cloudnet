@@ -1,0 +1,15 @@
+@import "partials/base";
+.public-main{
+  .main-interoperability{
+    background: #375B6F;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    h2{color: #F5F6F7;}
+    p{
+      color: #8BA0AC;
+      font-size: 1.2em;
+      @media (max-width: $container-med) { font-size: 1em; }
+    }
+    img{padding-right: 1em;}
+  }
+}

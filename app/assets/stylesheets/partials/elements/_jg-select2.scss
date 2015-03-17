@@ -1,0 +1,188 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/*
+Compatible Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
+*/
+
+@import '../base';
+
+.jg-option-field {
+    margin: 0 15px;
+    height: 100%;
+    display: inline-block;
+
+    &.os {
+        margin: 0 15px  0 0;
+
+        &:before {
+            margin-right: 8px;
+            position: relative;
+            top: 2px;
+        }
+
+    }
+}
+
+.select2-container.jg-select {
+    @include border-radius(2px);
+    width:              100%;
+    a {
+        color: $jg-lilac-strong;
+        font-size:  $twelve;
+        font-weight: bold; 
+        line-height: $thirtysix;
+        height:      38px;
+        
+        background-color: rgba(255,255,255,0);
+
+        border-color: #cfd0dc #c3c5d3 #a7aabd #c3c5d3;
+
+        @include border-radius(2px);
+        @include box-shadow(0 1px rgba(0,0,0,.09), inset 0 1px 2px rgba(255,255,255,.6));
+        @include background-image(linear-gradient(to top, #f1f2f7, #f8f8fb));
+        padding: 0 12px;
+        span.select2-chosen {
+            height:         100%;
+            line-height:    37px;
+        }
+
+        span.select2-arrow {
+            background:     none;
+            border-left:    none;
+            width:          30px;
+            margin-left:    10px;
+            b {
+                background: none;
+                position: relative;
+                &:before{
+
+                    font-family: 'jg-cloud';
+                    speak: none;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-variant: normal;
+                    text-transform: none;
+                    line-height: 1;
+                    content: "\e618";
+                    font-size: 1.250em;
+                    position: relative;
+                    top: 20%;
+                }
+
+            }
+        }
+    }
+
+    &.select2-container-active.select2-dropdown-open.select2-drop-above {
+        @include border-radius(2px);
+        a {
+            border: 1px solid;
+            // border-color: #6a97f1 #6a97f1 #386fde #6a97f1;
+            border-color: #cfd0dc #c3c5d3 #a7aabd #c3c5d3;
+            @include border-radius(2px);
+            @include box-shadow(0 1px rgba(0,0,0,.09), inset 0 1px 2px rgba(255,255,255,.6));
+            @include background-image(linear-gradient(to top, #f1f2f7, #f8f8fb));
+        }
+    }
+    &.select2-container-active {
+        @include border-radius(2px);
+        a {
+            @include border-radius(2px);
+            border-color: #6e99f1 #6e99f1 #386edb #6e99f1;
+            @include box-shadow(0 0 2px 1px rgba(57,112,222,.2), 0 1px 0 rgba(31,85,193,.1));
+        }
+        span.select2-arrow {
+            b {
+                &:before{
+                    content: "\e619";
+                    color: $jg-blue;
+                }
+            }
+        }
+    }
+}
+
+.select2-drop.jg-dropdown {
+    border:         1px solid;
+    border-color:   #d2d4da #d2d4da #a7aabd #d2d4da;
+
+    margin:         3px 0 0;
+    z-index:        99999999;
+
+    @include border-radius(2px);
+    @include box-shadow( 0 1px 1px rgba(0, 0, 0, .2));
+
+    .select2-search {
+        padding:    6px 0;
+        margin:     0;
+        border-bottom: 1px solid $jg-border-default;
+
+        input {
+            border:     none;
+            background: none;
+            font-size:  $thirteen;
+            color:      $colour;
+        }
+    }
+    
+    ul.select2-results {
+        padding:            0px;
+        margin:             0px;
+        max-height:         250px;
+
+        li {
+            padding: 4px;
+            border:         none;
+            font-size:      $twelve;
+            line-height:    $thirtysix;
+            color:          $label-colour;
+
+            &.select2-highlighted {
+                color:          white;
+                font-weight:    bold;
+            }
+            &:after {
+                background: white;
+            }
+            &:first-child {
+                // @include border-radius(2px 2px 0 0);
+            }
+            &:last-child {
+                @include border-radius(0 0 2px 2px);
+            }
+        }
+    }
+
+    // Options
+
+    &.search-off {
+        .select2-search {
+            visibility: hidden;
+            display:    none;
+        }
+        ul.select2-results {
+            li {
+                &:first-child {
+                    @include border-radius(2px 2px 0 0);
+                }
+            }
+        }
+    }
+
+    &.select2-drop.select2-drop-above.select2-drop-active {
+        border:         1px solid;
+        border-color:   #d2d4da #d2d4da #a7aabd #d2d4da;
+        margin:         0 0 3px;
+
+        @include border-radius(2px);
+        @include box-shadow( 0 1px 1px rgba(0, 0, 0, .2));
+    }
+
+}
+
+.field_with_errors .select2-container.jg-select a.select2-choice, .field_with_errors .select2-drop.jg-dropdown a.select2-choice {
+    border:             1px solid $jg-warning-red;
+    @include border-radius(2px);
+}

@@ -1,0 +1,516 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import '../base';
+@import 'select2';
+@import 'jg-select2';
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color:    $colour;
+    opacity:  0.9;
+}
+input:-moz-placeholder, textarea:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    $colour;
+    opacity:  0.9;
+}
+input::-moz-placeholder, textarea::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    $colour;
+    opacity:  0.9;
+}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder,{ /* Internet Explorer 10+ */
+    color:    $colour;
+    opacity:  0.9;
+}
+
+input[placeholder], textarea[placeholder] {
+   color:     $colour;
+   opacity:   0.9;
+}
+
+.jg-mandatory {
+    &:after {
+        color:      $jg-warning-red;
+        position:   relative;
+        display:    inline-block;
+        content:    '*';
+        padding:    0 4px;
+    }
+}
+
+span.unit-box {
+    display: block;
+    height: 40px;
+    @include border-radius(2px);
+    @include box-shadow(inset 0 1px 1px rgba(33,18,17,.15));
+    border:       1px solid $jg-lilac-light;
+    border-top-color:   $jg-lilac;
+    position: relative;
+    z-index: 20;
+    input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 55%;
+        @include border-radius(2px 0 0 2px);
+        @include box-shadow(none);
+        border: none;
+        background: none;
+        height: 100%;
+    }
+    span.unit {
+        @include box-shadow(inset 0 1px 1px rgba(33,18,17,.15));
+        @include border-radius(0 2px 2px 0);
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #f1f2f7;
+        display:    block;
+        width: 44%;
+        font-size:          $thirteen;
+        height: 100%;
+        line-height:        2.95em;
+        text-align: center;
+        font-weight: bold;
+        color: #8d91aa;
+        border-left: 1px solid #cbcdd4;
+    }
+}
+
+.jg-step-box {
+
+
+    list-style-type: none;
+    background: #f1f2f7;
+    border:     1px solid #cdcfd8;
+    border-bottom-color: #c0c3cf;
+    margin: 20px 0;
+    padding: 0;
+
+    ul.checkoutList {
+        list-style-type: none;
+        margin:          0;
+        padding: 0 0 0 10px;
+        li {
+            display: inline-block;
+            padding: 0 2px;
+        }
+    }
+
+    > li {
+        padding:        0;
+        border-bottom: 1px solid #cdcfd8;
+        &.open {
+            .step-body {
+                display: block;
+                visibility: visible;
+            }
+            .step-header {
+                border-bottom: 1px solid #cdcfd8;
+            }
+        }
+
+        &:last-child {
+
+        }
+
+        &.disabled {
+            > * {
+                opacity: .6;
+            }
+
+            #toggle {
+                cursor: default;
+                visibility: hidden;
+            }
+        }
+    }
+
+    @include border-radius(2px);
+    @include box-shadow(0px 1px 1px rgba(0,0,0,.07));
+
+    .step-header {
+        border: none;
+        padding: 15px 15px 15px 100px;
+        position: relative;
+        min-height: 60px;
+
+        .step-value {
+            width: 90%;
+        }
+
+        h4 {
+            margin:         0;
+            font-size:      $fourteen;
+            line-height:    30px;
+            color:          #9c9ea8;
+            img {
+                margin: 0 5px;
+            }
+        }
+    }
+
+    .step-body {
+        background: white;
+        padding:    15px;
+        display:    none;
+        visibility: hidden;
+    }
+
+}
+
+#packages2.not-selectable {
+    .form-group > ul > li > .package-box {
+        background: white;
+        border: 1px solid #e7e7e7;
+        cursor: default;
+    }
+}
+
+#location-summary {
+    #location-prices {
+        margin-top: 5px;
+        dl {
+            border-bottom: 1px dotted #cdcfd8;
+            padding:    16px 12px;
+            font-size: $fourteen;
+            margin:     0;
+            line-height: $thirtysix;
+
+            &:last-child {
+                border: none;
+            }
+
+            dt {
+                display: inline-block;
+            }
+            dd {
+                display: inline-block;
+                float: right;
+            }
+        }
+    }
+}
+.jg-toggleable {
+    position: relative;
+    display: none;
+}
+
+.open {
+    .jg-toggleable {
+        display: inline-block !important;
+    }
+}
+
+.jg-hide {
+    display: none;
+}
+.jg-show {
+    display: block;
+}
+
+.jg-disclosure {
+    position: absolute;
+    right: 0;
+    top: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 300px;
+    background: #a8abb6;
+    text-align: center;
+    line-height: 37px;
+    font-size: 20px;
+    color: white;
+    &:before {
+        left: -2px;
+        position: relative;
+    }
+    &.active {
+        &:before {top: -2px;}
+    }
+}
+
+#toggle {
+    line-height: 26px;
+    cursor: pointer;
+    padding: 4px;
+    visibility: visible;
+    position: absolute;
+    right: 15px;
+    background: #f1f2f7;
+    margin-left: 10px;
+    &.active {
+        color: $jg-blue;
+    }
+}
+
+
+.step-container {
+    position: absolute;
+    height: 30px;
+    display: inline-block;
+    left: 0;
+    margin: 0 15px;
+    span {
+        font-weight:    bold;
+        color:          white;
+        background:     #8bcb9d;
+        @include border-radius(0 300px 300px 0);
+        width:          40px;
+        padding: 0 4px;
+        height:         30px;
+        display:        inline-block;
+        text-align: center;
+        line-height: 29px;
+        position: absolute;
+
+        &.icon {
+            left: 36px;
+            background: #82bb92;
+            line-height: 31px;
+            text-indent: -4px;
+        }
+
+        &.step-number {
+            left: 0;
+            font-size: $fourteen;
+            @include border-radius(300px 0 0 300px);
+        }
+    }
+
+}
+
+#jg-payment {
+    .icon-visa, .icon-mastercard, .icon-amex, .icon-paypal, .icon-maestro, .icon-discover, .icon-jcb, .icon-visa_electron, .icon-diners_club_international {
+        &:before {
+
+        }
+        top: 4px;
+    }
+}
+
+.jg-sliders {
+
+    input {
+        margin: 0;
+    }
+
+    .form-group{
+
+        padding: 0;
+
+        > * {
+
+            > * {
+                padding: 10px;
+            }   
+        }
+    }
+
+    .resource-unit {
+        label {
+            line-height: $twentyone;
+            margin: 4px 0;
+        }
+        span.total-resource-cost {
+            font-size: $thirteen;
+            color:     #8bca9d;
+        }
+    }
+
+    .wizard-slider.noUi-connect{
+            background: #9db6ec;
+            @include box-shadow(none);
+            @include border-radius(300px);
+            border:     1px solid rgba(0, 0, 0, .05);
+            height:     14px;
+            position:   relative;
+            top:        3px;
+
+            .noUi-origin {
+                @include border-radius(300px);
+                @include box-shadow(none);
+                background: #e2e5eb;
+            }
+            .noUi-handle {
+                cursor: pointer;
+                height: 24px;
+                border:     1px solid rgba(0, 0, 0, .2);
+                @include box-shadow(inset 0 0 0 rgba( 0, 0, 0, 0), 0 1px 1px rgba(33,18,17,.05));
+
+                &:before, &:after {
+                    height: 11px;
+                }
+            }
+    }
+
+}
+
+
+.jg-widget-form {
+    padding: 5px 15px 15px;
+
+    .form-group {
+        margin:     0;
+        padding: 10px;
+    }
+
+    label {
+        color:          #8a8d98;
+        line-height:    $thirtysix;
+        font-size:      $thirteen;
+        margin:         4px 0 14px;
+
+        &.jg-card-validate {
+            color: rgb(138, 109, 59);
+            font-weight: normal;
+            line-height: 18.5px;
+            font-size: 13px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+
+    }
+
+    .jg-inline, .jg-natural {
+        margin: 0;
+
+        .pure-u-1 {
+            .jg-select, input, textarea {
+                //padding: 0 20px 0 0;
+            }
+            &:last-child {
+                .jg-select, input, textarea {
+                    //padding: 0;
+                }
+            }
+        }
+    }
+
+    .jg-relative {
+        position: relative;
+    }
+
+    .field-status {
+        position: absolute;
+        z-index: 999;
+        top: 10px;
+        right: 10px;
+        display: none;
+        &.icon-error:before {
+            color: $jg-warning-red;
+        }
+        &.icon-success:before {
+            color: $jg-green;
+        }
+    }
+
+    .field-container {
+        width: 100%;
+        display: block;
+    }
+
+    input, textarea {
+        color:              #5d5d5d;
+        padding:            9px 12px 8px;
+        border:             1px solid $jg-lilac-light;
+        border-top-color:   $jg-lilac;
+        font-size:          $thirteen;
+        height:             auto;
+        line-height:        $twentyeight;
+        @include border-radius(2px);
+        @include box-shadow(inset 0 1px 1px rgba(33,18,17,.15));
+
+        &[type="text"] {
+            height: 42px;
+        }
+
+        &[type="checkbox"] {
+            border: 0px;
+            @include box-shadow(0px 0px 0px 0px);
+        }
+
+        &:focus {
+            border-color: #6e99f1 #6e99f1 #386edb #6e99f1;
+            @include box-shadow(0 0 2px 1px rgba(57,112,222,.2), 0 1px 0 rgba(31,85,193,.05));
+        }
+    }
+
+    textarea {
+        min-height: 200px;
+    }
+    .panel {
+        font-size: $fourteen;
+        ul {
+            margin:         0;
+            padding:    0 15px;
+            li {
+                font-size: $thirteen;
+                line-height: $thirtysix;
+                padding: 2px;
+                color:  $label-colour;
+            }
+        }
+    }
+
+    .field_with_errors input, .field_with_errors textarea, input.invalid, textarea.invalid {
+        border:             1px solid $jg-warning-red;
+
+    }
+    input.valid, textarea.valid {
+        // Add valid styles here..
+
+    }
+
+    .ip_address {
+        font-size: 0.813em;
+        font-weight: bold;
+    }
+}
+
+@media (min-width: 768px) {
+
+    .jg-widget-form {
+
+        .jg-inline {
+            > [class^="pure-u-"], [class*=" pure-u-"] {
+                float:      left;
+                padding:  0px 10px;
+
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                &:last-child {
+                    padding-right: 0;
+                }
+
+            }
+
+        }
+
+    }
+
+}
+@media (min-width: 400px) and (max-width: 768px) {
+
+    .jg-widget-form {
+        padding: 15px 15px 15px;
+
+        label {
+            color:          #8a8d98;
+            line-height:    $thirtysix;
+            font-size:      $thirteen;
+            margin:         4px 0 14px;
+        }
+
+        .jg-inline {
+
+            > * {
+                padding: 20px 0 0 0;
+            }
+
+        }
+    }
+
+}

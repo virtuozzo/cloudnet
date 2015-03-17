@@ -1,0 +1,2 @@
+module TicketRepliesHelper
+end

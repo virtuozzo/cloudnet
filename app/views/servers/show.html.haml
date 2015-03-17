@@ -1,0 +1,102 @@
+- breadcrumb :server, @server
+- title "#{@server.name}"
+
+= render partial: 'servers/nav', locals: { server: @server }
+
+%div{data: {"ng-controller" => "ServerIndividualCtrl", "ng-init" => "init(#{@server.id})"}}
+  .jg-widget-content{"ng-if" => "server"}
+    %header.jg-widget-header.pure-g.clearfix
+      %h2.pure-u-1-2{class: "jg-icon icon-cloud"}= "{{ server.name }}"
+      %ul.pure-u-1-2.jg-widget-controls
+        %li
+          %sticky-dropdown{"data-id" => "server-{{ server.id }}"}
+            .btn-group{class: 'sticky'}
+              %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button", "data-target" =>  "#", "ng-class" => "{disabled: disabled(server)}"}
+                %span.icon-settings
+                %span.icon-arrow-down
+              %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+                %li
+                  %a{"href" => "/servers/{{ server.id }}/edit", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Edit Server
+                %li
+                  %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/reboot", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Reboot Server
+                %li
+                  %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/shut_down", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Shut Down Server
+                %li
+                  %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/start_up", "ng-show" => "server.state == 'off'", "rel" => "nofollow"} Start Up Server
+                %li
+                  %a{"href" => "/servers/{{ server.id }}/console", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Server Console
+                %li
+                  %a{"data-target" => "#destroy-server", "data-toggle" => "modal", "rel" => "nofollow"} Destroy Server
+          %li
+            %span{class: "tags {{ server.state }}"}= "{{ server.state | actionTitleize }}"
+
+    .jg-widget-body
+      .server-details.pure-g
+        %div{class: "os x64 os-{{server.template.os_distro}} pure-u-1-8"}
+
+        %ul.server-info.pure-u-7-8.pure-u-md-5-8
+          %li.pure-u-1-2= "{{ server.template.name }}"
+          %li.pure-u-1-2.country
+            %img{"ng-src" => '/assets/images/flags/flat/24/{{ server.location.country }}.png'}
+            = "{{ server.location.city }},  {{ server.location.country_name }}"
+          %li.pure-u-1-2.hostname= "{{ server.hostname }}"
+          %li.pure-u-1-2
+            = "{{ server.location.provider }}" 
+            %img{"ng-src" => '/assets/images/ssd_disks.png', "ng-show" => "server.location.ssd_disks == true"}
+
+        .server-location-presence.pure-u-1.pure-u-md-1-4
+          #jg-map{"locate-presence" => "{{ server.location }}"}
+    .server-additional-info.pure-g
+      %table.ip-address-table.table.table-hover.jg-tables.pure-u-1.pure-u-md-1-2
+        %thead.pure-u-1-1
+          %tr.pure-u-1-1
+            %td.pure-u-1-2 IP Addresses
+            %td.pure-u-1-2 Network
+        %tbody.pure-u-1-1{"scrollable" => ""}
+          %tr.pure-u-1-1
+            %td.pure-u-1-2= "{{ server.primary_ip_address }}"
+            %td.pure-u-1-2= "eth0"
+
+      .basic-server-info.pure-u-1.pure-u-md-1-2
+        %dl
+          %dt.pure-u-1-3 Credentials
+          %dd.pure-u-2-3
+            %span root  / 
+            %a.password{"obfuscate" => "{{ server.root_password }}", data: {"message" => "show password", "timer" => "true", "time-limit" => 12000, "id" => "obs-{{ server.id }}"}} show password
+            %a.copy.icon-clipboard{"copy-password" => "a.password[data-copy='true']", data: {"toggle" => "tooltip", "placement" => "top", "title" => "Copied password", "clipboard-text" => "{{ server.root_password }}"}}
+
+        %dl
+          %dt.pure-u-1-3 Hourly
+          %dd.pure-u-2-3.cost
+            %b= server_cost(@server_costs[:hourly], @server_costs[:hourly_with_vat], 8)
+            per hour
+        %dl
+          %dt.pure-u-1-3 Monthly
+          %dd.pure-u-2-3.cost
+            %b= server_cost(@server_costs[:monthly], @server_costs[:monthly_with_vat])
+            per month
+        %dl
+          %dt.pure-u-1-3 Created On
+          %dd.pure-u-2-3
+            = "{{ server.created_at | absoluteDate }}"
+
+    .jg-widget-footer
+      %ul.resources-footer.pure-g
+        %li.pure-u-1-4
+          %span.resource-value= "{{ server.cpus }} Cores"
+          %span.resource= 'CPU'
+        %li.pure-u-1-4
+          %span.resource-value= "{{ server.memory }} MB"
+          %span.resource= 'Memory'
+        %li.pure-u-1-4
+          %span.resource-value= "{{ server.disk_size }} GB"
+          %span.resource= 'Disk Size'
+        %li.pure-u-1-4
+          %span.resource-value= "{{ server.bandwidth }} GB"
+          %span.resource= 'Inclusive Bandwidth'
+          
+  = render partial: 'cpu_usage', locals: { cpu_usages: @cpu_usages }
+  = render partial: 'network_usage', locals: { network_usages: @network_usages }
+  = render partial: 'server_event'
+
+= render partial: 'server_delete_dialog', locals: { server: @server }

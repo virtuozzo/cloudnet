@@ -1,0 +1,6 @@
+= semantic_form_for :issue_credit_note, url: { action: :submit_credit_note } do |f|
+  = f.inputs "Credit Note" do
+    = f.input :amount, label: "Amount (in USD)"
+    = f.input :reason, label: "Reason for Credit Note. Will appear on Credit Note PDF.",
+      as: :text
+  = f.actions

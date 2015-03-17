@@ -1,0 +1,328 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "partials/base";
+@import "partials/layouts/navigation";
+
+$footer-background: #11161C;
+
+header.jg-header {
+	z-index: 30000;
+	height: 60px;
+	width: 100%;
+
+	.navbar-default {
+		background: none;
+	}
+	button.navbar-toggle {
+		display: inline-block;
+		float: left;
+		margin: 0;
+		height: 100%;
+		border: none;
+		border-right: 1px solid $jg-border-light;
+		@include border-radius(0);
+		padding: 8px 20px;
+	}
+	#hiddenNav {
+		.navbar-collapse {
+			margin: 0;
+			padding: 0 15px;
+			width: 100%;
+			font-size: $thirteen;
+
+			li {
+				border-color: $jg-light-grey;
+				background: white;
+				font-weight: bold;
+				a {
+					&:hover {
+						@include border-radius(0px);
+					}
+				}
+				
+			}
+
+		}
+	}
+	#hiddenNav > * > ul{
+		background: white;
+		top: 0;
+		margin-top: 0;
+		@include border-radius(0);
+	}
+}
+
+header.jg-header, .jg-header {
+
+	border: 			1px solid $jg-grey;
+	border-width: 		0 0 1px 0;
+	height: 			60px;
+	line-height: 		1.5em;
+	// @include box-shadow(0 1px #b6b9c5);
+	@include background-image(linear-gradient(#ffffff, #ececec));
+	width: 100%;
+
+	&#jg-header-main {
+		// @include box-shadow(-1px 0 0 0 $jg-header-lilac-border);
+	}
+
+	.jg-fh {
+		height: 100%;
+	}
+
+	.jg-user-avatar {
+		width: 32px;
+		height: 32px;
+		@include border-radius(600px);
+		overflow: hidden;
+		display: block;
+		@include box-sizing(border-box);
+		margin: 15px 20px 0 20px;
+	}
+
+	.nav.navbar-nav.navbar-right {
+		margin: 0;
+		font-size: 			16px;
+		height: 100%;
+		display: inline-block;
+		> li {
+			margin: 	0;
+			height: 	100%;
+
+			&.open {
+				> a.dropdown-toggle {
+					background: none;
+				}
+			}
+
+			> a.dropdown-toggle {
+				margin: 0;
+				height: 100%;
+				border-left: 1px solid $jg-border-light;
+				padding-top: 14px;
+
+				.icon-arrow-down {
+					position: relative;
+					top: 6px;
+				}
+
+				&:hover {
+					background: none;
+				}
+			}
+		}
+		.dropdown-menu {
+			border:         1px solid;
+			border-color:   #d2d4da #d2d4da #bfc2d2 #d2d4da;
+
+			z-index:        99999999;
+			padding: 				0;
+
+			@include border-radius(0 0 3px 3px);
+			@include box-shadow( 0 1px 1px rgba(0, 0, 0, .1));
+
+			li {
+
+				line-height: 	$thirtysix;
+				background: 		white;
+				&.menu-header {
+					padding: 			6px 12px;
+					border: 			1px solid;
+					border-width: 		0 0 1px 0;
+					border-color: 		$jg-border-default;
+					@include box-sizing(border-box);
+
+					&#user-account-profile {
+						padding: 20px;
+						min-width:	220px;
+
+						.gravatar {
+							float: left;
+							margin: 0 15px 0 0;
+							@include box-sizing(border-box);
+						}
+
+						.details {
+							@include box-sizing(border-box);
+							display: inline-block;
+							float: left;
+							
+							* {
+								display: block;
+								float: left;
+								clear: both;
+							}
+							.full-name {
+								
+								font-weight: 		bold;
+								color:				#505050;
+								line-height: 		1.5em;
+							}
+							.user-email {
+								font-size: 		$thirteen;
+								line-height: 	1.1em;
+								width: 100%;
+								display: block;
+							}
+						}
+					}
+
+				}
+
+				a {
+					
+					
+					display: 			block;
+					line-height: 		2em;
+					font-size: 			$thirteen;
+					font-weight: 		500;
+					color:				#9d9fa8;
+					background: 		$jg-light-grey;
+					border-bottom: 		1px solid $jg-border-default;
+
+					&:before {
+						font-weight: 	normal;
+						font-size: 		1.143em;
+						margin-right: 	15px;
+						width:			32px;
+						text-align: 	center;
+						display: 		inline-block;
+						color:			$jg-blue;
+					}
+					&:hover {
+						background: 	$jg-blue;
+						border-color: 	$jg-border-blue;
+						color:			white;
+
+						&:before {
+							color:		white;
+						}
+					}
+				}
+			}
+
+		}
+	}
+}
+
+#logo {
+	@include background(image-url('cloudnetbeta.png') center center no-repeat, transparent);
+	text-indent: 		-9999px;
+	height: 60px;
+	text-align: center;
+}
+
+#logoLarge {
+	@include background(image-url('cloudnet-large.png') center center no-repeat, transparent);
+	height: 80px;
+	text-indent: 		-9999px;
+}
+
+#logo.navbar-brand.jg-header {
+	text-indent: 		-9999px;
+	@include background(image-url('cloudnet.png') center center no-repeat, linear-gradient(#ffffff, #ececec));
+	height: 60px;
+
+}
+
+@media (max-width: 768px) {
+	.wrapper-header {
+		border: none;
+	}
+	header {
+		.navbar-toggle {
+			float: left;
+		}
+		#uap {
+			float: right;
+
+			.jg-dropmenu, li#user-account-profile {
+				@include border-radius(0px);
+			}
+			
+			a.dropdown-toggle {
+				width: 95px;
+				position: absolute;
+				right: 0;
+			}
+			ul.jg-dropmenu {
+				position: relative;
+				top: 58px;
+				margin: 0 -1px 0 0;
+				a {
+					&:hover {
+						@include border-radius(0px);
+					}
+				}
+			}
+		}
+	}
+}
+
+.public-layout{
+  #main-menu{
+    .container-fluid{padding: 0;}
+    .navbar{margin: 0;}
+    .navbar-header{
+      width: 50px;
+      margin-left: 15px;
+    }
+    .navbar-header, .nav > li, .navbar-nav{
+      float: left;
+      margin-right: 0;
+    }
+    .navbar-nav{ margin: 0; }
+    .navbar-right{float: right;}
+    .nav > li > a{
+      font-size: $twelve;
+      margin-top: 16px;
+      padding: 0 10px;
+    }
+    .navbar-btn{
+      margin-bottom: 0;
+    }
+
+    #logo.navbar-brand {
+    	@include background(image-url('cloudnet.png') center center no-repeat);
+    	height: 35px;
+      padding: 0;
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  ul.jg-color-row {
+    width: 100%;
+    font-size: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      width:20%;
+      height:3px;
+      display: inline-block;
+    }
+    li:nth-child(1) {
+      background:#2ecc71;
+    }
+    li:nth-child(2) {
+      background:#3498db;
+    }
+    li:nth-child(3) {
+      background:#f1c40f;
+    }
+    li:nth-child(4) {
+      background:#e74c3c;
+    }
+    li:nth-child(5) {
+      background:#9b59b6;
+    }
+  }
+  
+  #footer{
+    padding: 30px 0 0 0;
+    background-color: $footer-background;
+    font-size: $eleven;
+  }
+}

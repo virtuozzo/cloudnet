@@ -1,0 +1,39 @@
+defaults: &defaults
+  zendesk:
+    api_url: https://cloudnet.zendesk.com/api/v2
+    user: <%= ENV["ZENDESK_USER"] %>
+    token: <%= ENV["ZENDESK_TOKEN"] %>
+    server_key: 23524182
+    department_key: 23446111
+    departments:
+      general: 
+        name: General/Server Support
+        group_id: 21693402
+      billing: 
+        name: Billing Issue
+        group_id: 22441742
+      abuse: 
+        name: DDOS/Abuse
+        group_id: 22447691
+      sales:
+        name: Sales
+        group_id: 22441752
+      other: 
+        name: Other Issue
+        group_id: 22447961
+    trigger_auth:
+      user: <%= ENV["ZENDESK_TRIGGER_USER"] %>
+      pass: <%= ENV["ZENDESK_TRIGGER_PASS"] %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  
+production:
+  <<: *defaults
+  

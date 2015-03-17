@@ -1,0 +1,41 @@
+@import 'partials/base';
+
+.billing-balance {
+  color: $jg-green;
+  font-size: 14px;
+}
+
+.jg-coupon_code {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.pre-coupon-price {
+  color: #cf5959;
+  text-decoration: line-through;
+}
+
+.payg-chart {
+  padding: 0px !important;
+}
+
+#PPDGFrame .panel {
+  background: none !important;
+}
+
+p.small {
+  font-size: 70%;
+}
+
+.billing-pie {
+  .jg-widget-body {
+    margin-bottom: -30px;
+  }
+  text-align: center;
+  .pie-balance-available {
+    color: #1f77b4;
+  }
+  .pie-balance-used {
+    color: #ff7f0e;
+  }
+}

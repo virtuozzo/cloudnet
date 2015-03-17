@@ -1,0 +1,22 @@
+@app.directive "cloudVpsSwitch", ['ServerSearchState', (State) ->
+  restrict: 'E'
+  templateUrl: "<%= asset_path('templates/server_search/cloud_vps_switch.html') %>"
+  scope: true
+
+  link: ($scope, $el, $attr) ->
+    $scope.cloud = true
+    $scope.vps = true
+
+    $scope.$watch 'cloud', ->
+      setCloudVpsFilter()
+      
+    $scope.$watch 'vps', ->
+      setCloudVpsFilter()
+
+    setCloudVpsFilter = ->
+      State.cloudVpsFilter = {wipe_everything: true}
+      if $scope.cloud and $scope.vps then State.cloudVpsFilter = {}
+      if $scope.cloud and !$scope.vps then State.cloudVpsFilter = {budgetVps: false}
+      if !$scope.cloud and $scope.vps then State.cloudVpsFilter = {budgetVps: true}
+      State.slidersEnabled = $scope.cloud
+]

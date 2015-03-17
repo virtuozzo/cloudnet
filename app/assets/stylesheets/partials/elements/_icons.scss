@@ -1,0 +1,83 @@
+@import "../base";
+@import "compass/utilities/sprites";
+@import "os/os16/*.png";
+@import "os/os24/*.png";
+@import "os/os32/*.png";
+@import "os/os64/*.png";
+
+.os {
+
+  &:before {
+    
+    display: inline-block;
+    height:   16px;
+    width:    16px;
+    background-repeat: no-repeat;
+    background-position: 0px 16px;
+    content: ' ';
+  }
+  &.os-ubuntu:before        {   @include os16-sprite(ubuntu);       }
+  &.os-rhel:before          {   @include os16-sprite(redhat);       }
+  &.os-gentoo:before        {   @include os16-sprite(gentoo);       }
+  &.os-windows:before       {   @include os16-sprite(windows);      }
+  &.os-archlinux:before     {   @include os16-sprite(archlinux);    }
+  &.os-debian:before        {   @include os16-sprite(debian);       }
+  &.os-fedora:before        {   @include os16-sprite(fedora);       }
+  &.os-centos:before        {   @include os16-sprite(centos);       }
+  &.os-clearos:before       {   @include os16-sprite(clearos);      }
+  &.os-cloudlinux:before    {   @include os16-sprite(cloudlinux);   }
+
+  &.x24 {
+    &:before {
+      height:   24px;
+      width:    24px;
+      background-position: 0px 24px;
+    }
+    &.os-ubuntu:before       {   @include os24-sprite(ubuntu);        }
+    &.os-rhel:before         {   @include os24-sprite(redhat);        }
+    &.os-gentoo:before       {   @include os24-sprite(gentoo);        }
+    &.os-windows:before      {   @include os24-sprite(windows);       }
+    &.os-archlinux:before    {   @include os24-sprite(archlinux);     }
+    &.os-centos:before       {   @include os24-sprite(centos);        }
+    &.os-debian:before       {   @include os24-sprite(debian);        }
+    &.os-fedora:before       {   @include os24-sprite(fedora);        }
+    &.os-clearos:before      {   @include os24-sprite(clearos);       }
+    &.os-cloudlinux:before   {   @include os24-sprite(cloudlinux);    }
+  }
+
+  &.x32 {
+    &:before {
+      height:   35px;
+      width:    35px;
+      background-position: 0px 32px;
+    }
+    &.os-ubuntu:before       {   @include os32-sprite(ubuntu);        }
+    &.os-rhel:before         {   @include os32-sprite(redhat);        }
+    &.os-gentoo:before       {   @include os32-sprite(gentoo);        }
+    &.os-windows:before      {   @include os32-sprite(windows);       }
+    &.os-archlinux:before    {   @include os32-sprite(archlinux);     }
+    &.os-centos:before       {   @include os32-sprite(centos);        }
+    &.os-debian:before       {   @include os32-sprite(debian);        }
+    &.os-fedora:before       {   @include os32-sprite(fedora);        }
+    &.os-clearos:before      {   @include os32-sprite(clearos);       }
+    &.os-cloudlinux:before   {   @include os32-sprite(cloudlinux);    }
+  }
+
+  &.x64 {
+    &:before {
+      height:   70px;
+      width:    70px;
+      background-position: 0px 70px;
+    }
+    &.os-ubuntu:before       {   @include os64-sprite(ubuntu);        }
+    &.os-rhel:before         {   @include os64-sprite(redhat);        }
+    &.os-gentoo:before       {   @include os64-sprite(gentoo);        }
+    &.os-windows:before      {   @include os64-sprite(windows);       }
+    &.os-archlinux:before    {   @include os64-sprite(archlinux);     }
+    &.os-centos:before       {   @include os64-sprite(centos);        }
+    &.os-debian:before       {   @include os64-sprite(debian);        }
+    &.os-fedora:before       {   @include os64-sprite(fedora);        }
+    &.os-clearos:before      {   @include os64-sprite(clearos);       }
+    &.os-cloudlinux:before   {   @include os64-sprite(cloudlinux);    }
+  }
+}

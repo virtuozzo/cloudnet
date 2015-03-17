@@ -1,0 +1,46 @@
+.jg-widget-body
+  .jg-widget-form.pure-g.jg-disabled
+    .jg-widget.pure-u-1.pure-g
+      .jg-widget-header.pure-g.jg-external-header.jg-no-margin.clearfix
+        %h2.icon-wallet.jg-icon.pure-u Use existing card
+      %table.table.table-hover.jg-tables
+        %thead
+          %tr
+            %th
+            %th Card Details
+            %th Expiry
+
+        %tbody#card-table
+          - if @cards.empty?
+            %tr
+              %td.no-data{colspan: "3"}
+                %p= "You don't have any card details stored"
+        
+  .jg-widget-form.pure-g.jg-disabled
+    .jg-widget.pure-u-1
+      .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+        %h2.icon-wallet.jg-icon.pure-u Add new card
+        .jg-disclosure.icon-arrow-down
+      .pure-u-md-4-24
+      .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-add-card.jg-toggleable
+        = render partial: 'billing/add_card/add_card_form'
+      .pure-u-md-4-24
+
+      .cc_card_validate_warning#cc_card_validate_warning
+
+  .jg-widget-form.pure-g.jg-disabled
+    .jg-widget.pure-u-1
+      .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+        %h2.icon-wallet.jg-icon.pure-u Coupon Code
+        .jg-disclosure.icon-arrow-down
+      .pure-u-md-4-24
+      .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-coupon-code.jg-toggleable
+        = render partial: 'billing/coupon_code/coupon_code_form'
+
+  .jg-widget-footer.actions.clearfix
+    .resources-total.pure-g.no-costs#jg-confirmation-costs
+      = render partial: "server_wizards/steps/partials/prepaid_confirmation_costs", locals: { costs: costs, coupon_multiplier: coupon_multiplier }
+
+    %ul.jg-widget-controls
+      %li= f.button @submit_button_title, class: 'btn jg-submit-button', id: "jg-prepaid-create-server"
+      %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button'

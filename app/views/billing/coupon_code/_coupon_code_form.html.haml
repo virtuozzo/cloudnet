@@ -1,0 +1,23 @@
+.jg-widget-body#jg-coupon-form
+  - if current_user.account.coupon.present?
+    .jg-widget-form.pure-g.pure-u-1
+      .form-group.pure-u-1.jg-inline
+        .pure-u-1.pure-u-1.jg-coupon_code
+          %strong Active Coupon:
+          = current_user.account.coupon.description
+  - else
+    .jg-widget-form.pure-g.pure-u-1
+      - if @message.present?
+        %div.coupon_alert.alert.alert-warning#coupon_alert
+          = @message
+
+      .form-group.pure-u-1.jg-inline
+        .pure-u-1.pure-u-1
+          = label_tag 'coupon_label', 'Coupon Code', {for: '#coupon_code', class: 'pure-u-1 jg-mandatory'  }
+          %span.jg-relative.field-container
+            = text_field_tag 'coupon_code', '' , {class: 'pure-u-1'}
+    .jg-widget-footer.actions.clearfix
+      %ul.jg-widget-controls
+        %li= button_tag "Set Coupon Code", {class: 'btn jg-submit-button', id: "coupon_code_submit"}
+  
+    = javascript_include_tag "billing/add_coupon_code"

@@ -1,0 +1,14 @@
+!!!
+- content_for :viewport_content do
+  width=device-width, initial-scale=0.8
+    
+%html{"ng-app" => "CloudNet"}
+  %head
+    = render 'shared/head'
+  %body{class: body_class}
+    .public-layout
+      = render partial: 'shared/public_header'
+      
+      = yield
+
+      = render partial: 'shared/footer'

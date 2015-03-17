@@ -1,0 +1,15 @@
+@app.directive "packagesTable", [ 'Packages', 'ServerSearchState', (Packages, State) ->
+  restrict: 'E'
+  templateUrl: "<%= asset_path('templates/server_search/packages_table.html') %>"
+  scope: true
+    
+  link: ($scope, $el, $attr) ->
+    $scope.packages = Packages.packages
+    
+    $scope.activatePackage = (pack) ->
+      State.counts = {cpu: pack.cpu, mem: pack.mem, disk: pack.disk}
+      Packages.activatePackage(pack.id)
+      
+    $scope.pluralize = (word, num) ->
+      _(word).simplePluralize num
+]

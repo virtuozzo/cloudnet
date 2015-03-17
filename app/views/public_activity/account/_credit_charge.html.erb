@@ -1,0 +1,3 @@
+<% invoice = Invoice.with_deleted.find(activity.parameters[:invoice]) %>
+<% credit = CreditNote.with_deleted.find(activity.parameters[:credit_note]) %>
+Credit Note Charge created for Invoice #<%= invoice.invoice_number %> for <%= Invoice.pretty_total(activity.parameters[:amount]) %>. Credit Note Source: <%= credit.credit_number %>

@@ -1,0 +1,15 @@
+<p>Hi <%= @user.full_name %>!</p>
+
+<p>Welcome to Cloud.net!</p>
+
+<p>You’re just one step away from access to the global cloud marketplace, and instant access to a rich range of Cloud and VPS services all over the world.</p>
+
+<p>Click the link below to confirm your account, and log in to the Cloud.net control panel.</p>
+
+<p><strong><%= link_to 'Confirm Account', confirmation_url(@user, :confirmation_token => @token) %></strong></p>
+
+<p>If you have any questions, or need help getting started, you can get in touch through the help desk in your control panel.</p>
+
+<p>We hope you enjoy the new way to host your apps in the cloud!</p>
+
+<p>The Cloud.net Team</p>

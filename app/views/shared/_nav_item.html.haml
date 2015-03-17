@@ -1,0 +1,6 @@
+- if link[:active]
+  %li.active
+    = link_to link[:text], link[:target]
+- else
+  %li
+    = link_to link[:text], link[:target]

@@ -1,0 +1,103 @@
+@import "../base";
+
+.jg-new-button, .jg-back-button {
+	@include 		border-radius(2px);
+	padding: 		12px 12px 11px;
+	background: 	#a8aab6;
+	font-size: 		$thirteen;
+	font-weight: 	bold;
+	color:			white;
+	border:			none;
+  min-width:  100px;
+
+	&:hover {
+		color: 		white;
+	}
+	&.pressed, &:focus, &:active {
+	  	color:		white;
+	  	outline:	none;
+	  	@include box-shadow(inset 0 1px 2px rgba(0,0,0,.2));
+  	}
+
+}
+
+.jg-submit-button {
+  padding: 11px 12px 10px;
+  background-color: #3c74e5;
+  border: solid 1px #3565c7;
+  color: white;
+  min-width:  100px;
+
+  font-size:    $thirteen;
+  text-shadow: none;
+  font-weight: bold;
+
+  @include background-image(linear-gradient(to top, #386edb, #407cf5));
+  @include box-shadow(0 1px 0 rgba(0,0,0,.15));
+  @include border-radius(2px);
+
+  &:hover {
+  	color: white;
+  }
+
+  &.pressed, &:focus, &:active {
+  	color:		white;
+  	outline:	none;
+
+  	@include box-shadow(0 1px rgba(0,0,0,.15), inset 0 1px 2px rgba(0,0,0,.2));
+  	@include background-image(linear-gradient(to bottom, #386edb, #407cf5));
+  }
+}
+
+.jg-disabled-button {
+  background: transparent;
+  border: 2px solid $jg-border-default;
+  color: #777;
+}
+
+button.btn {
+	-webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
+	outline-width: 0;
+	&:active:focus, &:focus {
+		outline-width: 0;
+	}
+}
+
+table {
+  .tags {
+    height: 22px;
+    line-height: 22px;
+    padding: 0 8px;
+    display: inline-block;
+    float: left;
+  }
+}
+
+.tags {
+
+  background:     #a7aab6;
+  text-align:     center;
+  color:          white;
+  font-size:      $twelve;
+  font-weight:    bold;
+  text-transform: uppercase;
+  @include border-radius(3px);
+  padding: 4px 8px;
+  display:  block;
+  min-width: 80px;
+
+  &.new, &.open, &.pending, &.backup-pending, &.partially_paid, &.uncredited, &.make_primary {
+    background: #578edd;
+  }
+  &.pending, &.building, &.starting_up, &.shutting_down, &.rebooting, &.running {
+    background: #ffbc6d;
+  }
+  &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary {
+    background: #6ebd8d;
+  }
+  &.hold, &.error, &.off, &.unpaid {
+    background: #e66464;
+  }
+
+}

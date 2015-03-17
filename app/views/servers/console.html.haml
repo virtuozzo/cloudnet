@@ -1,0 +1,36 @@
+- breadcrumb :console, @server
+- title "Server Console"
+
+%div
+  = render partial: 'servers/nav', locals: { server: @server }
+  
+  .jg-widget-content
+    %header.jg-widget-header.pure-g.clearfix
+      %h2.pure-u-1-2{class: "jg-icon icon-cloud"}= "#{@server.name} - Server Console"
+      %ul.pure-u-1-2.jg-widget-controls
+    .jg-widget-body.pure-g.console-page
+      .console.pure-u-1
+        %iframe{height: 500, width: 665, name: "Server Console", src: "#{@console[:console_src]}"}
+        %p Server console may take some time to load
+
+      .server-additional-info.pure-g.pure-u-1
+        %table.ip-address-table.table.table-hover.jg-tables.pure-u-1.pure-u-md-1-2
+          %thead.pure-u-1-1
+            %tr.pure-u-1-1
+              %td.pure-u-1-2 IP Addresses
+              %td.pure-u-1-2 Network
+          %tbody.pure-u-1-1{"scrollable" => ""}
+            %tr.pure-u-1-1
+              %td.pure-u-1-2= "#{@server.primary_ip_address}"
+              %td.pure-u-1-2= "eth0"
+
+        %table.ip-address-table.table.table-hover.jg-tables.pure-u-1.pure-u-md-1-2
+          %thead.pure-u-1-1
+            %tr.pure-u-1-1
+              %td.pure-u-1-1 Credentials
+          %tbody.pure-u-1-1
+            %tr.pure-u-1-1
+              %td.pure-u-1-1
+                %span root  / 
+                %a.password{"obfuscate" => "#{@server.root_password}", data: {"message" => "show password", " timer" => "true", "time-limit" => 12000, "id" => "obs-#{@server.id}"}} show password
+                %a.copy.icon-clipboard{"copy-password" => "a.password[data-copy='true']", data: {"toggle" =>      "tooltip", "placement" => "top", "title" => "Copied password", "clipboard-text" => "#{@server.root_password}"}}

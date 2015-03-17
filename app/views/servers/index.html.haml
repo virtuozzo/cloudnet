@@ -1,0 +1,57 @@
+- breadcrumb :servers
+- title "Servers"
+
+%div{data: {"ng-controller" => "ServersCtrl"}}
+  .jg-widget-content
+    %header.jg-widget-header.pure-g.clearfix
+      %h2.pure-u-1-2.jg-icon.icon-cloud Servers
+      %ul.pure-u-1-2.jg-widget-controls
+        %li= link_to 'New Server', servers_create_path, {class: 'jg-button-lilac jg-new-button'}
+    .jg-widget-body
+      %table.table.table-hover.jg-tables
+        %thead
+          %tr
+            %th= "Name"
+            %th.visible-md.visible-lg= "CPU"
+            %th.visible-md.visible-lg= "RAM"
+            %th.visible-md.visible-lg= "Disk"
+            %th.visible-md.visible-lg= "Location"
+            %th= "Status"
+            %th= "Actions"
+
+        %tbody
+          %tr{data: {"ng-repeat" => "server in servers | startFrom:currentPage * pageSize | limitTo:pageSize"}}
+            %td
+              %a{"href" => "/servers/{{ server.id }}"}= "{{ server.name }}"
+            %td.visible-md.visible-lg= "{{ server.cpus }} Cores"
+            %td.visible-md.visible-lg= "{{ server.memory }} MB"
+            %td.visible-md.visible-lg= "{{ server.disk_size }} GB"
+            %td.visible-md.visible-lg= "{{ server.location.city }}, {{ server.location.country_name }}"
+            %td
+              %span{class: "tags {{ server.state }}"}= "{{ server.state | actionTitleize }}"
+            %td
+              %sticky-dropdown{"data-id" => "server-{{ server.id }}"}
+                .btn-group{class: 'sticky'}
+                  %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button", "data-target" => "#", "ng-class" => "{disabled: disabled(server)}"}
+                    %span.icon-settings
+                    %span.icon-arrow-down
+                  %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+                    %li
+                      %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/reboot", "ng-show" => "server.state == 'on'"} Reboot Server
+                    %li
+                      %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/shut_down", "ng-show" => "server.state == 'on'"} Shut Down Server
+                    %li
+                      %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/start_up", "ng-show" => "server.state == 'off'"} Start Up Server
+                    %li
+                      %a{"data-method" => "get", "href" => "/servers/{{ server.id }}/edit"} Edit Server
+
+          %tr{data: {"ng-if" => "servers && servers.length === 0"}}
+            %td.no-data{colspan: "7"}
+              %p= "You don't have any servers. Why not create one?"
+              .jg-widget-controls= link_to 'New Server', servers_create_path, {class: 'jg-button-lilac jg-new-button'}
+
+    .jg-widget-footer.jg-pagination
+      .jg-pagination-controls{"ng-show" => "servers"}
+        %a{class: 'jg-previous icon-arrow-left', "ng-click" => "currentPage = currentPage - 1", "ng-show" => "currentPage > 0"}
+        %span Page {{ currentPage + 1 }} of {{ numberOfPages() }}
+        %a{class: 'jg-next icon-arrow-right', "ng-click" => " currentPage = currentPage + 1", "ng-show" => "currentPage < servers.length/pageSize - 1"}

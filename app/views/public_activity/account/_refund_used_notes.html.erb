@@ -1,0 +1,9 @@
+<%
+  notes = activity.parameters[:notes]
+  details = notes.map do |k, v|
+    note = CreditNote.with_deleted.find(k)
+    "#{Invoice.pretty_total(v)} back into ##{note.credit_number}"
+  end.join(', ')
+%>
+
+Refunded Credit Notes: <%= details %>

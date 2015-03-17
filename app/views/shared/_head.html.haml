@@ -1,0 +1,19 @@
+-title = yield(:title).empty? ? 'Cloud Marketplace' : yield(:title)
+%title= "Cloud.net | #{title}"
+%link{rel: "icon", href: "favicon.ico", type: "image/x-icon"}
+%link{rel: "shortcut icon", href: "favicon.ico", type: "image/x-icon"}
+%link{href: "http://fonts.googleapis.com/css?family=Oxygen:400,300,700", rel: 'stylesheet', type: 'text/css'}
+
+- viewport_content = yield(:viewport_content).empty? ? "width=device-width, initial-scale=0.7, minimum-scale=0.7, maximum-scale=0.7" : yield(:viewport_content)
+%meta{name: "viewport", content: "#{viewport_content}"}
+
+%script{type: "text/javascript", src: "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"}
+%link{href: "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css", rel: "stylesheet"}
+
+%script{type: "text/javascript", src: "https://js.stripe.com/v2/"}
+
+= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+= javascript_include_tag "application", "data-turbolinks-track" => true
+= csrf_meta_tags
+
+%script{id:'notification_template', type: 'text/ractive'}= (render partial: "layouts/notifications.js.ractive").html_safe

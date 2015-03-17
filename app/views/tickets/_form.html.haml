@@ -1,0 +1,24 @@
+= form_for @ticket, html: { role: 'form' } do |f|
+  .jg-widget-form.pure-g-r.clearfix
+    .form-group.pure-u-1
+      = f.label :subject, {class: 'pure-u-1'}
+      = f.text_field :subject, class: 'form-control', required: true
+
+    .form-group.jg-inline.pure-g
+      .pure-u-1.pure-u-md-1-2
+        = f.label :department
+        = f.select :department, options_for_select(form_departments, @ticket.department)
+
+      .pure-u-1.pure-u-md-1-2
+        = f.label :server
+        = f.select :server_id, content_tag(:option, 'No Server Selected / Not Server Related', value: "") + options_from_collection_for_select(@servers, :id, :name_with_ip, @ticket.server_id)
+
+    .form-group.pure-u-1
+      = f.label :body, {class: 'pure-u-1'}
+      .editor-wrapper
+        = f.text_area :body, id: 'editor', placeholder: 'Ticket description goes here. Please be descriptive', required: false
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      %li= f.button 'Submit Ticket', class: 'btn jg-submit-button'
+      %li= link_to 'Back', tickets_path, class: 'btn jg-back-button'
+      

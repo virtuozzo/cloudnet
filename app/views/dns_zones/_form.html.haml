@@ -1,0 +1,18 @@
+= form_for @domain, html: { role: 'form' } do |f|
+  .jg-widget-form.pure-g-r.clearfix
+    .form-group.pure-u-1
+      = f.label :domain, {class: 'pure-u-1'}
+      = f.text_field :domain, class: 'form-control', required: true
+
+    .form-group.pure-u-1
+      .pure-g
+        .pure-u-1-24.checkbox
+          = f.check_box :autopopulate, checked: true, class: 'form-control'
+        .pure-u-23-24
+          = f.label :autopopulate, 'Autopopulate with existing DNS records?', {class: 'pure-u-1'}
+
+
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      %li= link_to 'Back', dns_zones_path, class: 'btn jg-back-button'
+      %li= f.button 'Add Domain', class: 'btn jg-submit-button'

@@ -1,0 +1,17 @@
+<% breadcrumb :two_factor_auth %>
+<% title "Two Factor Authentication" %>
+
+<%= devise_error_messages! %>
+
+<div class="jg-widget-content">
+  <div class="jg-widget-header pure-g clearfix">
+    <h2 class="pure-u jg-icon icon-user">Manage Two Factor Authentication</h2>
+  </div>
+  <div class="jg-widget-body">
+    <%= render :partial => 'token_secret' %>
+
+    <div class="jg-widget-form pure-g-r clearfix">
+      <%= render :partial => 'trusted_devices' if trusted_devices_enabled? %>
+    </div>
+  </div>
+</div>

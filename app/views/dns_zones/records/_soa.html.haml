@@ -1,0 +1,27 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-target= "SOA (Start of Authority) Records for #{domain.domain}" 
+  .jg-widget-body
+    %table.table.table-hover.jg-tables
+      %thead
+        %tr
+          %th Refresh
+          %th Retry
+          %th Expire
+          %th Minimum
+          %th Hostmaster
+          %th TTL
+      %tbody
+        - records[:soa].each do |record|
+          %tr
+            %td= record[:refresh]
+            %td= record[:retry]
+            %td= record[:expire]
+            %td= record[:minimum]
+            %td= dns_editable_record record, :hostmaster
+            %td= dns_editable_record record, :ttl
+
+        - if records[:soa].size == 0 
+          %tr
+            %td.no-data{colspan: "6"}
+              %p= "You don't have any SOA records for this domain"

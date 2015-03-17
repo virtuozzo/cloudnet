@@ -1,0 +1,420 @@
+// Place all the styles related to the ticket_replies controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'partials/base';
+
+a.show-older {
+  background: #fbfbfb;
+  border-bottom: dotted 1px #e7e7e7;
+  font-size: $thirteen;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+}
+
+
+.cbp_tmtimeline {
+    margin: 30px 0 0 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+} 
+
+.cbp_header {
+  min-height: 40px;
+  .tags {
+    float: right;
+    min-width: 60px;
+  }
+}
+ 
+/* The line */
+.cbp_tmtimeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    // background: #afdcf8;
+    left: 20%;
+    margin-left: -10px;
+}
+ 
+.cbp_tmtimeline > li {
+    position: relative;
+}
+ 
+/* The date/time */
+.cbp_tmtimeline > li .cbp_tmtime {
+    display: inline-block;
+    //display: block;
+    //width: 25%;
+    //padding-right: 100px;
+    position: absolute;
+}
+ 
+.cbp_tmtimeline > li .cbp_tmtime span {
+    display: block;
+    text-align: right;
+}
+ 
+.cbp_tmtimeline > li .cbp_tmtime span:first-child {
+    font-size: 0.9em;
+    color: #bdd0db;
+}
+ 
+.cbp_tmtimeline > li .cbp_tmtime span:last-child {
+    font-size: 2.9em;
+    color: #3594cb;
+}
+ 
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmtime span:last-child {
+    color: #6cbfee;
+}
+ 
+/* Right content */
+.cbp_tmtimeline > li .cbp_tmlabel {
+    // margin: 0 0 15px 25%;
+    background: #3594cb;
+    color: #fff;
+    padding: 2em;
+    font-size: 1.2em;
+    font-weight: 300;
+    line-height: 1.4;
+    position: relative;
+    border-radius: 5px;
+
+}
+ 
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
+    background: #6cbfee;
+}
+ 
+.cbp_tmtimeline > li .cbp_tmlabel h2 { 
+    margin-top: 0px;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+ 
+/* The triangle */
+.cbp_tmtimeline > li .cbp_tmlabel:after {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: #3594cb;
+    border-width: 10px;
+    top: 10px;
+}
+ 
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
+    border-right-color: #6cbfee;
+}
+ 
+/* The icons */
+.cbp_tmtimeline > li .cbp_tmicon {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: inline-block;
+    float: left;
+
+    // position: absolute;
+    color: #fff;
+    background: #46a4da;
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px #afdcf8;
+    text-align: center;
+    //left: 20%;
+    //top: 0;
+    //margin: 0 0 0 -25px;
+}
+ 
+.cbp_tmicon-phone:before {
+    content: "\e000";
+}
+ 
+.cbp_tmicon-screen:before {
+    content: "\e001";
+}
+ 
+.cbp_tmicon-mail:before {
+    content: "\e002";
+}
+ 
+.cbp_tmicon-earth:before {
+    content: "\e003";
+}
+ 
+/* Example Media Queries */
+@media screen and (max-width: 65.375em) {
+ 
+  
+}
+ 
+@media screen and (max-width: 47.2em) {
+
+}
+
+.cbp_arrow {
+  height: 10px;
+  margin: 0 auto;
+  display: inline-block;
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  span.cbp_arrow_border {
+    right: 0;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: #d4d4d4;
+    border-width: 8px;
+    top: 10px;
+  }
+  span.cbp_arrow_inner {
+    right: 0;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: white;
+    border-width: 7px;
+    top: 11px;
+  }
+}
+
+#jg-show-ticket {
+
+  .alert {
+    margin: 20px;
+  }
+
+}
+ul#jg-ticket-thread {
+  margin: 20px 0;
+
+  li {
+    //border-bottom: 1px solid #e7e7e7;
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+    @include border-radius(0);
+
+    .pure-u-1-4, .pure-u-3-4 {
+      float: left;
+      position: relative;
+    }
+
+    &.initial_ticket {
+      .cbp_tmlabel {
+        border-top: 1px solid #d4d4d4 !important;
+        border-top-left-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+      }
+    }
+
+    .cbp_tmtime {
+      position: relative;
+      width: 100%;
+      padding: 15px 70px 0 0;
+
+      span.username{
+        font-size: $thirteen;
+        font-weight: bold;
+        color:  #505050;
+      }
+      span.time-date {
+        font-size: $eleven;
+        color: #777;
+        padding: 2px 0 0;
+      }
+      span.moment-date{
+        font-size: $eleven;
+        font-weight: bold;
+        color:  #777;
+      }
+    }
+
+    .cbp_tmicon {
+      top: 16px;
+      line-height: 30px;
+      @include box-shadow(none);
+      background: $jg-light-grey;
+      position: absolute;
+      
+      height: 32px;
+      width:  32px;
+      margin: 0;
+
+      left: -50px;
+
+      &.icon-user {
+        background: $jg-green;
+        &:before {
+          line-height: 31px;
+        }
+      }
+      &.icon-support {
+        background: $jg-green;
+        &:before {
+          line-height: 32px;
+        }
+      }
+    }
+
+    .cbp_tmlabel {
+      min-height: 67px;
+
+      > * {
+        
+      }
+
+      p {
+        line-height: $twentyeight;
+        font-size: $fourteen;
+      }
+      pre {
+        @include border-radius(2px);
+        background: white;
+        border-color: $jg-border-light;
+      }
+
+      blockquote {
+        p {
+          &:first-child {margin: 0;}
+        }
+      }
+      
+
+      border: 1px solid #d4d4d4;
+      border-top: none;
+      
+      margin: 0;
+      @include border-radius(0);
+      padding: 15px 30px;
+      font-size: 16px;
+      border-bottom: 1px dotted #e7e7e7;
+      background: $jg-light-grey;
+      color: #777;
+      @include box-shadow(0px 0px 1px rgba(0,0,0,.1));
+      span.cbp_arrow_inner {
+        border-right-color: $jg-light-grey;
+      }
+      &:after {
+          border: none;
+        }
+    }
+
+    .reply-footer {
+      position: relative;
+      display: block;
+      width: 100%;
+      /* float: left; */
+      clear: both;
+
+      &:before {
+        position: relative;
+        display: block;
+        width: 100%;
+        clear: both;
+        border-top: 1px dotted #e7e7e7;
+        height: 1px;
+        margin: 0 auto;
+      }
+      span.sender {
+        float: left;
+        display: block;
+        padding:  12px 12px 0 0;
+        font-size: $thirteen;
+        font-weight: bold;
+        color: #505050;
+      }
+    }
+
+    &.admin_reply {
+      .cbp_tmicon {
+        background: #ffb453;
+      }
+      .cbp_tmlabel {
+        background: white;
+        span.cbp_arrow_inner {
+          border-right-color: white;
+        }
+      }
+    }
+
+
+    &:first-child{
+      .cbp_tmlabel {
+        @include border-radius(4px 4px 0 0);
+        border-top: 1px solid #d4d4d4;
+      }
+    }
+
+
+    &:last-child{
+      border-bottom: none;
+      .cbp_tmlabel {
+        margin-bottom: 10px;
+        @include border-radius(0 0 4px 4px);
+        @include box-shadow(0px 1px 1px rgba(0,0,0,.1));
+        border-top: 1px dotted #e7e7e7;
+        border-bottom: 1px solid #d4d4d4;
+      }
+    }
+
+  }
+}
+
+ul.ticket-info {
+  padding:    10px 20px;
+  background: $jg-light-grey;
+  border-top: dotted 1px #e7e7e7;
+  margin-bottom: 0;
+
+  list-style-type: none;
+  width: 100%;
+
+  li {
+    display: inline-block;
+    float: left;
+    padding: 10px 15px 10px 0;
+    font-size: $thirteen;
+    color: #8a8d98;
+
+
+
+    span {
+      color: #505050;
+      text-transform: capitalize;
+    }
+    a {
+      color: $jg-blue;
+      text-transform: capitalize;
+    }
+
+  }
+}
+
+.jg-widget-content {
+  pre {
+    font-size: 0.8em;
+    overflow-x: auto;
+  }
+
+  pre code {
+    overflow-wrap: normal;
+    white-space: pre;
+  }
+}

@@ -1,0 +1,69 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'compass/css3';
+
+$container-med: 991px;
+$container-sm: 767px;
+$public-light-text: #E5E5E5;
+$public-blue-header: #47AEE9;
+$public-subheader: #6A8A9C;
+$public-paragraph: #848F96;
+$public-font: 'Oxygen', sans-serif;
+
+// Core colors
+
+$colour: 			#a8aab6;
+$label-colour:		#8a8d98;
+
+$jg-green:   #6ebd8d;
+$jg-blue:         #3c74e5;
+$jg-grey:			#c6c6c6;
+$jg-lilac:			#afb3c2;
+$jg-lilac-light: 	#c7cbdb;
+$jg-lilac-strong:	#8d91aa;
+$jg-light-grey:   #fbfbfb;
+$jg-warning-red: #E74C3C;
+
+$light: 	100;
+$regular: 	400;
+$bold: 		600;
+
+$sixteen: 		1em;
+$ten:			0.625em;
+$eleven:		0.688em;
+$twelve:		0.750em;
+$thirteen:		0.813em;
+$fourteen:		0.875em;
+$twentyone:		1.313em;
+$twentyeight: 	1.750em;
+$thirtysix: 	2.250em;
+
+$jg-header-font: 	'Montserrat';
+$jg-font-family: 	'Helvetica-neue', Helvetica, Verdana, sans-serif;
+$jg-font-weight: 	$regular;
+
+// LINK
+
+$jg-black:				#505050;
+$jg-active-link:		#3c73e5;
+$jg-link-decoration: 	none;
+
+// ICON VAR
+$jg-icon-active:	$jg-active-link;
+$jg-icon-green:		#6ebd8d;
+$jg-icon-inactve: 	$jg-grey;
+$jg-icon-header: 	#999999;
+$jg-icon-ferrari:	#f25858;
+$jg-icon-black:		$jg-black;
+
+
+// Borders
+
+$jg-border-default:  #e7e7e7;
+$jg-border-light:	   #cdcdcd;
+$jg-border-blue:     #3a6fdb;
+
+$jg-icon-size-20px: 1.4em;
+

@@ -1,0 +1,99 @@
+en:
+  public:
+    headline: "The global cloud marketplace"
+    main_message: "Deploy cloud servers from all over the world, with near instant
+                   deployment, from one control panel."
+    title_box1: "What is Cloud.net?"
+    sec1_info1: "It is the first global marketplace for public cloud hosting with
+                 a simple way to compare cloud providers all over the world and
+                 allow you to deploy your applications wherever you like."
+    sec1_info2: "All manged through one account, one control panel, with one invoice
+                 and one place to get support - however many providers or locations use"
+    billing_cap1: "One billing account"
+    billing_cap2: "Resource usage"
+    billing_cap3: "Providers"
+    billing_head: "A Unified Billing"
+    billing_par1: "Don't spend time mapping different accounts with different providers.
+                   You can host your applications in the cloud, wherever you like, and get
+                   one unified monthly bill - no matter how many providers or locations
+                   you want to use. Cloud hosting becomes much easier!"
+    billing_par2: "Whatever combination of providers you choose, we look after your account,
+                   your service, your bill and support. Give us a call for any questions."
+    transp_head: "Total Transparency"
+    transp_par1: "We give you a simple way to compare clouds from the world's best cloud
+                  providers, with radical transparencyinto performance, KPIs and price
+                  of each location to make informed decisions."
+    transp_note1: "Select one or multiple regions"
+    transp_n2_head: "Compare KPIs (Key Performance Indicators)"
+    transp_note2: "The Service Measurement Index (SMI) defines a work and method
+                   for the calculation of a relative index"
+    transp_n3_head: "Chose the Best Price"
+    transp_note3: "Servers are priced per hour up to a maximum 672 hours (28 days)
+                   in each monthly billing"
+    transp_note4: "The Cloud.net marketplace puts global cloud capacity at your fingertips,
+                   with more scale than any single provider. Deploy one cloud server
+                   or a thousand in cities worldide"
+    transp_note5: "Deploy your apps with the provider, location and OS you want
+                   with the price and requirements you want."
+    inter_head: "Interoperability"
+    inter_par1: "Easily scale and move applications, website and projects around from one
+                 server to another. Global capacity allows your apps to remain working anywhere."
+    news_head1: "What the industry is saying"
+    news_head2: "Latest news"
+    news_q1: "OnApp Federation could end SLA controversy."
+    news_q1_src: "Data Center Dynamics"
+    news_quote2: "Cloud.net squares up to Amazon EC2"
+    news_blog1: "Cloud.net at WHD Global 2015"
+    news_blog2: "Two factor authentication is now available"
+    news_blog3: "How is the cloud index determined for a location?"
+    news_read_more: "Read more"
+    deploy_head: "Deploy one cloud server or more in under minute"
+  features:
+    title_box1: "What is Cloud.net?"
+    content_box1: "Cloud.net is the first global marketplace for public cloud hosting.
+                   We give you a simple way to compare cloud providers all over the world,
+                   and then deploy your applications wherever you like with just
+                   a few cliks, using one simple control panel."
+    title_sbox1: "Freedom of choice"
+    content_sbox1: "We put the world's best cloud providers at your fingertips, with a huge
+                    range price and performance options available for your apps. You can
+                    create cloud servers at locations across the US, Europe and Asia, with
+                    more coming online all the time.</br></br>
+                    It's all managed through one account and one control panel, with one
+                    invoice and one place to get support - however many providers or locations
+                    you use."
+    title_sbox2: "Massive scale"
+    content_sbox2: "The Cloud.net marketplace puts global cloud capacity at your fingertips,
+                    with way more scale than any single provider can offer. You can deploy
+                    one cloud server or a thousand, in cities all over the world."
+                    
+    title_sbox3: "Easy price comparison"
+    content_sbox3: "Why trawl through hundreds of cloud websites? We give you a simple way
+                    to compare clouds from the world's best providers, and find capacity with
+                    the price and performance you need."
+
+    title_sbox4: "Did you know?"
+    content_sbox4: "Cloud.net can bring you this freedom of choice and scale because it runs on
+                    the OnApp Federation - a global network of clouds powered by OnApp, the
+                    leading cloud platform for service providers."
+                    
+    title_sbox5: "Total transparency"
+    content_sbox5: "You can use Cloud.net to deploy your apps with the provider you want,
+                    at the location you want, with the OS and apps you want. Whatever combination
+                    of providers you choose, we look after your account, your service, your bill
+                    and support."
+                    
+    title_sbox6: "Unified billing"
+    content_sbox6: "Why spend time managing different accounts with different providers? You
+                    can host your applications in the cloud, wherever you like, and get one unified
+                    monthly bill – no matter how many providers or locations you use."
+
+    title_box2: "Deploy a cloud server now"
+    content_box2: "Sign up for Cloud.net today."
+    
+    deploy_button: "Get Started Now"
+pl:
+  public:
+    headline: "Globalny rynek chmur obliczeniowych"
+    main_message: "Stwórz serwery w chmurach na całym świecie, z błyskawicznym
+                   uruchomieniem, używając jednego panelu"

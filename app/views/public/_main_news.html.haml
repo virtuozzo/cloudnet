@@ -1,0 +1,37 @@
+%section.main-news
+  .container
+    .pure-g
+      .pure-u-2-5
+        %h3= t('public.news_head1')
+        %blockquote.blockquote-reverse
+          %p
+            „
+            = t('public.news_q1')
+            “ 
+          %footer
+            %cite
+              =link_to t('public.news_q1_src'), "http://www.datacenterdynamics.com/it-networks/onapp-federation-could-end-sla-controversy/87371.article", target: "_blank"
+      .pure-u-3-5
+        %h3= t('public.news_head2')
+        %table.table-bordered
+          %tr
+            %td
+              .pic.lock
+            %td= truncate(t('public.news_blog1'))
+            %td= link_to t('public.news_read_more'),
+            "http://blog.cloud.net/cloud-net-whd-global-2015/", 
+            target: "_blank"
+          %tr
+            %td
+              .pic.cloud
+            %td= truncate(t('public.news_blog2'))
+            %td= link_to t('public.news_read_more'),
+            "http://blog.cloud.net/two-factor-authentication-now-available/", 
+            target: "_blank"
+          %tr
+            %td
+              .pic.circle
+            %td= truncate(t('public.news_blog3'))
+            %td= link_to t('public.news_read_more'),
+            "http://blog.cloud.net/cloud-index-determined-location/",
+            target: "_blank"

@@ -1,0 +1,2 @@
+<% notes = activity.parameters[:notes] %>
+Charges to payment account (note ID, amount): <%= notes.map { |id, value| "##{id}: #{Invoice.pretty_total(value)}" }.join(', ') %>

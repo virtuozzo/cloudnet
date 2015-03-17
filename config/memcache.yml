@@ -1,0 +1,9 @@
+production:
+  servers:
+    - localhost:11211
+  namespace: cloudnet
+
+staging:
+  servers:
+    - localhost:11211
+  namespace: cloudnet

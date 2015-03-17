@@ -1,0 +1,181 @@
+// Place all the styles related to the Wizards controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'partials/base';
+
+
+.server-location-presence {
+  padding: 1px;
+  height: 120px;
+  overflow: hidden;
+  // @include box-shadow(inset 0px 0px 4px rgba(0,0,0,.6));
+  position: relative;
+  z-index: 100;
+  @include border-radius(4px);
+  #jg-map {
+    position: relative;
+    z-index: 99;
+    @include border-radius(4px);
+    height: 100%;
+  }
+}
+
+.server-additional-info {
+  > * {
+    float: left;
+    border-top: 1px solid #e7e7e7;
+  }
+
+  table.ip-address-table {
+    font-size: $thirteen;
+    font-size: 16px;
+
+    thead {
+      tr {
+        td {
+          float: left;
+          padding: 8px 0 8px 16px;
+          line-height: 32px;
+          @include box-sizing(border-box);
+          font-size: $eleven;
+          text-transform: uppercase;
+          font-weight: bold;
+
+        }
+        border-bottom: 1px solid #e7e7e7;
+      }
+    }
+    tbody {
+      height: 110px;
+      position: relative;
+      overflow: hidden;
+      tr {
+        background: white;
+        td {
+          float: left;
+          padding: 6px 0 6px 14px;
+          line-height: 30px;
+          @include box-sizing(border-box);
+          font-size: $thirteen;
+          border-top: none;
+          border-bottom: 1px solid $jg-light-grey;
+
+        }
+      }
+    }
+  }
+
+  .basic-server-info {
+    height: 100%;
+    border-left: 1px solid #e7e7e7;
+
+    dl {
+      margin: 0;
+      float: left;
+      display: block;
+      width: 100%;
+      border-bottom: 1px solid #e7e7e7;
+
+      &:nth-child(even) {
+        background: $jg-light-grey;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      > * {
+        float: left;
+        margin:   0;
+        padding: 8px 0 8px 16px;
+        line-height: 32px;
+      }
+      dt {
+        font-size: $eleven;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      dd {
+        font-size: $twelve;
+      }
+      .cost {
+        color: $jg-green;
+      }
+    }
+
+  }
+
+}
+
+h2.os {
+  &:before {
+    margin: 0 15px 0 0;
+  }
+}
+.server-details {
+  padding: 20px;
+  @include box-sizing(padding-box);
+  .os {
+    height: 100%;
+    &:before {
+      margin: 25px 0;
+      position: relative;
+      left:     10%;
+    }
+  }
+  ul.server-info {
+    list-style-type: none;
+    li {
+      color:      #afb1b8;
+      padding:    12px 0 11px;
+      float:      left;
+      &.hostname {
+        font-weight:  bold;
+        color:        #505050;
+      }
+      &.country {
+        img {
+          margin: -3px 5px 0 0;
+        }
+      }
+    }
+  }
+}
+
+.console-page {
+  .console {
+    text-align: center;
+    padding: 30px;
+  }
+}
+
+ul.resources-footer {
+  list-style-type:  none;
+  padding:          10px 0 15px;
+  margin:           0;
+  li {
+    text-align: center;
+
+    span {
+      width: 100%;
+      clear: both;
+      display: block;
+    }
+
+    span.resource-value {
+      color:        #505050;
+      font-size:    $sixteen;
+      font-weight:  bold;
+      line-height:  $thirtysix;
+      padding:      6px 0;
+    }
+
+    span.resource {
+      color:          #a8aab2;
+      font-size:      $eleven;
+      text-transform: uppercase;
+    }
+
+  }
+}

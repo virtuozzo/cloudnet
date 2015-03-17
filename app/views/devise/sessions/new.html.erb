@@ -1,0 +1,35 @@
+<% title "Login" %>
+
+<%= devise_error_messages! %>
+
+<div id="jg-registration-widget" class="pure-g sessions">  
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
+    <header class="session-logo pure-u-1">
+      <%= link_to 'Cloud.net', root_path, { class: "pure-u-1", id: 'logoLarge'} %>
+    </header>
+
+    <dl>
+      <dt class="jg-icon icon-user pure-u-1-8"></dt>
+      <dd class="pure-u-7-8"><%= f.email_field :email, :autofocus => true, :class => "form-control", :placeholder => "Email Address" %></dd>
+    </dl>
+    <dl>
+      <dt class="jg-icon icon-locked pure-u-1-8"></dt>
+      <dd class="pure-u-7-8"><%= f.password_field :password, :class => "form-control", :placeholder => "Password" %></dd>
+    </dl>
+    <% if devise_mapping.rememberable? -%>
+      <dl class="jg-rememberable">
+        <dt class="pure-u-1-8"><%= f.check_box :remember_me, :type => "checkbox" %></dt>
+        <dd class="pure-u-7-8">
+            <%= f.label :remember_me %>
+        </dd>
+      </dl>
+    <% end -%>
+
+    <dl>
+      <dd id="session-action" class="pure-u-1-1"><%= f.button "Sign in", {id: 'session-button', :class => "btn btn-lg btn-primary btn-block jg-submit-button"} %></dd>
+    </dl>
+  <% end %>
+</div>
+
+
+<%= render "devise/shared/links" %>

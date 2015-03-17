@@ -1,0 +1,38 @@
+@app.directive "locationWidget", [ 'Packages', 'ServerSearchState', '$filter',
+(Packages, State, $filter) ->
+  templateUrl: "<%= asset_path('templates/server_search/location.html') %>"
+  scope: 
+    location: '='
+  link: (scope, el, attr) ->
+    scope.noPackageActive = ->
+      not Packages.activePackage
+    
+    scope.totalPricePerHour = ->
+      filterCurrency(scope.location.pricePerHour(State.counts), 5)
+      
+    scope.totalPricePerMonth = ->
+      filterCurrency(scope.location.pricePerMonth(State.counts), 2)
+      
+    scope.memoryPerHour = ->
+      filterCurrency(scope.location.fPriceMem() / 100000)
+
+    scope.diskPerHour = ->
+      filterCurrency(scope.location.fPriceDisk() / 100000)
+      
+    scope.cpuPerHour = ->
+      filterCurrency(scope.location.fPriceCpu() / 100000)
+      
+    scope.provision = ->
+      document.location = "/servers/create?#{$.param(State.counts)}&id=#{scope.location.id}"
+      
+    filterCurrency = (value, precision=6) ->
+      $filter('currency')(value, '$', precision)
+      
+    scope.prepareGraphs = ->
+      uptime = State.currentUptime(scope.location)
+      indices = scope.location.indices
+      new helpers.CloudIndexChart($(el).find(".cloud-index-graph")[0], indices).draw()
+      new helpers.UptimeChart($(el).find(".uptime-chart")[0], uptime).draw() if uptime
+      
+    scope.prepareGraphs()
+]

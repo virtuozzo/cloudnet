@@ -1,0 +1,15 @@
+defaults: &defaults
+  sentry:
+    dsn: <%= ENV["SENTRY_DSN"] %>
+
+development: 
+  <<: *defaults
+
+staging: 
+  <<: *defaults
+
+test: 
+  <<: *defaults
+
+production: 
+  <<: *defaults

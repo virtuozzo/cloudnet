@@ -1,0 +1,32 @@
+<% title "Two-factor Auth | Recovery Codes" %>
+<% breadcrumb :recovery_2fa %>
+
+<div class="jg-widget-content">
+  <div class="jg-widget-header pure-g clearfix">
+    <h2 class="pure-u jg-icon icon-user">Two-factor Authentication Recovery Codes</h2>
+  </div>
+  <div class="jg-widget-body">
+    <div class="jg-widget-form pure-g-r clearfix">
+      <p><%= I18n.t('explain', {:scope => 'devise.otp.tokens.recovery'}) %></p>
+
+      <table class="jg-tables">
+        <caption>
+          <thead>
+              <tr>
+                <th>Code Sequence Number</th>
+                <th><%= I18n.t('code', {:scope => 'devise.otp.tokens.recovery'}) %></th>
+              </tr>
+          </thead>
+          <tbody>
+          <%- resource.next_otp_recovery_tokens.each do |seq, code| %>
+              <tr>
+                <td><%= seq + 1 %></td>
+                <td><%= code %></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </caption>
+      </table>
+    </div>
+  </div>
+</div>

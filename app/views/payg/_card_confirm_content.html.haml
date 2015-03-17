@@ -1,0 +1,19 @@
+- if !@error.present?
+  .jg-widget-form.pure-g-r.clearfix
+    %div
+      %p
+        Are you sure you want to top up your PAYG account with 
+        %strong= "$#{@amount} USD" 
+        using primary billing card ending in 
+        %strong= "'#{@last4}'"
+  
+  .modal-footer
+    %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
+    = button_tag "Confirm Payment", class: 'btn jg-submit-button', id: "payg_card_confirm_payment"
+- else
+  .jg-widget-form.pure-g-r.clearfix
+    %div
+      %p= @error
+  
+  .modal-footer
+    %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel

@@ -1,0 +1,72 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import '../base';
+
+$jg-header-border: 			#c6c6c6;
+
+input {
+	border: none;
+	outline: none;
+}
+
+#main-search-container {
+	border-right: 1px solid $jg-header-border;
+
+	> * {
+		float: left;
+		height: 100%;
+		
+	}
+
+	#search-image {
+		font-size: 			$jg-icon-size-20px;
+		text-align: 		center;
+		vertical-align: 	middle;
+		line-height: 		60px;
+	}
+
+	#main-search {
+		height: 100%;
+		@include background-image(linear-gradient(#ffffff, #ececec));
+		padding: 0 10px;
+		display: block;
+	}
+
+	#jg-audio {
+		line-height: 		60px;
+		line-height: 		60px;
+		font-size: 			$jg-icon-size-20px;
+		text-align: 		center;
+		vertical-align: 	middle;
+		text-decoration:	$jg-link-decoration;
+		color: 				$jg-icon-header;
+		display: 			block;
+		cursor:				pointer;
+
+		&:hover {
+			color: $jg-icon-ferrari;
+			opacity: .8;
+			@include transition(1s linear all);
+		}
+
+		&.active {
+			color: 				$jg-icon-ferrari;
+			text-decoration: 	$jg-link-decoration;
+		}
+	}
+
+}
+@media (max-width:480px) {
+    #main-search-container {
+    	#search-image {
+			visibility: hidden;
+			width: 		0%;
+			display: 	none;
+		}
+		#main-search {
+			width: 87.5%;
+		}
+    }
+}

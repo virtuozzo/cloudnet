@@ -1,0 +1,82 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-target= "SRV (Service) Records for #{domain.domain}" 
+    %ul.pure-u-1-2.jg-widget-controls
+      %li
+        %a.jg-button-lilac.jg-new-button{"data-target" => "#add-srv-record", "data-toggle" => "modal"} Add SRV Record
+  .jg-widget-body
+    %table.table.table-hover.jg-tables
+      %thead
+        %tr
+          %th Name
+          %th Priority
+          %th Weight
+          %th Port
+          %th Hostname
+          %th TTL
+          %th Actions
+      %tbody
+        - records[:srv].each do |record|
+          %tr
+            %td= dns_editable_record record, :name
+            %td= dns_editable_record record, :priority
+            %td= dns_editable_record record, :weight
+            %td= dns_editable_record record, :port
+            %td= dns_editable_record record, :hostname
+            %td= dns_editable_record record, :ttl
+            %td
+              .btn-group{class: 'sticky'}
+                %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button", "data-target" => "#"}
+                  %span.icon-settings
+                  %span.icon-arrow-down
+                %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+                  %li
+                    = link_to "Delete Record", destroy_record_dns_zone_path(@domain.id, record_id: record[:id]), method: :delete, confirm: "Are you sure you want to delete this record?"
+
+
+
+        - if records[:srv].size == 0 
+          %tr
+            %td.no-data{colspan: "7"}
+              %p= "You don't have any SRV records for this domain"
+
+#add-srv-record.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "srv-record", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#srv-record.modal-title Add SRV Record
+      = form_tag create_record_dns_zone_path(@domain.id), remote: true, role: 'form', class: 'jg-dns-record-form' do
+        .modal-body
+          %div.dns-alert
+
+          .jg-widget-form.pure-g-r.clearfix
+            = hidden_field_tag :type, 'srv'
+            .form-group.pure-u-1
+              = label_tag :name, 'Name', class: 'pure-u-1'
+              = text_field_tag :name, nil, placeholder: 'www', class: 'form-control focus', required: true
+
+            .form-group.pure-u-1
+              = label_tag :hostname, 'Hostname', class: 'pure-u-1'
+              = text_field_tag :hostname, 'ns1.cloud.net', placeholder: 'ns1.cloud.net', class: 'form-control', required: true
+
+            .form-group.jg-inline.pure-g
+              .pure-u-1.pure-u-md-1-3
+                = label_tag :priority, 'Priority', class: 'pure-u-1'
+                = text_field_tag :priority, nil, placeholder: '10', class: 'form-control', required: true
+              
+              .pure-u-1.pure-u-md-1-3
+                = label_tag :weight, 'Weight', class: 'pure-u-1'
+                = text_field_tag :weight, nil, placeholder: '10', class: 'form-control', required: true
+
+              .pure-u-1.pure-u-md-1-3
+                = label_tag :port, 'Port', class: 'pure-u-1'
+                = text_field_tag :port, nil, placeholder: '80', class: 'form-control', required: true
+              
+            .form-group.pure-u-1
+              = label_tag :ttl, 'TTL', class: 'pure-u-1'
+              = select_tag :ttl, dns_ttl_options
+        
+          .modal-footer
+            %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
+            = button_tag "Create SRV Record", class: 'btn jg-submit-button'

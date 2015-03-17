@@ -1,0 +1,23 @@
+%script
+  - r = cpu_usages.to_json
+  = raw "var cpu_usages = #{r}" 
+
+.jg-widget-content#jg-cpu-usages
+  .jg-widget-header.clearfix
+    %h2.pure-u CPU Usage
+    %ul.pure-u.jg-widget-controls
+      %li
+        %a 24 Hours
+      %li.current
+        %a 7 Days
+      %li
+        %a 30 Days
+  
+  .jg-widget-body
+    .jg-chart.linechart
+    %div{ :style => "clear:both" }
+    .jg-chart.overview-chart
+    %div{ :style => "clear:both" }
+    
+
+= javascript_include_tag "servers/cpu_usage"

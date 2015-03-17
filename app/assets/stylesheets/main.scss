@@ -1,0 +1,678 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'partials/base';
+.leaflet-popup-content-wrapper {
+  background: none;
+}
+
+#feedback-tab {
+  margin-top:-52px;
+  background-color:#3C74E5;
+  border:0px;
+}
+
+.notifications-list {
+  padding: 0px 20px;
+  li {
+    line-height: $twentyeight;
+    padding: 5px 15px;
+  }
+}
+
+.alert {
+  font-size: $thirteen;
+  width: 100%;
+}
+.leaflet-popup-tip-container {
+  top: -1px;
+}
+.leaflet-popup-close-button {
+  z-index:    9999;
+  opacity:    1;
+  top: 1px;
+  right: 1px;
+  background-color:      white;
+  @include border-radius(0 3px 0 0);
+}
+.leaflet-popup-content {
+  @include border-radius(3px);
+  background: white;
+  width: 100% !important;
+  padding: 0;
+
+  .location_info {
+    padding: 0;
+    margin: 5px 0 0 0;
+    li {
+      padding: 0 4px 0 0;
+      font-size: 12px;
+      b {
+        color: #505050;
+        padding: 4px 6px 4px 0;
+      }
+      span {
+        color: #777;
+        padding: 4px 6px 0px 0;
+
+        a {
+          color: #777;
+          padding: 0;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  #image_links {
+    list-style-type: none;
+    margin:       0;
+    padding:      0;
+    display:      block;
+    position:     absolute;
+    top:          25px;
+    z-index:      999;
+    right:        0;
+    float: right;
+
+    li {
+      position: relative;
+      height: 30px;
+      float: right;
+      clear: both;
+      border-bottom: 1px solid #8ad3a7;
+      width: 26px;
+      background: #6ebd8d;
+
+      &:hover {
+          background: #8ad3a7;
+          span {
+            display: block;
+            opacity: .9;
+            @include transition(linear all .8);
+          }
+      }
+
+      &:last-child {
+        border: none;
+        @include border-radius(0 0 0 3px);
+      }
+      span {
+        right: 36px;
+        color: white;
+        font-weight: bold;
+        text-align: right;
+        padding: 4px 4px 4px;
+        position: absolute;
+        top: 2px;
+        
+        z-index: 999;
+        opacity: 0;
+        display: none;
+        background: rgba(0,0,0,.1);
+        @include transition(opacity linear .8);
+      }
+      a {
+        position: relative;
+        &:before {
+          position:   relative;
+          padding-left: 1px;
+          color:      #478e63;
+
+          font-size: 16px;
+        }
+        display: block;
+        height: 100%;
+        text-decoration: none;
+        font-size:   12px;
+        color:       white;
+        font-weight: bold;
+        line-height: $thirtysix;
+        padding:     5px 4px 4px;
+      }
+    }
+  }
+  .location_header {
+    position: relative;
+    background: $jg-light-grey;
+    padding: 0 0 1px 0;
+    top: -1px;
+    @include border-radius(3px 3px 0 0);
+    height: 100px;
+    overflow: hidden;
+    .coordinates {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      z-index: 999;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .title {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+      z-index: 999;
+      width: 250px;
+      text-overflow:ellipsis;
+      overflow: hidden;
+      white-space:nowrap; 
+      padding: 5px;
+      background: rgba(0,0,0,.1);
+    }
+
+
+
+    .map_location {
+      position: relative;
+      top: -60%;
+    }
+    img {
+      
+    }
+  }
+  .location_body {
+    
+    .country_city {
+      padding: 15px;
+      a.location_name {
+        font-size: 14px;
+        color: #777;
+        padding: 2px 10px 0;
+        line-height: 24px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+}
+span.price {
+  font-weight: bold;
+  color:  $jg-green;
+}
+.gravatar {
+  width:  32px;
+  height: 32px;
+  margin: 0 4px;
+  img {
+    @include border-radius(300px);
+  }
+}
+.show-less {
+  height:   80px;
+  overflow: hidden;
+  @include transition(1s linear all);
+}
+.show-more {
+  height:   auto;
+  overflow: visible;
+  @include transition(1s linear all);
+}
+a.show-more-or-less {
+  padding: 15px 15px 15px 0;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  &:after {
+    display: inline-block;
+    content: 'More';
+    font-size: $thirteen;
+    color: #777;
+    font-weight: bold;
+    padding: 0 8px;
+  }
+  &.icon-ellipsis {
+    color: #777;
+    &:before {
+      position: relative;
+      top: 3px;
+      font-size: 16px;
+    }
+  }
+  &.less:after {
+    content: 'Less';
+  }
+}
+
+.nvtooltip {
+    display: none;
+}
+
+.d3-tip {
+  padding: 0;
+  line-height: 1;
+  font-weight: bold;
+  background: white;
+  border: 1px solid $jg-border-light;
+  color: #777;
+  @include box-shadow(0px 1px 1px rgba(0,0,0,.1));
+  @include border-radius(2px);
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(255, 255, 255, 1);
+  text-shadow: 0px 0px 1px rgba(0,0,0, 1);
+  top: -1px;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.d3-tip.n:after {
+  content: "\25BC";
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+  text-align: center;
+}
+
+/* Eastward tooltips */
+.d3-tip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+
+/* Southward tooltips */
+.d3-tip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -8px;
+  left: 0;
+  text-align: center;
+}
+
+/* Westward tooltips */
+.d3-tip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
+}
+
+.alert {
+    margin: 20px 0 0;
+}
+
+#layout, html, body {
+  min-height: 100%;
+  height:   100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+  font-size: 16px;
+  background: #f7f7f7;
+
+}
+a.copy {
+    &.icon-clipboard {
+        padding:    0 10px;
+        color:      #8a8d98;
+        font-size:  16px;
+        position:   relative;
+        top:        2px;
+        right:      24px;
+        float: right;
+        text-decoration: none;
+        @include transition(.1s all linear);
+        &.zeroclipboard-is-hover {
+            opacity: 0.5;
+        }
+        &.zeroclipboard-is-active {
+            opacity: 1;
+            color: $jg-blue;
+        }
+    }
+}
+
+a.password {
+    &.icon-unlocked {
+        &:before {
+            color: $colour;
+            padding: 0 6px 0 0;
+            text-decoration: none;
+            font-size: 16px;
+            position: relative;
+            top: 2px;
+        }
+    }
+    font-weight: bold;
+    color: $jg-blue;
+    cursor: pointer;
+    padding: 0 2px;
+    display: inline-block;
+}
+
+a.revealed {
+    text-decoration: none;
+    color: #777;
+    font-weight: normal;
+    &.password {
+        font-family: 'andale mono', 'lucida console', monospace;
+        cursor: default;
+    }
+}
+
+.clear {
+    // content: "."; 
+    visibility: hidden; 
+    display: block; 
+    height: 0; 
+    clear: both;
+}
+
+.clearfix:after { 
+   @extend .clear;
+}
+
+.fake { 
+   content: "."; 
+   visibility: hidden; 
+   display: block; 
+   height: 0; 
+   clear: both;
+}
+
+.bd-top {
+   border-top: 1px solid $jg-border-light;
+}
+
+.pure-extend {
+   display: inline-block;
+   zoom: 1; *display: inline; /* IE < 8: fake inline-block */
+   letter-spacing: normal;
+   word-spacing: normal;
+   vertical-align: top;
+   text-rendering: auto;
+}
+
+.pure-u-1-1 {
+   width: 100%;
+   @extend .pure-extend;
+}
+
+
+#layout.container {
+	padding-right: 0;
+	width: 100%;
+}
+
+.wrapper {
+	padding: 60px 20px 20px;
+    background: #f7f7f7;
+    min-width:  496px;
+    // max-width:  980px;
+}
+
+#main {
+    position: relative;
+    height: 100%
+}
+
+#main header .wrapper-header{
+    border-right:   1px solid #d6d4d4;
+    width: 100%;
+    height: 100%;
+    min-width:  496px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+
+    #hiddenNav {
+        display: none;
+    }
+
+}
+
+body {
+    color: #777;
+}
+
+.pure-img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+
+/*
+Add transition to containers so they can push in and out.
+*/
+#layout,
+#menu,
+.menu-link {
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+
+/*
+This is the parent `<div>` that contains the menu and the content area.
+*/
+#layout {
+    position: relative;
+    padding-left: 0;
+}
+    #layout.active {
+        position: relative;
+        left: 150px;
+    }
+        #layout.active #menu {
+            left: 150px;
+            width: 150px;
+        }
+
+        #layout.active .menu-link {
+            left: 150px;
+        }
+/*
+The content `<div>` is where all your content goes.
+*/
+.content {
+    margin: 0 auto;
+    padding: 0 2em;
+    max-width: 800px;
+    margin-bottom: 50px;
+    line-height: 1.6em;
+}
+
+.header {
+     margin: 0;
+     color: #333;
+     text-align: center;
+     padding: 2.5em 2em 0;
+     border-bottom: 1px solid #eee;
+ }
+    .header h1 {
+        margin: 0.2em 0;
+        font-size: 3em;
+        font-weight: 300;
+    }
+     .header h2 {
+        font-weight: 300;
+        color: #ccc;
+        padding: 0;
+        margin-top: 0;
+    }
+
+.content-subhead {
+    margin: 50px 0 20px 0;
+    font-weight: 300;
+    color: #888;
+}
+
+
+
+/*
+The `#menu` `<div>` is the parent `<div>` that contains the `.pure-menu` that
+appears on the left side of the page.
+*/
+.modal {
+  z-index: 30010;
+}
+.modal-backdrop {
+  z-index: 30005;
+}
+.modal-content {
+  @include border-radius(3px);
+}
+.modal-body {
+  padding: 0;
+}
+#menu {
+    margin-left: -150px; /* "#menu" width */
+    width: 150px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 30001; /* so the menu or its navicon stays above all content */
+    background: #191818;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+    /*
+    All anchors inside the menu should be styled like this.
+    */
+    #menu a {
+        color: #999;
+        border: none;
+        padding: 0.6em 0 0.6em 0.6em;
+    }
+
+    /*
+    Remove all background/borders, since we are applying them to #menu.
+    */
+
+    /*
+    Add that light border to separate items into groups.
+    */
+
+
+/* -- Dynamic Button For Responsive Menu -------------------------------------*/
+
+/*
+The button to open/close the Menu is custom-made and not part of Pure. Here's
+how it works:
+*/
+
+/*
+`.menu-link` represents the responsive menu toggle that shows/hides on
+small screens.
+*/
+.menu-link {
+    position: fixed;
+    display: block; /* show this only on small screens */
+    top: 0;
+    left: 0; /* "#menu width" */
+    background: #000;
+    background: rgba(0,0,0,0.7);
+    font-size: 10px; /* change this value to increase/decrease button size */
+    z-index: 10;
+    width: 2em;
+    height: auto;
+    padding: 2.1em 1.6em;
+}
+
+    .menu-link:hover,
+    .menu-link:focus {
+        background: #000;
+    }
+
+    .menu-link span {
+        position: relative;
+        display: block;
+    }
+
+    .menu-link span,
+    .menu-link span:before,
+    .menu-link span:after {
+        background-color: #fff;
+        width: 100%;
+        height: 0.2em;
+    }
+
+        .menu-link span:before,
+        .menu-link span:after {
+            position: absolute;
+            margin-top: -0.6em;
+            content: " ";
+        }
+
+        .menu-link span:after {
+            margin-top: 0.6em;
+        }
+
+
+/* -- Responsive Styles (Media Queries) ------------------------------------- */
+
+/*
+Hides the menu at `48em`, but modify this based on your app's needs.
+*/
+
+@media (max-width: 768px) {
+
+    .dashboard-stats {
+        li {
+            padding: 0;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+
+    .header,
+    .content {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+    #layout {
+        padding-left: 150px; /* left col width "#menu" */
+        left: 0;
+    }
+    #menu {
+        left: 150px;
+    }
+
+    .menu-link {
+        position: fixed;
+        left: 150px;
+        display: none;
+    }
+
+    #layout.active .menu-link {
+        left: 150px;
+    }
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+  font-family: 'icomoon';
+  content: attr(data-icon);
+  speak: none;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.disabled {
+  opacity: 0.6;
+}
