@@ -12,7 +12,7 @@ class DestroyServerTask < BaseTask
 
     begin
       tasker.perform(:destroy, @user.id, @server.id)
-      @server.create_credit_note_for_remaining_time
+      @server.create_credit_note_for_time_remaining
       @server.destroy_with_ip(@ip)
     rescue Faraday::Error::ClientError => e
       ErrorLogging.new.track_exception(e, extra: { current_user: @user, source: 'DestroyServerTask', faraday: e.response })
