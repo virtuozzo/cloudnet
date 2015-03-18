@@ -3,15 +3,15 @@
     .pure-g
       .pure-u-1-6
         %ul.list-unstyled
-          %li Cloud.net
-          %li Features
-          %li Account Login
+          %li= link_to t('menu.cloud_net'), root_path
+          %li= link_to t('menu.features'), public_features_path 
+          %li= link_to t('menu.account_login'), new_user_session_path
       .pure-u-1-6
         %ul.list-unstyled
           %li Company
           %li About Us
-          %li Blog
-          %li Careers
+          %li= link_to t('menu.blog'), "http://blog.cloud.net/", target: "_blank"
+          =#%li Careers
       .pure-u-1-6
         %ul.list-unstyled
           %li Support
@@ -21,5 +21,19 @@
         .pull-right
           =image_tag 'cloudnet-small-grey.png'
           %p Copyright ©2015 Cloud.net Ltd.
-          Terms of Service | Privacy
-          =image_tag 'social-icons.png'
+          %p
+            %span.tos= link_to('Terms of Service',
+            'http://feedback.cloud.net/knowledge-base/article/terms-of-service',
+            target: "_blank")
+            |
+            %span.priv Privacy
+          = image_tag 'social-icons.png', usemap: "#footer-social"
+          %map{name: "footer-social"}
+            %area{shape: "rect",
+                  coords: "0,0,17,17", 
+                  href: "https://www.facebook.com/CloudDotNet?_rdr",
+                  target: "_blank"}
+            %area{shape: "rect",
+                  coords: "26,0,43,17", 
+                  href: "https://twitter.com/cloud",
+                  target: "_blank"}

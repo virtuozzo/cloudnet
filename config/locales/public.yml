@@ -12,7 +12,7 @@ en:
     billing_cap1: "One billing account"
     billing_cap2: "Resource usage"
     billing_cap3: "Providers"
-    billing_head: "A Unified Billing"
+    billing_head: "A Unified Experience"
     billing_par1: "Don't spend time mapping different accounts with different providers.
                    You can host your applications in the cloud, wherever you like, and get
                    one unified monthly bill - no matter how many providers or locations
@@ -92,6 +92,16 @@ en:
     content_box2: "Sign up for Cloud.net today."
     
     deploy_button: "Get Started Now"
+
+  menu:
+    features: "Features"
+    account_login: "Account Login"
+    login: "Login"
+    sign_up: "Sign up"
+    cloud_net: "Cloud.net"
+    faq: "FAQ"
+    contact: "Contact"
+    blog: "Blog"
 pl:
   public:
     headline: "Globalny rynek chmur obliczeniowych"

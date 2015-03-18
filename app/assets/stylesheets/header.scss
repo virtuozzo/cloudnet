@@ -321,8 +321,12 @@ header.jg-header, .jg-header {
   }
   
   #footer{
-    padding: 30px 0 0 0;
+    padding: 30px 0 20px 0;
     background-color: $footer-background;
     font-size: $eleven;
+    img{float: right; margin: 2px 0;}
+    p{ margin: 1px 0; clear: both; }
+    .tos{margin-right: 12px;}
+    .priv{margin-left: 14px;}
   }
 }

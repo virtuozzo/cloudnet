@@ -6,7 +6,7 @@ $public-transparent-middle-line: 1px solid white;
     padding-top: 80px;
     padding-bottom: 80px;
     h2{color: white;}
-    #top-message{margin: 1.5em 4em;}
+    .top-message{margin: 1.5em 4em;}
     .graph-text-wrapper{
       position: relative;
       padding-bottom: 50px;
@@ -36,23 +36,23 @@ $public-transparent-middle-line: 1px solid white;
       background-color: #232A33;
       z-index: 1;
     }
-    #circle1{
+    .circle1{
       right: -4px;
       top: 12px;
     }
-    #circle2{
+    .circle2{
       left: -4px;
       top: -6px;
     }
-    #circle3{
+    .circle3{
       right: -7px;
       top: -6px;
     }
-    #circle4{ right: -6px; }
-    #graph1{ padding-top: 50px;}
-    #graph2{ margin-left: 30px;}
-    #graph3{ margin-left: 30px;}
-    #graph4{ margin-left: 30px;}
+    .circle4{ right: -6px; }
+    .graph1{ padding-top: 50px;}
+    .graph2{ margin-left: 30px;}
+    .graph3{ margin-left: 30px;}
+    .graph4{ margin-left: 30px;}
   
     .empty-line{
       border-top: $public-transparent-middle-line; 
@@ -68,21 +68,21 @@ $public-transparent-middle-line: 1px solid white;
       font-size: $thirteen;
       color: #58616C;
     }
-    #text1{ margin-left: 10px; }
-    #text2{width: 72%; float: right;} 
-    #text3{
+    .text1{ margin-left: 10px; }
+    .text2{width: 72%; float: right;} 
+    .text3{
       width: 80%;
       margin-top: -8px;
       padding-left: 1.5em;
     }
-    #text4{
+    .text4{
       border-right: $public-transparent-middle-line;
       margin-right: -1px;
       padding-right: 1em;
       padding-top: 9em;
       padding-bottom: 4em;
     }
-    #text5{ margin-left: 8em; }
+    .text5{ margin-left: 8em; }
     .text-wrapper{ position: relative; }
   }
 }
