@@ -1,4 +1,7 @@
-redis_config = { url: "redis://#{ YAML.load_file(Rails.root.join('config/redis.yml'))[Rails.env.to_s] }", namespace: 'cloudnet'  }
+redis_config = {
+  url: ENV['REDIS_URI'] || 'redis://localhost:6379',
+  namespace: 'cloudnet'
+}
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
