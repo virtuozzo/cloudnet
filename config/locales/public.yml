@@ -108,7 +108,7 @@ en:
     fb: "Facebook"
     fb_note: "Join the community."
     tweet: "Twitter"
-    tweet_note: "@Mention us"
+    tweet_note: "@Mention us."
 pl:
   public:
     headline: "Globalny rynek chmur obliczeniowych"
