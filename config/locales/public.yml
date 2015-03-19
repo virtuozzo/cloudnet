@@ -92,7 +92,6 @@ en:
     content_box2: "Sign up for Cloud.net today."
     
     deploy_button: "Get Started Now"
-
   menu:
     features: "Features"
     account_login: "Account Login"
@@ -102,6 +101,14 @@ en:
     faq: "FAQ"
     contact: "Contact"
     blog: "Blog"
+  contact:
+    header: "We're all about the cloud."
+    email: "Email support"
+    email_note: "Get in touch."
+    fb: "Facebook"
+    fb_note: "Join the community."
+    tweet: "Twitter"
+    tweet_note: "@Mention us"
 pl:
   public:
     headline: "Globalny rynek chmur obliczeniowych"

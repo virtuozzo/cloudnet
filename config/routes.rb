@@ -5,8 +5,9 @@ CloudNet::Application.routes.draw do
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)
   get 'search' => 'server_search#index'
-  get 'public/features'
-  get 'about_us' => 'public#about_us'
+  get 'features' => 'public#features', as: 'public_features'
+  get 'about_us' => 'public#about_us', as: 'public_about_us'
+  get 'contact' => 'public#contact', as: 'public_contact'
   get 'public/howitworks'
   get 'payg/add_funds'
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', tokens: 'tokens' }

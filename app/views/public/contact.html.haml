@@ -1,0 +1,73 @@
+%section
+  .headline
+    .pure-g
+      .container
+        .pure-u-1
+          %h1
+            =t('contact.header')
+%section
+  .container.social-bar
+    .pure-g
+      .pure-u-1-3
+        .soc-pic= image_tag 'main/contact-sprite.png', class: 'mail-pic'
+        .media=t('contact.email')
+        .msg=t('contact.email_note')
+      .pure-u-1-3
+        .soc-pic= image_tag 'main/contact-sprite.png', class: 'fb-pic'
+        .media=t('contact.fb')
+        .msg=t('contact.fb_note')
+      .pure-u-1-3
+        .soc-pic= image_tag 'main/contact-sprite.png', class: 'tweet-pic'
+        .media=t('contact.tweet')
+        .msg=t('contact.tweet_note')
+%section
+  .container.address
+    .pure-g
+      .pure-u-1-6
+        .inner-headline
+          CONTACT us
+    .pure-g
+      .pure-u-1-6
+        .flag= image_tag 'main/contact-sprite.png', class: 'uk-flag'
+      .pure-u-1-3
+        .text
+          :markdown
+            **UK (HQ)**  
+            The Cooperage  
+            Old truman Brewery  
+            91 Brick Lane  
+            London, E1 6QL  
+            Tel: 0800 158 8600
+      .pure-u-1-2
+        %iframe{ frameBorder: '0', src: 'https://a.tiles.mapbox.com/v4/cloudnet.lgc19ihn/attribution,zoompan,zoomwheel,share.html?access_token=pk.eyJ1IjoiY2xvdWRuZXQiLCJhIjoibUVncjloVSJ9.P3SZquGqEX0Dbb2FKdxX2g'}
+    .pure-g
+      .pure-u-1-6
+        .flag= image_tag 'main/contact-sprite.png', class: 'us-flag'
+      .pure-u-1-3
+        .text
+          :markdown
+            **US**  
+            98 West Center Suite B  
+            Logan, UT 84321  
+            Tel: 866 234 3240  
+      .pure-u-1-2
+        %iframe{ frameBorder: '0', src: 'https://a.tiles.mapbox.com/v4/cloudnet.lgc37n3f/attribution,zoompan,zoomwheel,share.html?access_token=pk.eyJ1IjoiY2xvdWRuZXQiLCJhIjoibUVncjloVSJ9.P3SZquGqEX0Dbb2FKdxX2g'}
+    .pure-g
+      .pure-u-1-6
+        .flag= image_tag 'main/contact-sprite.png', class: 'ml-flag'
+      .pure-u-1-3
+        .text
+          :markdown
+            **Asia-Pacific**  
+            1, Jalan Emas 6  
+            Taman Megah Mas  
+            47301, Petaling Jaya  
+            Selangor, Malysia  
+      .pure-u-1-2
+        %iframe{ frameBorder: '0', src: 'https://a.tiles.mapbox.com/v4/cloudnet.lgc58dg8/attribution,zoompan,zoomwheel,share.html?access_token=pk.eyJ1IjoiY2xvdWRuZXQiLCJhIjoibUVncjloVSJ9.P3SZquGqEX0Dbb2FKdxX2g'}
+%section
+  .container.send-message
+    .pure-g
+      .pure-u-1-6
+        .inner-headline
+          Send a message

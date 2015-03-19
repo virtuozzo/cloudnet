@@ -1,0 +1,82 @@
+@import "partials/base";
+
+.public-contact{
+  background: #F5F6F7;
+  .headline{
+    padding-top: 80px;
+    padding-bottom: 80px;
+    text-align: center;
+    h1{color: #6A8A9C;}
+  }
+  
+  .social-bar{
+    background: #4E5B64;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    text-align: center;
+    h1{color: #6A8A9C;}
+    .media{
+      color: white;
+      text-transform: uppercase;
+      font-size: $twelve;
+      font-weight: bold;
+    }
+    .msg{
+      color: #92A1AB;
+      font-size: $thirteen;
+    }
+    .soc-pic{
+      width: 30px;
+      height: 18px;
+      margin-right: auto;
+      margin-left: auto;
+      overflow: hidden;
+      img{position: relative;}
+    }
+    img.mail-pic{ left: -48px; top: -35px; }
+    img.fb-pic{ left: -48px; top: -35px; }
+    img.tweet-pic{ left: -48px; top: -35px; }
+  }
+  
+  .inner-headline{
+    float: right;
+    position: relative;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  .address{
+    background: white;
+    .inner-headline{right: -40px;}
+    p{
+      color: #11161C;
+      margin: 0;
+    }
+    padding-top: 80px;
+    padding-bottom: 80px;
+    .text{margin-bottom: 50px;}
+    .flag{
+      width: 51px;
+      height: 34px;
+      margin-right: 15px;
+      margin-top: 3px;
+      float: right;
+      overflow: hidden;
+      img{position: relative;}
+    }
+    img.us-flag{ left: 1px; }
+    img.uk-flag{ left: -50px; }
+    img.ml-flag{ left: -101px; }
+    
+    iframe{
+      width: 100%;
+      height: 200px;
+    }
+  }
+  .send-message{
+    background: white;
+    .inner-headline{right: -80px;}
+    
+  }
+}
