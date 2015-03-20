@@ -10,15 +10,24 @@ class helpers.UptimeChart
     
   drawArc: ->
     @chart
+      .datum({endAngle: 0})
       .attr("d", @arc())
       .attr("transform", "translate(5,5)")
+      .transition()
+        .duration(5000)
+        .call(@arcTween, @endAngle());
     
+  arcTween: (trans, newAngle) =>
+    trans.attrTween "d", (d) =>
+      (t) =>
+        d.endAngle = d3.interpolate(d.endAngle, newAngle)(t)
+        @arc()(d)
+        
   arc: ->
     d3.svg.arc()
       .innerRadius(4.2)
       .outerRadius(4.5)
       .startAngle(0)
-      .endAngle(@endAngle())
       
   addText: ->
     uptimeVal = d3.select(@elem).select("svg")
