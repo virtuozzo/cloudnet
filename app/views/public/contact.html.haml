@@ -3,27 +3,31 @@
     .pure-g
       .container
         .pure-u-1
-          %h1
-            =t('contact.header')
+          %h1= t('contact.header')
+          %h2= t('contact.subheader')
 %section
   .container.social-bar
     .pure-g
+      .pure-u-1-3.mail
+        =mail_to "contact@cloud.net" do
+          .soc-pic= image_tag 'main/contact-sprite.png', class: 'mail-pic'
+          .media=t('contact.email')
+          .msg=t('contact.email_note')
       .pure-u-1-3
-        .soc-pic= image_tag 'main/contact-sprite.png', class: 'mail-pic'
-        .media=t('contact.email')
-        .msg=t('contact.email_note')
+        = link_to "https://www.facebook.com/CloudDotNet?_rdr", target: '_blank' do
+          .soc-pic= image_tag 'main/contact-sprite.png', class: 'fb-pic'
+          .media=t('contact.fb')
+          .msg=t('contact.fb_note')
       .pure-u-1-3
-        .soc-pic= image_tag 'main/contact-sprite.png', class: 'fb-pic'
-        .media=t('contact.fb')
-        .msg=t('contact.fb_note')
-      .pure-u-1-3
-        .soc-pic= image_tag 'main/contact-sprite.png', class: 'tweet-pic'
-        .media=t('contact.tweet')
-        .msg=t('contact.tweet_note')
+        = link_to "https://twitter.com/cloud", target: '_blank' do
+          .soc-pic= image_tag 'main/contact-sprite.png', class: 'tweet-pic'
+          .media=t('contact.tweet')
+          .msg=t('contact.tweet_note')
 %section
   .container.address
     .pure-g
       .pure-u-1-6
+      .pure-u-1-3
         .inner-headline
           CONTACT us
     .pure-g
@@ -69,5 +73,9 @@
   .container.send-message
     .pure-g
       .pure-u-1-6
+      .pure-u-1-3
         .inner-headline
           Send a message
+    =render partial: 'contact_form'
+    
+= render partial: 'main_deploy'

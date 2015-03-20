@@ -16,7 +16,7 @@
         %ul.list-unstyled
           %li Support
           %li Help Center
-          %li Contact Us
+          %li= link_to t('menu.contact'), public_contact_path
       .pure-u-1-2
         .pull-right
           =image_tag 'cloudnet-small-grey.png'
@@ -26,7 +26,7 @@
             'http://feedback.cloud.net/knowledge-base/article/terms-of-service',
             target: "_blank")
             |
-            %span.priv Privacy
+            %span.priv.hide Privacy
           = image_tag 'social-icons.png', usemap: "#footer-social"
           %map{name: "footer-social"}
             %area{shape: "rect",

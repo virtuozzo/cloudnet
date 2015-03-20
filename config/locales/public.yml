@@ -102,13 +102,19 @@ en:
     contact: "Contact"
     blog: "Blog"
   contact:
-    header: "We're all about the cloud."
+    header: "Get in touch"
+    subheader: "Questions? Feedback? Want to sell your infrastructure on the Cloud.net marketplace? Let us know..."
     email: "Email support"
     email_note: "Get in touch."
     fb: "Facebook"
     fb_note: "Join the community."
     tweet: "Twitter"
     tweet_note: "@Mention us."
+    full_name: "Full Name"
+    email: "Email Address"
+    phone: "Phone Number"
+    message: "Message"
+    send: "Send Email"
 pl:
   public:
     headline: "Globalny rynek chmur obliczeniowych"

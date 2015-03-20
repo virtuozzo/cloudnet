@@ -8,6 +8,8 @@ CloudNet::Application.routes.draw do
   get 'features' => 'public#features', as: 'public_features'
   get 'about_us' => 'public#about_us', as: 'public_about_us'
   get 'contact' => 'public#contact', as: 'public_contact'
+  post 'contact' => 'public#user_message'
+  
   get 'public/howitworks'
   get 'payg/add_funds'
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', tokens: 'tokens' }

@@ -6,7 +6,17 @@
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: center;
-    h1{color: #6A8A9C;}
+    h1{
+      $public-font: 'Oxygen', sans-serif;
+      color: #6A8A9C;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    h2{
+      $public-font: 'Oxygen', sans-serif;
+      font-size: $sixteen;
+      color: #6A8A9C;;
+    }
   }
   
   .social-bar{
@@ -15,6 +25,7 @@
     padding-bottom: 80px;
     text-align: center;
     h1{color: #6A8A9C;}
+    a:hover{text-decoration: none;};
     .media{
       color: white;
       text-transform: uppercase;
@@ -39,16 +50,15 @@
   }
   
   .inner-headline{
-    float: right;
     position: relative;
     margin-bottom: 20px;
     text-transform: uppercase;
     font-weight: bold;
+    margin-left: -66px;
   }
   
   .address{
     background: white;
-    .inner-headline{right: -40px;}
     p{
       color: #11161C;
       margin: 0;
@@ -76,7 +86,44 @@
   }
   .send-message{
     background: white;
-    .inner-headline{right: -80px;}
-    
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    .form-group{ width: 95%; margin-left: -66px;}
+    label{ 
+      font-size: $eleven;
+      color: #AAB3BA;
+      text-transform: uppercase;
+    }
+    .btn-send{
+      width: 200px;
+      background: #6A8A9C;
+      height: 40px;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: $eleven;
+      @include border-radius(0);
+      margin-left: -66px;
+    }
+    .form-control{
+      background: #F5F6F7;
+      border: 1px solid #E2EAEF;
+      @include border-radius(0);
+      @include box-shadow(none);
+    }
+    .form-group.long{width:100%;}
+    textarea{
+      height: 200px;
+      margin-bottom: 30px;
+    }
+  }
+  #message-sent{
+    @include transition( 1s all linear);
+    margin-bottom: 16px;
+    font-weight: bold;
+    color: rgb(239, 20, 20);
+    &.hide-mes{ opacity: 0; }
+    &.show-mes{ opacity: 1; }
+    margin-left: -66px;
   }
 }
