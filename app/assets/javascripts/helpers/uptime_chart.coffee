@@ -15,13 +15,12 @@ class helpers.UptimeChart
       .attr("transform", "translate(5,5)")
       .transition()
         .duration(5000)
-        .call(@arcTween, @endAngle());
+        .attrTween "d", @arcTween
     
-  arcTween: (trans, newAngle) =>
-    trans.attrTween "d", (d) =>
-      (t) =>
-        d.endAngle = d3.interpolate(d.endAngle, newAngle)(t)
-        @arc()(d)
+  arcTween: (d) =>
+    (t) =>
+      d.endAngle = d3.interpolate(d.endAngle, @endAngle())(t)
+      @arc()(d)
         
   arc: ->
     d3.svg.arc()
@@ -38,6 +37,11 @@ class helpers.UptimeChart
       .attr("class", "number")
       .attr("x", @centerValue(uptimeVal))
       .attr("y", 5)
+      .attr("opacity", 0)
+      .transition()
+        .delay(800)
+        .duration(1000)
+        .attrTween "opacity", -> (t)->t
         
     label = d3.select(@elem).select("svg")
       .append("text")
@@ -46,7 +50,12 @@ class helpers.UptimeChart
     label
       .attr("x", @centerValue(label))
       .attr("y", 7)
-    
+      .attr("opacity", 0)
+      .transition()
+        .delay(800)
+        .duration(1000)
+        .attrTween "opacity", -> (t)->t
+        
   centerValue: (el) ->
     5 - el.node().getComputedTextLength() / 2
 
