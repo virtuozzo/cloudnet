@@ -52,7 +52,7 @@ CloudNet::Application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  MEMCACHE_CONFIG = YAML.load_file(ERB.new(Rails.root.join('config', 'memcache.yml')).result)[Rails.env].symbolize_keys
+  MEMCACHE_CONFIG = YAML.load_file(ERB.new(Rails.root.join('config', 'memcache.yml').to_s).result)[Rails.env].symbolize_keys
   config.cache_store =
     :dalli_store,
     MEMCACHE_CONFIG[:servers],
