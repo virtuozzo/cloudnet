@@ -1,5 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
-  # layout false
+  layout "public"
   # def new
   # end
   #

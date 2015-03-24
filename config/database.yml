@@ -1,7 +1,7 @@
 defaults: &defaults
   adapter: postgresql
   database: <%= ENV['DB_NAME'] || 'cloudnet' %>
-  username: <%= ENV['DB_USER'] || 'cloudnet' %>
+  username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASSWD'] %>
   encoding: utf8
   host: <%= ENV['DB_HOST'] || '127.0.0.1' %>
