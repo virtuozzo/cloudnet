@@ -1,10 +1,5 @@
 # Fetch the available datacentres and templates currently on the Federation
 class UpdateFederationResources
-  # GP coords [lat, long] for
-  COORDS_FOR_DATACENTRES = {
-    'Cloud.net Budget US Dallas Zone' => [32.7767, 96.7970]
-  }
-
   def self.run
     new.run
   end
@@ -40,44 +35,26 @@ class UpdateFederationResources
   end
 
   def upsert_datacentre(datacentre)
-    Location.find_or_initialize(
+    Location.where(
       hv_group_id: datacentre['hypervisor_group_id']
-    ).update_attributes(
-      latitude: COORDS_FOR_DATACENTRES[datacentre['label']][0],
-      longitude: COORDS_FOR_DATACENTRES[datacentre['label']][1],
-      provider: datacentre['label'],
-      country: ,
-      city: ,
-      memory:
-      disk_size:
-      cpu:
-      hidden: false,
-      price_memory: ,
-      price_disk: ,
-      price_cpu: ,
-      price_bw: ,
-      provider_link: ,
-      network_limit:
-      photo_ids: ,
-      price_ip_address: ,
-      budget_vps: ,
-      inclusive_bandwidth: ,
-      ssd_disks:
-    )
+    ).first_or_initialize(
+      provider: datacentre['label']
+    ).save(validate: false)
   end
 
   def upsert_template(template, datacentre)
     details = template['image_template']
-    Template.find_or_initialize(
-    ).update_atributes(
-      identifier: template['id'],
-      location: datacentre['hypervisor_group_id'],
+    location = Location.find_by hv_group_id: datacentre['hypervisor_group_id']
+    Template.where(
+      identifier: template['id'].to_s,
+    ).first_or_initialize(
+      location: location,
       name: details['label'],
       os_type: details['operating_system'],
       onapp_os_distro: details['operating_system_distro'],
       min_memory: details['min_memory_size'],
       min_disk: details['min_disk_size'],
       hourly_cost: template['price']
-    )
+    ).save(validate: false)
   end
 end
