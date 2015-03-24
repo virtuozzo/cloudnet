@@ -29,7 +29,7 @@ MAXMIND_KEY=
 ANALYTICS_KEY=
 
 # Logging
-SENTRY_DSN=http://localhost
+SENTRY_DSN_URI=http://localhost
 
 # Payments
 STRIPE_API_KEY=
@@ -46,6 +46,7 @@ SYMMETRIC_ENCRYPTION_KEY=
 # Admin recipients
 MAILER_ADMIN_RECIPIENTS="sample@email.com, joebloggs@website.com"
 # Financial report recipients
+MAILER_ENQUIRY_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_FINANCE_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_ADMIN_DEFAULT_FROM='Cloud.net Admin <admin@website.com>'
 MAILER_NOTIFICATIONS_DEFAULT_FROM='Cloud.net Notifications <notifications@website.com>'
