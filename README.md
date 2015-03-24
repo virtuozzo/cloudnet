@@ -39,8 +39,13 @@ Firstly you will need to populate the `dotenv.sample` file and rename it to `.en
 
 Then create the database structure with `docker run --env-file=.env --rm cloudnet rake db:schema:load`.
 
-And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will add the available providers from your OnApp installation and an initial admin user with username 'admin' and password 'password'.
+And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 
+add the available providers from your OnApp installation and an initial admin user with 
+username 'admin' and password 'password'.
 
+You will then need to change the admin password and fill out the extra details for the providers
+that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
+You can edit these details through the admin interface at `/admin/locations`.
 
 **Running the Docker containers**    
 You will need at least 2 containers:
