@@ -1,14 +1,8 @@
 defaults: &defaults
   sentry:
-    dsn: <%= ENV["SENTRY_DSN"] %>
-
-development: 
-  <<: *defaults
+    dsn: <%= ENV["SENTRY_DSN_URI"] || 'http://localhost' %>
 
 staging: 
-  <<: *defaults
-
-test: 
   <<: *defaults
 
 production: 
