@@ -22,6 +22,24 @@ class BillingPdf < Prawn::Document
     move_down 30
   end
 
+  def address
+    address = if @account.address1
+      # If the user has manually provided an 'Invoice address' prefer that
+      @account
+    else
+      # Otherwise default to the primary card's billing address
+      @account.billing_address
+    end
+
+    if address.present?
+      text address[:address1]
+      text address[:address2] if address[:address2].present?
+      text "#{address[:city]}, #{address[:region]}"
+      text address[:postal]
+      text IsoCountryCodes.find(address[:country]).name rescue IsoCountryCodes::UnknownCodeError
+    end
+  end
+
   private
 
   def header_text_options

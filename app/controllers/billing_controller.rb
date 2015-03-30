@@ -157,6 +157,13 @@ class BillingController < ApplicationController
   end
 
   def account_params
-    params.permit(:vat_number)
+    params.permit(
+      :vat_number,
+      :address1,
+      :address2,
+      :city,
+      :country,
+      :postal
+    )
   end
 end
