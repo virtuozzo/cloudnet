@@ -1,0 +1,31 @@
+#order-summary
+  %h2 Order Summary:
+  %p 
+    = @location.try(:budget_vps) ? "VPS Server" : "Cloud Server"
+    %br
+    %span.order-provider
+      with 
+      = @location.try(:provider)
+  %p
+    Memory 
+    %span.pull-right.value &nbsp;MB
+    %span.pull-right.value= @server_params[:mem]
+  %p
+    CPU(s) 
+    %span.pull-right.value &nbsp;Core
+    %span.pull-right.value= @server_params[:cpu]
+  %p
+    Disk Space 
+    %span.pull-right.value &nbsp;GB
+    %span.pull-right.value= @server_params[:disk]
+  %p
+    Location
+    %span.pull-right.value= @location.city
+    %br
+    %span.pull-right.value= @location.country_name
+  %p.summary
+    Monthly
+    %span.pull-right.value= "$" + @m_price.to_s
+    %br
+    Hourly
+    %span.pull-right.value= "$" + @h_price.to_s
