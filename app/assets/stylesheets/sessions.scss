@@ -144,3 +144,39 @@ $colour: #7f8181;
 .jg-token-box {
   margin: 10px auto !important;
 }
+
+#order-summary{
+  position: absolute;
+  border: 1px solid $jg-grey;
+  margin-top: 40px;
+  margin-left: 30px;
+  padding: 20px;
+  font-size: $twelve;
+  min-width: 200px;
+  p{
+    color: $jg-black;
+    font-size: $sixteen;
+    padding-top: 10px;
+    border-top: 1px solid #E3EBEF;
+  }
+  h2+p{ border-top: none };
+  
+  .order-provider{
+    color: $jg-grey;
+    font-size: $fourteen;
+  }
+  h2{
+    font-size: 1.2em;
+    color: $jg-black;
+    font-weight: normal;
+  }
+  .summary{
+    clear: both;
+    margin-top: 40px;
+    font-size: 1.1em;
+  }
+  .value{
+    color: #47AEE9;
+    font-weight: bold;
+  }
+}
