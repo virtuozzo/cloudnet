@@ -23,19 +23,28 @@ class BillingPdf < Prawn::Document
   end
 
   def address
-    address = if @account.address1
-      # If the user has manually provided an 'Invoice address' prefer that
+    address_parts = [
+      :company,
+      :address1,
+      :address2,
+      :address3,
+      :address4,
+      :country,
+      :postal,
+    ]
+    # If the user has manually provided an 'Invoice address' then prefer that
+    address = if address_parts.any? { |line| @account.send(line).present? }
       @account
+    # Otherwise default to the primary card's billing address
     else
-      # Otherwise default to the primary card's billing address
       @account.billing_address
     end
 
     if address.present?
-      text address[:address1]
-      text address[:address2] if address[:address2].present?
-      text "#{address[:city]}, #{address[:region]}"
-      text address[:postal]
+      address_parts = address_parts.insert -2, :city, -1, :region # Add Stripe-specific parts
+      address_parts.each do |line|
+        text address[line] if address[line].present?
+      end
       text IsoCountryCodes.find(address[:country]).name rescue IsoCountryCodes::UnknownCodeError
     end
   end

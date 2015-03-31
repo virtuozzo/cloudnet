@@ -10,17 +10,23 @@
             %h2.icon-wallet.jg-icon.pure-u Invoice Address
           .pure-form-aligned.jg-inline.pure-g-r.clearfix
             .pure-control-group
-              = label_tag :address1, 'Address 1 *'
-              = text_field_tag :address1, account.address1, required: true
+              = label_tag :company, 'Company Name'
+              = text_field_tag :company, account.company
+            .pure-control-group
+              = label_tag :address1, 'Address 1'
+              = text_field_tag :address1, account.address1
             .pure-control-group
               = label_tag :address2, 'Address 2'
               = text_field_tag :address2, account.address2
             .pure-control-group
-              = label_tag :city, 'City'
-              = text_field_tag :city, account.city
+              = label_tag :address3, 'Address 3'
+              = text_field_tag :address3, account.address3
+            .pure-control-group
+              = label_tag :address4, 'Address 4'
+              = text_field_tag :address4, account.address3
             .pure-control-group
               = label_tag :country, 'Country'
-              = text_field_tag :country, account.country
+              = country_select 'account', 'country', selected: account.country
             .pure-control-group
               = label_tag :postal, 'Zip/Postal Code'
               = text_field_tag :postal, account.postal

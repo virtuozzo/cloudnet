@@ -157,8 +157,12 @@ class BillingController < ApplicationController
   end
 
   def account_params
+    # Need to override the country_select gem's form name limitation
+    params[:country] = params[:account][:country]
+    # Normal strict params
     params.permit(
       :vat_number,
+      :company_name,
       :address1,
       :address2,
       :city,

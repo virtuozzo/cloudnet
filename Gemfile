@@ -37,6 +37,7 @@ gem 'faraday-http-cache', '~> 0.4.0'
 gem 'squall', git: 'https://github.com/suhailpatel/squall.git', ref: '49d5db8'
 gem 'symmetric-encryption', '~> 3.4.0'
 gem 'iso_country_codes', '~> 0.4.4'
+gem 'country_select', github: 'stefanpenner/country_select'
 gem 'carmen-rails', '~> 1.0.1'
 
 # Billing Integration Dependencies
