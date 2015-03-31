@@ -1,11 +1,11 @@
 #order-summary
   %h2 Order Summary:
   %p 
-    = @location.budget_vps ? "VPS Server" : "Cloud Server"
+    = @location.try(:budget_vps) ? "VPS Server" : "Cloud Server"
     %br
     %span.order-provider
       with 
-      = @location.provider
+      = @location.try(:provider)
   %p
     Memory 
     %span.pull-right.value &nbsp;MB

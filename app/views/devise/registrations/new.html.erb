@@ -2,7 +2,7 @@
 
 <%= devise_error_messages! %>
 
-<%= render partial: "order_summary"%>
+<%= render partial: "order_summary" if @location%>
 
 <div id="jg-registration-widget" class="pure-g">  
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
