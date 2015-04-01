@@ -16,7 +16,7 @@ describe Account do
     it 'should set an invoicing day between 1 and 28 just fine' do
       date = Date.today
       [1, 3, 6, 10, 15, 23, 28].each do |number|
-        date = date.change(day: number)
+        date = date.change(month: 1, day: number, hour: 0)
         Timecop.freeze date do
           account = FactoryGirl.create(:user).account
           expect(account.invoice_day).to eq(number)
