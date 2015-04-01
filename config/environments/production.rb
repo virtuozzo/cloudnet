@@ -49,7 +49,7 @@ CloudNet::Application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  MEMCACHE_CONFIG = YAML.load_file(Rails.root.join('config', 'memcache.yml'))[Rails.env].symbolize_keys
+  MEMCACHE_CONFIG = YAML.load(ERB.new(File.read(Rails.root.join('config', 'memcache.yml'))).result)[Rails.env].symbolize_keys
   config.cache_store =
     :dalli_store,
     MEMCACHE_CONFIG[:servers],

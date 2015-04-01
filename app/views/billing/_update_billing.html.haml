@@ -4,14 +4,43 @@
 
   = form_tag update_billing_billing_index_path,  role: 'form', class: 'jg-billing-form' do
     .jg-widget-body.pure-u-1
-      .jg-widget-form.pure-g-r.clearfix
-        .form-group.jg-inline.pure-g-r.clearfix
-          .pure-u-1.pure-u-md-1-2
-            = label_tag :billing_country, 'Billing Country (determined by your primary card)', class: 'pure-u-1'
-            = text_field_tag :billing_country, country_name(account.billing_country), disabled: true, class: 'form-control'
-          .pure-u-1.pure-u-md-1-2
-            = label_tag :vat_number, 'EU VAT Number', class: 'pure-u-1'
-            = text_field_tag :vat_number, account.vat_number, class: 'form-control'
+      .jg-widget-form.pure-g.jg-disabled
+        .jg-widget.pure-u-1
+          .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+            %h2.icon-wallet.jg-icon.pure-u Invoice Address
+          .pure-form-aligned.jg-inline.pure-g-r.clearfix
+            .pure-control-group
+              = label_tag :company_name, 'Company Name'
+              = text_field_tag :company_name, account.company_name
+            .pure-control-group
+              = label_tag :address1, 'Address 1'
+              = text_field_tag :address1, account.address1
+            .pure-control-group
+              = label_tag :address2, 'Address 2'
+              = text_field_tag :address2, account.address2
+            .pure-control-group
+              = label_tag :address3, 'Address 3'
+              = text_field_tag :address3, account.address3
+            .pure-control-group
+              = label_tag :address4, 'Address 4'
+              = text_field_tag :address4, account.address4
+            .pure-control-group
+              = label_tag :country, 'Country'
+              = country_select 'account', 'country', selected: account.country
+            .pure-control-group
+              = label_tag :postal, 'Zip/Postal Code'
+              = text_field_tag :postal, account.postal
+      .jg-widget-form.pure-g.jg-disabled
+        .jg-widget.pure-u-1
+          .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+            %h2.icon-wallet.jg-icon.pure-u EU Tax Status
+          .form-group.jg-inline.pure-g-r.clearfix
+            .pure-u-1.pure-u-md-1-2
+              = label_tag :billing_country, 'Billing Country (determined by your primary card)', class: 'pure-u-1'
+              = text_field_tag :billing_country, country_name(account.billing_country), disabled: true, class: 'form-control'
+            .pure-u-1.pure-u-md-1-2
+              = label_tag :vat_number, 'EU VAT Number', class: 'pure-u-1'
+              = text_field_tag :vat_number, account.vat_number, class: 'form-control'
     .jg-widget-footer.actions.clearfix
       %ul.jg-widget-controls
         %li= button_tag 'Update Billing Account', class: 'btn jg-submit-button'

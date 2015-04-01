@@ -1,0 +1,45 @@
+# This is reallly only for local builds. Normally Docker builds will be automated
+# by the Docker Registry
+
+# Ignore bundler config.
+.bundle
+
+# Ignore the default SQLite database.
+db/*.sqlite3
+db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+log
+tmp
+
+.DS_Store
+.AppleDouble
+.LSOverride
+.rbenv-gemsets
+gems/*
+node_modules/*
+
+# Icon must ends with two \r.
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Ignore Code Coverage files
+coverage/*
+
+# Ignore application configuration
+config/application.yml
+
+# Redis dump
+dump.rdb
+
+# dotenv ENV vars
+.env*
+
+# Locations/Templates cache
+locations.json

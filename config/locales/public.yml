@@ -93,6 +93,7 @@ en:
     
     deploy_button: "Get Started Now"
   menu:
+    market: "Market"
     features: "Features"
     account_login: "Account Login"
     login: "Login"

@@ -15,8 +15,9 @@ $colour: #7f8181;
   border-color: #d6d6d6 #d6d6d6 #cacaca #d6d6d6;
 
   background: #fbfbfb;
-  width: 380px;
-  margin: 40px auto;
+  min-height: 411px;
+  //width: 380px;
+  margin: 40px 0 0 10px;
 
   header.session-logo {
     background: white;
@@ -143,4 +144,43 @@ $colour: #7f8181;
 
 .jg-token-box {
   margin: 10px auto !important;
+}
+
+#order-summary{
+  border: 1px solid $server-search-border;
+  margin: 40px 0;
+  padding: 0 25px;
+  font-size: $twelve;
+  min-height: 411px;
+  p{
+    color: $jg-black;
+    font-size: $sixteen;
+    padding-top: 10px;
+    border-top: 1px solid #E3EBEF;
+  }
+  h3+p{ border-top: none };
+  
+  .order-provider{
+    color: $jg-grey;
+    font-size: $fourteen;
+  }
+  .summary{
+    clear: both;
+    margin-top: 30px;
+    font-size: 1.1em;
+  }
+  .value{
+    color: #47AEE9;
+    font-weight: bold;
+  }
+}
+
+#order-progress{
+  margin-top: 30px;
+  .step {
+    border: 1px solid $jg-grey;
+    padding: 5px;
+    text-align: center;
+    font-size: $twelve;
+  }
 }

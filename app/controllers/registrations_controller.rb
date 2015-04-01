@@ -1,5 +1,7 @@
 class RegistrationsController < Devise::RegistrationsController
-  # layout false
+  layout "public"
+  include SessionOrderReport
+  before_action :prepare_order
   # def new
   # end
   #
@@ -10,6 +12,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def new
     # We want to have the ability to fill in some params
+    #prepare_order if session[:user_return_to]
     build_resource(sign_up_params)
     respond_with resource
   end
@@ -20,4 +23,5 @@ class RegistrationsController < Devise::RegistrationsController
     session[:registration_flash] = flash[:notice] if flash[:notice]
     super
   end
+  
 end

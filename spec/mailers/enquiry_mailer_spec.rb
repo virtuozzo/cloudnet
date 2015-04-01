@@ -8,7 +8,7 @@ RSpec.describe EnquiryMailer, :type => :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("Enquiry from contact page")
-      expect(mail.to).to eq(ENV['MAILER_ENQUIRY_RECEIPIENTS'].split(','))
+      expect(mail.to).to eq(ENV['MAILER_ENQUIRY_RECIPIENTS'].split(','))
       expect(mail.from).to eq([params[:email]])
       expect(ActionMailer::Base.deliveries).not_to be_empty
     end

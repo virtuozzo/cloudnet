@@ -16,8 +16,6 @@ class PaymentReceiptPdf < BillingPdf
   end
 
   def addresses_and_receipt_details
-    billing_address = @receipt.billing_address
-
     float do
       span((bounds.width / 2) - 20, position: :left) do
         text 'Payment by', style: :bold
@@ -26,13 +24,7 @@ class PaymentReceiptPdf < BillingPdf
         text @receipt.account.user.email
         move_down 5
 
-        if billing_address.present?
-          text billing_address[:address1]
-          text billing_address[:address2] if billing_address[:address2].present?
-          text "#{billing_address[:city]}, #{billing_address[:region]}"
-          text billing_address[:postal]
-          text IsoCountryCodes.find(billing_address[:country]).name
-        end
+        address
       end
     end
 

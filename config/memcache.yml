@@ -1,9 +1,10 @@
-production:
+defaults: &defaults
   servers:
-    - localhost:11211
+    - <%= ENV['MEMCACHE_URI'] || 'localhost:11211' %>
   namespace: cloudnet
 
+production:
+  <<: *defaults
+
 staging:
-  servers:
-    - localhost:11211
-  namespace: cloudnet
+  <<: *defaults

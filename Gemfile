@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'dotenv-rails'
+gem 'foreman', require: false
 
 gem 'rails', '4.2'
 gem 'activerecord-session_store'
@@ -10,7 +11,6 @@ gem 'sass-rails'
 gem 'uglifier', '~> 2.5.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
-#gem 'jquery-turbolinks'
 gem 'compass-rails'
 
 gem 'paranoia', '~> 2.0.2'
@@ -37,6 +37,7 @@ gem 'faraday-http-cache', '~> 0.4.0'
 gem 'squall', git: 'https://github.com/suhailpatel/squall.git', ref: '49d5db8'
 gem 'symmetric-encryption', '~> 3.4.0'
 gem 'iso_country_codes', '~> 0.4.4'
+gem 'country_select', github: 'stefanpenner/country_select'
 gem 'carmen-rails', '~> 1.0.1'
 
 # Billing Integration Dependencies
@@ -78,7 +79,6 @@ gem 'capistrano-upload-config'
 gem 'yaml_db'
 
 group :development, :test do
-  gem 'foreman'
   gem 'guard'
   gem 'guard-rails'
   gem 'guard-livereload', require: false

@@ -39,18 +39,13 @@ module PublicHelper
     [['10 GB', 10], ['20 GB', 20], ['40 GB', 40], ['60 GB', 60]]
   end
   
-  def emphasized_box(title: '', content: '')
-    content_tag(:article, class: "emphasized-box") do
-      content_tag(:h2, title) +
-      content_tag(:p, content)
-    end
-  end
-  
-  # Make sure 'content' is html SAFE
-  def standard_box(title: '', content: '', klass: '')
-    content_tag(:article, class: "standard-box #{klass}") do
-      content_tag(:h3, title, class: 'text-uppercase') +
-      content_tag(:p, content.html_safe)
+  def summary_param(label, abbr, value)
+    content_tag :p do
+      abbr = ("&nbsp;" + abbr).html_safe
+      classes = ["pull-right", "value"]
+      label.html_safe +
+      content_tag(:span, abbr, class: classes) +
+      content_tag(:span, value, class: classes)
     end
   end
 end
