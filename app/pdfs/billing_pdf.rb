@@ -24,7 +24,7 @@ class BillingPdf < Prawn::Document
 
   def address
     address_parts = [
-      :company,
+      :company_name,
       :address1,
       :address2,
       :address3,

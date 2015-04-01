@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.string   "postal"
     t.string   "address3"
     t.string   "address4"
-    t.string   "company"
+    t.string   "company_name"
   end
 
   add_index "accounts", ["coupon_id"], name: "index_accounts_on_coupon_id", using: :btree
