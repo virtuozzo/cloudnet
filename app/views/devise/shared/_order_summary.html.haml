@@ -1,5 +1,5 @@
 #order-summary
-  %h2 Order Summary:
+  %h3 Order Summary:
   %p 
     = @location.try(:budget_vps) ? "VPS Server" : "Cloud Server"
     %br
@@ -14,6 +14,7 @@
     Location
     %span.pull-right.value= @location.city
     %br
+    =image_tag("/assets/images/flags/flat/24/#{@location.country.upcase}.png", alt: @location.country)
     %span.pull-right.value= @location.country_name
   %p.summary
     Monthly
