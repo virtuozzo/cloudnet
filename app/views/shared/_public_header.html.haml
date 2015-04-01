@@ -13,6 +13,8 @@
           = link_to 'Cloud.net', root_path, {class: 'navbar-brand', id: 'logo'}
         %ul.nav.navbar-nav.list-unstyled
           %li
+            =link_to t('menu.market'), search_path
+          %li
             =link_to t('menu.features'), public_features_path
           %li
             =link_to t('menu.blog'), "http://blog.cloud.net/", target: "_blank"
