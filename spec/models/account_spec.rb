@@ -13,6 +13,8 @@ describe Account do
       expect(user.account.invoice_start).to be_present
     end
 
+    # Note: this spec failed on April 1st 2015, but only on Codeship's CI. Fixed it by hardcoding
+    # the month in date.change() There was no obvious reason for the discrepancy
     it 'should set an invoicing day between 1 and 28 just fine' do
       date = Date.today
       [1, 3, 6, 10, 15, 23, 28].each do |number|
