@@ -1,5 +1,5 @@
 class EnquiryMailer < ActionMailer::Base
-  RECIPIENTS = ENV['MAILER_ENQUIRY_RECEIPIENTS'].split(',')
+  RECIPIENTS = ENV['MAILER_ENQUIRY_RECIPIENTS'].split(',')
   default to: RECIPIENTS
   
   def contact_page(e)
