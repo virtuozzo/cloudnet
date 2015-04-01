@@ -6,18 +6,10 @@
     %span.order-provider
       with 
       = @location.try(:provider)
-  %p
-    Memory 
-    %span.pull-right.value &nbsp;MB
-    %span.pull-right.value= @server_params[:mem]
-  %p
-    CPU(s) 
-    %span.pull-right.value &nbsp;Core
-    %span.pull-right.value= @server_params[:cpu]
-  %p
-    Disk Space 
-    %span.pull-right.value &nbsp;GB
-    %span.pull-right.value= @server_params[:disk]
+      
+  =summary_param("Memory", "MB", @server_params[:mem])
+  =summary_param("CPU(s)", "Core", @server_params[:cpu])
+  =summary_param("Disk Space", "GB", @server_params[:disk])
   %p
     Location
     %span.pull-right.value= @location.city
