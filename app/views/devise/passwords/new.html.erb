@@ -1,25 +1,31 @@
 <% title "Password Reset" %>
 
 <%= devise_error_messages! %>
-<div id="jg-registration-widget" class="pure-g">  
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
 
-	<header class="session-logo">
-	  <%= link_to 'Cloud.net', root_path, { class: "pure-u-1-1", id: 'logoLarge'} %>
-	</header>
+<div class="pure-g">
+  <div class="pure-u-1-4"></div>
+  <div class="pure-u-1-2">
+    <div id="jg-registration-widget" class="pure-g">  
+      <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
 
-	<dl>
-		<dt class="jg-icon icon-email pure-u-1-8"></dt>
-		<dd class="pure-u-7-8">
-			<%= f.email_field :email, :autofocus => true, :class => "form-control", :placeholder => "Email" %>
-		</dd>
-	</dl>
-	<dl>
-     <dd id="session-action" class="pure-u-1-1">
-     	<%= f.button "Send reset password instructions", {id: 'session-button', :class => "btn btn-lg btn-primary btn-block jg-submit-button"} %>
-     </dd>
-   </dl>
-<% end %>
+      	<header class="session-logo">
+      	  <%= link_to 'Cloud.net', root_path, { class: "pure-u-1-1", id: 'logoLarge'} %>
+      	</header>
+
+      	<dl>
+      		<dt class="jg-icon icon-email pure-u-1-8"></dt>
+      		<dd class="pure-u-7-8">
+      			<%= f.email_field :email, :autofocus => true, :class => "form-control", :placeholder => "Email" %>
+      		</dd>
+      	</dl>
+      	<dl>
+           <dd id="session-action" class="pure-u-1-1">
+           	<%= f.button "Send reset password instructions", {id: 'session-button', :class => "btn btn-lg btn-primary btn-block jg-submit-button"} %>
+           </dd>
+         </dl>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <%= render "devise/shared/links" %>
