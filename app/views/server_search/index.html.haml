@@ -9,8 +9,8 @@
       %section.results
         .filters
           %span.font-11 Sort these clouds by what's important to you:
-          .btn-group.btn-group-xs{:"data-toggle" => "buttons", role: "group", 
-                                  :"aria-label" => "sorting"}
+          .btn-group{:"data-toggle" => "buttons", role: "group", 
+                     :"aria-label" => "sorting"}
             %label.btn.btn-default{:"ng-click" => "ctrl.sortBy = {field: 'cloudIndex', rev: true}"} 
               %input{type:"radio", name:"sort", id:"sort_index", autocomplete:"off"} Cloud Index
             %label.btn.btn-default{:"ng-click" => "ctrl.sortBy = {field: 'uptime', rev: true}"} 
