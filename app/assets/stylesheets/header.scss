@@ -284,7 +284,7 @@ header.jg-header, .jg-header {
     .navbar-btn{
       margin-bottom: 0;
     }
-
+    .login{ border: 1px solid rgb(139, 198, 255);}
     #logo.navbar-brand {
     	@include background(image-url('cloudnet.png') center center no-repeat);
     	height: 35px;
