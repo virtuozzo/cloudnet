@@ -37,7 +37,8 @@ set :whenever_roles, -> { :app }
 
 before 'deploy:check:linked_files', 'config:push' unless ENV['CI']
 before 'deploy:restart', 'puma:config'
-after 'deploy', 'deploy:restart', 'deploy:cache_clear'
+after 'deploy', 'deploy:restart'
+after 'deploy', 'deploy:cache_clear'
 
 namespace :deploy do
   # after :restart, :clear_cache do
