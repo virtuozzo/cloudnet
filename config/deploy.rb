@@ -37,7 +37,7 @@ set :whenever_roles, -> { :app }
 
 before 'deploy:check:linked_files', 'config:push' unless ENV['CI']
 before 'deploy:restart', 'puma:config'
-after 'deploy', 'deploy:restart'
+after 'deploy', 'deploy:restart', 'deploy:cache_clear'
 
 namespace :deploy do
   # after :restart, :clear_cache do
@@ -53,6 +53,11 @@ namespace :deploy do
     'puma:phased-restart'
   end
 
+  desc "Clear cache"
+  task :cache_clear do
+    Rails.cache.clear
+  end
+  
   desc 'Seed application data'
   task :seed do
     on roles(:app), in: :sequence, wait: 5 do
