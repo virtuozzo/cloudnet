@@ -1,5 +1,4 @@
 class SessionsController < Devise::SessionsController
-  layout "public"
   include SessionOrderReport
   before_action :prepare_order
   

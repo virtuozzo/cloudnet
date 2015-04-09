@@ -1,5 +1,4 @@
 class RegistrationsController < Devise::RegistrationsController
-  layout "public"
   include SessionOrderReport
   before_action :prepare_order
   # def new
