@@ -40,13 +40,6 @@ before 'deploy:restart', 'puma:config'
 after 'deploy', 'deploy:restart'
 
 namespace :deploy do
-  after :deploy, :clear_cache do
-    on roles(:app), in: :sequence, wait: 5 do
-      within release_path do
-        execute "cd #{current_path} && rake deploy:cache_flush"
-      end
-    end
-  end
 
   desc "Restart using Puma's Phased Restart"
   task :restart do
