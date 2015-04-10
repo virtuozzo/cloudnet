@@ -29,16 +29,7 @@ module Billing
     end
 
     def generate_credit_item(hours)
-      ram  = ram_invoice_item(hours)
-      cpu  = cpu_invoice_item(hours)
-      disk = disk_invoice_item(hours)
-      ip   = ip_invoice_item(hours)
-      bw   = bandwidth_invoice_item
-      template = template_invoice_item(hours)
-
-      net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + bw[:net_cost] + ip[:net_cost] + template[:net_cost]
-      description = "Server: #{name} (Hostname: #{hostname})"
-      { description: description, net_cost: net_cost, metadata: [ram, cpu, disk, bw, ip, template], source: self }
+      generate_invoice_item(hours)
     end
 
     def hourly_cost
