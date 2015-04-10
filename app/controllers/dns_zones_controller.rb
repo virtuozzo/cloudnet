@@ -21,7 +21,7 @@ class DnsZonesController < ApplicationController
     @records = DnsZone.process_records(records)
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#Show' })
-    flash.now[:alert] = "Could not load DNS records for domain #{@domain.domain}. Please try again later"
+    flash[:alert] = "Could not load DNS records for domain #{@domain.domain}. Please try again later"
     redirect_to dns_zones_path
   end
 
@@ -42,7 +42,7 @@ class DnsZonesController < ApplicationController
           format.json { render action: 'show', status: :created, location: @domain }
         rescue Exception => e
           ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#Create' })
-          flash.now[:alert] = 'Domain could not be added on our back end. Please try again later'
+          flash[:alert] = 'Domain could not be added on our back end. Please try again later'
           format.html { render action: 'new' }
         end
       else
@@ -60,7 +60,7 @@ class DnsZonesController < ApplicationController
     redirect_to dns_zones_path, notice: 'Domain has been removed from DNS'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#Destroy' })
-    flash.now[:alert] = 'Could not destroy domain on our back end. Please try again later'
+    flash[:alert] = 'Could not destroy domain on our back end. Please try again later'
     redirect_to @domain
   end
 
@@ -74,9 +74,11 @@ class DnsZonesController < ApplicationController
         format.json { render json: { status: 200 } }
       rescue Faraday::Error::ClientError => e
         ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#CreateRecord', faraday: e.response })
+        flash[:alert] = format_error_messages(e.response[:body])
         format.json { render json: e.response[:body], status: :unprocessable_entity }
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#CreateRecord' })
+        flash[:alert] = format_error_messages(e.response[:body])
         format.json { render json: { errors: { 'error' => 'Server Error' } }, status: :unprocessable_entity }
       end
     end
@@ -93,6 +95,7 @@ class DnsZonesController < ApplicationController
         format.json { render json: { status: 200 } }
       rescue Faraday::Error::ClientError => e
         ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#EditRecord', faraday: e.response })
+        flash[:alert] = format_error_messages(e.response[:body])
         format.json { render json: e.response[:body], status: :unprocessable_entity }
       end
     end
@@ -108,7 +111,7 @@ class DnsZonesController < ApplicationController
         format.html { redirect_to dns_zone_path(@domain), notice: 'DNS Record was successfully deleted' }
       rescue Faraday::Error::ClientError => e
         ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'DnsZones#DestroyRecord', faraday: e.response })
-        flash.now[:alert] = format_error_messages(e.response[:body])
+        flash[:alert] = format_error_messages(e.response[:body])
         format.html { redirect_to dns_zone_path(@domain) }
       end
     end

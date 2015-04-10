@@ -107,11 +107,11 @@ $server-search-text-gray: #5F8093;
     border: 1px solid $server-search-border;
     background-color: white;
     .filters{
-      font-size: 1.1em;
-      label{padding: 5px;}
+      label{padding: 3px; font-size: 1.15em;}
       span{
+        font-size: 1.05em;
         position: relative;
-        top: 7px;
+        top: 6px;
       }
     }
     .locations-container{

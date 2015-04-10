@@ -4,18 +4,19 @@
       .pure-u-1-6
         %ul.list-unstyled
           %li= link_to t('menu.cloud_net'), root_path
-          %li= link_to t('menu.features'), public_features_path 
           %li= link_to t('menu.account_login'), new_user_session_path
       .pure-u-1-6
         %ul.list-unstyled
-          %li Company
-          %li About Us
           %li= link_to t('menu.blog'), "http://blog.cloud.net/", target: "_blank"
+          %li= link_to t('menu.features'), public_features_path 
+          %li= link_to t('menu.market'), search_path
           =#%li Careers
       .pure-u-1-6
         %ul.list-unstyled
-          %li Support
-          %li Help Center
+          %li= link_to t('menu.faq'), 'http://feedback.cloud.net/knowledge-base',
+            target: "_blank"
+          %li= link_to('Help Center',
+            'http://feedback.cloud.net', target: "_blank")
           %li= link_to t('menu.contact'), public_contact_path
       .pure-u-1-2
         .pull-right

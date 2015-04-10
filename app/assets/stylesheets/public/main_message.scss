@@ -17,13 +17,12 @@
         font-weight: bold;
         padding: 10px;
         text-align: center;
-        margin-top: 50px;
+        margin-top: 80px;
         text-transform: uppercase;
       }
       .jg-top-message { 
         font-family: $public-font;
         padding: 10px;
-        //background-color: rgba(0,0,0,0.5);
         text-align: center;
       }
     }
@@ -54,6 +53,10 @@
       font-weight: normal;
     }
   
-    button{ margin: 27px 0 0 10px;}
+    button{ 
+      margin: 27px 5px 0 10px; 
+      width: 80%;
+      float: right;
+    }
   }
 }

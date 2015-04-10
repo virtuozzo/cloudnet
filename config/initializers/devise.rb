@@ -291,3 +291,11 @@ Devise.setup do |config|
     config.otp_uri_application = 'Cloud.net'
   end
 end
+
+Rails.application.config.to_prepare do
+  Devise::SessionsController.layout "public"
+  Devise::RegistrationsController.layout proc { |controller| user_signed_in? ? "application" : "public" }
+  Devise::ConfirmationsController.layout "public"
+  Devise::UnlocksController.layout "public"
+  Devise::PasswordsController.layout "public"
+end

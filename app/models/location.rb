@@ -34,7 +34,7 @@ class Location < ActiveRecord::Base
   end
 
   def indices_for_calculation
-    @indices_for_calculation||= indices.order(:created_at).last
+    @indices_for_calculation ||= indices.order(:created_at).last
   end
 
   def calc_indices_update

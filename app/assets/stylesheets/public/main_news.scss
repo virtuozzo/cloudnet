@@ -22,12 +22,12 @@
       .lock{@include background(image-url('main/news-pics.png') center 0px no-repeat);}
       .cloud{@include background(image-url('main/news-pics.png') center -60px no-repeat);}
       .circle{@include background(image-url('main/news-pics.png') center -119px no-repeat);}
-      &:nth-child(2){padding: 10px 30px 10px 15px; border-right: none;}
+      &:nth-child(2){padding: 3px 30px 3px 15px; border-right: none;}
       font-family: $public-font;
       font-size: $thirteen;
       color: #6A8A9C;
       &:nth-child(3){
-        padding: 10px 15px;
+        padding: 3px 15px;
         font-style: italic; 
         border-left: none;
       }

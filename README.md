@@ -37,6 +37,11 @@ Or build the image yourself. First make sure you have the repo with
 **Initial config**    
 Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
 
+Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
+of the created ID;
+`docker run --env-file=.env --rm cloudnet rake create_onapp_role`.
+That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
+
 Then create the database structure with `docker run --env-file=.env --rm cloudnet rake db:schema:load`.
 
 And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 

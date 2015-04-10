@@ -2,7 +2,7 @@ defaults: &defaults
   uri: <%= ENV["ONAPP_CP"] %>
   user: <%= ENV["ONAPP_USER"] %>
   pass: <%= ENV["ONAPP_PASS"] %>
-  user_role: 2
+  user_role: <%= ENV["ONAPP_ROLE"] %>
 
 development:
   <<: *defaults
