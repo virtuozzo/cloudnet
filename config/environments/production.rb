@@ -67,7 +67,7 @@ CloudNet::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Mailer options for Devise
-  config.action_mailer.default_url_options = { host: 'jager.cloud.net' }
+  config.action_mailer.default_url_options = { host: 'cloud.net' }
   config.action_mailer.delivery_method     = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
@@ -79,7 +79,7 @@ CloudNet::Application.configure do
     user_name: ENV['MANDRILL_USER'],
     password: ENV['MANDRILL_KEY'],
     authentication: 'login',
-    domain: 'jager.cloud.net'
+    domain: 'cloud.net'
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
