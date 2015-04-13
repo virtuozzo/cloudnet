@@ -1,29 +1,35 @@
 task calculate_per_location_costs: :environment do
-  year = ENV['YEAR'].to_i
-  month = ENV['MONTH'].to_i
+  year = (ENV['YEAR'] || 2015).to_i
+  month = (ENV['MONTH'] || 1).to_i
+  lower = Date.new(year, month)
+  upper = lower.end_of_month
+  range = lower..upper
 
-  # Method 1: By server usage
-  # Get all servers that were created in the given month
-  servers_by_location = Server.with_deleted
-    .where('extract(year from created_at) = ?', year)
-    .where('extract(month from created_at) = ?', month)
-    .group_by(&:location)
+  paid_invoices = Hash[
+    InvoiceItem
+    .joins(:invoice)
+    .where(invoices: { state: 'paid' })
+    .where(source_type: 'Server')
+    .where(created_at: range)
+    .group_by { |ii| Server.with_deleted.find(ii.source_id).location.provider }
+    .map { |l| [l[0], l[1].sum(&:net_cost)] }
+  ]
 
-  servers_by_location.each do |location|
-    provider = location[0]
-    servers = location[1]
-    provider_total_costs = 0
+  credit_notes = Hash[
+    CreditNoteItem
+    .where(source_type: 'Server')
+    .where(created_at: range)
+    .group_by { |cn| Server.with_deleted.find(cn.source_id).location.provider }
+    .map { |l| [l[0], l[1].sum(&:net_cost)] }
+  ]
 
-    servers.each do |server|
-      # Only calculate the amount of time the server existed in the given month
-      end_time = server.deleted_at || Date.new(year, month).end_of_month.to_time
-      hours = (end_time - server.created_at) / 3600
-      # Calculate how much the server cost for the given month
-      cost_for_month = server.generate_invoice_item(hours)[:net_cost]
-      # Add to the providers total costs for this month
-      provider_total_costs += cost_for_month
-    end
-
-    puts "#{provider}: #{Invoice.pretty_total provider_total_costs}"
+  puts "#{Date::MONTHNAMES[month]} #{year}"
+  puts 'Provider: invoices, credit_notes, total'
+  paid_invoices.each do |provider, invoice_sum|
+    credit_note_sum = credit_notes[provider] || 0
+    invoice_sum_pretty = Invoice.pretty_total(invoice_sum)
+    credit_note_sum_pretty = Invoice.pretty_total(credit_note_sum)
+    total_pretty = Invoice.pretty_total(invoice_sum - credit_note_sum)
+    puts "#{provider}: #{invoice_sum_pretty}, #{credit_note_sum_pretty}, #{total_pretty}"
   end
 end
