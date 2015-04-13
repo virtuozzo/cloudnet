@@ -79,6 +79,3 @@ Document scaling with Docker using a [Swarm](http://docs.docker.com/swarm/) and 
 
 #CONTRIBUTING
 Pull Requests welcome
-
-#LICENSE
-TBC
