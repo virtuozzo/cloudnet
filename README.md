@@ -2,7 +2,9 @@
 
 #Control Panel for Cloud.net
 
-[Cloud.net](https://cloud.net) is an end user interface to [OnApp](http://onapp.com/)'s cloud provisioning platform. Cloud.net is equivalent to other well known hosting providers such as [Digital Ocean](https://www.digitalocean.com/) or [Linode](https://www.linode.com/).
+[Cloud.net](https://cloud.net) is an end user interface to [OnApp](http://onapp.com/)'s cloud provisioning platform.
+
+Cloud.net is the first truly transparent marketplace for global cloud infrastructure. You can deploy servers on clouds all over the world, get independently-verified data about price, performance and uptime, and manage everything through one control panel.
 
 You will find this repository useful if you have your own installation of OnApp and want to offer paid cloud hosting through a more traditional interface.
 
