@@ -10,7 +10,7 @@
             .navbar-header
               = link_to 'Cloud.net', root_path, { class: "navbar-brand jg-header", id: 'logo'}
             = render partial: 'shared/nav'
-          
+
         %div#main.pure-u-1-1
           %header#jg-header-main.jg-header.navbar-fixed-top
             .wrapper-header.navbar.navbar-default
@@ -37,19 +37,17 @@
                       = link_to "Balance Due: #{remaining_balance(current_user)}", billing_index_path, {class: 'jg-icon icon-wallet' }
                     %li
                       = link_to 'Sign out', destroy_user_session_path, {class: 'jg-icon icon-signout', :method => :delete }
-              
+
               #hiddenNav= render partial: 'shared/nav'
 
           .wrapper
             = render partial: 'shared/alerts'
             = render partial: 'shared/breadcrumbs'
             = yield
-            
+
       = render partial: 'shared/feedback'
     - else
       = javascript_include_tag "shared/session"
       .wrapper.login
         = render partial: 'shared/alerts'
         = yield
-
-      // = render partial: 'shared/footer'

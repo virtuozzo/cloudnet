@@ -66,6 +66,8 @@ MAPBOX_TOKEN=
 DEVISE_SECRET_KEY=
 COOKIES_SECRET_BASE=
 
+# Google Analytics code
+GA_UA_NUMBER=
 
 # Capistrano deployment config. (Not needed if using Docker installation method)
 GIT_ORIGIN=git@github.com:OnApp/cloudnet.git
