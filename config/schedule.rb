@@ -50,6 +50,10 @@ every 1.day, at: '1:00 am' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
 end
 
+every 1.day, at: '1:00 am' do
+  runner 'NegativeBalanceCheckerTask.perform_in(4.minutes, :daily)'
+end
+
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'
 end
