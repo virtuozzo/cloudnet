@@ -33,6 +33,7 @@ describe CreateServerTask do
     end
 
     it 'should refund any credit notes if authorization fails' do
+      expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Stripe::StripeError))
       cost = Invoice.milli_to_cents(@invoice.total_cost)
       expect(@payments).to receive(:auth_charge)
         .with(@account.gateway_id, @card.processor_token, cost)
@@ -119,6 +120,7 @@ describe CreateServerTask do
     end
 
     it 'should fail if the server throws a Faraday error' do
+      expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
       allow_any_instance_of(CreateServer).to receive(:process).and_raise Faraday::Error::ClientError.new('Help!')
       expect(CreditNote).to receive(:refund_used_notes).exactly(1).times
 
@@ -148,6 +150,7 @@ describe CreateServerTask do
     end
 
     it 'should do a credit note refund if charge fails' do
+      expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Stripe::StripeError))
       expect(@payments).to receive(:capture_charge)
         .with(12_345, kind_of(String)).and_raise Stripe::StripeError
 

@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe ChargeUnpaidInvoices do
+  after :each do
+    SidekiqUniqueJobs.redis_mock.flushdb
+  end
+
   it 'should charge unpaid prepaid invoices' do
     @invoice = FactoryGirl.create :invoice, invoice_type: :prepaid, state: :unpaid
     @user = FactoryGirl.create :user, account: @invoice.account

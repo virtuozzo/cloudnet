@@ -68,6 +68,7 @@ describe ServersController do
       end
 
       it 'should show an error if shutdown schedule failed' do
+        expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
         allow(@server_tasks).to receive(:perform).and_raise(Faraday::Error::ClientError.new('Test'))
         post :shut_down, id: server.id
         expect(response).to redirect_to(servers_path)
@@ -82,6 +83,7 @@ describe ServersController do
       end
 
       it 'should show an error if startup schedule failed' do
+        expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
         allow(@server_tasks).to receive(:perform).and_raise(Faraday::Error::ClientError.new('Test'))
         post :start_up, id: server.id
         expect(response).to redirect_to(servers_path)
@@ -159,6 +161,7 @@ describe ServersController do
           end
 
           it 'should handle errors if updating resources fails' do
+            expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
             allow(@server_tasks).to receive(:perform).and_raise(Faraday::Error::ClientError.new('Test'))
             expect(@payments).to_not receive(:capture_charge)
             session['warden.user.user.session'] = {
