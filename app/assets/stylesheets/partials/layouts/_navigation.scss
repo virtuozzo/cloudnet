@@ -15,7 +15,7 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
 
     #logo {
         border: 1px solid $jg-header-lilac-border;
-        @include box-shadow(inset -1px 0 0 0 $jg-header-lilac-border);
+        //@include box-shadow(inset -1px 0 0 0 $jg-header-lilac-border);
         border-width: 0 0 1px 0;
     }
 
@@ -28,8 +28,8 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
             border:     none;
         }
 
-        .navbar-header {
-            float: none;
+        .navbar-collapse {
+            float: left;
         }
 
         ul {
@@ -39,10 +39,10 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
             left:       0;
             top:        0;
             z-index:    1;
-            margin:     20px 0;
+            margin:     15px 0;
 
             li {
-                width: 100%;
+                //width: 100%;
                 a {
                     font-family:    $jg-font-main;
                     font-size:      $fourteen;
@@ -50,10 +50,10 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
                     padding:        0 0 0 20px;
                     text-indent:    10px;
                     line-height:    2.75em;
-                    border-right:   1px $jg-border-light solid;
+                    //border-right:   1px $jg-border-light solid;
 
                     &:before {
-                        content:    '';
+                        //content:    '';
                         background: transparent;
                         position:   absolute;
                         width:      4px;
@@ -65,6 +65,7 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
                 &.pure-menu-selected, &.active {
                     a {
                         color: $jg-blue;
+                        background: transparent;
                         // border-right:    1px $jg-blue solid;
                         &:before {
                             background: $jg-blue;
@@ -73,7 +74,5 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
                 }
             }
         }
-
     }
-
 }

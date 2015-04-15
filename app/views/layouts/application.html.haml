@@ -31,6 +31,9 @@
                       %div.details
                         %span.full-name= current_user.full_name
                         %span.user-email=current_user.email
+                    - if is_admin_user?
+                      %li
+                        =link_to 'Admin', admin_root_path, {class: 'jg-icon icon-user'}
                     %li
                       = link_to 'Manage Account', edit_user_registration_path, {class: 'jg-icon icon-user'}
                     %li

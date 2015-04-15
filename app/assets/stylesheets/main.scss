@@ -536,14 +536,10 @@ appears on the left side of the page.
 }
 #menu {
     margin-left: -150px; /* "#menu" width */
-    width: 150px;
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
     z-index: 30001; /* so the menu or its navicon stays above all content */
-    background: #191818;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
     /*
@@ -643,7 +639,7 @@ Hides the menu at `48em`, but modify this based on your app's needs.
     }
 
     #layout {
-        padding-left: 150px; /* left col width "#menu" */
+        //padding-left: 150px; /* left col width "#menu" */
         left: 0;
     }
     #menu {
