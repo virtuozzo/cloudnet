@@ -13,7 +13,7 @@ class Invoice < ActiveRecord::Base
   enum_field :invoice_type, allowed_values: [:prepaid, :payg], default: :prepaid
 
   scope :prepaid, -> { where(invoice_type: :prepaid) }
-  scope :payg, -> { where(invoice_type: :prepaid) }
+  scope :payg, -> { where(invoice_type: :payg) }
   scope :not_paid, -> { where.not(state: :paid) }
 
   before_create :coupon_should_not_present_if_payg

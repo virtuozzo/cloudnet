@@ -345,6 +345,7 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.6.2)
     minitest (5.5.1)
+    mock_redis (0.14.0)
     multi_json (1.11.0)
     multipart-post (2.0.0)
     nenv (0.1.1)
@@ -646,6 +647,7 @@ DEPENDENCIES
   launchy
   maxmind (~> 0.4.5)
   minitest
+  mock_redis
   newrelic_rpm
   paranoia (~> 2.0.2)
   paypal-express (~> 0.6.0)

@@ -110,6 +110,7 @@ group :test do
   gem 'fuubar'
   gem 'brakeman'
   gem 'rails_best_practices'
+  gem 'mock_redis'
 end
 
 gem 'puma', '~> 2.9.0'
