@@ -208,7 +208,7 @@ header.jg-header, .jg-header {
 }
 
 #logo {
-	@include background(image-url('cloudnetbeta.png') center center no-repeat, transparent);
+	@include background(image-url('cloudnet.png') center center no-repeat, transparent);
 	text-indent: 		-9999px;
 	height: 60px;
 	text-align: center;
@@ -224,7 +224,7 @@ header.jg-header, .jg-header {
 	text-indent: 		-9999px;
 	@include background(image-url('cloudnet.png') center center no-repeat, linear-gradient(#ffffff, #ececec));
 	height: 60px;
-
+  width: 60px;
 }
 
 @media (max-width: 768px) {
