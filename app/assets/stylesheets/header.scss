@@ -14,6 +14,7 @@ header.jg-header {
 
 	.navbar-default {
 		background: none;
+    border: none;
 	}
 	button.navbar-toggle {
 		display: inline-block;
@@ -21,7 +22,7 @@ header.jg-header {
 		margin: 0;
 		height: 100%;
 		border: none;
-		border-right: 1px solid $jg-border-light;
+		//border-right: 1px solid $jg-border-light;
 		@include border-radius(0);
 		padding: 8px 20px;
 	}
@@ -101,7 +102,7 @@ header.jg-header, .jg-header {
 				margin: 0;
 				height: 100%;
 				border-left: 1px solid $jg-border-light;
-				padding-top: 14px;
+				padding-top: 13px;
 
 				.icon-arrow-down {
 					position: relative;
@@ -320,15 +321,15 @@ header.jg-header, .jg-header {
       background:#9b59b6;
     }
   }
-  
-  #footer{
-    padding: 30px 0 20px 0;
-    background-color: $footer-background;
-    font-size: $eleven;
-    img{float: right; margin: 2px 0;}
-    p{ margin: 1px 0; clear: both; }
-    .tos{margin-right: 12px;}
-    .priv{margin-left: 14px;}
-    li{text-transform: uppercase;}
-  }
+}
+
+#footer{
+  padding: 30px 0 20px 0;
+  background-color: $footer-background;
+  font-size: $eleven;
+  img{float: right; margin: 2px 0;}
+  p{ margin: 1px 0; clear: both; }
+  .tos{margin-right: 12px;}
+  .priv{margin-left: 14px;}
+  li{text-transform: uppercase;}
 }
