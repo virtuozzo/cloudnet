@@ -12,7 +12,6 @@ $jg-module-bg-light: #ffffff;
 $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, sans-serif;
 
 #menu {
-
     #logo {
         border: 1px solid $jg-header-lilac-border;
         //@include box-shadow(inset -1px 0 0 0 $jg-header-lilac-border);
@@ -32,6 +31,10 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
             float: left;
         }
 
+        .jg-moremenu{
+          margin: 0;
+        }
+        
         ul {
             border-top: none;
             visibility: visible;
@@ -47,7 +50,7 @@ $jg-font-main:              'Montserrat', 'Helvetica-neue', Helvetica, Verdana, 
                     font-family:    $jg-font-main;
                     font-size:      $fourteen;
                     position:       relative;
-                    padding:        0 0 0 20px;
+                    padding:        0 10px 0 10px;
                     text-indent:    10px;
                     line-height:    2.75em;
                     //border-right:   1px $jg-border-light solid;
