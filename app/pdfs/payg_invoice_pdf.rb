@@ -26,13 +26,7 @@ class PaygInvoicePdf < BillingPdf
         text @invoice.account.user.email
         move_down 5
 
-        if billing_address.present?
-          text billing_address[:address1]
-          text billing_address[:address2] if billing_address[:address2].present?
-          text "#{billing_address[:city]}, #{billing_address[:region]}"
-          text billing_address[:postal]
-          text IsoCountryCodes.find(billing_address[:country]).name
-        end
+        address
       end
     end
 
