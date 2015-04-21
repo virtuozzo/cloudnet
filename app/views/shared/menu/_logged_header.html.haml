@@ -1,8 +1,9 @@
-%div#menu
-  %nav.navbar.navbar-default.navbar-static-top{role: "navigation"}
-    .navbar-header
-      = link_to 'Cloud.net', root_path, { class: "navbar-brand jg-header", id: 'logo'}
-    = render partial: 'shared/nav'
+.container
+  %div#menu
+    %nav.collapse.navbar-collapse{role: "navigation"}
+      .navbar-header
+        = link_to 'Cloud.net', root_path, { class: "navbar-brand jg-header", id: 'logo'}
+      = render partial: 'shared/nav'
 
 %header#jg-header-main.jg-header.navbar-fixed-top
   .wrapper-header.navbar.navbar-default
@@ -11,26 +12,26 @@
       %span.icon-bar
       %span.icon-bar
       %span.icon-bar
-
-    %ul#uap.nav.navbar-nav.navbar-right
-      %li.dropdown
-        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-          %span.gravatar= image_tag(gravatar_image(current_user, 64), size: "32")
-          %span.icon-arrow-down
-        %ul.jg-dropmenu.dropdown-menu
-          %li#user-account-profile.menu-header.clearfix
+    .container
+      %ul#uap.nav.navbar-nav.navbar-right
+        %li.dropdown
+          %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
             %span.gravatar= image_tag(gravatar_image(current_user, 64), size: "32")
-            %div.details
-              %span.full-name= current_user.full_name
-              %span.user-email=current_user.email
-          - if is_admin_user?
+            %span.icon-arrow-down
+          %ul.jg-dropmenu.dropdown-menu
+            %li#user-account-profile.menu-header.clearfix
+              %span.gravatar= image_tag(gravatar_image(current_user, 64), size: "32")
+              %div.details
+                %span.full-name= current_user.full_name
+                %span.user-email=current_user.email
+            - if is_admin_user?
+              %li
+                =link_to 'Admin', admin_root_path, {class: 'jg-icon icon-user'}
             %li
-              =link_to 'Admin', admin_root_path, {class: 'jg-icon icon-user'}
-          %li
-            = link_to 'Manage Account', edit_user_registration_path, {class: 'jg-icon icon-user'}
-          %li
-            = link_to "Balance Due: #{remaining_balance(current_user)}", billing_index_path, {class: 'jg-icon icon-wallet' }
-          %li
-            = link_to 'Sign out', destroy_user_session_path, {class: 'jg-icon icon-signout', :method => :delete }
+              = link_to 'Manage Account', edit_user_registration_path, {class: 'jg-icon icon-user'}
+            %li
+              = link_to "Balance Due: #{remaining_balance(current_user)}", billing_index_path, {class: 'jg-icon icon-wallet' }
+            %li
+              = link_to 'Sign out', destroy_user_session_path, {class: 'jg-icon icon-signout', :method => :delete }
 
     #hiddenNav= render partial: 'shared/nav'

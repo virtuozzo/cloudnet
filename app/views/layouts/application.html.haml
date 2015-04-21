@@ -4,10 +4,10 @@
     = render 'shared/head'
   %body{class: body_class}
     - if current_user
-      %div#layout.container
+      %div#layout
         %div#main.pure-u-1-1
           = menu_header
-          .wrapper
+          .wrapper.container
             = render partial: 'shared/alerts'
             =# render partial: 'shared/breadcrumbs'
             = yield

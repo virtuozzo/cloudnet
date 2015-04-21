@@ -17,7 +17,7 @@ header.jg-header {
     border: none;
 	}
 	button.navbar-toggle {
-		display: inline-block;
+		display: none;
 		float: left;
 		margin: 0;
 		height: 100%;
@@ -25,6 +25,9 @@ header.jg-header {
 		//border-right: 1px solid $jg-border-light;
 		@include border-radius(0);
 		padding: 8px 20px;
+    @media (max-width: 768px) {
+      display: inline-block;
+    }
 	}
 	#hiddenNav {
 		.navbar-collapse {
@@ -101,7 +104,8 @@ header.jg-header, .jg-header {
 			> a.dropdown-toggle {
 				margin: 0;
 				height: 100%;
-				border-left: 1px solid $jg-border-light;
+				//border-left: 1px solid $jg-border-light;
+        //border-right: 1px solid $jg-border-light;
 				padding-top: 13px;
 
 				.icon-arrow-down {
@@ -228,17 +232,22 @@ header.jg-header, .jg-header {
   width: 60px;
 }
 
+#uap{
+  .dropdown-toggle{
+    &:hover, &:focus {background: #DDD};
+  }
+}
 @media (max-width: 768px) {
 	.wrapper-header {
 		border: none;
 	}
 	header {
 		.navbar-toggle {
-			float: left;
+			//float: left;
 		}
 		#uap {
 			float: right;
-
+      &:hover{background: none};
 			.jg-dropmenu, li#user-account-profile {
 				@include border-radius(0px);
 			}
