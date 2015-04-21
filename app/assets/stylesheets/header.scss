@@ -265,7 +265,8 @@ header.jg-header, .jg-header {
 .public-layout{
   #main-menu{
     .container-fluid{padding: 0;}
-    .navbar{margin: 0;}
+    .container{margin-top: 5px;}
+    .navbar{margin: 0; height: 60px;}
     .navbar-header{
       width: 50px;
       margin-left: 15px;
