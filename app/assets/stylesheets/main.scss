@@ -535,10 +535,10 @@ appears on the left side of the page.
   padding: 0;
 }
 #menu {
-    margin-left: -150px; /* "#menu" width */
+    //margin-left: -150px; /* "#menu" width */
     position: fixed;
     top: 0;
-    left: 0;
+    //left: 0;
     z-index: 30001; /* so the menu or its navicon stays above all content */
     -webkit-overflow-scrolling: touch;
 }
@@ -628,6 +628,10 @@ Hides the menu at `48em`, but modify this based on your app's needs.
             padding: 0;
         }
     }
+    
+    #menu {
+        margin-left: -300px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -643,7 +647,7 @@ Hides the menu at `48em`, but modify this based on your app's needs.
         left: 0;
     }
     #menu {
-        left: 150px;
+        //left: 150px;
     }
 
     .menu-link {
