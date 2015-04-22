@@ -49,7 +49,7 @@ Then create the database structure with `docker run --env-file=.env --rm cloudne
 
 And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 
 add the available providers from your OnApp installation and an initial admin user with 
-username 'admin@cloud.net' and password 'adminpassword'.
+email 'admin@cloud.net' and password 'adminpassword'.
 
 You will then need to change the admin password and fill out the extra details for the providers
 that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
