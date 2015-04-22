@@ -34,7 +34,7 @@ You can either pull the latest image from the Docker registry with `docker pull 
 
 Or build the image yourself. First make sure you have the repo with
 `git clone https://github.com/OnApp/cloudnet` then in the root of the repo run
-`rake assets:precompile` if `config.serve_static_assets = true` in your `config/environments/production.rb` and
+`rake assets:precompile` check on `config.serve_static_assets` option should be set `true` in your `config/environments/production.rb` and run
 `docker build -t cloudnet .`
 
 **Initial config**    
