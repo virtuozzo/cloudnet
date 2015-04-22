@@ -37,6 +37,11 @@ waitForFinalEvent = (->
 )()
 
 $ ->
+  #hide mobile menu when profile button clicked
+  $('#uap a.dropdown-toggle').on 'click', ->
+    $m = $('header button.navbar-toggle')
+    $m.click() unless $m.hasClass('collapsed')
+
   $('.bs-tooltip').tooltip
       animation:  true
 

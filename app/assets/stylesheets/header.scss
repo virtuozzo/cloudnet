@@ -14,16 +14,20 @@ header.jg-header {
 
 	.navbar-default {
 		background: none;
+    border: none;
 	}
 	button.navbar-toggle {
-		display: inline-block;
+		display: none;
 		float: left;
 		margin: 0;
 		height: 100%;
 		border: none;
-		border-right: 1px solid $jg-border-light;
+		//border-right: 1px solid $jg-border-light;
 		@include border-radius(0);
 		padding: 8px 20px;
+    @media (max-width: 768px) {
+      display: inline-block;
+    }
 	}
 	#hiddenNav {
 		.navbar-collapse {
@@ -99,9 +103,10 @@ header.jg-header, .jg-header {
 
 			> a.dropdown-toggle {
 				margin: 0;
-				height: 100%;
-				border-left: 1px solid $jg-border-light;
-				padding-top: 14px;
+				height: 60px;
+				//border-left: 1px solid $jg-border-light;
+        //border-right: 1px solid $jg-border-light;
+				padding-top: 13px;
 
 				.icon-arrow-down {
 					position: relative;
@@ -208,7 +213,7 @@ header.jg-header, .jg-header {
 }
 
 #logo {
-	@include background(image-url('cloudnetbeta.png') center center no-repeat, transparent);
+	@include background(image-url('cloudnet.png') center center no-repeat, transparent);
 	text-indent: 		-9999px;
 	height: 60px;
 	text-align: center;
@@ -224,20 +229,25 @@ header.jg-header, .jg-header {
 	text-indent: 		-9999px;
 	@include background(image-url('cloudnet.png') center center no-repeat, linear-gradient(#ffffff, #ececec));
 	height: 60px;
-
+  width: 60px;
 }
 
+#uap{
+  .dropdown-toggle{
+    &:hover, &:focus {background: #DDD};
+  }
+}
 @media (max-width: 768px) {
 	.wrapper-header {
 		border: none;
 	}
 	header {
 		.navbar-toggle {
-			float: left;
+			//float: left;
 		}
 		#uap {
 			float: right;
-
+      &:hover{background: none};
 			.jg-dropmenu, li#user-account-profile {
 				@include border-radius(0px);
 			}
@@ -264,7 +274,8 @@ header.jg-header, .jg-header {
 .public-layout{
   #main-menu{
     .container-fluid{padding: 0;}
-    .navbar{margin: 0;}
+    .container{margin-top: 5px;}
+    .navbar{margin: 0; height: 60px;}
     .navbar-header{
       width: 50px;
       margin-left: 15px;
@@ -320,15 +331,15 @@ header.jg-header, .jg-header {
       background:#9b59b6;
     }
   }
-  
-  #footer{
-    padding: 30px 0 20px 0;
-    background-color: $footer-background;
-    font-size: $eleven;
-    img{float: right; margin: 2px 0;}
-    p{ margin: 1px 0; clear: both; }
-    .tos{margin-right: 12px;}
-    .priv{margin-left: 14px;}
-    li{text-transform: uppercase;}
-  }
+}
+
+#footer{
+  padding: 30px 0 20px 0;
+  background-color: $footer-background;
+  font-size: $eleven;
+  img{float: right; margin: 2px 0;}
+  p{ margin: 1px 0; clear: both; }
+  .tos{margin-right: 12px;}
+  .priv{margin-left: 14px;}
+  li{text-transform: uppercase;}
 }

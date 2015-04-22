@@ -7,8 +7,8 @@
     = render 'shared/head'
   %body{class: body_class}
     .public-layout
-      = render partial: 'shared/public_header'
-
+      = menu_header
+      
       = yield
 
       = render partial: 'shared/footer'

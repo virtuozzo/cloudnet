@@ -24,6 +24,14 @@ module ApplicationHelper
     render partial: 'shared/nav_item',  locals: { link: @link }
   end
 
+  def menu_header
+    if user_signed_in?
+      render partial: 'shared/menu/logged_header'
+    else
+      render partial: 'shared/menu/public_header'
+    end
+  end
+  
   def gravatar_image(user, size = 32)
     hash = Digest::MD5.hexdigest(user.email.downcase.strip)
     "https://secure.gravatar.com/avatar/#{hash}?s=#{size}&d=retro"
