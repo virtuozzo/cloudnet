@@ -34,6 +34,7 @@ You can either pull the latest image from the Docker registry with `docker pull 
 
 Or build the image yourself. First make sure you have the repo with
 `git clone https://github.com/OnApp/cloudnet` then in the root of the repo run
+`rake assets:precompile` if `config.serve_static_assets = true` in your `config/environments/production.rb` and
 `docker build -t cloudnet .`
 
 **Initial config**    
@@ -48,7 +49,7 @@ Then create the database structure with `docker run --env-file=.env --rm cloudne
 
 And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 
 add the available providers from your OnApp installation and an initial admin user with 
-username 'admin' and password 'password'.
+username 'admin@cloud.net' and password 'adminpassword'.
 
 You will then need to change the admin password and fill out the extra details for the providers
 that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
@@ -65,6 +66,7 @@ docker run \
   -p 443:3443 \
   --restart=always \
   --name cloudnet-web \
+  --detach
   cloudnet foreman run web
 ```
   * Worker container:
@@ -73,6 +75,7 @@ docker run \
   --env-file=.env \
   --restart=always \
   --name cloudnet-worker \
+  --detach
   cloudnet foreman run sidekiq --logfile /dev/stdout
 ```
 
