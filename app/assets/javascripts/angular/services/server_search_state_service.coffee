@@ -1,17 +1,27 @@
-@app.service "ServerSearchState",
+@app.service "ServerSearchState", ["$rootScope", "$filter",
   class ServerSearchState
-    constructor: ->
+    constructor: (@scope, @filter) ->
       @setVariables()
+      @registerWatch()
 
     setVariables: ->
+      @sortBy = {field: 'price', rev: false}
       @slidersEnabled = true
       @cloudVpsFilter = {}
+      @locations = []
+      @filteredLocationsArray = []
       @counts = 
         cpu:  @initialValue('cpu')
         mem:  @initialValue('mem')
         disk: @initialValue('disk')
         index: 0
         uptime: 0
+      
+    registerWatch: ->
+      @scope.$watchCollection => 
+        [@cloudVpsFilter, @packageFilter, @counts, @sortBy, @locations]
+      , =>
+        @filteredLocationsArray = @filteredSortedLocations()
         
     initialValue: (param) ->
       $('.filters').data(param) || 1
@@ -30,3 +40,19 @@
         data[data.length-1].indexUptime 
       else
         0
+        
+    locationSort: ->
+      [(location) =>
+        switch @sortBy.field
+          when 'price' then location.pricePerHour(@counts)
+          when 'cloudIndex' then location.cloudIndex
+          when 'uptime' then @currentUptime(location)
+       ,'city']
+       
+    filteredSortedLocations: ->
+      loc = @filter('filter')(@locations, @cloudVpsFilter)
+      loc = @filter('filter')(loc, @packageFilter)
+      loc = @filter('filter')(loc, @cloudIndexUptimeFilter)
+      @filter('orderBy')(loc, @locationSort(), @sortBy.rev)
+      
+]

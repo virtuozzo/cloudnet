@@ -1,0 +1,10 @@
+@app.directive "mapWidget", ['ServerSearchState', '$filter', (State, $filter) ->
+  scope: true
+  require: 'ngModel'
+  link: ($scope, $element, $attr, ngModelCtrl) ->
+    keys = 
+      mapboxKey: mapboxKey
+      mapboxPublicToken: mapboxPublicToken
+    new helpers.MapSearchWidget($scope, $element, ngModelCtrl, State, $filter, keys)
+  
+]

@@ -100,6 +100,19 @@ $server-search-text-gray: #5F8093;
     .wizard-slider[disabled].noUi-connect{background: $server-search-slider-disabled;}
   }
   
+  .map-search{position: relative;}
+  map-widget{
+    height: 300px;
+    margin: 20px 0;
+    border: 1px solid black;
+    display: block;
+
+  }
+  .results-with-map{
+    overflow: auto;
+    height: 421px;
+    position: relative;
+  }
   .results{
     font-size: $thirteen;
     margin: 20px 0 0 10px;
