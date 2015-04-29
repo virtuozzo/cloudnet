@@ -20,7 +20,7 @@ CloudNet::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_assets = false
+  config.serve_static_assets = ENV['SERVE_STATIC_ASSETS'] || false
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -73,12 +73,12 @@ CloudNet::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default charset: 'utf-8'
   config.action_mailer.smtp_settings = {
-    address: 'smtp.mandrillapp.com',
-    port: 25,
+    address: ENV['SMTP_DOMAIN'],
+    port: ENV['SMTP_PORT'],
     enable_starttls_auto: true,
-    user_name: ENV['MANDRILL_USER'],
-    password: ENV['MANDRILL_KEY'],
-    authentication: 'login',
+    user_name: ENV['SMTP_USER'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: ENV['SMTP_AUTH_METHOD'],
     domain: 'cloud.net'
   }
 

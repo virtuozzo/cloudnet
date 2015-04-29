@@ -11,4 +11,6 @@ PAYMENTS  = ConfigHelper.load_yml_file('config/configurations/payments.yml')
 LOGGING   = ConfigHelper.load_yml_file('config/configurations/logging.yml')
 KEYS      = ConfigHelper.load_yml_file('config/configurations/keys.yml')
 
-fail "Onapp API must connect over SSL" unless URI.parse(ONAPP_CP[:uri]).scheme == 'https'
+if ONAPP_CP[:uri]  # Sometimes Rails is loaded with initialisation, eg asset compilation
+  fail "Onapp API must connect over SSL" unless URI.parse(ONAPP_CP[:uri]).scheme == 'https'
+end

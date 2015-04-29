@@ -26,6 +26,7 @@ Cloud.net has various dependencies;
   * [Stripe API](https://stripe.com): payment gateway
   * [500PX API](http://developers.500px.com/): photo library
   * [Mapbox API](https://www.mapbox.com/developers/api/): displaying maps
+  * An SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
 
 You will need to either install or register API keys for all these dependencies.
 
@@ -33,9 +34,7 @@ You will need to either install or register API keys for all these dependencies.
 You can either pull the latest image from the Docker registry with `docker pull Onapp/cloudnet`
 
 Or build the image yourself. First make sure you have the repo with
-`git clone https://github.com/OnApp/cloudnet` then in the root of the repo run
-`rake assets:precompile` check on `config.serve_static_assets` option should be set `true` in your `config/environments/production.rb` and run
-`docker build -t cloudnet .`
+`git clone https://github.com/OnApp/cloudnet` then run `docker build -t cloudnet .`
 
 **Initial config**    
 Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
@@ -49,7 +48,7 @@ Then create the database structure with `docker run --env-file=.env --rm cloudne
 
 And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 
 add the available providers from your OnApp installation and an initial admin user with 
-email 'admin@cloud.net' and password 'adminpassword'.
+email: 'admin@cloud.net' and password: 'adminpassword'.
 
 You will then need to change the admin password and fill out the extra details for the providers
 that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
@@ -62,20 +61,23 @@ You will need at least 2 containers:
 ```
 docker run \
   --env-file=.env \
-  -p 80:3443 \
   -p 443:3443 \
+  -v /home/tombh/Workspace/peas/contrib/ssl-keys:/mnt/certs \
   --restart=always \
   --name cloudnet-web \
-  --detach
+  --detach \
   cloudnet foreman run web
 ```
+
+NB. This web process will only accept HTTPS traffic
+
   * Worker container:
 ```
 docker run \
   --env-file=.env \
   --restart=always \
   --name cloudnet-worker \
-  --detach
+  --detach \
   cloudnet foreman run sidekiq --logfile /dev/stdout
 ```
 

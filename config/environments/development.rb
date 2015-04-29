@@ -13,7 +13,7 @@ CloudNet::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
   #config.cache_store = :null_store
-  
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -39,12 +39,13 @@ CloudNet::Application.configure do
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :user_name => ENV['MAILTRAP_USER'],
-    :password => ENV['MAILTRAP_PASS'],
-    :address => 'mailtrap.io',
-    :domain => 'mailtrap.io',
-    :port => '2525',
-    :authentication => :cram_md5
+    address: ENV['SMTP_DOMAIN'],
+    port: ENV['SMTP_PORT'],
+    enable_starttls_auto: true,
+    user_name: ENV['SMTP_USER'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: ENV['SMTP_AUTH_METHOD'],
+    domain: 'cloud.net'
   }
 
   # Print deprecation notices to the Rails logger.
