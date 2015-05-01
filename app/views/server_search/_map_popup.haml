@@ -1,0 +1,9 @@
+.location_header
+  %ul#image_links.pure-g
+    %li.icon-hover.jg-hover-trans.pure-u
+      %a.icon-user{ target: "_blank", href: "http://500px.com/<%= photo.data.user.username %>".html_safe}
+      %span.jg-animate.animated.fadeInRight <%= photo.data.user.username %>
+    %li.icon-hover.pure-u
+      %a.icon-link{ target: "_blank", href: "http://500px.com<%= photo.data.photo.url %>".html_safe}
+  .title <%= photo.data.photo.name %>
+  .map_location <%= photo.data.first.img %>

@@ -4,7 +4,16 @@
     
     constructor: (@state, @locationsQuery, @packages) ->
       @initializeLocations()
-
+      @mapVisible = true
+      
+    showMap: ->
+      console.log 'show map'
+      @mapVisible = true
+      
+    hideMap: ->
+      console.log 'hide map'
+      @mapVisible = false
+      
     initializeLocations: ->
       @locationsQuery.query (result) =>
         @state.locations.push(new models.Location(loc)) for loc in result
