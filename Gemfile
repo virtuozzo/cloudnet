@@ -25,7 +25,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'devise', git: 'https://github.com/plataformatec/devise.git'
 gem 'devise-otp'
 
-gem 'angularjs-rails', '~> 1.3.10'
+gem 'angularjs-rails', '~> 1.3.15'
 gem 'underscore-rails', '~> 1.6.0'
 
 gem 'sidekiq', '~> 3.2'

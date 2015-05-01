@@ -357,26 +357,6 @@ $ ->
     delete object[oldKey]
     return object
 
-  _.mixin geoJson: (locations) ->
-    arr = []
-
-    geoJson =
-      type: 'Feature'
-      geometry:
-        type: 'Point'
-        coordinates: null
-      properties:
-        icon: default_icon
-    _.each locations, (location) ->
-      # Copy the GeoJSON template, clone attributes and then set attributes based on location
-      data                        = _.clone geoJson
-      data.geometry               = _.clone geoJson.geometry
-      data.geometry.coordinates   = [location.longitude, location.latitude]
-      data.properties             = _.extend location, data.properties
-      
-      arr.push data
-
-    return arr
 
   resetMarkers = (markers) ->
     _.each markers, (marker) ->
@@ -394,9 +374,9 @@ $ ->
     return
 
   setupMapBeta = ->
-    geojson = _.geoJson locations
-
+    geojson = new helpers.GeoJsonBuilder(locations).generate()
     map = L.mapbox.map 'jg-map', mapbox_key,
+      accessToken: mapboxPublicToken,
       minZoom: 2,
       maxZoom: 12
       closePopupOnClick: false

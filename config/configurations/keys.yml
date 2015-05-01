@@ -6,6 +6,7 @@ defaults: &defaults
     api_key: <%= ENV["FIVEHUNDREDPX_KEY"] %>
   mapbox:
     token: <%= ENV["MAPBOX_TOKEN"] %>
+    public_token: <%= ENV["MAPBOX_PUBLIC_TOKEN"] %>
   analytics:
     token: <%= ENV["ANALYTICS_KEY"] %>
 

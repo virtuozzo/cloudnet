@@ -4,21 +4,21 @@
     
     constructor: (@state, @locationsQuery, @packages) ->
       @initializeLocations()
-
-    locationSort: ->
-      [(location) =>
-        switch @sortBy.field
-          when 'price' then location.pricePerHour(@state.counts)
-          when 'cloudIndex' then location.cloudIndex
-          when 'uptime' then @state.currentUptime(location)
-       ,'city']  
+      @mapVisible = true
+      
+    showMap: ->
+      console.log 'show map'
+      @mapVisible = true
+      
+    hideMap: ->
+      console.log 'hide map'
+      @mapVisible = false
       
     initializeLocations: ->
-      @locations = []
-      @sortBy = {field: 'price', rev: false}
       @locationsQuery.query (result) =>
-        @locations.push(new models.Location(loc)) for loc in result
-
+        @state.locations.push(new models.Location(loc)) for loc in result
+        @state.filteredLocationsArray = @state.filteredSortedLocations()
+        
     showVpsLocations: ->
       !@packages.activePackage and
       (Object.keys(@state.cloudVpsFilter).length is 0 or

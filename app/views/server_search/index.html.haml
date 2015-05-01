@@ -1,29 +1,39 @@
 %script
   = raw "models.packagesData = #{packages}"
-%section.container{:"ng-controller" => "ServerSearchCtrl as ctrl"}
+%section.container.split-cont{:"ng-controller" => "ServerSearchCtrl as ctrl"}
   .pure-g
     .pure-u-1-4
       %section.filters{data: {mem: params[:mem], cpu: params[:cpu], disk: params[:disc]}}
         = render 'filters'
-    .pure-u-3-4
+    .pure-u-3-4.map-search
       %section.results
         .filters
           %span.font-11 Sort these clouds by what's important to you:
           .btn-group{:"data-toggle" => "buttons", role: "group", 
                      :"aria-label" => "sorting"}
-            %label.btn.btn-default{:"ng-click" => "ctrl.sortBy = {field: 'cloudIndex', rev: true}"} 
+            %label.btn.btn-default{:"ng-click" => "ctrl.state.sortBy = {field: 'cloudIndex', rev: true}"} 
               %input{type:"radio", name:"sort", id:"sort_index", autocomplete:"off"} Cloud Index
-            %label.btn.btn-default{:"ng-click" => "ctrl.sortBy = {field: 'uptime', rev: true}"} 
+            %label.btn.btn-default{:"ng-click" => "ctrl.state.sortBy = {field: 'uptime', rev: true}"} 
               %input{type:"radio", name:"sort", id:"sort_index", autocomplete:"off"} Uptime
-            %label.btn.btn-default.active{:"ng-click" => "ctrl.sortBy = {field: 'price', rev: false}"}
+            %label.btn.btn-default.active{:"ng-click" => "ctrl.state.sortBy = {field: 'price', rev: false}"}
               %input{type:"radio", name:"sort", id:"sort_price", autocomplete:"off"} Price  
-              
-        .locations-container
-          .location{:"ng-repeat" => "l in ctrl.locations | filter:ctrl.state.cloudVpsFilter | filter:ctrl.state.packageFilter | filter:ctrl.state.cloudIndexUptimeFilter | orderBy:ctrl.locationSort():ctrl.sortBy.rev"}
+          .maplist.pull-right
+            =link_to "link1", "/post"
+            =link_to "link2", "/post"
+            
+        .map-container#mts
+          %map-widget{:"ng-model" => "ctrl.state.filteredLocationsArray"}
+          
+        .locations-container.results-with-map
+          .location{:"ng-repeat" => "l in ctrl.state.filteredLocationsArray"}
             %location-widget{location: "l", data: {id: "{{l.id}}"}}
             
           .vps-not-valid{:"ng-show" => "ctrl.showVpsLocations()"}
             %hr
             %h3 For VPS hosting choose one of the predefined packages
-            .location{:"ng-repeat" => "l in ctrl.locations | filter:{budgetVps: true} | filter:ctrl.state.cloudIndexUptimeFilter | orderBy:ctrl.locationSort():ctrl.sortBy.rev"}
+            .location{:"ng-repeat" => "l in ctrl.state.locations | filter:{budgetVps: true} | filter:ctrl.state.cloudIndexUptimeFilter | orderBy:ctrl.state.locationSort():ctrl.state.sortBy.rev"}
               %location-widget{:"location" => "l"}
+:javascript
+  var mapboxKey = "#{KEYS[:mapbox][:token]}";
+  var mapboxPublicToken = "#{KEYS[:mapbox][:public_token]}";
+  var inactive_pin = "#{asset_path('pins/inactive-pin.png')}";
