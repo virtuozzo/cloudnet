@@ -7,3 +7,19 @@
       %a.icon-link{ target: "_blank", href: "http://500px.com<%= photo.data.photo.url %>".html_safe}
   .title <%= photo.data.photo.name %>
   .map_location <%= photo.data.first.img %>
+.location_body
+  .country_city
+    %img{src: "/assets/images/flags/flat/24/<%= data.country %>.png".html_safe}
+    %a.popup.location_name{target: "_blank", href:"https://www.google.co.uk/maps/place/<%=data.city%>".html_safe}
+      %b <%=data.city%>
+      , <%=data.countryName%>
+    %ul.location_info.pure-g
+      %li.pure-u-1-3
+        %b.pure-u-1 Provider
+        %span.pure-u-1
+          %a{href: "<%=data.providerLink%>".html_safe, target: "_blank"} <%=data.provider%>
+      %li.pure-u-1-3
+        %b.pure-u-1 Type
+        %span.pure-u-1
+          <%= data.budgetVps ? 'Budget VPS' : 'Cloud' %>
+      <%= data.ssdDisks ? '<li class="pure-u-1-3"><b class="pure-u-1">SSD Disks</b><span class="pure-u-1">Yes</span></li>' : "" %>

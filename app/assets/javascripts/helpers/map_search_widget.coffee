@@ -18,29 +18,38 @@ class helpers.MapSearchWidget
     
   attachMapToModelChange: ->
     @ctrl.$render = =>
-      @map.removeLayer(@scope.clusters) if @scope.clusters
-      geoJson = new helpers.GeoJsonBuilder(@ctrl.$viewValue).generate()
-      geoJsonLayer = L.geoJson geoJson,
-        onEachFeature: (feature, layer) =>
-          #rect    = generateRect d.latitude, d.longitude
-          
-          
-          photoBuilder = new helpers.PhotoBuilder(feature.properties, layer)
-          photoBuilder.fetchPhoto().then (photo) =>
-            #console.log @popup({photo: photo})
-            data   = photo.marker.feature.properties
-            newContent = @popup({photo: photo})
-            photo.marker.bindPopup(newContent)
-
-          layer.setIcon(L.icon(feature.properties.icon))
-          layer.bindPopup('')
-          layer.on 'click', (e) ->
-            marker  =   e.target
-            icon    =   marker.options.icon.options
-            data    =   marker?.feature?.properties
-            
-      @scope.clusters = new L.MarkerClusterGroup
-        maxClusterRadius: 20
-        animateAddingMarkers: true
+      @removeExistingMarkers()
+      geoJsonLayer = @prepareGeoJsonLayer( @buildGeoJsonData() )
+      @scope.clusters = @defineClusterGroup()
       @scope.clusters.addLayer(geoJsonLayer)
       @map.addLayer(@scope.clusters)
+
+  removeExistingMarkers: ->
+    @map.removeLayer(@scope.clusters) if @scope.clusters
+    
+  buildGeoJsonData: ->
+    new helpers.GeoJsonBuilder(@ctrl.$viewValue).generate()
+    
+  defineClusterGroup: ->
+    new L.MarkerClusterGroup
+      maxClusterRadius: 20
+      animateAddingMarkers: true
+      
+  prepareGeoJsonLayer: (geoJson) ->
+    L.geoJson geoJson,
+      onEachFeature: (feature, layer) =>
+        #rect    = generateRect d.latitude, d.longitude
+  
+        photoBuilder = new helpers.PhotoBuilder(feature.properties, layer)
+        photoBuilder.fetchPhoto().then (photo) =>
+          #console.log @popup({photo: photo})
+          data   = photo.marker.feature.properties
+          newContent = @popup({photo: photo, data: data})
+          photo.marker.bindPopup(newContent)
+
+        layer.setIcon(L.icon(feature.properties.icon))
+        layer.bindPopup('')
+        layer.on 'click', (e) ->
+          marker  =   e.target
+          icon    =   marker.options.icon.options
+          data    =   marker?.feature?.properties
