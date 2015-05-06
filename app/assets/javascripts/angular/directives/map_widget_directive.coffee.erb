@@ -1,4 +1,4 @@
-@app.directive "mapWidget", ['ServerSearchState', '$filter', '$templateCache', (State, $filter, $templateCache) ->
+@app.directive "mapWidget", ['ServerSearchState', '$templateCache', (State, $templateCache) ->
   scope: true
   require: 'ngModel'
   link: ($scope, $element, $attr, ngModelCtrl) ->
@@ -8,6 +8,6 @@
       mapboxPublicToken: mapboxPublicToken
       fiveHundredPxKey: fiveHundredPxKey
       
-    new helpers.MapSearchWidget($scope, $element, ngModelCtrl, State, $filter, keys, popup)
+    new helpers.MapSearchWidget($scope, $element, ngModelCtrl, State, keys, popup)
   
 ]

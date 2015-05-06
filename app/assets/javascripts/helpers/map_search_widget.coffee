@@ -1,5 +1,6 @@
 class helpers.MapSearchWidget
-  constructor: (@scope, @mapElem, @ctrl, @state, @filter, @keys, @popup) ->
+  constructor: (@scope, @mapElem, @ctrl, @state, @keys, @popup) ->
+    @getTopPixel = new helpers.LocationTopPixel(@state)
     @initialize500px()
     @initializeMap()
     @attachMapToModelChange()
@@ -11,7 +12,7 @@ class helpers.MapSearchWidget
   initializeMap: ->
     @map = L.mapbox.map @mapElem[0], @keys.mapboxKey,
       accessToken: @keys.mapboxPublicToken,
-      minZoom: 1,
+      minZoom: 2,
       maxZoom: 8
       closePopupOnClick: false
     @map.setView [40.0, -20.0], 2
@@ -20,9 +21,24 @@ class helpers.MapSearchWidget
     @ctrl.$render = =>
       @removeExistingMarkers()
       geoJsonLayer = @prepareGeoJsonLayer( @buildGeoJsonData() )
-      @scope.clusters = @defineClusterGroup()
-      @scope.clusters.addLayer(geoJsonLayer)
-      @map.addLayer(@scope.clusters)
+      @addLayersToMap(geoJsonLayer)
+
+  addLayersToMap: (layer) ->
+    @scope.clusters = @defineClusterGroup()
+    @scope.clusters.addLayer(layer)
+    @map.addLayer(@scope.clusters)
+
+  defineClusterGroup: ->
+    new L.MarkerClusterGroup
+      maxClusterRadius: 20
+      animateAddingMarkers: true
+
+  prepareGeoJsonLayer: (geoJson) ->
+    L.geoJson geoJson,
+      onEachFeature: (feature, layer) =>
+        @attachPhotoToPopup(feature.properties, layer)
+        @attachClickHandler(layer)
+        layer.setIcon(L.icon(feature.properties.icon))
 
   removeExistingMarkers: ->
     @map.removeLayer(@scope.clusters) if @scope.clusters
@@ -30,26 +46,27 @@ class helpers.MapSearchWidget
   buildGeoJsonData: ->
     new helpers.GeoJsonBuilder(@ctrl.$viewValue).generate()
     
-  defineClusterGroup: ->
-    new L.MarkerClusterGroup
-      maxClusterRadius: 20
-      animateAddingMarkers: true
-      
-  prepareGeoJsonLayer: (geoJson) ->
-    L.geoJson geoJson,
-      onEachFeature: (feature, layer) =>
-        #rect    = generateRect d.latitude, d.longitude
+  attachPhotoToPopup: (properties, layer) ->
+    photoBuilder = new helpers.PhotoBuilder(properties, layer)
+    photoBuilder.fetchPhoto().then (photo) =>
+      data   = photo.marker.feature.properties
+      newContent = @popup({photo: photo, data: data})
+      photo.marker.bindPopup(newContent)
   
-        photoBuilder = new helpers.PhotoBuilder(feature.properties, layer)
-        photoBuilder.fetchPhoto().then (photo) =>
-          #console.log @popup({photo: photo})
-          data   = photo.marker.feature.properties
-          newContent = @popup({photo: photo, data: data})
-          photo.marker.bindPopup(newContent)
+  attachClickHandler: (marker) ->
+    marker.on 'click', (e) =>
+      marker  =   e.target
+      icon    =   marker.options.icon.options
+      data    =   marker?.feature?.properties
+      $('.results-with-map').animate
+        scrollTop: @getTopPixel.forLocation(data.id)
+      , 1000
+      
+  toggleMarkerPin: (icon, marker) ->
+    if icon.iconUrl is inactive_pin
+      return marker.setIcon(L.icon(active_icon))
 
-        layer.setIcon(L.icon(feature.properties.icon))
-        layer.bindPopup('')
-        layer.on 'click', (e) ->
-          marker  =   e.target
-          icon    =   marker.options.icon.options
-          data    =   marker?.feature?.properties
+    else if icon.iconUrl is active_pin
+      return marker.setIcon(L.icon(default_icon))
+
+  

@@ -572,7 +572,7 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    underscore-rails (1.6.0)
+    underscore-rails (1.8.2)
     unicode_utils (1.4.0)
     vcr (2.9.3)
     warden (1.2.3)
@@ -684,7 +684,7 @@ DEPENDENCIES
   turbolinks
   turnout
   uglifier (~> 2.5.0)
-  underscore-rails (~> 1.6.0)
+  underscore-rails (~> 1.8.2)
   vcr
   webmock
   whenever

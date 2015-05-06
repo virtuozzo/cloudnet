@@ -11,7 +11,7 @@
   .pure-u-1-5
     .provider
       %span.font-11 PROVIDER:
-      %span.provider-name {{location.provider}}
+      %span.provider-name{title: "{{location.provider}}"} {{location.provider | limitTo:13}}
 .pure-g
   .pure-u-1-5
     .uptime-chart
