@@ -13,7 +13,7 @@ You will find this repository useful if you have your own installation of OnApp 
 The recommended installation method is with [Docker](http://www.docker.com). Although traditional
 methods should also work, see `Dockerfile` and this README as a guide.
 
-**Dependencies**   
+**Dependencies**
 Cloud.net has various dependencies;
   * [OnApp](http://onapp.com/platform/pricing-packages/): cloud provision
   * [Postgres](https://wiki.postgresql.org/wiki/Detailed_installation_guides): main database
@@ -30,13 +30,13 @@ Cloud.net has various dependencies;
 
 You will need to either install or register API keys for all these dependencies.
 
-**Building/retrieving the Cloud.net Docker image**    
+**Building/retrieving the Cloud.net Docker image**
 You can either pull the latest image from the Docker registry with `docker pull Onapp/cloudnet`
 
 Or build the image yourself. First make sure you have the repo with
 `git clone https://github.com/OnApp/cloudnet` then run `docker build -t cloudnet .`
 
-**Initial config**    
+**Initial config**
 Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
 
 Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
@@ -46,15 +46,15 @@ That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
 
 Then create the database structure with `docker run --env-file=.env --rm cloudnet rake db:schema:load`.
 
-And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will 
-add the available providers from your OnApp installation and an initial admin user with 
+And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will
+add the available providers from your OnApp installation and an initial admin user with
 email: 'admin@cloud.net' and password: 'adminpassword'.
 
 You will then need to change the admin password and fill out the extra details for the providers
 that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
 You can edit these details through the admin interface at `/admin/locations`.
 
-**Running the Docker containers**    
+**Running the Docker containers**
 You will need at least 2 containers:
 
   * Web container:
@@ -62,7 +62,7 @@ You will need at least 2 containers:
 docker run \
   --env-file=.env \
   -p 443:3443 \
-  -v /home/tombh/Workspace/peas/contrib/ssl-keys:/mnt/certs \
+  -v /local/path/to/ssl-keys:/mnt/certs \
   --restart=always \
   --name cloudnet-web \
   --detach \
