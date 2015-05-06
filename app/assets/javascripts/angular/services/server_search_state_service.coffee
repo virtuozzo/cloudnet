@@ -10,6 +10,7 @@
       @cloudVpsFilter = {}
       @locations = []
       @filteredLocationsArray = []
+      @mapVisible = true
       @counts = 
         cpu:  @initialValue('cpu')
         mem:  @initialValue('mem')

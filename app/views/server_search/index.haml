@@ -19,12 +19,12 @@
             %label.btn.btn-default.active{:"ng-click" => "ctrl.state.sortBy = {field: 'price', rev: false}"}
               %input{type:"radio", name:"sort", id:"sort_price", autocomplete:"off"} Price  
           .map-controls.pull-right
-            %button.btn.btn-default.btn-sm.show-map{"ng-click" => "ctrl.showMap()"} show
-            %button.btn.btn-default.btn-sm.hide-map{"ng-click" => "ctrl.hideMap()"} hide
+            %button.btn.btn-default.btn-sm.show-map{"ng-click" => "ctrl.state.mapVisible = true"} show
+            %button.btn.btn-default.btn-sm.hide-map{"ng-click" => "ctrl.state.mapVisible = false"} hide
             
-        %map-widget{:"ng-model" => "ctrl.state.filteredLocationsArray", "ng-show" => "ctrl.mapVisible"}
+        %map-widget{:"ng-model" => "ctrl.state.filteredLocationsArray", "ng-show" => "ctrl.state.mapVisible"}
           
-        .locations-container{"ng-class" => "{'results-with-map': ctrl.mapVisible}"}
+        .locations-container{"ng-class" => "{'results-with-map': ctrl.state.mapVisible}"}
           .location{:"ng-repeat" => "l in ctrl.state.filteredLocationsArray"}
             %location-widget{location: "l", data: {id: "{{l.id}}"}}
             
@@ -37,6 +37,7 @@
   var mapboxKey = "#{KEYS[:mapbox][:token]}";
   var mapboxPublicToken = "#{KEYS[:mapbox][:public_token]}";
   var inactive_pin = "#{asset_path('pins/inactive-pin.png')}";
+  var active_pin = "#{asset_path('pins/active-pin.png')}";
   var fiveHundredPxKey = "#{KEYS[:five_hundred_px][:api_key]}";
   
 %script{type: "text/ng-template", id: "mapPopup.html"}

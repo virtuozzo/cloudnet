@@ -11,7 +11,8 @@ describe ServerSearchController do
   
     context 'when logged in' do
       before(:each) {sign_in_onapp_user}
-      it {is_expected.to redirect_to :root}
+      it { is_expected.to be_success }
+      it {is_expected.to render_template :public}
     end 
   end
 end

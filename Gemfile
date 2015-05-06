@@ -26,7 +26,7 @@ gem 'devise', git: 'https://github.com/plataformatec/devise.git'
 gem 'devise-otp'
 
 gem 'angularjs-rails', '~> 1.3.15'
-gem 'underscore-rails', '~> 1.6.0'
+gem 'underscore-rails', '~> 1.8.2'
 
 gem 'sidekiq', '~> 3.2'
 gem 'sinatra', '>= 1.4.5', require: false

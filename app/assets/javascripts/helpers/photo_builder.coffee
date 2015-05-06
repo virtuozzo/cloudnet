@@ -16,7 +16,7 @@ class helpers.PhotoBuilder
     deferred = Q.defer()
     _500px.api "/photos/#{@grabPhotoId()}", (response) =>
       if response.err?
-        console.log 'error'
+        console.log '!!!! ERROR !!!!'
         deferred.reject(response.err)
       deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo), marker: @marker)
     return deferred.promise

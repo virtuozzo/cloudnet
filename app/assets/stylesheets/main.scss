@@ -31,16 +31,19 @@
 .leaflet-popup-close-button {
   z-index:    9999;
   opacity:    1;
-  top: 1px;
+  //top: 1px;
   right: 1px;
+  width: 26px;
+  height: 26px;
   background-color:      white;
+  background-position: 0 -52px;
   @include border-radius(0 3px 0 0);
 }
 .leaflet-popup-content {
   @include border-radius(3px);
   background: white;
   width: 100% !important;
-  padding: 0;
+  padding: 0 !important;
 
   .location_info {
     padding: 0;

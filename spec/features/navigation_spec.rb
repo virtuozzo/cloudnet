@@ -27,13 +27,13 @@ feature 'Navigation Bar' do
     scenario 'nav should have signed in user nav links' do
       expect(nav).to have_link 'Dashboard', href: dashboard_index_path
       expect(nav).to have_link 'Servers', href: servers_path
-      # expect(nav).to have_link 'Billing', :href => servers_path
+      expect(nav).to have_link 'Billing', href: billing_index_path
       expect(nav).to have_link 'DNS', href: dns_zones_path
       expect(nav).to have_link 'Support', href: tickets_path
     end
 
     scenario 'nav should not have an admin link' do
-      expect(nav).to_not have_link 'Admin'
+      expect(page).to_not have_link 'Admin'
     end
 
     scenario "nav should tell me i'm signed in as" do
@@ -44,6 +44,7 @@ feature 'Navigation Bar' do
       expect(page).to have_link 'Manage Account', href: edit_user_registration_path
       expect(page).to have_link 'Sign out', href: destroy_user_session_path
     end
+    
 
     feature 'and is an admin' do
       before (:each) do
@@ -53,7 +54,7 @@ feature 'Navigation Bar' do
       end
 
       scenario 'nav should have an admin link' do
-        expect(nav).to have_link 'Admin'
+        expect(page).to have_link 'Admin', href: admin_root_path
       end
     end
   end
