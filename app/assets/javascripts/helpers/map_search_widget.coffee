@@ -14,7 +14,7 @@ class helpers.MapSearchWidget
       accessToken: @keys.mapboxPublicToken,
       minZoom: 2,
       maxZoom: 8
-      closePopupOnClick: false
+      closePopupOnClick: true
     @map.setView [40.0, -20.0], 2
     
   attachMapToModelChange: ->
