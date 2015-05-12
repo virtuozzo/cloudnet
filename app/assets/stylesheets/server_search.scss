@@ -111,8 +111,14 @@ $server-search-text-gray: #5F8093;
     .message{
       height: 0;
       opacity: 0;
-      padding-top: 5px;
+      
       font-size: 0.95em;
+      .info {
+        border-left: 1px solid #E0E0E0; 
+        border-right: 1px solid #E0E0E0;
+        padding: 5px 10px;
+      }
+      .location {margin: 0;}
       &.open {
         height: 150px;
         opacity: 1;
@@ -167,8 +173,13 @@ $server-search-text-gray: #5F8093;
       .provider{
         margin: 0 0 5px -12px;
       }
+      .labelg.uptime{
+        margin: 0;
+        text-align: center;
+      }
       .labelg {
         margin: 5px 0 0 17px;
+        a {text-decoration: none;}
         @media (max-width: $container-med) {
           margin: 5px 0 0 12px;
         }
@@ -235,7 +246,7 @@ $server-search-text-gray: #5F8093;
         }
       }
       .uptime-chart{
-        height: 105px;
+        height: 100px;
         fill: #F5D670;
         
         text{
@@ -248,6 +259,7 @@ $server-search-text-gray: #5F8093;
         }
       }
       .cloud-index-graph{
+        height: 90px;
         position: relative;
         margin: 5px 0 2px 0;
         .border{

@@ -15,10 +15,14 @@
 .pure-g
   .pure-u-1-5
     .uptime-chart
+    .labelg.uptime 30 days average
   .pure-u-1-5
     .cloud-index-graph
       .border
-    .labelg cloud index {{location.cloudIndex}}
+    .labelg 
+      cloud index
+      %a{href: "http://feedback.cloud.net/knowledge-base/article/how-is-the-cloud-index-calculated-",
+          target: "_blank" } {{location.cloudIndex}}
   .pure-u-2-5
     .parameters{:"ng-hide" => "location.budgetVps"}
       %table{class: "table"}

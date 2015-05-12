@@ -27,15 +27,14 @@
       
     filterCurrency = (value, precision=6) ->
       $filter('currency')(value, '$', precision)
-      
-    scope.$watch "location", ->
-      scope.prepareGraphs()
-      
+
     scope.prepareGraphs = ->
       uptime = State.currentUptime(scope.location)
       indices = scope.location?.indices
+      console.log 'ooo'
       new helpers.CloudIndexChart($(el).find(".cloud-index-graph")[0], indices).draw() if indices
       new helpers.UptimeChart($(el).find(".uptime-chart")[0], uptime).draw() if uptime
       
-    #scope.prepareGraphs()
+    scope.$watch "location", ->
+      scope.prepareGraphs()
 ]
