@@ -67,6 +67,7 @@ class helpers.UptimeChart
     parseInt(@data * 1000, 10) / 1000
     
   initialize: ->
+    d3.select(@elem).selectAll("*").remove()
     @chart = d3.select(@elem).append("svg")
       .attr("viewBox", "0 0 10 10")
       .append("path")

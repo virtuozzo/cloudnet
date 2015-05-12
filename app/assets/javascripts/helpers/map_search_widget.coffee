@@ -1,5 +1,5 @@
 class helpers.MapSearchWidget
-  constructor: (@scope, @mapElem, @ctrl, @state, @keys, @popup) ->
+  constructor: (@scope, @mapElem, @ctrl, @state, @keys, @popup, @pins) ->
     @getTopPixel = new helpers.LocationTopPixel(@state)
     @initialize500px()
     @initializeMap()
@@ -44,7 +44,7 @@ class helpers.MapSearchWidget
     @map.removeLayer(@scope.clusters) if @scope.clusters
     
   buildGeoJsonData: ->
-    new helpers.GeoJsonBuilder(@ctrl.$viewValue).generate()
+    new helpers.GeoJsonBuilder(@ctrl.$viewValue, @pins.inactivePin).generate()
     
   attachPhotoToPopup: (properties, layer) ->
     photoBuilder = new helpers.PhotoBuilder(properties, layer)
@@ -58,10 +58,12 @@ class helpers.MapSearchWidget
       marker  =   e.target
       icon    =   marker.options.icon.options
       data    =   marker?.feature?.properties
-      $('.results-with-map').animate
-        scrollTop: @getTopPixel.forLocation(data.id)
-      , 1000
-      
+      el = $('map-widget .message')
+      el.addClass('open') 
+      el.find('location-widget').addClass('show')
+      @scope.$apply(
+        @state.mapActiveLocation = _(@state.filteredLocationsArray).find (loc) -> loc.id == data.id
+      )
   toggleMarkerPin: (icon, marker) ->
     if icon.iconUrl is inactive_pin
       return marker.setIcon(L.icon(active_icon))

@@ -57,6 +57,7 @@ class helpers.CloudIndexChart
     .attr("transform", "translate(15, 0)").call(@yAxis)
     
   initialize: ->
+    d3.select(@elem).selectAll("*").remove()
     @chart = d3.select(@elem).append("svg")
     @yScale = d3.scale.linear().range([60,5]).domain([0,100]);
     @xScale = d3.scale.linear().range([20,100]).domain([1, @data.length])

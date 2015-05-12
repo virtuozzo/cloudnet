@@ -1,5 +1,5 @@
 class helpers.GeoJsonBuilder
-  constructor: (locations) ->
+  constructor: (locations, @inactivePin) ->
     @locations = locations
     
   generate: ->
@@ -18,7 +18,7 @@ class helpers.GeoJsonBuilder
       icon: @defaultIcon()
       
   defaultIcon: ->
-    iconUrl: inactive_pin
+    iconUrl: @inactivePin
     iconSize: ['26', '32']
     iconAnchor: ['13', '32']
     popupAnchor: [-2, -35]

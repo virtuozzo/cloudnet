@@ -374,7 +374,7 @@ $ ->
     return
 
   setupMapBeta = ->
-    geojson = new helpers.GeoJsonBuilder(locations).generate()
+    geojson = new helpers.GeoJsonBuilder(locations, inactive_pin).generate()
     map = L.mapbox.map 'jg-map', mapbox_key,
       accessToken: mapboxPublicToken,
       minZoom: 2,

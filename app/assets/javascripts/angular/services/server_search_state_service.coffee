@@ -36,8 +36,8 @@
       location.cloudIndex >= @counts.index && @currentUptime(location) >= @counts.uptime
 
     currentUptime: (location) ->
-      data = location.indices
-      if data.length > 0
+      data = location?.indices
+      if data?.length > 0
         data[data.length-1].indexUptime 
       else
         0

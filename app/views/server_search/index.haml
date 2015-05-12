@@ -24,9 +24,9 @@
             
         %map-widget{:"ng-model" => "ctrl.state.filteredLocationsArray", "ng-show" => "ctrl.state.mapVisible"}
           
-        .locations-container{"ng-class" => "{'results-with-map': ctrl.state.mapVisible}"}
+        .locations-container
           .location{:"ng-repeat" => "l in ctrl.state.filteredLocationsArray"}
-            %location-widget{location: "l", data: {id: "{{l.id}}"}}
+            %location-widget{location: "l"}
             
           .vps-not-valid{:"ng-show" => "ctrl.showVpsLocations()"}
             %hr

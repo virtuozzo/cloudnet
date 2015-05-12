@@ -1,0 +1,13 @@
+!!!
+%html{"ng-app" => "CloudNet"}
+  %head
+    %title Jasmine Specs
+    %script{type: "text/javascript", src: "https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js"}
+    %link{href: "https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css", rel: "stylesheet"}
+    %script{type: "text/javascript", src: "https://js.stripe.com/v2/"}
+    %script{id:'notification_template', type: 'text/ractive'}= (render partial: "layouts/notifications.js.ractive").html_safe
+    = stylesheet_link_tag *jasmine_css_files
+    = javascript_include_tag *jasmine_js_files
+  %body
+    #jasmine_content
+    = yield
