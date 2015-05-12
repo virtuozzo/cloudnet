@@ -10,6 +10,7 @@ inactive_pin  = "<%= asset_path('pins/inactive-pin.png') %>"
 active_pin    = "<%= asset_path('pins/active-pin.png') %>"
 budget_pin    = "<%= asset_path('pins/budget-pin.png') %>"
 mapbox_key    = "<%= KEYS[:mapbox][:token] %>"
+mapboxPublicToken = "<%= KEYS[:mapbox][:public_token] %>"
 movie_path    = "<%= asset_path('ZeroClipboard.swf') %>"
 @helpers ?= {}
 @models ?= {}
@@ -92,6 +93,7 @@ ZeroClipboard.config
     setupMap = (location) ->
       LatLng = [parseFloat(location.latitude), parseFloat(location.longitude)]
       map = L.mapbox.map('jg-map', mapbox_key,
+          accessToken: mapboxPublicToken,
           zoomControl: false
           dragging:    false
           doubleClickZoom: false
