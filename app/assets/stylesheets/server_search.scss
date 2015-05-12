@@ -113,12 +113,10 @@ $server-search-text-gray: #5F8093;
       opacity: 0;
       
       font-size: 0.95em;
-      .info {
-        border-left: 1px solid #E0E0E0; 
-        border-right: 1px solid #E0E0E0;
-        padding: 5px 10px;
+      .location {
+        margin: 0 0 0 1px;
+        border-top: none;
       }
-      .location {margin: 0;}
       &.open {
         height: 150px;
         opacity: 1;

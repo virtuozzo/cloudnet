@@ -19,8 +19,8 @@
             %label.btn.btn-default.active{:"ng-click" => "ctrl.state.sortBy = {field: 'price', rev: false}"}
               %input{type:"radio", name:"sort", id:"sort_price", autocomplete:"off"} Price  
           .map-controls.pull-right
-            %button.btn.btn-default.btn-sm.show-map{"ng-click" => "ctrl.state.mapVisible = true"} show
-            %button.btn.btn-default.btn-sm.hide-map{"ng-click" => "ctrl.state.mapVisible = false"} hide
+            %label.btn.btn-default{"ng-click" => "ctrl.state.mapVisible = true"} show map
+            %label.btn.btn-default{"ng-click" => "ctrl.state.mapVisible = false"} hide map
             
         %map-widget{:"ng-model" => "ctrl.state.filteredLocationsArray", "ng-show" => "ctrl.state.mapVisible"}
           

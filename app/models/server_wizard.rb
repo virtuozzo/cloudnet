@@ -34,7 +34,7 @@ class ServerWizard
   validates :payment_type, inclusion: { in: %w(prepaid payg) }
 
   def initialize(attributes = {})
-    @submission_path = Rails.application.routes.url_helpers.servers_create_path
+    @submission_path = Rails.application.routes.url_helpers.search_path
     @build_errors = []
     unless attributes.nil?
       attributes.each do |name, value|
