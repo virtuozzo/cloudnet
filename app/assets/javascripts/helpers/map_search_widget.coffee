@@ -1,6 +1,5 @@
 class helpers.MapSearchWidget
   constructor: (@scope, @mapElem, @ctrl, @state, @keys, @popup, @pins) ->
-    @getTopPixel = new helpers.LocationTopPixel(@state)
     @initialize500px()
     @initializeMap()
     @attachMapToModelChange()

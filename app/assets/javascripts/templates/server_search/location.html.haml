@@ -24,23 +24,23 @@
       %a{href: "http://feedback.cloud.net/knowledge-base/article/how-is-the-cloud-index-calculated-",
           target: "_blank" } {{location.cloudIndex}}
   .pure-u-2-5
-    .parameters{:"ng-hide" => "location.budgetVps"}
+    .parameters
       %table{class: "table"}
         %tr
           %td.pictogram
             = image_tag('mem-pic.png')
           %td.descr.font-11 MEMORY (MB) 
-          %td {{memoryPerHour()}} /hour
+          %td {{memoryPerHour()}}
         %tr
           %td.pictogram
             = image_tag('disk-pic.png')
           %td.descr.font-11 DISK (GB)
-          %td {{diskPerHour()}} /hour
+          %td {{diskPerHour()}}
         %tr
           %td.pictogram
             = image_tag('cpu-pic.png')
           %td.descr.font-11 CPU (Cores)
-          %td {{cpuPerHour()}} /hour
+          %td {{cpuPerHour()}}
   .pure-u-1-5
     .action{:"ng-hide" => "location.budgetVps && noPackageActive()"}
       .price-box

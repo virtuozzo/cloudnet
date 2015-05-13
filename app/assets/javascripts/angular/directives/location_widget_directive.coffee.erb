@@ -14,16 +14,20 @@
       filterCurrency(scope.location?.pricePerMonth(State.counts), 2)
       
     scope.memoryPerHour = ->
-      filterCurrency(scope.location?.fPriceMem() / 100000)
+      pricingMessage(scope.location?.fPriceMem())
 
     scope.diskPerHour = ->
-      filterCurrency(scope.location?.fPriceDisk() / 100000)
+      pricingMessage(scope.location?.fPriceDisk())
       
     scope.cpuPerHour = ->
-      filterCurrency(scope.location?.fPriceCpu() / 100000)
+      pricingMessage(scope.location?.fPriceCpu())
       
     scope.provision = ->
       document.location = "/servers/create?#{$.param(State.counts)}&id=#{scope.location.id}"
+      
+    pricingMessage = (value) ->
+      return "Package only" if scope.location?.budgetVps
+      filterCurrency(value / 100000) + " /hour"
       
     filterCurrency = (value, precision=6) ->
       $filter('currency')(value, '$', precision)
