@@ -51,7 +51,7 @@ every 1.day, at: '1:00 am' do
 end
 
 every 1.day, at: '1:00 am' do
-  runner 'NegativeBalanceCheckerTask.perform_in(4.minutes, :daily)'
+  runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
 every '0 1 1 * *' do
