@@ -24,6 +24,8 @@ class helpers.CloudIndexChart
       .attr("cx", (d) => @xScale(1))
       .attr("cy", (d) => @yScale(d.cloudIndex))
       .attr("r", 2)
+      .on('mouseover', @tip.show)
+      .on('mouseout', @tip.hide)
 
     elem = @chart.selectAll("circle")
     last = elem.size()
@@ -70,6 +72,6 @@ class helpers.CloudIndexChart
   prepareTooltips: ->
     @tip = d3.tip()
       .attr('class', 'd3-tip')
-      .html @popup
-      .offset [0,10]
+      .html (d) => @popup(data: d)
+      .offset [0,9]
       .direction 'e'
