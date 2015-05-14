@@ -4,8 +4,8 @@ class NegativeBalanceCheckerTask
   sidekiq_options unique: true
 
   def perform
-    User.all.each do |user|
-      if user.account.remaining_balance > 0
+    User.where(suspended: false).each do |user|
+      if user.account.remaining_balance > 100_000
         NegativeBalanceMailer.warning_email(user).deliver_now
       end
     end
