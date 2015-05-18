@@ -26,7 +26,7 @@ generate_card_html = ->
               <div class="pure-u-1-6">
                 <div class="cardtype icon-#{card.card_type.replace(' ', '-')}"></div>
               </div>
-              <div class="pure-u-2-3">
+              <div class="pure-u-2-3 card-last4">
                 **** **** **** #{card.last4}
                 &nbsp;
                 <i class="jg-icon icon-key #{if card.requires_validation then "" else "hide"}" 
@@ -37,6 +37,7 @@ generate_card_html = ->
             </div>
           </td>
           <td>#{card.expiry_month} / #{card.expiry_year}</td>
+          <td><a href="javascript:;" class="remove-billing-card jg-icon icon-close"></td>
         </tr>
       """
 
@@ -49,6 +50,21 @@ $ ->
   renderCards = ->
     $(card_table).html(generate_card_html())
     $(card_table).find('i').tooltip()
+    $('.remove-billing-card').bind('click', ->
+      card_row = $(this).parents('tr')
+      card_id = card_row.attr('data-id')
+      last4 = $.trim card_row.find('.card-last4').text()
+      if confirm("Are you sure you want to delete card '#{last4}'?")
+        $.post(
+          '/billing/remove_card',
+          {card_id: card_id},
+          (result) ->
+            if result
+              card_row.html('<td><strong>Card removed</strong></td><td></td><td></td>')
+            else
+              alert 'There was a problem removing your card'
+        )
+    )
 
   $(card_form).on 'add_card', (e) ->
     renderCards()
