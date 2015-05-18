@@ -50,7 +50,7 @@ every 1.day, at: '1:00 am' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
 end
 
-every 1.day, at: '1:00 am' do
+every 1.day, at: '2:00 am' do
   runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
