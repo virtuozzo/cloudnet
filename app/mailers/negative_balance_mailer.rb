@@ -9,7 +9,7 @@ class NegativeBalanceMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: @user[:email],
-      bcc: ENV['MAILER_FINANCE_RECIPIENTS'],
+      bcc: ENV['MAILER_ENQUIRY_RECIPIENTS'],
       subject: 'Cloud.net: negative balance warning'
     )
   end

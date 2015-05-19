@@ -17,7 +17,7 @@ describe 'Negative balance mailer', type: :mailer do
     warning_emails = deliveries.select { |m| m.subject[/negative balance warning/] }
     expect(warning_emails.length).to eq 1
     email = warning_emails.first
-    expect(email.bcc).to eq ENV['MAILER_FINANCE_RECIPIENTS'].split(', ')
+    expect(email.bcc).to eq ENV['MAILER_ENQUIRY_RECIPIENTS'].split(', ')
     negative_balance = Regexp.escape Invoice.pretty_total user.account.remaining_balance
     expect(email.body.to_s).to match(/account balance is currently negative by #{negative_balance}/)
   end
