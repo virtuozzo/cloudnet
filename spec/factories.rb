@@ -30,6 +30,11 @@ FactoryGirl.define do
     gateway_id 'cn_abc123456'
   end
 
+  factory :region do
+    name 'Europe'
+    description 'GB FR PO ES'
+  end
+  
   # This isn't a real location. But hv_group_id is very likely to be, if Onapp is properly set up
   factory :location do
     latitude '-51.43423423'
@@ -37,6 +42,7 @@ FactoryGirl.define do
     provider 'Dediserve'
     country 'GB'
     city 'London'
+    region
     hv_group_id '30'
     hidden false
     photo_ids '123456,789012'

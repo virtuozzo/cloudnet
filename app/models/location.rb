@@ -5,6 +5,7 @@ class Location < ActiveRecord::Base
   has_many :servers
   has_many :packages
   has_many :indices, dependent: :destroy
+  belongs_to :region
 
   acts_as_paranoid
 

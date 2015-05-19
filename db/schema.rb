@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331122030) do
+ActiveRecord::Schema.define(version: 20150519104131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -248,10 +248,12 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.integer  "max_index_bandwidth",             default: 0
     t.float    "max_index_uptime",                default: 0.0
     t.datetime "deleted_at"
+    t.integer  "region_id"
   end
 
   add_index "locations", ["country"], name: "index_locations_on_country", using: :btree
   add_index "locations", ["hv_group_id"], name: "index_locations_on_hv_group_id", using: :btree
+  add_index "locations", ["region_id"], name: "index_locations_on_region_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
     t.integer  "location_id"
@@ -278,6 +280,13 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.datetime "updated_at"
     t.string   "pay_source",      limit: 255
     t.datetime "deleted_at"
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "server_backups", force: :cascade do |t|
@@ -508,4 +517,5 @@ ActiveRecord::Schema.define(version: 20150331122030) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "indices", "locations"
+  add_foreign_key "locations", "regions"
 end
