@@ -33,7 +33,7 @@ describe Location do
     location.city = ''
     expect(location).not_to be_valid
   end
-
+  
   it 'should be invalid without a hypervisor group id' do
     location.hv_group_id = nil
     expect(location).not_to be_valid

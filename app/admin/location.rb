@@ -4,7 +4,7 @@ ActiveAdmin.register Location do
   scope :all
   scope("Active", default: true) { |scope| scope.where(hidden: false) }
   
-  permit_params :latitude, :longitude, :provider, :country, :city, :memory, :disk, :cpu,
+  permit_params :latitude, :longitude, :provider, :region_id, :country, :city, :memory, :disk, :cpu,
                 :hidden, :price_memory, :price_disk, :price_cpu, :price_bw, :country_code,
                 :hv_group_id, :provider_link, :network_limit, :photo_ids, :price_ip_address,
                 :budget_vps, :inclusive_bandwidth, :ssd_disks
@@ -31,6 +31,7 @@ ActiveAdmin.register Location do
     semantic_errors *object.errors.keys
 
     inputs 'Location Details' do
+      input :region, include_blank: 'Choose Region...'
       input :country, include_blank: 'Choose Country...', priority_countries: %w(US CA MX GB FR)
       input :city
       input :provider
@@ -98,6 +99,12 @@ ActiveAdmin.register Location do
 
   action_item :edit, only: :show do
     link_to 'Notify Users in Location', notify_users_admin_location_path(location)
+  end
+  
+  controller do
+    def find_resource
+      Location.find_by_id(params[:id])
+    end
   end
 end
 
