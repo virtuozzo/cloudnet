@@ -194,4 +194,10 @@ FactoryGirl.define do
     source_type 'Tester'
     source_id 100
   end
+
+  factory :payment_receipt do
+    net_cost 100_000
+    association :account, factory: :account
+    pay_source :paypal
+  end
 end

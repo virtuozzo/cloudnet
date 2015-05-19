@@ -14,7 +14,7 @@ class ChargeInvoicesTask < BaseTask
       credit_notes = account.credit_notes.with_remaining_cost
       notes_used = CreditNote.charge_account(credit_notes, invoice.remaining_cost)
       account.create_activity :charge_credit_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
-      create_credit_note_charges(account, invoice, notes_used)
+      self.class.create_credit_note_charges(account, invoice, notes_used, @user)
       invoices_to_card_charge << invoice if Invoice.milli_to_cents(invoice.remaining_cost) > 0
     end
 
@@ -42,11 +42,11 @@ class ChargeInvoicesTask < BaseTask
     end
   end
 
-  def create_credit_note_charges(account, invoice, credit_notes)
+  def self.create_credit_note_charges(account, invoice, credit_notes, user)
     credit_notes.each do |k, v|
       source = CreditNote.find(k)
       Charge.create(source: source, invoice: invoice, amount: v)
-      account.create_activity :credit_charge, owner: @user, params: { invoice: invoice.id, amount: v, credit_note: k }
+      account.create_activity :credit_charge, owner: user, params: { invoice: invoice.id, amount: v, credit_note: k }
     end
 
     if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && credit_notes.present?

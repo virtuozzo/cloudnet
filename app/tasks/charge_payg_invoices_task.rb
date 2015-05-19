@@ -8,6 +8,19 @@ class ChargePaygInvoicesTask < BaseTask
   def process
     account = @user.account
 
+    # First try credit notes
+    @invoices.each do |invoice|
+      credit_notes = account.credit_notes.with_remaining_cost
+      notes_used = CreditNote.charge_account(credit_notes, invoice.remaining_cost)
+      account.create_activity :charge_credit_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
+      ChargeInvoicesTask.create_credit_note_charges(account, invoice, notes_used, @user)
+    end
+
+    # We're done here if everything is paid off
+    @invoices.reload
+    return if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
+
+    # Now try any cash that's credited in the user's account
     @invoices.each do |invoice|
       payment_receipts = account.payment_receipts.with_remaining_cost
       notes_used = PaymentReceipt.charge_account(payment_receipts, invoice.remaining_cost)
