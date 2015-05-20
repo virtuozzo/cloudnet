@@ -1,4 +1,4 @@
-@app = angular.module('CloudNet', ['ngResource', 'angularMoment', 'ngRoute', 'ngAnimate'])
+@app = angular.module('CloudNet', ['ngResource', 'angularMoment', 'ngRoute', 'ngAnimate', 'ui.unique'])
 
 @app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locProvider) ->
  # $locProvider.html5Mode(true)
