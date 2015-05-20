@@ -140,6 +140,11 @@ class InvoicePdf < BillingPdf
   end
 
   def invoice_item(item)
+    if item.source_type == 'Server'
+      server = Server.find item.source_id
+      provider = "#{server.location.provider} #{server.location.city}"
+      item.description += " @ #{provider}"
+    end
     desc_items = [[formatted_cell("<b>#{truncate(item.description, length: 60)}</b>")]]
 
     if item.metadata.present?
