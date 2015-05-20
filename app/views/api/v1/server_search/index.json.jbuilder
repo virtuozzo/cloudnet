@@ -5,4 +5,5 @@ json.array! @locations do |loc|
                      :budget_vps, :ssd_disks, :latitude, :longitude, :photo_ids
   json.indices loc.indices, :created_at, :index_uptime, :cloud_index, :index_cpu, 
                             :index_iops, :index_bandwidth
+  json.region loc.region
 end
