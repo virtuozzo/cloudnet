@@ -43,6 +43,9 @@ module ApplicationHelper
 
   def remaining_balance(user)
     balance = pretty_total user.account.remaining_balance
+    # remaining_balance() is confusing, in the codebase negative values mean credit, but for users
+    # we represent negative balances as being in debt.
+    balance.gsub!('-', '')
     remaining_balance_in_credit?(user) ? "+#{balance}" : "-#{balance}"
   end
 
