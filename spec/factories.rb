@@ -37,12 +37,17 @@ FactoryGirl.define do
   
   # This isn't a real location. But hv_group_id is very likely to be, if Onapp is properly set up
   factory :location do
+    transient do
+      region_name 'Europe'
+    end
     latitude '-51.43423423'
     longitude '60.323233423'
     provider 'Dediserve'
     country 'GB'
     city 'London'
-    region
+    region do
+      Region.find_by(name: region_name) || create(:region, name: region_name)
+    end
     hv_group_id '30'
     hidden false
     photo_ids '123456,789012'
