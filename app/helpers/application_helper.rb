@@ -31,7 +31,7 @@ module ApplicationHelper
       render partial: 'shared/menu/public_header'
     end
   end
-  
+
   def gravatar_image(user, size = 32)
     hash = Digest::MD5.hexdigest(user.email.downcase.strip)
     "https://secure.gravatar.com/avatar/#{hash}?s=#{size}&d=retro"
@@ -42,8 +42,12 @@ module ApplicationHelper
   end
 
   def remaining_balance(user)
-    balance = user.account.remaining_balance
-    balance < 0 ? "(#{pretty_total(balance)})" : "#{pretty_total(balance)}"
+    balance = pretty_total user.account.remaining_balance
+    remaining_balance_in_credit?(user) ? "+#{balance}" : "-#{balance}"
+  end
+
+  def remaining_balance_in_credit?(user)
+    user.account.remaining_balance <= 0
   end
 
   def payg_balance(user)

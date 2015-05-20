@@ -5,8 +5,8 @@
   .jg-widget-header.pure-g.clearfix
     %h2.pure-u-1-2.jg-icon.icon-tickets Invoices, Credit Notes & Payment Receipts
     %ul.pure-u-1-2.jg-widget-controls
-      %li.billing-balance
-        Your Balance Due:
+      %li.billing-balance{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }
+        Your Balance:
         %b= remaining_balance(current_user)
 
   .jg-widget-body.pure-u-1
