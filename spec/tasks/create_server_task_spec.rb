@@ -137,6 +137,16 @@ describe CreateServerTask do
     end
   end
 
+  describe 'Destroying Server' do
+    before do
+      task = CreateServerTask.new(@wizard, @user)
+      task.process
+    end
+    it 'should create a credit note and correct card charge amount' do
+      # p Invoice.count
+    end
+  end
+
   describe 'Charging Card' do
     it 'should not do any credit note refunds if charge succeeds' do
       expect(@payments).to receive(:capture_charge)

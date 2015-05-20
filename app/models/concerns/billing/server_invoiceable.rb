@@ -283,15 +283,18 @@ module Billing
     end
 
     def create_credit_note_for_time_remaining
-      item = InvoiceItem.where(source_type: self.class.to_s, source_id: id).order(updated_at: :desc).last
+      existing_invoice_item = InvoiceItem.where(
+        source_type: self.class.to_s,
+        source_id: id
+      ).order(updated_at: :desc).last
 
-      if item.present?
-        credit_note = CreditNote.generate_credit_note([self], user.account, item.invoice)
+      if existing_invoice_item.present?
+        credit_note = CreditNote.generate_credit_note([self], user.account, existing_invoice_item.invoice)
       else
         credit_note = CreditNote.generate_credit_note([self], user.account)
       end
 
-      determine_vat_coupon_status(credit_note, item)
+      determine_vat_coupon_status(credit_note, existing_invoice_item)
       credit_note.save
       user.account.create_activity(
         :create_credit,
