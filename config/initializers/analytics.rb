@@ -6,7 +6,7 @@ class Analytics
       user_id: user.id,
       username: user.email,
       context: { traits: { email: user.email, name: user.full_name } }
-    }
+      } if user
 
     service.track(events.merge(user_traits))
   end
