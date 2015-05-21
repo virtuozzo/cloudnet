@@ -1,8 +1,8 @@
 class helpers.CloudIndexChart
-  constructor: (@elem, @data) ->
+  constructor: (@elem, @data, @popup) ->
     @initialize()
     @appendData()
-    
+
   draw: ->
     @drawChart()
     #@addXaxis()
@@ -24,7 +24,9 @@ class helpers.CloudIndexChart
       .attr("cx", (d) => @xScale(1))
       .attr("cy", (d) => @yScale(d.cloudIndex))
       .attr("r", 2)
-      
+      .on('mouseover', @tip.show)
+      .on('mouseout', @tip.hide)
+
     elem = @chart.selectAll("circle")
     last = elem.size()
     if last > 1
@@ -32,7 +34,8 @@ class helpers.CloudIndexChart
         .attr("cx", (d) => @xScale(last))
         .attr("cy", (d) => @yScale(d.cloudIndex))
         .attr("r", 2)
-      
+        .on('mouseover', @tip.show)
+        .on('mouseout', @tip.hide)
   
   prepareLinePath: ->
     xPos = 0
@@ -58,9 +61,17 @@ class helpers.CloudIndexChart
     
   initialize: ->
     d3.select(@elem).selectAll("*").remove()
-    @chart = d3.select(@elem).append("svg")
+    @prepareTooltips()
+    @chart = d3.select(@elem).append("svg").call(@tip)
     @yScale = d3.scale.linear().range([60,5]).domain([0,100]);
     @xScale = d3.scale.linear().range([20,100]).domain([1, @data.length])
     @xAxis = d3.svg.axis().scale(@xScale).tickValues([])
     @yAxis = d3.svg.axis().scale(@yScale).orient("left").tickValues([0,50,100])
              .innerTickSize([2]).outerTickSize([2]).tickPadding([1])
+             
+  prepareTooltips: ->
+    @tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .html (d) => @popup(data: d)
+      .offset [0,9]
+      .direction 'e'

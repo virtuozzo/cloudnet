@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331122030) do
+ActiveRecord::Schema.define(version: 20150519104131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.text     "billing_address"
     t.integer  "coupon_id"
     t.string   "invoice_type",        limit: 255
-    t.boolean  "transactions_capped",             default: true
+    t.boolean  "transactions_capped"
   end
 
   add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
@@ -243,15 +243,17 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.boolean  "budget_vps",                      default: false
     t.integer  "inclusive_bandwidth",             default: 100
     t.boolean  "ssd_disks",                       default: false
+    t.datetime "deleted_at"
     t.integer  "max_index_cpu",                   default: 0
     t.integer  "max_index_iops",                  default: 0
     t.integer  "max_index_bandwidth",             default: 0
     t.float    "max_index_uptime",                default: 0.0
-    t.datetime "deleted_at"
+    t.integer  "region_id"
   end
 
   add_index "locations", ["country"], name: "index_locations_on_country", using: :btree
   add_index "locations", ["hv_group_id"], name: "index_locations_on_hv_group_id", using: :btree
+  add_index "locations", ["region_id"], name: "index_locations_on_region_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
     t.integer  "location_id"
@@ -278,6 +280,13 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.datetime "updated_at"
     t.string   "pay_source",      limit: 255
     t.datetime "deleted_at"
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "server_backups", force: :cascade do |t|
@@ -407,7 +416,7 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255
     t.string   "identifier",      limit: 255
-    t.integer  "hourly_cost",     limit: 8,   default: 1
+    t.integer  "hourly_cost",                 default: 1
     t.string   "name",            limit: 255
     t.integer  "location_id"
     t.datetime "created_at"
@@ -483,8 +492,8 @@ ActiveRecord::Schema.define(version: 20150331122030) do
     t.integer  "storage_max",                          default: 120
     t.integer  "bandwidth_max",                        default: 1024
     t.datetime "deleted_at"
-    t.integer  "account_id"
     t.boolean  "suspended",                            default: false
+    t.integer  "account_id"
     t.string   "otp_auth_secret",          limit: 255
     t.string   "otp_recovery_secret",      limit: 255
     t.boolean  "otp_enabled",                          default: false,     null: false
@@ -508,4 +517,5 @@ ActiveRecord::Schema.define(version: 20150331122030) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "indices", "locations"
+  add_foreign_key "locations", "regions"
 end

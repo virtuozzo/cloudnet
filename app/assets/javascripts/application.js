@@ -37,6 +37,7 @@
 //= require moment-range
 //= require select2.min
 //= require angular-moment.min
+//= require ui-utils.min
 //= require underscore
 //= require ractive.min
 //= require perfect-scrollbar

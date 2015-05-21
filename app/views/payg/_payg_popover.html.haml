@@ -16,7 +16,7 @@
               available
             %p Please select the amount you wish to top up (minimum is $5 USD)
           .form-group.pure-u-1
-            = select_tag :payg_amount, payg_options
+            = select_tag :payg_amount, payg_options(current_user.account)
       
         .modal-footer
           - if current_user.account.primary_billing_card.present?

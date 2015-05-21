@@ -1,0 +1,8 @@
+@app.directive "regionFilter", ['ServerSearchState', "$filter", (State, $filter) ->
+  restrict: 'E'
+  templateUrl: "<%= asset_path('templates/server_search/regions.html') %>"
+  scope:
+    locations: '='
+  link: ($scope, $el, $attr) ->
+    
+]

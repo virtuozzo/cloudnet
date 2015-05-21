@@ -179,8 +179,28 @@ $colour: #7f8181;
   margin-top: 30px;
   .step {
     border: 1px solid $jg-grey;
+    border-left: transparent;
     padding: 5px;
     text-align: center;
     font-size: $twelve;
+  }
+  .past, .active{
+    background: #8EC449;
+    border-color: #7BB233;
+    color: white;
+    font-weight: bold;
+  }
+  .active{background: #6BA126;}
+
+  .triangle{
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 6px 0 6px 10.4px;
+    border-color: transparent transparent transparent #7BB233;
+    margin-right: -10px;
+    margin-top: -20px;
+    position: relative;
+    &.inactive{border-color: transparent transparent transparent $jg-grey;}
   }
 }

@@ -1,0 +1,16 @@
+.indexTooltip
+  %h2 
+    Cloud Index
+    %br
+    Score:
+  .cloud-index <%= data.cloudIndex %>
+  %h3 Detailed Breakdown:
+  %table
+    %tr
+      %td CPU:
+      %td <%= data.indexCpu %>
+      %td.bandwidth Bandwidth:
+      %td <%= data.indexBandwidth %>
+    %tr
+      %td IOPS:
+      %td <%= data.indexIops %>

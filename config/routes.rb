@@ -61,6 +61,7 @@ CloudNet::Application.routes.draw do
   resources :billing, only: [:index] do
     collection do
       post :validate_card
+      post :remove_card
       post :add_card_token
       post :update_billing
       post :make_primary

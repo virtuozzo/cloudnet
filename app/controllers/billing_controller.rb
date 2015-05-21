@@ -28,6 +28,14 @@ class BillingController < ApplicationController
     end
   end
 
+  def remove_card
+    card = current_user.account.billing_cards.find params[:card_id]
+    BillingCard.find(card).destroy
+    respond_to do |format|
+      format.json { render layout: false, text: true }
+    end
+  end
+
   def credit_note_pdf
     respond_to do |format|
       format.any do
