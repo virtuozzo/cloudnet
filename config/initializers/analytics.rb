@@ -7,7 +7,8 @@ class Analytics
       username: user.email,
       context: { traits: { email: user.email, name: user.full_name } }
       } : {anonymous_id: 'guest'}
-
+      
+    Rails.logger.warn "API-KEY: #{KEYS[:analytics][:token]}"
     service.track(events.merge(user_traits))
   end
 
