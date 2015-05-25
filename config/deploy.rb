@@ -53,7 +53,7 @@ namespace :deploy do
 
   desc "Restart Puma via Puma Jungle"
   task :restart do 
-    invoke 'puma:jungle:restart'
+    invoke 'puma:phased-restart'
   end
 
   desc "Configure and start Monit for Puma and Sidekiq"
