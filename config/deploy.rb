@@ -22,6 +22,7 @@ set :format, :pretty
 # set :pty, true
 
 # Puma related config variables
+set :puma_default_hooks, false
 set :puma_threads, [4, 8]
 set :puma_workers, 4
 set :puma_preload_app, true
@@ -41,13 +42,24 @@ set :whenever_roles, -> { :app }
 
 before 'deploy:check:linked_files', 'config:push' unless ENV['CI']
 before 'deploy:restart', 'puma:config'
-after 'deploy', 'deploy:restart'
 
 namespace :deploy do
 
-  desc "Restart using Puma's Phased Restart"
-  task :restart do
-    'puma:jungle:restart'
+  desc "Run post-deploy actions (restart Puma, enable monit for Puma and Sidekiq)"
+  task :post_deploy do
+    invoke 'deploy:restart'
+    invoke 'deploy:configure_monit'
+  end
+
+  desc "Restart Puma via Puma Jungle"
+  task :restart do 
+    invoke 'puma:jungle:restart'
+  end
+
+  desc "Configure and start Monit for Puma and Sidekiq"
+  task :configure_monit do 
+    invoke 'puma:monit:monitor'
+    invoke 'sidekiq:monit:monitor'
   end
 
   desc 'Seed application data'
@@ -73,6 +85,8 @@ namespace :deploy do
   # end
 end
 
+after 'deploy:check', 'puma:check'
+after 'deploy:finished', 'deploy:post_deploy'
 # after "deploy", "deploy:remove_cached_js"
 
 namespace :maintenance do

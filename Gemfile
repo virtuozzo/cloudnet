@@ -72,7 +72,7 @@ gem 'pry-rails', '0.3.2'
 gem 'capistrano', '~> 3.2.1'
 gem 'capistrano-rails', '~> 1.1.1'
 gem 'capistrano3-puma', '~> 1.0.0'
-gem 'capistrano-sidekiq', '~> 0.3.5'
+gem 'capistrano-sidekiq', '~> 0.5.2'
 gem 'capistrano-upload-config'
 
 # Fixtures

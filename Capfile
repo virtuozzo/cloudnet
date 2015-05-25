@@ -28,6 +28,7 @@ require 'capistrano/puma/workers'
 require 'capistrano/puma/jungle'
 require 'capistrano/puma/monit'
 require 'capistrano/sidekiq'
+require 'capistrano/sidekiq/monit'
 require 'whenever/capistrano'
 require 'capistrano/upload-config'
 
