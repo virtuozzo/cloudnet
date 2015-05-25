@@ -26,10 +26,14 @@ set :puma_threads, [4, 8]
 set :puma_workers, 4
 set :puma_preload_app, true
 set :puma_init_active_record, false
+set :puma_jungle_conf, '/etc/puma.conf'
+set :puma_run_path, '/usr/local/bin/run-puma'
+set :puma_state, "#{shared_path}/tmp/pids/puma.state"
+set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
 
 set :config_files, %w(.env)
 set :linked_files, %w(.env)
-set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
+set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets tmp/puma vendor/bundle public/system)
 
 set :keep_releases, 10
 
@@ -43,7 +47,7 @@ namespace :deploy do
 
   desc "Restart using Puma's Phased Restart"
   task :restart do
-    'puma:phased-restart'
+    'puma:jungle:restart'
   end
 
   desc 'Seed application data'

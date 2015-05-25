@@ -160,7 +160,7 @@ GEM
       sidekiq
     capistrano-upload-config (0.5.0)
       capistrano (>= 3.0)
-    capistrano3-puma (0.6.1)
+    capistrano3-puma (1.0.0)
       capistrano (~> 3.0)
       puma (>= 2.6)
     capybara (2.4.4)
@@ -611,7 +611,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.1.1)
   capistrano-sidekiq (~> 0.3.5)
   capistrano-upload-config
-  capistrano3-puma (~> 0.6.1)
+  capistrano3-puma (~> 1.0.0)
   capybara
   carmen-rails (~> 1.0.1)
   coffee-rails (~> 4.0.0)
