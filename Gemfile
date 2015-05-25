@@ -113,7 +113,7 @@ group :test do
   gem 'mock_redis'
 end
 
-gem 'puma', '~> 2.9.0'
+gem 'puma', '~> 2.11.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
