@@ -8,6 +8,7 @@
       @sortBy = {field: 'price', rev: false}
       @slidersEnabled = true
       @cloudVpsFilter = {}
+      @regionFilter = {}
       @locations = []
       @filteredLocationsArray = []
       @mapVisible = true
@@ -20,7 +21,7 @@
       
     registerWatch: ->
       @scope.$watchCollection => 
-        [@cloudVpsFilter, @packageFilter, @counts, @sortBy, @locations]
+        [@cloudVpsFilter, @packageFilter, @regionFilter, @counts, @sortBy, @locations]
       , =>
         @filteredLocationsArray = @filteredSortedLocations()
         
@@ -52,8 +53,8 @@
        
     filteredSortedLocations: ->
       loc = @filter('filter')(@locations, @cloudVpsFilter)
+      loc = @filter('filter')(loc, @regionFilter)
       loc = @filter('filter')(loc, @packageFilter)
       loc = @filter('filter')(loc, @cloudIndexUptimeFilter)
       @filter('orderBy')(loc, @locationSort(), @sortBy.rev)
-      
 ]
