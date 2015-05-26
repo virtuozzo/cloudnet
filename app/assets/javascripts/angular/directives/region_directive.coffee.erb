@@ -1,4 +1,4 @@
-@app.directive "regionFilter", ($timeout) ->
+@app.directive "regionFilter", ['$timeout', ($timeout) ->
   restrict: 'E'
   templateUrl: "<%= asset_path('templates/server_search/regions.html') %>"
   scope:
@@ -8,3 +8,4 @@
     $timeout ->
       $('input[type=radio]').click()
     ,0
+]
