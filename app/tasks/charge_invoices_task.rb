@@ -9,18 +9,33 @@ class ChargeInvoicesTask < BaseTask
     account = @user.account
     card    = account.primary_billing_card
 
-    invoices_to_card_charge = []
+    # First try credit notes
     @invoices.each do |invoice|
       credit_notes = account.credit_notes.with_remaining_cost
       notes_used = CreditNote.charge_account(credit_notes, invoice.remaining_cost)
       account.create_activity :charge_credit_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
       self.class.create_credit_note_charges(account, invoice, notes_used, @user)
+    end
+
+    # We're done if everything is paid off
+    @invoices.reload
+    return if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
+
+    # Now try any cash that's credited in the user's account
+    invoices_to_card_charge = []
+    @invoices.each do |invoice|
+      payment_receipts = account.payment_receipts.with_remaining_cost
+      notes_used = PaymentReceipt.charge_account(payment_receipts, invoice.remaining_cost)
+      account.create_activity :charge_payment_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
+      create_payment_receipt_charges(account, invoice, notes_used)
       invoices_to_card_charge << invoice if Invoice.milli_to_cents(invoice.remaining_cost) > 0
     end
 
+    # Finally try to charge a credit card
     if Invoice.milli_to_cents(invoices_to_card_charge.sum(&:remaining_cost)) >= Invoice::MIN_CHARGE_AMOUNT && card.present?
       charge_primary_card_for_invoices(account, invoices_to_card_charge, card)
     end
+
   end
 
   private
@@ -50,6 +65,20 @@ class ChargeInvoicesTask < BaseTask
     end
 
     if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && credit_notes.present?
+      invoice.update(state: :partially_paid)
+    elsif Invoice.milli_to_cents(invoice.remaining_cost) <= 0
+      invoice.update(state: :paid)
+    end
+  end
+
+  def create_payment_receipt_charges(account, invoice, payment_receipts)
+    payment_receipts.each do |k, v|
+      source = PaymentReceipt.find(k)
+      Charge.create(source: source, invoice: invoice, amount: v)
+      account.create_activity :payment_receipt_charge, owner: @user, params: { invoice: invoice.id, amount: v, payment_receipt: k }
+    end
+
+    if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && payment_receipts.present?
       invoice.update(state: :partially_paid)
     elsif Invoice.milli_to_cents(invoice.remaining_cost) <= 0
       invoice.update(state: :paid)

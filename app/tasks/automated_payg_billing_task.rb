@@ -14,7 +14,7 @@ class AutomatedPaygBillingTask < BaseTask
     invoice.save!
     account.create_activity :automated_billing, owner: @user, params: { invoice: invoice.id, amount: invoice.total_cost }
 
-    ChargePaygInvoicesTask.new(@user, [invoice], true).process
+    ChargeInvoicesTask.new(@user, [invoice], true).process
     invoice.reload
     send_auto_email(@user, invoice)
   end
