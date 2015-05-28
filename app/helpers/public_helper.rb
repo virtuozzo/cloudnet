@@ -3,9 +3,9 @@ module PublicHelper
     content_tag(:div)
   end
   
-  def region_select
+  def region_select(regions = [])
     label_tag(:region, "Region") +
-    select_tag(:region, options_for_select(region_options), class: "pure-input-1")
+    select_tag(:region, options_for_select(region_options(regions)), class: "pure-input-1")
   end
   
   def cpu_select
@@ -23,8 +23,8 @@ module PublicHelper
     select_tag(:disc, options_for_select(disc_options), class: "pure-input-1")
   end
   
-  def region_options
-    [['Global', 'global']]
+  def region_options(regions)
+    [['Global', -1]] + regions
   end
   
   def cpu_options
