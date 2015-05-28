@@ -8,7 +8,7 @@
       @sortBy = {field: 'price', rev: false}
       @slidersEnabled = true
       @cloudVpsFilter = {}
-      @regionFilter = {}
+      @regionId = @regionIdInitialValue()
       @locations = []
       @filteredLocationsArray = []
       @mapVisible = true
@@ -21,12 +21,16 @@
       
     registerWatch: ->
       @scope.$watchCollection => 
-        [@cloudVpsFilter, @packageFilter, @regionFilter, @counts, @sortBy, @locations]
+        [@cloudVpsFilter, @packageFilter, @regionId, @counts, @sortBy, @locations]
       , =>
         @filteredLocationsArray = @filteredSortedLocations()
         
-    initialValue: (param) ->
-      $('.filters').data(param) || 1
+    regionIdInitialValue: ->
+      paramValue = @initialValue('region', false) 
+      if paramValue then paramValue else -1
+        
+    initialValue: (param, nulls = true) ->
+      $('.filters').data(param) || (nulls and 1)
       
     getIntegerCounts: ->
       mem:  parseInt(@counts.mem,  10) 
@@ -36,6 +40,9 @@
     cloudIndexUptimeFilter: (location, ind) =>
       location.cloudIndex >= @counts.index && @currentUptime(location) >= @counts.uptime
 
+    regionFilter: (location) =>
+      if @regionId >= 0 then location.region?.id == @regionId else true
+      
     currentUptime: (location) ->
       data = location?.indices
       if data?.length > 0
@@ -57,4 +64,5 @@
       loc = @filter('filter')(loc, @packageFilter)
       loc = @filter('filter')(loc, @cloudIndexUptimeFilter)
       @filter('orderBy')(loc, @locationSort(), @sortBy.rev)
+      
 ]

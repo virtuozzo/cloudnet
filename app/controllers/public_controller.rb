@@ -2,6 +2,10 @@ class PublicController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :clear_remembered_path
   
+  def main
+    @regions = Region.active_regions
+  end
+  
   def user_message
     Thread.new{EnquiryMailer.contact_page(params[:enquiry]).deliver_now}
   end

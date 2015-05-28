@@ -18,7 +18,7 @@
           = form_tag("/search", method: "get", enforce_utf8: false, class: "pure-form pure-form-stacked") do
             .pure-g
               .pure-u-1.pure-u-md-1-5.main-label
-                = region_select
+                = region_select(@regions)
               .pure-u-1.pure-u-md-1-5.main-label
                 = cpu_select
               .pure-u-1.pure-u-md-1-5.main-label
