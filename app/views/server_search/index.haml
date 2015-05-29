@@ -4,7 +4,7 @@
 %section.container.split-cont{:"ng-controller" => "ServerSearchCtrl as ctrl"}
   .pure-g
     .pure-u-1-4
-      %section.filters{data: {mem: params[:mem], cpu: params[:cpu], disk: params[:disc]}}
+      %section.filters{data: {mem: params[:mem], cpu: params[:cpu], disk: params[:disc], region: params[:region]}}
         = render 'filters'
     .pure-u-3-4.map-search
       %section.results
@@ -31,7 +31,7 @@
           .vps-not-valid{:"ng-show" => "ctrl.showVpsLocations()"}
             %hr
             %h3 For VPS hosting choose one of the predefined packages
-            .location{:"ng-repeat" => "l in ctrl.state.locations | filter:{budgetVps: true} | filter:ctrl.state.cloudIndexUptimeFilter | orderBy:ctrl.state.locationSort():ctrl.state.sortBy.rev"}
+            .location{:"ng-repeat" => "l in ctrl.state.locations | filter:{budgetVps: true} | filter:ctrl.state.regionFilter | filter:ctrl.state.cloudIndexUptimeFilter | orderBy:ctrl.state.locationSort():ctrl.state.sortBy.rev"}
               %location-widget{:"location" => "l"}
 :javascript
   var mapboxKey = "#{KEYS[:mapbox][:token]}";

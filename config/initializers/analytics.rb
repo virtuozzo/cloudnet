@@ -2,12 +2,13 @@ require 'segment/analytics'
 
 class Analytics
   def self.track(user, events = {})
-    user_traits = {
+    user_traits = user ? {
       user_id: user.id,
       username: user.email,
       context: { traits: { email: user.email, name: user.full_name } }
-    }
-
+      } : {anonymous_id: 'guest'}
+      
+    Rails.logger.warn "API-KEY: #{KEYS[:analytics][:token]}"
     service.track(events.merge(user_traits))
   end
 

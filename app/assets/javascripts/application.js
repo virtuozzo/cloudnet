@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery
 //= require accounting.min
 //= require angular
 //= require async
@@ -18,7 +19,6 @@
 //= require angular-animate
 //= require editor/marked
 //= require editor/codemirror
-//= require jquery
 //= require jquery_ujs
 //= require jquery.creditCardValidator
 //= require jquery.payment

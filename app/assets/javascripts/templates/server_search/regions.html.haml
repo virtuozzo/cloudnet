@@ -4,8 +4,10 @@
 
 .regions-container
   .region
-    %input{type: "radio", name: "region", checked: "checked", id: "-1", value: "-1"}
-    %label{for: "-1"} Global
-  .region{:"ng-repeat" => "l in locations | filter:{region: '!'} | unique:'region.id'"}
-    %input{type: "radio", name: "region", id: "{{l.region.id}}", value: "{{l.region.id}}"}
-    %label{for: "{{l.region.id}}"} {{l.region.name}}
+    %label
+      %input{type: "radio", :"ng-model" => "state.regionId", checked: "", name: "region", :"ng-value" => "-1"}
+      Global
+  .region{:"ng-repeat" => "l in state.locations | filter:{region: '!'} | unique:'region.id'"}
+    %label
+      %input{type: "radio", :"ng-model" => "state.regionId", name: "region", :"ng-value" => "{{l.region.id}}"}
+      {{l.region.name}}
