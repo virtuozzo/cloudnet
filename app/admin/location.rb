@@ -54,6 +54,10 @@ ActiveAdmin.register Location do
       input :price_bw
       input :price_ip_address
     end
+    
+    inputs 'Additional Info' do
+      input :summary
+    end
 
     actions
   end
