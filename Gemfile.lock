@@ -155,6 +155,8 @@ GEM
     capistrano-rails (1.1.2)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-rails-console (0.5.2)
+      capistrano (>= 3.0.0, < 4.0.0)
     capistrano-sidekiq (0.5.2)
       capistrano
       sidekiq
@@ -609,6 +611,7 @@ DEPENDENCIES
   brakeman
   capistrano (~> 3.2.1)
   capistrano-rails (~> 1.1.1)
+  capistrano-rails-console
   capistrano-sidekiq (~> 0.5.2)
   capistrano-upload-config
   capistrano3-puma (~> 1.0.0)
