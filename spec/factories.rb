@@ -34,7 +34,7 @@ FactoryGirl.define do
     name 'Europe'
     description 'GB FR PO ES'
   end
-  
+
   # This isn't a real location. But hv_group_id is very likely to be, if Onapp is properly set up
   factory :location do
     transient do
@@ -59,14 +59,13 @@ FactoryGirl.define do
       3.times {|i| create("pack#{i}".to_sym, location: location) }
     end
   end
-  
+
   factory :package do
     memory 512
     cpus 1
     disk_size 10
     ip_addresses 1
-    location 
-    
+    location
     factory :pack0
     factory :pack1 do
       memory 1024
