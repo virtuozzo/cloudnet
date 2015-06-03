@@ -50,3 +50,7 @@ locations.json
 
 #dynamic image uploads
 /public/uploads
+
+# Ctags
+/tags
+

@@ -141,7 +141,7 @@ class InvoicePdf < BillingPdf
 
   def invoice_item(item)
     if item.source_type == 'Server'
-      server = Server.find item.source_id
+      server = Server.with_deleted.find item.source_id
       provider = "#{server.location.provider} #{server.location.city}"
       item.description += " @ #{provider}"
     end

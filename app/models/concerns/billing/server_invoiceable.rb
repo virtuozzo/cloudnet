@@ -286,7 +286,7 @@ module Billing
       existing_invoice_item = InvoiceItem.where(
         source_type: self.class.to_s,
         source_id: id
-      ).order(updated_at: :desc).last
+      ).order(updated_at: :desc).first
 
       if existing_invoice_item.present?
         credit_note = CreditNote.generate_credit_note([self], user.account, existing_invoice_item.invoice)

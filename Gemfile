@@ -75,6 +75,7 @@ gem 'capistrano-rails', '~> 1.1.1'
 gem 'capistrano3-puma', '~> 1.0.0'
 gem 'capistrano-sidekiq', '~> 0.5.2'
 gem 'capistrano-upload-config'
+gem 'capistrano-rails-console'
 
 # Fixtures
 gem 'yaml_db'
