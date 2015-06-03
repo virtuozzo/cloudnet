@@ -174,6 +174,11 @@ GEM
     carmen-rails (1.0.1)
       carmen (~> 1.0.0)
       rails
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     childprocess (0.5.5)
@@ -614,6 +619,7 @@ DEPENDENCIES
   capistrano3-puma (~> 1.0.0)
   capybara
   carmen-rails (~> 1.0.1)
+  carrierwave
   coffee-rails (~> 4.0.0)
   compass-rails
   country_select!

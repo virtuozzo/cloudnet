@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529120952) do
+ActiveRecord::Schema.define(version: 20150602153029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,21 @@ ActiveRecord::Schema.define(version: 20150529120952) do
     t.string   "address2",        limit: 255
     t.boolean  "primary",                     default: false
   end
+
+  create_table "certificates", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "certificate_avatar"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  create_table "certificates_locations", force: :cascade do |t|
+    t.integer "certificate_id"
+    t.integer "location_id"
+  end
+
+  add_index "certificates_locations", ["certificate_id", "location_id"], name: "index_certificates_locations_on_certificate_id_and_location_id", using: :btree
 
   create_table "charges", force: :cascade do |t|
     t.integer  "invoice_id"

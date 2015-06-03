@@ -197,4 +197,25 @@ $server-search-text-gray: #5F8093;
       pointer-events: none;
     }
   }
+  additional-info{
+    .trigger{
+      margin-top: -17px;
+      width: 10px;
+      height: 10px;
+      cursor: pointer;
+      &:before {
+          display: block;
+          content: '+';
+          margin-right: 5px;
+          @include transition(5s linear all);
+      }
+      &:hover::before{
+        font-weight: bold;
+        @include transform(rotate(360deg));
+      }
+    }
+    .info-part{
+      display: none;
+    }
+  }
 }

@@ -18,6 +18,7 @@ gem 'kaminari', '~> 0.15.1'
 gem 'gretel', '~> 3.0.6'
 gem 'redcarpet', '~> 3.1.1'
 gem 'public_activity', '~> 1.4.1'
+gem 'carrierwave'
 
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'

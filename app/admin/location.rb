@@ -7,7 +7,7 @@ ActiveAdmin.register Location do
   permit_params :latitude, :longitude, :provider, :region_id, :country, :city, :memory, :disk, :cpu,
                 :hidden, :price_memory, :price_disk, :price_cpu, :price_bw, :country_code,
                 :hv_group_id, :provider_link, :network_limit, :photo_ids, :price_ip_address,
-                :budget_vps, :inclusive_bandwidth, :ssd_disks
+                :budget_vps, :inclusive_bandwidth, :ssd_disks, :summary, certificate_ids: []
 
   sidebar :control_panel_links do
     ul do
@@ -23,7 +23,10 @@ ActiveAdmin.register Location do
     column :city
     column :provider
     column :hidden
-
+    column "Certificates" do |loc|
+      loc.certificates.map(&:name).join(', ')
+    end
+    
     actions
   end
   
@@ -56,6 +59,7 @@ ActiveAdmin.register Location do
     end
     
     inputs 'Additional Info' do
+      input :certificates, :multiple => true, as: :check_boxes
       input :summary
     end
 

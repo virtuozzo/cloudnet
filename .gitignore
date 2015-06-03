@@ -47,3 +47,6 @@ dump.rdb
 
 # Locations/Templates cache
 locations.json
+
+#dynamic image uploads
+/public/uploads

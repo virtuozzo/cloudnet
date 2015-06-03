@@ -6,6 +6,7 @@ class Location < ActiveRecord::Base
   has_many :packages
   has_many :indices, dependent: :destroy
   belongs_to :region
+  has_and_belongs_to_many :certificates
 
   acts_as_paranoid
 
