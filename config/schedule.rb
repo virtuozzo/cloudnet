@@ -43,14 +43,14 @@ every 1.day, at: '1:00 am' do
   runner 'AutoBilling.perform_in(2.minutes)'
 end
 
-# Email daily financial reports
+# Create charges for outstanding balances, uses Credit Notes, Payment Receipts and CCs
 every 1.day, at: '1:30 am' do
-  runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
+  runner 'ChargeUnpaidInvoices.perform_in(2.minutes)'
 end
 
-# Create charges for outstanding balances, uses Credit Notes, Payment Receipts and CCs
+# Email daily financial reports
 every 1.day, at: '2:00 am' do
-  runner 'ChargeUnpaidInvoices.perform_in(2.minutes)'
+  runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
 end
 
 # Sending warning emails to users with negative balance
