@@ -38,22 +38,27 @@ every '0 * * * *', roles: [:app] do
   runner 'ServerUsageHourly.perform_in(1.minute)'
 end
 
+# Create invoices (does not create charges)
 every 1.day, at: '1:00 am' do
-  runner 'ChargeUnpaidInvoices.perform_in(2.minutes)'
-end
-
-every 1.day, at: '2:00 am' do
   runner 'AutoBilling.perform_in(2.minutes)'
 end
 
-every 1.day, at: '1:00 am' do
+# Create charges for outstanding balances, uses Credit Notes, Payment Receipts and CCs
+every 1.day, at: '1:30 am' do
+  runner 'ChargeUnpaidInvoices.perform_in(2.minutes)'
+end
+
+# Email daily financial reports
+every 1.day, at: '2:00 am' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
 end
 
-every 1.day, at: '2:00 am' do
+# Sending warning emails to users with negative balance
+every 1.day, at: '2:30 am' do
   runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
+# Email monthly financial reports
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'
 end
