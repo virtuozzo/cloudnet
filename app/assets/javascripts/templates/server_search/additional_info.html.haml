@@ -1,7 +1,7 @@
 .pure-g
   .pure-u-1
-    .trigger
-.info-part
+    .trigger{:"ng-click" => "showInfo = !showInfo"}
+.info-part{:"ng-show" => "showInfo"}
   .pure-g
     .pure-u-2-5
       %h3
