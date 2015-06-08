@@ -1,6 +1,6 @@
 ActiveAdmin.register Certificate do
 
-  permit_params :name, :certificate_avatar, :description
+  permit_params :name, :avatar, :description
   
 
   

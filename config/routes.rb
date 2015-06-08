@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 CloudNet::Application.routes.draw do
-
+  mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)
   get 'search' => 'server_search#index'
