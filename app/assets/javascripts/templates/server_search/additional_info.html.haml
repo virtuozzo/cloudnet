@@ -4,8 +4,10 @@
 .info-part
   .pure-g
     .pure-u-2-5
-      .summary
+      %h3
         Summary
-        .summary
-          {{location.summary}}
+      .summary
+        {{location.summary}}
+      .certificate{:"ng-repeat" => "cert in location.certificates"}
+        %img.c-avatar{:"ng-src" => "{{cert.avatar}}"}
     

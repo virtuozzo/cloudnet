@@ -6,5 +6,9 @@ json.array! @locations do |loc|
                      :summary
   json.indices loc.indices, :created_at, :index_uptime, :cloud_index, :index_cpu, 
                             :index_iops, :index_bandwidth
-  json.region loc.region
+  json.certificates loc.certificates do |cert|
+    json.avatar cert.certificate_avatar.url
+    json.id cert.id
+  end
+    json.region loc.region
 end
