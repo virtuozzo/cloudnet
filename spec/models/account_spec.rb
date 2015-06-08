@@ -7,6 +7,11 @@ describe Account do
     expect(user.account).to be_valid
   end
 
+  it 'should not include suspended users in its default scope' do
+    user.update! suspended: true
+    expect(Account.count).to eq 0
+  end
+
   describe 'Invoicing Start and Invoicing Day' do
     it 'should set an invoicing start and invoicing day' do
       expect(user.account.invoice_day).to be_present

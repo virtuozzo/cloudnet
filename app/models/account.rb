@@ -21,6 +21,7 @@ class Account < ActiveRecord::Base
   RISKY_CARDS_ALLOWED = 3
   COUPON_LIMIT_MONTHS = 6.months
 
+  default_scope { joins(:user).where.not(users: {suspended: true}) }
   scope :invoice_day, lambda { |date| where(invoice_day: date.day) }
 
   def hours_till_next_invoice(from_time=Time.now, today=Time.now)

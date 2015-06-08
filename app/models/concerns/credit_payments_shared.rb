@@ -23,7 +23,7 @@ module CreditPaymentsShared
   def add_remaining_cost(cost)
     success = true
     transaction do
-      success = update(remaining_cost: remaining_cost + cost)
+      success = update!(remaining_cost: remaining_cost + cost)
     end
   end
 

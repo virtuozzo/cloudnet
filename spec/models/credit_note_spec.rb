@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe CreditNote do
   let(:credit_note) { FactoryGirl.create(:credit_note) }
+  let(:user) { FactoryGirl.create(:user) }
 
   it 'should be valid' do
     expect(credit_note).to be_valid
@@ -28,9 +29,9 @@ describe CreditNote do
     end
 
     it 'should not complain if I refund no used notes' do
-      credit_note_1 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 0)
-      credit_note_2 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 20)
-      credit_note_3 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 50)
+      credit_note_1 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 0)
+      credit_note_2 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 20)
+      credit_note_3 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 50)
 
       CreditNote.refund_used_notes({})
       [credit_note_1, credit_note_2, credit_note_3].each(&:reload)
@@ -41,9 +42,9 @@ describe CreditNote do
     end
 
     it 'should refund used notes' do
-      credit_note_1 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 0)
-      credit_note_2 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 20)
-      credit_note_3 = FactoryGirl.create(:credit_note, account: credit_note.account, remaining_cost: 50)
+      credit_note_1 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 0)
+      credit_note_2 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 20)
+      credit_note_3 = FactoryGirl.create(:credit_note, account: user.account, remaining_cost: 50)
 
       CreditNote.refund_used_notes(credit_note_1.id => 100, credit_note_2.id => 200, credit_note_3.id => 300)
       [credit_note_1, credit_note_2, credit_note_3].each(&:reload)
@@ -55,9 +56,9 @@ describe CreditNote do
   end
 
   it 'should give a max - 1 hours for credit note' do
-    allow(credit_note.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX)
+    allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX)
     expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
-    allow(credit_note.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX + 1)
+    allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX + 1)
     expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
   end
 
@@ -68,14 +69,12 @@ describe CreditNote do
   end
 
   it 'should have VAT exempt status determined from the account' do
-    account = credit_note.account
-    allow(account).to receive_messages(vat_exempt?: false)
-
-    credit_note.account = account
+    allow(user.account).to receive(:vat_exempt?).and_return false
+    credit_note.account = user.account
     expect(credit_note.vat_exempt?).to be false
 
-    allow(account).to receive_messages(vat_exempt?: true)
-    credit_note.account = account
+    allow(user.account).to receive_messages(vat_exempt?: true)
+    credit_note.account = user.account
     expect(credit_note.vat_exempt?).to be true
   end
 
@@ -112,7 +111,7 @@ describe CreditNote do
 
   describe 'Generating Credit Notes from Servers' do
     it 'should have no credit note items if passed in no servers' do
-      c = CreditNote.generate_credit_note([], credit_note.account)
+      c = CreditNote.generate_credit_note([], user.account)
       expect(c.credit_note_items.length).to eq(0)
     end
 
@@ -120,7 +119,7 @@ describe CreditNote do
       server1 = FactoryGirl.create(:server)
       server2 = FactoryGirl.create(:server)
 
-      c = CreditNote.generate_credit_note([server1, server2], credit_note.account)
+      c = CreditNote.generate_credit_note([server1, server2], user.account)
       expect(c.credit_note_items.length).to eq(2)
     end
   end

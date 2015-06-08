@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe BillingCard do
-  let (:card) { FactoryGirl.create(:billing_card) }
+  let(:card) { FactoryGirl.create(:billing_card) }
+  let(:user) { FactoryGirl.create(:user) }
 
   it 'should be a valid billing card' do
     expect(card).to be_valid
@@ -182,9 +183,9 @@ describe BillingCard do
     end
 
     it 'should unset a card to not primary if another primary card comes through' do
-      card1 = FactoryGirl.create(:billing_card, account: card.account, primary: true)
-      card2 = FactoryGirl.create(:billing_card, account: card.account)
-      card3 = FactoryGirl.create(:billing_card, account: card.account)
+      card1 = FactoryGirl.create(:billing_card, account: user.account, primary: true)
+      card2 = FactoryGirl.create(:billing_card, account: user.account)
+      card3 = FactoryGirl.create(:billing_card, account: user.account)
 
       expect(card1.primary).to be true
       expect(card2.primary).to be false
