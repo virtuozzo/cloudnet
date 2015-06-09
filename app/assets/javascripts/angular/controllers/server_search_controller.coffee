@@ -9,6 +9,7 @@
       @locationsQuery.query (result) =>
         @state.locations.push(new models.Location(loc)) for loc in result
         @state.filteredLocationsArray = @state.filteredSortedLocations()
+        @state.mapActiveLocation = @state.filteredLocationsArray[0]
         
     showVpsLocations: ->
       !@packages.activePackage and

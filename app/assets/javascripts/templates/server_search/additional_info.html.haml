@@ -3,11 +3,14 @@
     .trigger{:"ng-click" => "showInfo = !showInfo"}
 .info-part{:"ng-show" => "showInfo"}
   .pure-g
-    .pure-u-2-5
+    .pure-u-7-12
       %h3
         Summary
       .summary
         {{location.summary}}
       .certificate{:"ng-repeat" => "cert in location.certificates"}
         %img.c-avatar{:"ng-src" => "{{cert.avatar}}"}
+        
+    .pure-u-5-12
+      .location-map
     
