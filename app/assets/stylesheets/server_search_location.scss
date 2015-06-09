@@ -215,11 +215,16 @@ $server-search-text-gray: #5F8093;
       }
     }
     .info-part{
-      //display: none;
+      .summary{margin-right: 20px;}
       .c-avatar{
         float: left;
-        width: 50px;
-        height: 50px;
+        width: 64px;
+        height: 64px;
+        margin: 10px;
+      }
+      .location-map{
+        height: 150px;
+        margin-top: 50px;
       }
     }
   }
