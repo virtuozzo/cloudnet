@@ -10,10 +10,7 @@ class PaygTopupCardTask < BaseTask
   def process
     card = @account.primary_billing_card
 
-    if !Payg::VALID_TOP_UP_AMOUNTS.include?(@usd_amount)
-      errors << 'Amount submitted is invalid. Please try again'
-      return false
-    elsif !card.present?
+    unless card.present?
       errors << 'You do not have a billing card associated with your account.'
       return false
     end

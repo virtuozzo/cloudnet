@@ -11,11 +11,6 @@ class PaygTopupPaypalRequestTask < BaseTask
   end
 
   def process
-    unless Payg::VALID_TOP_UP_AMOUNTS.include?(@usd_amount)
-      errors << 'Amount submitted is invalid. Please try again'
-      return false
-    end
-
     begin
       request = Paypal::Express::Request.new(
         username: PAYMENTS[:paypal][:api_user],

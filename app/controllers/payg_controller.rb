@@ -4,12 +4,10 @@ class PaygController < ApplicationController
   end
 
   def confirm_card_payment
-    @amount = params[:amount].to_i
+    @amount = params[:amount]
     @account = current_user.account
 
-    if !Payg::VALID_TOP_UP_AMOUNTS.include?(@amount)
-      @error = 'Amount submitted is invalid. Please try again'
-    elsif !@account.primary_billing_card.present?
+    if !@account.primary_billing_card.present?
       @error = 'You do not have a billing card associated with your account.'
     else
       @last4 = @account.primary_billing_card.last4
@@ -19,7 +17,7 @@ class PaygController < ApplicationController
   end
 
   def card_payment
-    @amount = params[:amount].to_i
+    @amount = params[:amount]
     @task = PaygTopupCardTask.new(current_user.account, @amount)
     @task.process
 
@@ -27,7 +25,7 @@ class PaygController < ApplicationController
   end
 
   def paypal_request
-    @amount = params[:amount].to_i
+    @amount = params[:amount]
     @task = PaygTopupPaypalRequestTask.new(current_user.account, @amount, request)
 
     if @task.process
