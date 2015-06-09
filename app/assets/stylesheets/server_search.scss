@@ -118,7 +118,7 @@ $server-search-text-gray: #5F8093;
         border-top: none;
       }
       &.open {
-        height: 150px;
+        display: initial;
         opacity: 1;
         @include transition(.8s linear height);
         @include transition(1s linear opacity);

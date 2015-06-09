@@ -1,7 +1,32 @@
 @app.directive "additionalInfo", ->
   restrict: 'E'
   templateUrl: "<%= asset_path('templates/server_search/additional_info.html') %>"
-  scope: true
+  scope:
+    location: '='
   
-  link: ($scope, $el, $attr) ->
+  link: ($scope, $element, $attr) ->
     $scope.showInfo = false
+    
+    map = L.mapbox.map $($element).find('.location-map')[0], mapboxKey,
+        accessToken: mapboxPublicToken
+        zoomControl: false
+        dragging:    false
+        doubleClickZoom: false
+        touchZoom: false
+        scrollWheelZoom: false
+        boxZoom:  false
+        tap:  false
+
+
+    mapSetup = (location) ->
+      LatLng = [parseFloat(location.latitude), 
+                parseFloat(location.longitude)]
+      map.setView(LatLng, 5)
+
+      marker = L.marker LatLng,
+        icon: L.icon
+          iconUrl: active_pin
+      marker.addTo(map)
+
+    $scope.$watch "location", (newValue,oldValue) ->
+      mapSetup($scope.location) if $scope.location
