@@ -32,8 +32,7 @@
         map.removeLayer(marker)
         mapShow(LatLng)
       else
-        map.on 'ready', ->
-          mapShow(LatLng)
+        map.on 'ready', -> mapShow(LatLng)
         
     mapShow = (LatLng) ->
       map.setView(LatLng, 5)
