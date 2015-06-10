@@ -199,20 +199,9 @@ $server-search-text-gray: #5F8093;
   }
   additional-info{
     .trigger{
-      margin-top: -17px;
-      width: 10px;
-      height: 10px;
-      cursor: pointer;
-      &:before {
-          display: block;
-          content: '+';
-          margin-right: 5px;
-          @include transition(5s linear all);
-      }
-      &:hover::before{
-        font-weight: bold;
-        @include transform(rotate(360deg));
-      }
+      font-size: 0.8em;
+      padding: 1px 3px;
+      margin-top: 5px;
     }
     .info-part{
       .summary{margin-right: 20px;}

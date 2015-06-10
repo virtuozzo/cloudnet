@@ -6,27 +6,41 @@
   
   link: ($scope, $element, $attr) ->
     $scope.showInfo = false
+    map = null
     
-    map = L.mapbox.map $($element).find('.location-map')[0], mapboxKey,
-        accessToken: mapboxPublicToken
-        zoomControl: false
-        dragging:    false
-        doubleClickZoom: false
-        touchZoom: false
-        scrollWheelZoom: false
-        boxZoom:  false
-        tap:  false
+    $scope.toggleInfo = ->
+      $scope.showInfo = !$scope.showInfo
+      setMap() if !map and $scope.showInfo
+      
+    setMap = ->
+      map = L.mapbox.map $($element).find('.location-map')[0], mapboxKey,
+          accessToken: mapboxPublicToken
+          #zoomControl: false
+          #dragging:    false
+          doubleClickZoom: false
+          touchZoom: false
+          scrollWheelZoom: false
+          boxZoom:  false
+          tap:  false
+      mapSetup($scope.location, false)
 
-
-    mapSetup = (location) ->
+    mapSetup = (location, update) ->
       LatLng = [parseFloat(location.latitude), 
                 parseFloat(location.longitude)]
+      if update
+        mapShow(LatLng)
+      else
+        map.on 'ready', ->
+          mapShow(LatLng)
+        
+    mapShow = (LatLng) ->
       map.setView(LatLng, 5)
-
       marker = L.marker LatLng,
         icon: L.icon
           iconUrl: active_pin
+          iconSize: ['26', '32']
+          iconAnchor: ['13', '32']
       marker.addTo(map)
 
     $scope.$watch "location", (newValue,oldValue) ->
-      mapSetup($scope.location) if $scope.location
+      mapSetup($scope.location, true) if map and $scope.location
