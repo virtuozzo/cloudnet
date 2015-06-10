@@ -17,6 +17,9 @@ class models.Location
   fPriceDisk: ->
     parseFloat(@priceDisk)
     
+  freeBandwidth: (counts) ->
+    (parseFloat(@inclusiveBandwidth) / 1024 * counts.mem).toFixed(1)
+    
   exactPricePerHour = (cpu, mem, disk) ->
     cpu = parseInt(cpu,10)
     mem = parseInt(mem,10)

@@ -41,6 +41,11 @@
             = image_tag('cpu-pic.png')
           %td.descr.font-11 CPU (Cores)
           %td {{cpuPerHour()}}
+        %tr
+          %td.pictogram
+            = image_tag('cpu-pic.png')
+          %td.descr.font-11 TRAFFIC
+          %td {{freeBandwidthPerMonth()}}
   .pure-u-1-5
     .action{:"ng-hide" => "location.budgetVps && noPackageActive()"}
       .price-box
