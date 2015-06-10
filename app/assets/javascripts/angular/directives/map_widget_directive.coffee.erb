@@ -4,7 +4,7 @@
   require: 'ngModel'
   link: ($scope, $element, $attr, ngModelCtrl) ->
     $scope.state = State
-    mapEl = $($element).find('.map-object')
+    mapEl = $($element).find('.map-object')[0]
     popup = _.template($templateCache.get "mapPopup.html")
     pins =
       inactivePin: inactive_pin
