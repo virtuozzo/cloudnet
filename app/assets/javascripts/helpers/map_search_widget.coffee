@@ -9,7 +9,7 @@ class helpers.MapSearchWidget
       sdk_key: @keys.fiveHundredPxKey
 
   initializeMap: ->
-    @map = L.mapbox.map @mapElem[0], @keys.mapboxKey,
+    @map = L.mapbox.map @mapElem, @keys.mapboxKey,
       accessToken: @keys.mapboxPublicToken,
       minZoom: 2,
       maxZoom: 8

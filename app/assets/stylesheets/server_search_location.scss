@@ -45,7 +45,7 @@ $server-search-text-gray: #5F8093;
         table{ 
           margin: 0;
           border-collapse: separate;
-          border-spacing: 0 5px;
+          border-spacing: 0 3px;
          }
         tr td:first-child{
           border-left: 1px solid $server-search-border;
@@ -65,11 +65,11 @@ $server-search-text-gray: #5F8093;
         td{
           border-top: 1px solid $server-search-border;
           border-bottom: 1px solid $server-search-border;
-          padding: 5px 0 5px 0;
+          padding: 3px 0 4px 0;
           vertical-align: bottom;
           @media (max-width: $container-med) {
             border-left: 1px solid $server-search-border;
-            padding: 5px 0 5px 3px;
+            padding: 3px 0 4px 3px;
           }
         }
       }
@@ -94,7 +94,7 @@ $server-search-text-gray: #5F8093;
         }
         button{
           width: 100%;
-          top: 19px;
+          top: 36px;
           position: relative;
           background-color: $server-search-green ;
           border-color: $server-search-border;
@@ -199,20 +199,8 @@ $server-search-text-gray: #5F8093;
   }
   additional-info{
     .trigger{
-      margin-top: -17px;
-      width: 10px;
-      height: 10px;
-      cursor: pointer;
-      &:before {
-          display: block;
-          content: '+';
-          margin-right: 5px;
-          @include transition(5s linear all);
-      }
-      &:hover::before{
-        font-weight: bold;
-        @include transform(rotate(360deg));
-      }
+      font-size: 0.8em;
+      padding: 1px 3px;
     }
     .info-part{
       .summary{margin-right: 20px;}
