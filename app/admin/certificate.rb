@@ -34,7 +34,7 @@ ActiveAdmin.register Certificate do
     inputs do
       input :name
       input :description
-      input :avatar, as: :file, :hint => image_tag(object.avatar.url)
+      input :avatar, as: :file, label: "Avatar (64 x 64)", :hint => image_tag(object.avatar.url)
       input :avatar_cache, :as => :hidden
     end
 

@@ -24,6 +24,9 @@
     scope.cpuPerHour = ->
       pricingMessage(scope.location?.fPriceCpu())
       
+    scope.freeBandwidthPerMonth = ->
+      scope.location?.freeBandwidth(State.counts) + " GB/month"
+      
     scope.provision = ->
       document.location = "/servers/create?#{$.param(State.counts)}&id=#{scope.location.id}"
       
