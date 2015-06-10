@@ -7,6 +7,7 @@
   link: ($scope, $element, $attr) ->
     $scope.showInfo = false
     map = null
+    marker = null
     
     $scope.toggleInfo = ->
       $scope.showInfo = !$scope.showInfo
@@ -28,6 +29,7 @@
       LatLng = [parseFloat(location.latitude), 
                 parseFloat(location.longitude)]
       if update
+        map.removeLayer(marker)
         mapShow(LatLng)
       else
         map.on 'ready', ->
