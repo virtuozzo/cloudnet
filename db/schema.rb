@@ -502,7 +502,7 @@ ActiveRecord::Schema.define(version: 20150608104145) do
     t.string   "onapp_user",               limit: 255
     t.string   "onapp_email",              limit: 255
     t.string   "encrypted_onapp_password", limit: 255
-    t.integer  "vm_max",                               default: 6
+    t.integer  "vm_max"
     t.integer  "memory_max",                           default: 8192
     t.integer  "cpu_max",                              default: 4
     t.integer  "storage_max",                          default: 120

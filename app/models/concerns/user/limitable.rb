@@ -8,14 +8,13 @@ class User < ActiveRecord::Base
       after_initialize :set_limitable_attributes
     end
 
-    private
-
     def set_limitable_attributes
-      self.vm_max         ||= 2
-      self.memory_max     ||= 1536
-      self.cpu_max        ||= 3
-      self.storage_max    ||= 30
-      self.bandwidth_max  ||= 50
+      multiplier = 10
+      self.vm_max         = 6 * multiplier
+      self.memory_max     = 1536 * multiplier
+      self.cpu_max        = 3 * multiplier
+      self.storage_max    = 30 * multiplier
+      self.bandwidth_max  = 50 * multiplier
     end
   end
 end
