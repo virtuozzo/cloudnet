@@ -113,7 +113,11 @@ $server-search-text-gray: #5F8093;
           font-weight: bold;
         }
       }
-      .cloud-index-graph{
+
+      
+      .cloud-index-graph, 
+      .uptime-time-chart
+      {
         height: 90px;
         position: relative;
         margin: 5px 0 2px 0;
@@ -129,7 +133,7 @@ $server-search-text-gray: #5F8093;
         path.line{
           fill: none; 
           stroke: $server-search-chart-color; 
-          stroke-width: 1px;
+          stroke-width: 0.8px;
         }
 
         .axis path{ 
@@ -149,6 +153,13 @@ $server-search-text-gray: #5F8093;
           &:hover{fill: darkorange; stroke: darkorange;};
         }
       }
+      
+      .uptime-time-chart{
+        height: 100%;
+        margin-top: 40px;
+        .axis text{font-size: 4pt;}
+      }
+      .uptime-label{text-align: center;}
     }
   }
   
@@ -201,6 +212,7 @@ $server-search-text-gray: #5F8093;
     .trigger{
       font-size: 0.8em;
       padding: 1px 3px;
+      margin-top: 5px;
     }
     .info-part{
       .summary{margin-right: 20px;}

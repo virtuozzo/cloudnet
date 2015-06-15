@@ -48,6 +48,7 @@
 //= require jquery.datatables.min
 //= require jquery.datatables.bootstrap
 //= require ./primary/main
+//= require ./helpers/time_chart.coffee
 //= require_tree ./primary
 //= require_tree ./helpers
 //= require_tree ./angular/models

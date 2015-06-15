@@ -43,5 +43,11 @@
           iconAnchor: ['13', '32']
       marker.addTo(map)
 
-    $scope.$watch "location", (newValue,oldValue) ->
-      mapSetup($scope.location, true) if map and $scope.location
+    $scope.prepareUptimeChart = ->
+      uptimeTimeChart = $($element).find(".uptime-time-chart")[0]
+      indices = $scope.location?.indices
+      new helpers.UptimeTimeChart(uptimeTimeChart, indices).draw() if indices
+      
+    $scope.$watch "location", ->
+      mapSetup($scope.location, true) if map
+      $scope.prepareUptimeChart()
