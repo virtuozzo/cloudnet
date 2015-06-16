@@ -1,10 +1,13 @@
-@app.directive "locationWidget", [ 'Packages', 'ServerSearchState', '$filter', '$templateCache',
-(Packages, State, $filter, $templateCache) ->
+@app.directive "locationWidget", [ 'Packages', 'ServerSearchState', '$filter', '$templateCache', '$location'
+(Packages, State, $filter, $templateCache, $location) ->
   templateUrl: "<%= asset_path('templates/server_search/location.html') %>"
   scope: 
     location: '='
   link: (scope, el, attr) ->
     popup = _.template($templateCache.get "indexChartPopup.html")
+    
+    scope.showMore = ->
+      $location.search().more == true
     
     scope.noPackageActive = ->
       not Packages.activePackage
