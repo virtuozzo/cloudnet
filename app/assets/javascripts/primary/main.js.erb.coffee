@@ -1,8 +1,8 @@
 @app = angular.module('CloudNet', ['ngResource', 'angularMoment', 'ngRoute', 'ngAnimate', 'ui.unique'])
 
 @app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
-  $locationProvider.html5Mode({enabled: true, requireBase: false})
-  $routeProvider.when('/post', { redirectTo: '/search' } )
+  #$locationProvider.html5Mode({enabled: true})
+  #$routeProvider.when('/post', { redirectTo: '/search' } )
   #$routeProvider.when('/search', { templateUrl: "<%= asset_path('templates/location.html') %>"} )
 ])
 
