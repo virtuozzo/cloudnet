@@ -7,7 +7,7 @@
     popup = _.template($templateCache.get "indexChartPopup.html")
     
     scope.showMore = ->
-      location.href.includes 'more'
+      ~location.href.indexOf('more')
     
     scope.noPackageActive = ->
       not Packages.activePackage
