@@ -11,6 +11,7 @@ MEMCACHE_URI=localhost:11211
 REDIS_URI=redis://localhost:6379
 
 # Onapp API
+ONAPP_API_ALLOW_INSECURE=false
 ONAPP_CP=https://onapp.api.endpoint.com
 ONAPP_USER=
 ONAPP_PASS=
