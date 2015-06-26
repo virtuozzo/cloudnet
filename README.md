@@ -39,12 +39,18 @@ Or build the image yourself. First make sure you have the repo with
 **Initial config**    
 Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
 
+Generate symmetric encryption key `docker run --env-file=.env --rm cloudnet rails generate symmetric_encryption:new_keys production`.That KEY will need to be added to the `SYMMETRIC_ENCRYPTION_KEY` setting in `.env`.
+
 Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
 of the created ID;
 `docker run --env-file=.env --rm cloudnet rake create_onapp_role`.
 That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
 
-Then create the database structure with `docker run --env-file=.env --rm cloudnet rake db:schema:load`.
+Then create the database and structure with 
+
+`docker run --env-file=.env --rm cloudnet rake db:schema:create` 
+
+`docker run --env-file=.env --rm cloudnet rake db:schema:load`.
 
 And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will
 add the available providers from your OnApp installation and an initial admin user with
