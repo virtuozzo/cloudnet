@@ -48,7 +48,7 @@ That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
 
 Then create the database and structure with 
 
-`docker run --env-file=.env --rm cloudnet rake db:schema:create` 
+`docker run --env-file=.env --rm cloudnet rake db:create` 
 
 `docker run --env-file=.env --rm cloudnet rake db:schema:load`.
 
