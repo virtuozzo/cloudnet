@@ -18,8 +18,8 @@ module Squall
     def request(request_method, path, options = {})
       check_config
 
-      verif_ssl = ENV['ONAPP_API_ALLOW_INSECURE'] != 'true'
-      conn = Faraday.new(url: @config[:uri], ssl: {verify: verif_ssl}) do |c|
+      verify_ssl = ENV['ONAPP_API_ALLOW_INSECURE'] != 'true'
+      conn = Faraday.new(url: @config[:uri], ssl: { verify: verify_ssl }) do |c|
         c.basic_auth @config[:user], @config[:pass]
         c.params = (options[:query] || {})
         c.request :url_encoded
