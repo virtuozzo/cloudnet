@@ -2,6 +2,7 @@ require 'vcr'
 
 # Use the .env file to compile the list of sensitive data that should not be recorded in
 # cassettes
+NOT_REPLACE = %w(ONAPP_ROLE)
 def sensitive_strings
   dotenv_path = "#{Rails.root}/.env"
   # It's not a big deal if there isn't a .env file when playing back cassettes, it's only when
@@ -13,8 +14,8 @@ def sensitive_strings
   end
   contents = File.read dotenv_path
   words = contents.split(/\s+/)
-  # Only interested in words with an '=' in them
-  words.reject! { |w| !w.include? '=' }
+  # Only interested in words with an '=' in them and not in NOT_REPLACE
+  words.reject! { |w| !w.include?('=') || NOT_REPLACE.any? {|n| w.include? n}}
   # Create a list of key/value pairs
   words.map! { |w| w.split('=', 2) }
   # Turn the key/value pairs into an actual hash

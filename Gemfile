@@ -63,6 +63,7 @@ gem 'responders', '~> 2.0'
 gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rails-4-2'
 gem 'pghero'
+gem 'faraday_middleware'
 
 # Sentry Exception Logging
 gem 'sentry-raven', git: 'https://github.com/getsentry/raven-ruby.git'

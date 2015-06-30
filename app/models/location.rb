@@ -5,6 +5,7 @@ class Location < ActiveRecord::Base
   has_many :servers
   has_many :packages
   has_many :indices, dependent: :destroy
+  has_many :uptimes, dependent: :destroy
   belongs_to :region
   has_and_belongs_to_many :certificates
 

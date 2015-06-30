@@ -9,6 +9,10 @@ defaults: &defaults
     public_token: <%= ENV["MAPBOX_PUBLIC_TOKEN"] %>
   analytics:
     token: <%= ENV["ANALYTICS_KEY"] %>
+  pingdom:
+    api_key: <%= ENV["PINGDOM_KEY"] %>
+    user: <%= ENV["PINGDOM_USER"] %>
+    pass: <%= ENV["PINGDOM_PASS"] %>
 
 development:
   <<: *defaults

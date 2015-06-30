@@ -1,4 +1,6 @@
 ActiveAdmin.register Location do
+  before_save :update_pingdom_name
+  after_save :update_new_uptimes
   actions :all, except: [:destroy]
   menu priority: 5
   scope :all
@@ -7,8 +9,9 @@ ActiveAdmin.register Location do
   permit_params :latitude, :longitude, :provider, :region_id, :country, :city, :memory, :disk, :cpu,
                 :hidden, :price_memory, :price_disk, :price_cpu, :price_bw, :country_code,
                 :hv_group_id, :provider_link, :network_limit, :photo_ids, :price_ip_address,
-                :budget_vps, :inclusive_bandwidth, :ssd_disks, :summary, certificate_ids: []
-
+                :pingdom_id, :budget_vps, :inclusive_bandwidth, :ssd_disks, :summary,
+                certificate_ids: []
+                
   sidebar :control_panel_links do
     ul do
       li link_to('Dashboard', root_path)
@@ -34,6 +37,7 @@ ActiveAdmin.register Location do
     semantic_errors *object.errors.keys
 
     inputs 'Location Details' do
+      input :pingdom_id, as: :select, collection: controller.pingdom_servers, hint: controller.connection_message
       input :region, include_blank: 'Choose Region...'
       input :country, include_blank: 'Choose Country...', priority_countries: %w(US CA MX GB FR)
       input :city
@@ -110,9 +114,82 @@ ActiveAdmin.register Location do
   end
   
   controller do
+    attr_accessor :not_connected
+    
     def find_resource
       Location.find_by_id(params[:id])
     end
+    
+    def pingdom_servers
+      @pingdom_servers ||= begin
+        data = pingdom_servers_cached
+        Rails.cache.delete(pingdom_cache_key) unless pingdom_connected?
+        update_selected(data)
+      end
+    end
+
+    def connection_message
+      pingdom_connected? ? "" : "pingdom connection error"
+    end
+
+    private
+      def update_pingdom_name(loc)
+        loc.pingdom_id = params["location"]["pingdom_id"].to_i
+        loc.pingdom_name = params["location"]["pingdom_id"].split(":")[1]
+        return true
+      end
+      
+      def update_new_uptimes(loc)
+        return false if loc.errors.count > 0
+        return true unless loc.previous_changes["pingdom_id"]
+        loc.uptimes.delete_all
+        UptimeUpdateServer.perform_async(loc.pingdom_id, loc.id, 150)
+      end
+
+      def pingdom_servers_cached
+        Rails.cache.fetch(pingdom_cache_key, expires_in: 30.seconds) {pingdom_servers_raw}
+      end
+      
+      def pingdom_servers_raw
+        UptimeTasks.new.perform(:pingdom_servers)
+      end
+
+      def update_selected(options)
+        location = Location.find(params["id"])
+        if pingdom_connected?
+          pingdom_options_mark_selected(location, options)
+        else
+          pingdom_options_with_current_values(location)
+        end
+      end
+      
+      def pingdom_options_with_current_values(location)
+        if location.pingdom_id
+          [[location.pingdom_name, 
+            "#{location.pingdom_id}:#{location.pingdom_name}", 
+            {selected: true}]
+          ]
+        else
+          []
+        end
+      end
+    
+      def pingdom_options_mark_selected(location, options)
+        options = pingdom_servers_cached if options[0][1].to_i == -1
+        unless location.pingdom_id.nil?
+          index = options.index {|o| o[1].to_i == location.pingdom_id}
+          options[index].push({selected: true}) if index
+        end
+        options
+      end
+      
+      def pingdom_connected?
+        pingdom_servers_cached[0][1].to_i > -1
+      end
+      
+      def pingdom_cache_key
+        "pingdom_servers"
+      end
   end
 end
 
