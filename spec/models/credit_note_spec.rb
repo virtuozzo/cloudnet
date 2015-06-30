@@ -56,10 +56,13 @@ describe CreditNote do
   end
 
   it 'should give a max - 1 hours for credit note' do
-    allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX)
-    expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
-    allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX + 1)
-    expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
+    # TODO: Does not take into account when Time.now is in the last days of a month
+    Timecop.freeze Time.zone.now.change(day: 15, month: 1) do
+      allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX)
+      expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
+      allow(user.account).to receive_messages(hours_till_next_invoice: Account::HOURS_MAX + 1)
+      expect(credit_note.hours_till_next_invoice).to eq(Account::HOURS_MAX - 1)
+    end
   end
 
   it 'should return if there are no items associated with this invoice' do
