@@ -210,4 +210,13 @@ FactoryGirl.define do
     association :account, factory: :account
     pay_source :paypal
   end
+  
+  factory :uptime do
+    avgresponse 108
+    downtime 100
+    starttime 1435014000
+    unmonitored 0
+    uptime 86300
+    association :location, factory: :location
+  end
 end

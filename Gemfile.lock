@@ -257,6 +257,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (0.4.2)
       faraday (~> 0.8)
+    faraday_middleware (0.9.1)
+      faraday (>= 0.7.4, < 0.10)
     fastercsv (1.5.5)
     ffi (1.9.8)
     figaro (1.0.0)
@@ -333,7 +335,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.3)
       railties (>= 3.2.16)
-    json (1.8.2)
+    json (1.8.3)
     kaminari (0.15.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -353,7 +355,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     mock_redis (0.14.0)
     multi_json (1.11.0)
     multipart-post (2.0.0)
@@ -640,6 +642,7 @@ DEPENDENCIES
   faker
   faraday (~> 0.9.0)
   faraday-http-cache (~> 0.4.0)
+  faraday_middleware
   figaro
   foreman
   fuubar
