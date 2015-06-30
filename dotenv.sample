@@ -60,6 +60,7 @@ MAILER_ADMIN_RECIPIENTS="sample@email.com, joebloggs@website.com"
 # Financial report recipients
 MAILER_ENQUIRY_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_FINANCE_RECIPIENTS="sample@email.com, joebloggs@website.com"
+MAILER_SUPPORT_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_ADMIN_DEFAULT_FROM='Cloud.net Admin <admin@website.com>'
 MAILER_NOTIFICATIONS_DEFAULT_FROM='Cloud.net Notifications <notifications@website.com>'
 MAILER_DEFAULT_WELCOME='Cloud.net <welcome@website.com>'

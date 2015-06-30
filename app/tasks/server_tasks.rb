@@ -13,16 +13,26 @@ class ServerTasks < BaseTasks
     info = squall.show(server.identifier)
 
     # Don't update our state if our server is locked
-    state = server.state
+    new_state = server.state
     if info['locked'] == false
       if info['built'] == false
-        state = :building
+        new_state = :building
       elsif info['booted'] == false
-        state = :off
+        new_state = :off
       else
-        state = :on
+        new_state = :on
       end
     end
+    old_state = server.state
+
+    if old_state != new_state
+      server.note_time_of_state_change
+      state = new_state
+    else
+      state = old_state
+    end
+
+    server.notify_if_stuck_state
 
     disk_size = info['total_disk_size'].to_i
 

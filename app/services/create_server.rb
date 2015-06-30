@@ -34,7 +34,7 @@ class CreateServer
   def self.extract_ip(server)
     ip = '0.0.0.0'
     array = server['ip_addresses']
-    if array.length >= 1
+    if array && array.length >= 1
       return array.first['ip_address']['address']
     end
 

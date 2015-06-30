@@ -4,6 +4,9 @@ class Server < ActiveRecord::Base
   include PublicActivity::Common
   include Billing::ServerInvoiceable
   acts_as_paranoid
+  
+  # Maximum time for server to be in states such as building, booting, etc
+  MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
 
   belongs_to :user
   belongs_to :template
@@ -50,6 +53,20 @@ class Server < ActiveRecord::Base
 
   def payg?
     payment_type == Server::TYPE_PAYG.to_sym
+  end
+
+  def note_time_of_state_change
+    update_attributes!(state_changed_at: Time.zone.now)
+  end
+
+  def last_state_change
+    state_changed_at || created_at
+  end
+
+  def notify_if_stuck_state
+    return if state.in? [:off, :on] # These are known stable states
+    return unless Time.zone.now - last_state_change > MAX_TIME_FOR_INTERMEDIATE_STATES
+    AdminMailer.notify_stuck_server_state(self).deliver_now
   end
 
   # Change the resources for a server in our DB. Does not sync these changes to the server on the

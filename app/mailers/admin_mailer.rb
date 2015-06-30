@@ -1,6 +1,7 @@
 class AdminMailer < ActionMailer::Base
   ADMIN_RECIPIENTS = ENV['MAILER_ADMIN_RECIPIENTS'].split(',')
   FINANCE_RECIPIENTS = ENV['MAILER_FINANCE_RECIPIENTS'].split(',')
+  SUPPORT_RECIPIENTS = ENV['MAILER_SUPPORT_RECIPIENTS'].split(',')
 
   default from: ENV['MAILER_ADMIN_DEFAULT_FROM']
 
@@ -24,5 +25,12 @@ class AdminMailer < ActionMailer::Base
     attachments[filename] = reporter.charge_report
 
     mail(to: mailto, subject: "Cloud.net Monthly CSV Reports - #{@date_name}")
+  end
+
+  def notify_stuck_server_state(server)
+    @server = server
+    @stuck_duration = "#{((Time.zone.now - @server.last_state_change) / 60).floor} minutes"
+    @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
+    mail(to: SUPPORT_RECIPIENTS, subject: 'Cloud.net Server stuck in intermediate state')
   end
 end
