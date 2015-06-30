@@ -39,7 +39,10 @@ Or build the image yourself. First make sure you have the repo with
 **Initial config**    
 Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
 
-Generate symmetric encryption key `docker run --env-file=.env --rm cloudnet rails generate symmetric_encryption:new_keys production`.That KEY will need to be added to the `SYMMETRIC_ENCRYPTION_KEY` setting in `.env`.
+Generate symmetric encryption key. First you will need to temporarily add `RAILS_ENV=test` to your `.env` file.
+Then run`docker run --env-file=.env --rm cloudnet rails generate symmetric_encryption:new_keys production`.
+That KEY will need to be added to the `SYMMETRIC_ENCRYPTION_KEY` setting in `.env`. Make sure to remove the
+`RAILS_ENV=test` line.
 
 Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
 of the created ID;
