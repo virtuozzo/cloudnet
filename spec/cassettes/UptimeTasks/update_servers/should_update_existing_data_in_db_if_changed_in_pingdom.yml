@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
+    uri: https://myUser:myPass@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
     body:
       encoding: US-ASCII
       string: ''
@@ -50,7 +50,7 @@ http_interactions:
   recorded_at: Thu, 02 Jul 2015 13:12:00 GMT
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/1534660?from=1433199600&includeuptime=true&resolution=day
+    uri: https://myUser:myPass@api.pingdom.com/api/2.0/summary.performance/1534660?from=1433199600&includeuptime=true&resolution=day
     body:
       encoding: US-ASCII
       string: ''

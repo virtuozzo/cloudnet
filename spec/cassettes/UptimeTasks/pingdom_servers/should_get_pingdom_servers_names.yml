@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/checks
+    uri: https://myUser:myPass@api.pingdom.com/api/2.0/checks
     body:
       encoding: US-ASCII
       string: ''
     headers:
       App-Key:
-      - "<%= ENV['PINGDOM_KEY'] %>"
+      - myAPIkey
       User-Agent:
       - Faraday v0.9.1
       Accept-Encoding:

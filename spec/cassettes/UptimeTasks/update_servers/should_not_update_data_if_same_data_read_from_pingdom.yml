@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
+    uri: https://myUser:myPass@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
     body:
       encoding: US-ASCII
       string: ''
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - cloudflare-nginx
       Date:
-      - Thu, 02 Jul 2015 13:11:44 GMT
+      - Thu, 02 Jul 2015 14:23:20 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -31,26 +31,26 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d6e4fffd8a4eef7868774c01dabeefae31435842704; expires=Fri, 01-Jul-16
-        13:11:44 GMT; path=/; domain=.pingdom.com; HttpOnly
+      - __cfduid=d1c249ab65b0ad923ff4ce54c1c2561b51435846998; expires=Fri, 01-Jul-16
+        14:23:18 GMT; path=/; domain=.pingdom.com; HttpOnly
       Cache-Control:
       - no-cache
       Req-Limit-Short:
-      - 'Remaining: 15075 Time until reset: 2669'
+      - 'Remaining: 15098 Time until reset: 2345'
       Req-Limit-Long:
-      - 'Remaining: 142370 Time until reset: 2323518'
+      - 'Remaining: 142293 Time until reset: 1287054'
       Server-Time:
-      - '1435842704'
+      - '1435847000'
       Cf-Ray:
-      - 1ffa992865d20610-LHR
+      - 1ffb01fa17c0061c-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"summary":{"days":[{"avgresponse":60,"downtime":0,"starttime":1433199600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433286000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1433372400,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1433458800,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433545200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433631600,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433718000,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1433804400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433890800,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433977200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434063600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434150000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1434236400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434322800,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434409200,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434495600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434582000,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434668400,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434754800,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434841200,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434927600,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1435014000,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1435100400,"unmonitored":0,"uptime":86400},{"avgresponse":68,"downtime":0,"starttime":1435186800,"unmonitored":0,"uptime":86400},{"avgresponse":67,"downtime":0,"starttime":1435273200,"unmonitored":0,"uptime":86400},{"avgresponse":78,"downtime":0,"starttime":1435359600,"unmonitored":0,"uptime":86400},{"avgresponse":81,"downtime":0,"starttime":1435446000,"unmonitored":0,"uptime":86400},{"avgresponse":84,"downtime":0,"starttime":1435532400,"unmonitored":0,"uptime":86400},{"avgresponse":92,"downtime":0,"starttime":1435618800,"unmonitored":0,"uptime":86400},{"avgresponse":82,"downtime":0,"starttime":1435705200,"unmonitored":2700,"uptime":83700},{"avgresponse":81,"downtime":0,"starttime":1435791600,"unmonitored":0,"uptime":50187}]}}'
+      string: '{"summary":{"days":[{"avgresponse":60,"downtime":0,"starttime":1433199600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433286000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1433372400,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1433458800,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433545200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433631600,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433718000,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1433804400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433890800,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433977200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434063600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434150000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1434236400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434322800,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434409200,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434495600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434582000,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434668400,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434754800,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434841200,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434927600,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1435014000,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1435100400,"unmonitored":0,"uptime":86400},{"avgresponse":68,"downtime":0,"starttime":1435186800,"unmonitored":0,"uptime":86400},{"avgresponse":67,"downtime":0,"starttime":1435273200,"unmonitored":0,"uptime":86400},{"avgresponse":78,"downtime":0,"starttime":1435359600,"unmonitored":0,"uptime":86400},{"avgresponse":81,"downtime":0,"starttime":1435446000,"unmonitored":0,"uptime":86400},{"avgresponse":84,"downtime":0,"starttime":1435532400,"unmonitored":0,"uptime":86400},{"avgresponse":92,"downtime":0,"starttime":1435618800,"unmonitored":0,"uptime":86400},{"avgresponse":82,"downtime":0,"starttime":1435705200,"unmonitored":2700,"uptime":83700},{"avgresponse":82,"downtime":0,"starttime":1435791600,"unmonitored":0,"uptime":54687}]}}'
     http_version: 
-  recorded_at: Thu, 02 Jul 2015 13:12:02 GMT
+  recorded_at: Thu, 02 Jul 2015 14:23:38 GMT
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
+    uri: https://myUser:myPass@api.pingdom.com/api/2.0/summary.performance/1534749?from=1433199600&includeuptime=true&resolution=day
     body:
       encoding: US-ASCII
       string: ''
@@ -71,7 +71,7 @@ http_interactions:
       Server:
       - cloudflare-nginx
       Date:
-      - Thu, 02 Jul 2015 13:11:45 GMT
+      - Thu, 02 Jul 2015 14:23:21 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -79,21 +79,21 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d0a0a847b40c2873bc8d405756a6ffb431435842705; expires=Fri, 01-Jul-16
-        13:11:45 GMT; path=/; domain=.pingdom.com; HttpOnly
+      - __cfduid=daf167f5eb12e04e5bd952c7efc7b621b1435847001; expires=Fri, 01-Jul-16
+        14:23:21 GMT; path=/; domain=.pingdom.com; HttpOnly
       Cache-Control:
       - no-cache
       Req-Limit-Short:
-      - 'Remaining: 15074 Time until reset: 2668'
+      - 'Remaining: 15099 Time until reset: 3600'
       Req-Limit-Long:
-      - 'Remaining: 142369 Time until reset: 2323517'
+      - 'Remaining: 142365 Time until reset: 2319221'
       Server-Time:
-      - '1435842705'
+      - '1435847001'
       Cf-Ray:
-      - 1ffa992b49180610-LHR
+      - 1ffb020e91931383-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"summary":{"days":[{"avgresponse":60,"downtime":0,"starttime":1433199600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433286000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1433372400,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1433458800,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433545200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433631600,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433718000,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1433804400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433890800,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433977200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434063600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434150000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1434236400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434322800,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434409200,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434495600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434582000,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434668400,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434754800,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434841200,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434927600,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1435014000,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1435100400,"unmonitored":0,"uptime":86400},{"avgresponse":68,"downtime":0,"starttime":1435186800,"unmonitored":0,"uptime":86400},{"avgresponse":67,"downtime":0,"starttime":1435273200,"unmonitored":0,"uptime":86400},{"avgresponse":78,"downtime":0,"starttime":1435359600,"unmonitored":0,"uptime":86400},{"avgresponse":81,"downtime":0,"starttime":1435446000,"unmonitored":0,"uptime":86400},{"avgresponse":84,"downtime":0,"starttime":1435532400,"unmonitored":0,"uptime":86400},{"avgresponse":92,"downtime":0,"starttime":1435618800,"unmonitored":0,"uptime":86400},{"avgresponse":82,"downtime":0,"starttime":1435705200,"unmonitored":2700,"uptime":83700},{"avgresponse":81,"downtime":0,"starttime":1435791600,"unmonitored":0,"uptime":50187}]}}'
+      string: '{"summary":{"days":[{"avgresponse":60,"downtime":0,"starttime":1433199600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433286000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1433372400,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1433458800,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433545200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433631600,"unmonitored":0,"uptime":86400},{"avgresponse":62,"downtime":0,"starttime":1433718000,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1433804400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1433890800,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1433977200,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434063600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434150000,"unmonitored":0,"uptime":86400},{"avgresponse":64,"downtime":0,"starttime":1434236400,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434322800,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434409200,"unmonitored":0,"uptime":86400},{"avgresponse":63,"downtime":0,"starttime":1434495600,"unmonitored":0,"uptime":86400},{"avgresponse":61,"downtime":0,"starttime":1434582000,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434668400,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434754800,"unmonitored":0,"uptime":86400},{"avgresponse":60,"downtime":0,"starttime":1434841200,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1434927600,"unmonitored":0,"uptime":86400},{"avgresponse":59,"downtime":0,"starttime":1435014000,"unmonitored":0,"uptime":86400},{"avgresponse":65,"downtime":0,"starttime":1435100400,"unmonitored":0,"uptime":86400},{"avgresponse":68,"downtime":0,"starttime":1435186800,"unmonitored":0,"uptime":86400},{"avgresponse":67,"downtime":0,"starttime":1435273200,"unmonitored":0,"uptime":86400},{"avgresponse":78,"downtime":0,"starttime":1435359600,"unmonitored":0,"uptime":86400},{"avgresponse":81,"downtime":0,"starttime":1435446000,"unmonitored":0,"uptime":86400},{"avgresponse":84,"downtime":0,"starttime":1435532400,"unmonitored":0,"uptime":86400},{"avgresponse":92,"downtime":0,"starttime":1435618800,"unmonitored":0,"uptime":86400},{"avgresponse":82,"downtime":0,"starttime":1435705200,"unmonitored":2700,"uptime":83700},{"avgresponse":82,"downtime":0,"starttime":1435791600,"unmonitored":0,"uptime":54687}]}}'
     http_version: 
-  recorded_at: Thu, 02 Jul 2015 13:12:02 GMT
+  recorded_at: Thu, 02 Jul 2015 14:23:39 GMT
 recorded_with: VCR 2.9.3
