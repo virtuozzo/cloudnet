@@ -10,5 +10,6 @@ json.array! @locations do |loc|
     json.avatar cert.avatar.url
     json.id cert.id
   end
-    json.region loc.region
+  json.uptimes loc.uptimes, :starttime, :downtime
+  json.region loc.region
 end

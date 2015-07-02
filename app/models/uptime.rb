@@ -1,6 +1,7 @@
 class Uptime < ActiveRecord::Base
   belongs_to :location
   validates :location, presence: true
+  default_scope {order('starttime ASC')}
   
   MAX_DATA_PER_LOCATION = 400 #days
   

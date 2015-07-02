@@ -25,6 +25,7 @@ ActiveAdmin.register Location do
     column :country
     column :city
     column :provider
+    column :pingdom_name
     column :hidden
     column "Certificates" do |loc|
       loc.certificates.map(&:name).join(', ')
