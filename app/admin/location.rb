@@ -134,7 +134,8 @@ ActiveAdmin.register Location do
 
     private
       def update_pingdom_name(loc)
-        loc.pingdom_id = params["location"]["pingdom_id"].to_i
+        params_pingdom_id = params["location"]["pingdom_id"]
+        loc.pingdom_id = params_pingdom_id.empty? ? nil : params_pingdom_id.to_i
         loc.pingdom_name = params["location"]["pingdom_id"].split(":")[1]
         return true
       end
@@ -155,7 +156,7 @@ ActiveAdmin.register Location do
       end
 
       def update_selected(options)
-        location = Location.find(params["id"])
+        location = Location.find(params["id"]) unless action_name.in? ["new", "create"]
         if pingdom_connected?
           pingdom_options_mark_selected(location, options)
         else
@@ -164,7 +165,7 @@ ActiveAdmin.register Location do
       end
       
       def pingdom_options_with_current_values(location)
-        if location.pingdom_id
+        if location.try(:pingdom_id)
           [[location.pingdom_name, 
             "#{location.pingdom_id}:#{location.pingdom_name}", 
             {selected: true}]
@@ -176,7 +177,7 @@ ActiveAdmin.register Location do
     
       def pingdom_options_mark_selected(location, options)
         options = pingdom_servers_cached if options[0][1].to_i == -1
-        unless location.pingdom_id.nil?
+        unless location.try(:pingdom_id).nil?
           index = options.index {|o| o[1].to_i == location.pingdom_id}
           options[index].push({selected: true}) if index
         end
@@ -184,7 +185,7 @@ ActiveAdmin.register Location do
       end
       
       def pingdom_connected?
-        pingdom_servers_cached[0][1].to_i > -1
+        pingdom_servers_cached && pingdom_servers_cached[0][1].to_i > -1
       end
       
       def pingdom_cache_key

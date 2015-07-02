@@ -4,6 +4,11 @@ class UptimeTasks < BaseTasks
     run_task(action, *args)
   end
 
+  def run_task(action, *args)
+    return false if no_pingdom_credentials?
+    super
+  end
+  
   private
   
   def update_all_servers
@@ -42,7 +47,7 @@ class UptimeTasks < BaseTasks
   
   #getting all servers being checked in Pingdom
   def checks
-    @checks ||= connection.get('checks')
+    @checks ||= connection && connection.get('checks')
   rescue Faraday::ConnectionFailed
     nil
   end
@@ -62,7 +67,7 @@ class UptimeTasks < BaseTasks
   end
   
   def performance_data(pingdom_id, days = 30)
-    connection.get("summary.performance/#{pingdom_id}", performance_args(days))
+    connection && connection.get("summary.performance/#{pingdom_id}", performance_args(days))
   end
   
   def performance_args(days)
@@ -74,6 +79,7 @@ class UptimeTasks < BaseTasks
   end
   
   def connection
+    return false if no_pingdom_credentials?
     @connection ||= Faraday.new(:url => "https://api/pingdom.com/api/2.0/", ssl: {verify: false}) do |builder|
       builder.url_prefix = "https://api.pingdom.com/api/2.0"
       builder.use Faraday::Response::Logger, Rails.logger
@@ -82,6 +88,12 @@ class UptimeTasks < BaseTasks
       builder.response :json, content_type: /\bjson$/
       builder.adapter Faraday.default_adapter
     end
+  end
+  
+  def no_pingdom_credentials?
+    !KEYS[:pingdom][:user] ||
+    !KEYS[:pingdom][:pass] ||
+    !KEYS[:pingdom][:api_key]
   end
   
   def allowable_methods
