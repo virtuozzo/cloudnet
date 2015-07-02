@@ -2,52 +2,6 @@
 http_interactions:
 - request:
     method: get
-    uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/?from=1426982400&includeuptime=true&resolution=day
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      App-Key:
-      - "<%= ENV['PINGDOM_KEY'] %>"
-      User-Agent:
-      - Faraday v0.9.1
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-  response:
-    status:
-      code: 403
-      message: Forbidden
-    headers:
-      Server:
-      - cloudflare-nginx
-      Date:
-      - Tue, 30 Jun 2015 14:27:37 GMT
-      Content-Type:
-      - application/json
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - __cfduid=d7fe0eb3bdc8d4595b0c0b6fcacda92501435674457; expires=Wed, 29-Jun-16
-        14:27:37 GMT; path=/; domain=.pingdom.com; HttpOnly
-      Cache-Control:
-      - no-cache
-      Req-Limit-Short:
-      - 'Remaining: 15081 Time until reset: 102'
-      Req-Limit-Long:
-      - 'Remaining: 142386 Time until reset: 1459595'
-      Cf-Ray:
-      - 1fea8d8d41d3061c-LHR
-    body:
-      encoding: ASCII-8BIT
-      string: '{"error":{"statuscode":403,"statusdesc":"Forbidden","errormessage":"Forbidden"}}'
-    http_version: 
-  recorded_at: Tue, 30 Jun 2015 14:27:41 GMT
-- request:
-    method: get
     uri: https://<%= CGI.escape ENV['PINGDOM_USER'] %>:<%= ENV['PINGDOM_PASS'] %>@api.pingdom.com/api/2.0/summary.performance/?from=1427155200&includeuptime=true&resolution=day
     body:
       encoding: US-ASCII
@@ -69,7 +23,7 @@ http_interactions:
       Server:
       - cloudflare-nginx
       Date:
-      - Thu, 02 Jul 2015 08:46:59 GMT
+      - Thu, 02 Jul 2015 13:11:48 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -77,19 +31,19 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d9b16003271c7d7018ebd18ab256ca7fa1435826818; expires=Fri, 01-Jul-16
-        08:46:58 GMT; path=/; domain=.pingdom.com; HttpOnly
+      - __cfduid=dcbcd15b18b9a67636898b2c041c6cad61435842707; expires=Fri, 01-Jul-16
+        13:11:47 GMT; path=/; domain=.pingdom.com; HttpOnly
       Cache-Control:
       - no-cache
       Req-Limit-Short:
-      - 'Remaining: 15060 Time until reset: 3075'
+      - 'Remaining: 15072 Time until reset: 2665'
       Req-Limit-Long:
-      - 'Remaining: 142323 Time until reset: 1307234'
+      - 'Remaining: 142367 Time until reset: 2323514'
       Cf-Ray:
-      - 1ff9155237150a84-LHR
+      - 1ffa993cfcc50ce3-LHR
     body:
       encoding: ASCII-8BIT
       string: '{"error":{"statuscode":403,"statusdesc":"Forbidden","errormessage":"Forbidden"}}'
     http_version: 
-  recorded_at: Thu, 02 Jul 2015 08:47:16 GMT
+  recorded_at: Thu, 02 Jul 2015 13:12:05 GMT
 recorded_with: VCR 2.9.3

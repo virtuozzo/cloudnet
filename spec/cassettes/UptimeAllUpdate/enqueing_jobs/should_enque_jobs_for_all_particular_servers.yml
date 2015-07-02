@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - cloudflare-nginx
       Date:
-      - Mon, 22 Jun 2015 14:28:47 GMT
+      - Thu, 02 Jul 2015 13:11:52 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -31,47 +31,89 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d548617192b4da85aaeebfed14384d8b31434983326; expires=Tue, 21-Jun-16
-        14:28:46 GMT; path=/; domain=.pingdom.com; HttpOnly
+      - __cfduid=d6ad0792a645d5dba244a12245424659f1435842712; expires=Fri, 01-Jul-16
+        13:11:52 GMT; path=/; domain=.pingdom.com; HttpOnly
       Cache-Control:
       - no-cache
       Req-Limit-Short:
-      - 'Remaining: 15098 Time until reset: 3325'
+      - 'Remaining: 15071 Time until reset: 2661'
       Req-Limit-Long:
-      - 'Remaining: 142558 Time until reset: 2591725'
+      - 'Remaining: 142366 Time until reset: 2323510'
       Server-Time:
-      - '1434983327'
+      - '1435842712'
       Cf-Ray:
-      - 1fa8a440a29705e1-WAW
+      - 1ffa995719560a8a-LHR
     body:
       encoding: ASCII-8BIT
       string: '{"checks":[{"id":1534660,"created":1426079477,"name":"Budget London
-        Softlayer","hostname":"budget-london.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429443920,"lasttesttime":1434982520,"lastresponsetime":35,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Softlayer","hostname":"budget-london.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429443920,"lasttesttime":1435842020,"lastresponsetime":18,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534663,"created":1426079529,"name":"Budget
-        Dallas Softlayer","hostname":"budget-dallas.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429666867,"lasttesttime":1434983182,"lastresponsetime":132,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
-        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534667,"created":1426079706,"name":"Cloud4y
-        Moscow","hostname":"control.cloud4y.ru","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1432269714,"lasttesttime":1434983178,"lastresponsetime":56,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Dallas Softlayer","hostname":"budget-dallas.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429666867,"lasttesttime":1435842682,"lastresponsetime":40,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534671,"created":1426079922,"name":"Jaguar
-        PC Atlanta","hostname":"209.140.21.114","use_legacy_notifications":false,"resolution":15,"type":"tcp","lasttesttime":1434983177,"lastresponsetime":64,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        PC - Atlanta, USA","hostname":"209.140.21.114","use_legacy_notifications":false,"resolution":15,"type":"tcp","lasttesttime":1435842386,"lastresponsetime":91,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534667,"created":1426079706,"name":"Cloud4y
+        Moscow","hostname":"control.cloud4y.ru","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1432269714,"lasttesttime":1435842678,"lastresponsetime":61,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534676,"created":1426080104,"name":"Fluccs
-        Brisbane","hostname":"118.88.31.210","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1432146414,"lasttesttime":1434983180,"lastresponsetime":379,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Brisbane","hostname":"118.88.31.210","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1435551990,"lasttesttime":1435842680,"lastresponsetime":254,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534690,"created":1426081008,"name":"XLHost
-        Columbus","hostname":"209.190.94.3","use_legacy_notifications":false,"resolution":15,"type":"tcp","lasterrortime":1433939179,"lasttesttime":1434983179,"lastresponsetime":108,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Columbus","hostname":"209.190.94.3","use_legacy_notifications":false,"resolution":15,"type":"tcp","lasterrortime":1433939179,"lasttesttime":1435842679,"lastresponsetime":59,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534703,"created":1426081708,"name":"Xfernet
-        Los Angeles","hostname":"67.43.167.83","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1434701952,"lasttesttime":1434982746,"lastresponsetime":67,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Los Angeles","hostname":"67.43.167.83","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1434701952,"lasttesttime":1435842246,"lastresponsetime":171,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534718,"created":1426082367,"name":"Secure
-        Online Desktop Milan","hostname":"77.93.253.210","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1433491915,"lasttesttime":1434983183,"lastresponsetime":131,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
-        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534740,"created":1426083751,"name":"Exabytes
-        Tokyo","hostname":"180.222.191.85","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1434982535,"lasttesttime":1434982535,"lastresponsetime":0,"status":"down","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Online Desktop - Milan, Italy","hostname":"77.93.253.210","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1433491915,"lasttesttime":1435842685,"lastresponsetime":123,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534742,"created":1426083812,"name":"Webair
-        New York","hostname":"209.200.47.200","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1428561722,"lasttesttime":1434983184,"lastresponsetime":68,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        New York","hostname":"209.200.47.200","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1428561722,"lasttesttime":1435842684,"lastresponsetime":101,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534745,"created":1426083908,"name":"Netcetera
-        Ballasalla","hostname":"81.27.105.88","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429783917,"lasttesttime":1434983185,"lastresponsetime":45,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        - Ballasalla, Isle of Man","hostname":"81.27.105.88","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1435259272,"lasttesttime":1435842436,"lastresponsetime":135,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534749,"created":1426083994,"name":"Quadranet
-        Miami","hostname":"96.44.142.22","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1434983187,"lastresponsetime":34,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Miami","hostname":"96.44.142.22","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842687,"lastresponsetime":115,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534715,"created":1426082244,"name":"HostPro
-        Kiev","hostname":"194.28.84.110","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1434456371,"lasttesttime":1434982886,"lastresponsetime":110,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
-        (Recommended)","acktimeout":0,"autoresolve":0}],"counts":{"total":13,"limited":13,"filtered":13}}'
+        - Kiev, Ukraine","hostname":"194.28.84.110","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1434456371,"lasttesttime":1435842677,"lastresponsetime":106,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639647,"created":1435056560,"name":"Dolphin
+        IT - Germany","hostname":"89.1.22.10","use_legacy_notifications":false,"resolution":1,"type":"http","lasterrortime":1435840634,"lasttesttime":1435842674,"lastresponsetime":100,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639649,"created":1435056711,"name":"Host
+        1 - Norway","hostname":"91.229.143.210","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842420,"lastresponsetime":46,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639653,"created":1435056892,"name":"HostingXS
+        - Netherlands","hostname":"213.207.111.49","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842419,"lastresponsetime":115,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639660,"created":1435056975,"name":"ICN
+        Technologies - Bulgaria","hostname":"77.77.148.100","use_legacy_notifications":false,"resolution":1,"type":"ping","lasttesttime":1435842679,"lastresponsetime":174,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639662,"created":1435057036,"name":"Maxihost
+        - Brazil","hostname":"189.1.170.224","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1435587177,"lasttesttime":1435841839,"lastresponsetime":231,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639664,"created":1435057069,"name":"Meebox
+        - Denmark","hostname":"77.66.121.70","use_legacy_notifications":false,"resolution":1,"type":"ping","lasttesttime":1435842653,"lastresponsetime":174,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639666,"created":1435057124,"name":"Net-Style
+        Atarim - Israel","hostname":"31.168.172.153","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842421,"lastresponsetime":62,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639668,"created":1435057182,"name":"Noc.tw
+        - Taiwan","hostname":"103.17.10.126","use_legacy_notifications":false,"resolution":1,"type":"ping","lasterrortime":1435778740,"lasttesttime":1435842700,"lastresponsetime":152,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639670,"created":1435057231,"name":"Premier
+        Innovations - USA","hostname":"67.43.162.18","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842422,"lastresponsetime":75,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639671,"created":1435057269,"name":"Safosi
+        - Tunisia","hostname":"41.231.54.9","use_legacy_notifications":false,"resolution":1,"type":"ping","lasterrortime":1435489491,"lasttesttime":1435842651,"lastresponsetime":167,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639673,"created":1435057320,"name":"SeFlow
+        - Italy","hostname":"95.141.42.115","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842424,"lastresponsetime":152,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639676,"created":1435057456,"name":"Serveo
+        - Netherlands","hostname":"91.218.124.34","use_legacy_notifications":false,"resolution":1,"type":"tcp","lasttesttime":1435842654,"lastresponsetime":68,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639678,"created":1435057492,"name":"StayOn
+        - Norway","hostname":"37.44.186.6","use_legacy_notifications":false,"resolution":1,"type":"ping","lasttesttime":1435842665,"lastresponsetime":186,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639679,"created":1435057544,"name":"Superb
+        Internet 1 - USA","hostname":"209.160.56.131","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842425,"lastresponsetime":47,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639680,"created":1435057572,"name":"Superb
+        Internet 2 - USA","hostname":"207.228.249.101","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842427,"lastresponsetime":88,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639683,"created":1435057750,"name":"Total
+        Server Solutions - USA","hostname":"199.58.187.35","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842428,"lastresponsetime":18,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639684,"created":1435057793,"name":"Vertiro
+        - Australia","hostname":"43.225.60.254","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842429,"lastresponsetime":251,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639686,"created":1435057825,"name":"VPS
+        Networks - South Africa","hostname":"197.85.190.251","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842430,"lastresponsetime":155,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639687,"created":1435057862,"name":"Web
+        In A Box - Australia","hostname":"110.173.224.53","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842431,"lastresponsetime":277,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639688,"created":1435057893,"name":"WebSP
+        - Portugal","hostname":"185.31.159.1","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842432,"lastresponsetime":143,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639689,"created":1435057920,"name":"Wholesale
+        Internet - USA","hostname":"208.67.0.251","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1435436533,"lasttesttime":1435842433,"lastresponsetime":121,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639690,"created":1435057949,"name":"Yisp
+        - Netherlands","hostname":"37.220.38.2","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842434,"lastresponsetime":15,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        (Recommended)","acktimeout":0,"autoresolve":0}],"counts":{"total":34,"limited":34,"filtered":34}}'
     http_version: 
-  recorded_at: Mon, 22 Jun 2015 14:28:48 GMT
+  recorded_at: Thu, 02 Jul 2015 13:12:09 GMT
 recorded_with: VCR 2.9.3

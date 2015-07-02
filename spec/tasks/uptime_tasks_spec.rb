@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe UptimeTasks, :vcr do
+  include_context :pingdom_env
   
   let(:tasks) {UptimeTasks.new}
   let(:all_servers_update) {tasks.perform(:update_all_servers)}
@@ -10,6 +11,7 @@ describe UptimeTasks, :vcr do
   let(:pingom_not_connected) {1534715} #from vcr - HostPro - Kiev
   let!(:location) {FactoryGirl.create(:location, pingdom_id: pingdom_id)}
   let!(:location2) {FactoryGirl.create(:location, pingdom_id: pingdom2_id)}
+  
   context "update_all_servers" do
     it 'should get all servers checks records' do
       allow(UptimeUpdateServers).to receive(:perform_async)

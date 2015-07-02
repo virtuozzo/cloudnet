@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe UptimeAllUpdate, :vcr do
-
+  include_context :pingdom_env
+  
   context "enqueing jobs" do
     before(:each) do
       Sidekiq::Testing.fake!
@@ -19,7 +20,7 @@ describe UptimeAllUpdate, :vcr do
       expect {
         #Based on VCR
         UptimeAllUpdate.drain
-      }.to change(UptimeUpdateServers.jobs, :size).by(13)
+      }.to change(UptimeUpdateServers.jobs, :size).by(34)
     end
   end
 end
