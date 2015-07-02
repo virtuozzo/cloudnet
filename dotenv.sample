@@ -30,6 +30,11 @@ MAXMIND_KEY=
 # Segment.io custom analytics
 ANALYTICS_KEY=
 
+#Pingdom
+PINGDOM_KEY=
+PINGDOM_USER=
+PINGDOM_PASS=
+
 # Logging
 SENTRY_DSN_URI=http://localhost
 

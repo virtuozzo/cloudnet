@@ -59,7 +59,7 @@ describe UptimeTasks, :vcr do
       }.not_to change(location.uptimes, :count)
     end
     
-    it "should return false if none of locations is not connected to pingdom_id" do
+    it "should return false if none of locations is connected to pingdom_id" do
       expect {
         expect(tasks.perform(:update_servers, pingom_not_connected)).to be_falsey
       }.not_to change(Uptime, :count)
