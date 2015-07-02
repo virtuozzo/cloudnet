@@ -11,7 +11,7 @@ class GenerateFinanceReport < BaseTask
 
     CSV.generate do |csv|
       csv << columns
-      User.all.find_each { |user| csv << account_user_row(user) }
+      User.all.select { |u| !u.account.nil? }.each { |user| csv << account_user_row(user) }
     end
   end
 
@@ -20,7 +20,7 @@ class GenerateFinanceReport < BaseTask
 
     CSV.generate do |csv|
       csv << columns
-      User.all.find_each { |user| transaction_user_rows(user).each { |r| csv << r } }
+      User.all.select { |u| !u.account.nil? }.each { |user| transaction_user_rows(user).each { |r| csv << r } }
     end
   end
 
@@ -29,7 +29,7 @@ class GenerateFinanceReport < BaseTask
 
     CSV.generate do |csv|
       csv << columns
-      User.all.find_each { |user| charges_user_rows(user).each { |r| csv << r } }
+      User.all.select { |u| !u.account.nil? }.each { |user| charges_user_rows(user).each { |r| csv << r } }
     end
   end
 

@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   private
 
   def create_account
-    self.account ||= Account.create(user: self)
+    self.account ||= Account.create!(user: self)
   end
 
   def create_onapp_user
