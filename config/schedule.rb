@@ -58,6 +58,12 @@ every 1.day, at: '2:30 am' do
   runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
+# Update uptime for servers
+every 1.day, at: '3:00am' do
+  runner 'UptimeAllUpdate.perform_in(1.minute)'
+end
+
+
 # Email monthly financial reports
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'

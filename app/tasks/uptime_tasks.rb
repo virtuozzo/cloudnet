@@ -24,7 +24,7 @@ class UptimeTasks < BaseTasks
     return false if location.empty?
     
     raw_data = performance_data(pingdom_id, days)
-    location.each { |loc| update_server(pingdom_id, loc.id, raw_data) }
+    location.each { |loc| update_server(pingdom_id, loc.id, raw_data, days) }
   end
   
   def pingdom_servers
