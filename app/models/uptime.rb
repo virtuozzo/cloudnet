@@ -2,6 +2,7 @@ class Uptime < ActiveRecord::Base
   belongs_to :location
   validates :location, presence: true
   default_scope {order('starttime ASC')}
+  scope :downtimes, -> {select(:downtime, :starttime).where("downtime > 0")}
   
   MAX_DATA_PER_LOCATION = 400 #days
   

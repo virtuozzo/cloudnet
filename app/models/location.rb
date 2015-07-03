@@ -29,9 +29,20 @@ class Location < ActiveRecord::Base
   def hourly_price(memory, cpu, disk)
     (memory * price_memory) + (cpu * price_cpu) + (disk * price_disk)
   end
-
+  
+  def frontend_uptimes
+    {
+      start: uptimes.first.try(:starttime).try(:to_date),
+      end:   uptimes.last.try(:starttime).try(:to_date),
+      downtimes: downtimes
+    }
+  end
   private
 
+  def downtimes
+    uptimes.downtimes.map {|obj| {date: obj.starttime.to_date, downtime: obj.downtime}}
+  end
+  
   def verify_valid_country_code
     errors.add(:country, 'Invalid Country') unless country && IsoCountryCodes.all.detect { |c| c.alpha2.downcase == country.downcase }
   end
