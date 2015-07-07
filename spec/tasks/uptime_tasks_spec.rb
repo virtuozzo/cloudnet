@@ -35,7 +35,17 @@ describe UptimeTasks, :vcr do
   end
   
   context "update_servers" do
+    before(:each) do
+      allow(tasks).to receive(:performance_args).and_return(
+        {
+          includeuptime: true, 
+          resolution: :day,
+          from: 1433199600
+        }
+      )
+    end
     it "should save performance data for given server (by pingdom check_id)" do
+
       expect {
         expect(tasks.perform(:update_servers, pingdom_id).count).to eq 1
       }.to change(location.uptimes, :count).by 30
@@ -70,12 +80,26 @@ describe UptimeTasks, :vcr do
   
   context "update server" do
     it "should save performance data for given server (by location_id)" do
+      allow(tasks).to receive(:performance_args).and_return(
+        {
+          includeuptime: true, 
+          resolution: :day,
+          from: 1433199600
+        }
+      )
       expect {
         expect(tasks.perform(:update_server, pingdom_id, location.id).count).to eq 30
       }.to change(location.uptimes, :count).by 30
     end
     
     it "should save performance data for given server for 100 days" do
+      allow(tasks).to receive(:performance_args).and_return(
+        {
+          includeuptime: true, 
+          resolution: :day,
+          from: 1427155200
+        }
+      )
       expect {
         expect(tasks.perform(:update_server, pingdom_id, location.id, nil, 100).count).to eq 100
       }.to change(location.uptimes, :count).by 100
