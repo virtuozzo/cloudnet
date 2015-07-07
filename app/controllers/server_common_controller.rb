@@ -40,7 +40,7 @@ class ServerCommonController < ApplicationController
 
   def step2
     @templates = Location.find(@wizard_object.location_id).templates.where(hidden: false).group_by { |t| "#{t.os_type}-#{t.os_distro}" }
-    Analytics.track(current_user, event: 'Server Wizard Step 2', properties: { location: @wizard_object.location.to_s })
+    Analytics.track(current_user, event: 'New Server - Options', properties: { location: @wizard_object.location.to_s })
   end
 
   def step3
@@ -48,7 +48,7 @@ class ServerCommonController < ApplicationController
 
     Analytics.track(
       current_user,
-      event: 'Server Wizard Step 3',
+      event: 'New Server - Billing Options',
       properties: {
         location: @wizard_object.location.to_s,
         template: @wizard_object.template.to_s,
@@ -94,7 +94,7 @@ class ServerCommonController < ApplicationController
   def track_analytics_for_server(server)
     Analytics.track(
       current_user,
-      event: 'Server Wizard Created Server',
+      event: 'New Server - Created Server',
       properties: {
         location: @wizard_object.location.to_s,
         template: @wizard_object.template.to_s,
