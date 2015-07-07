@@ -32,8 +32,6 @@ class ServerTasks < BaseTasks
       state = old_state
     end
 
-    server.notify_if_stuck_state
-
     disk_size = info['total_disk_size'].to_i
 
     server.update(
