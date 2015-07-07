@@ -4,6 +4,7 @@ class PublicController < ApplicationController
   
   def main
     @regions = Region.active_regions
+    analytics_info
   end
   
   def user_message
@@ -15,4 +16,7 @@ class PublicController < ApplicationController
     session[:user_return_to] = nil
   end
   
+  def analytics_info
+    Analytics.track(current_user, event: 'Main Page')
+  end
 end
