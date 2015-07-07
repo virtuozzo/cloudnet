@@ -36,7 +36,7 @@ module PublicHelper
   end
   
   def disc_options
-    [['10 GB', 10], ['20 GB', 20], ['40 GB', 40], ['60 GB', 60]]
+    [['20 GB', 20], ['40 GB', 40], ['60 GB', 60], ['80 GB', 80]]
   end
   
   def summary_param(label, abbr, value)
