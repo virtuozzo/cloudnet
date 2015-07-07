@@ -86,6 +86,9 @@ COOKIES_SECRET_BASE=
 # Google Analytics code
 GA_UA_NUMBER=
 
+#HubSpot CRM
+HUBSPOT_ID=
+
 # Capistrano deployment config. (Not needed if using Docker installation method)
 GIT_ORIGIN=git@github.com:OnApp/cloudnet.git
 PROD_SERVER1_IP=1.2.3.4
