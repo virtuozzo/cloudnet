@@ -52,8 +52,9 @@ describe Server do
 
       # Notifications should be triggered because the server has been building for longer
       # than Server::MAX_TIME_FOR_INTERMEDIATE_STATES
-      p ActionMailer::Base.deliveries[1].body
-      # puts email
+      email = ActionMailer::Base.deliveries[1].body
+      expect(email).to match(/stuck in the building stat/)
+      expect(email).to match(/#{server.identifier}/)
     end
   end
 end
