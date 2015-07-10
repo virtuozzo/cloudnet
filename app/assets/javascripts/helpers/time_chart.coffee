@@ -45,7 +45,7 @@ class helpers.TimeChart
     @line = d3.svg.line()
       .x( (d) => @xScale (xPos += 1)) 
       .y( (d) => @yScale(d[@dataName()]))
-      .interpolate("cardinal")
+      .interpolate(@interpolation())
   
   drawPath: ->
     @chart.insert("path",":first-child")
@@ -82,6 +82,9 @@ class helpers.TimeChart
       .offset [0,9]
       .direction 'e'
       
+  interpolation: ->
+    "cardinal"
+    
   xRange: ->
     throw "implement me"
     

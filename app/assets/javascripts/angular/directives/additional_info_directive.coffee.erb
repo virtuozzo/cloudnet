@@ -45,8 +45,8 @@
 
     $scope.prepareUptimeChart = ->
       uptimeTimeChart = $($element).find(".uptime-time-chart")[0]
-      indices = $scope.location?.indices
-      new helpers.UptimeTimeChart(uptimeTimeChart, indices).draw() if indices
+      uptimes = new helpers.UptimeGenerator($scope.location?.uptimes).uptimeInDays()
+      new helpers.UptimeTimeChart(uptimeTimeChart, uptimes).draw() if uptimes
       
     $scope.$watch "location", ->
       mapSetup($scope.location, true) if map

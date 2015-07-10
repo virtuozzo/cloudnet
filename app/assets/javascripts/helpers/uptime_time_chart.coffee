@@ -6,13 +6,16 @@ class helpers.UptimeTimeChart extends helpers.TimeChart
     [20,150]
     
   yDomain: ->
-    [98,100]
+    [0,100]
     
   yTicks: ->
-    [98,99,100]
+    [0,25,50,75,100]
     
   viewBoxValues: ->
     "0 0 155 65"
   
   dataName: ->
-    "indexUptime"
+    "uptime"
+    
+  interpolation: ->
+    "linear"

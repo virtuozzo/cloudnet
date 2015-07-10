@@ -60,7 +60,7 @@ end
 
 # Update uptime for servers
 every 1.day, at: '3:00am' do
-  runner 'UptimeAllUpdate.perform_in(1.minute)'
+  runner 'UptimeAllUpdate.perform_in(5.minutes)'
 end
 
 
