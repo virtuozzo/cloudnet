@@ -114,7 +114,6 @@ $server-search-text-gray: #5F8093;
         }
       }
 
-      
       .cloud-index-graph, 
       .uptime-time-chart
       {
@@ -135,7 +134,11 @@ $server-search-text-gray: #5F8093;
           stroke: $server-search-chart-color; 
           stroke-width: 0.8px;
         }
-
+        path.area{
+          fill: lightsteelblue;
+          stroke-width: 0;
+          opacity: 0.6;
+        }
         .axis path{ 
           fill: none;
           stroke: $server-search-border; 
