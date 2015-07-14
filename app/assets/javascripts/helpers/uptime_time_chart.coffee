@@ -1,6 +1,6 @@
 class helpers.UptimeTimeChart extends helpers.TimeChart
   constructor: (@elem, @data) ->
-    super(@elem, @data)
+    super(@elem, @data, false, true)
 
   xRange: ->
     [20,150]

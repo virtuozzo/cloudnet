@@ -1,5 +1,5 @@
 class helpers.TimeChart
-  constructor: (@elem, @data, @popup) ->
+  constructor: (@elem, @data, @popup, @fillArea) ->
     @initialize()
     @addTooltips() if @popup
     @appendData()
@@ -17,8 +17,8 @@ class helpers.TimeChart
       
   drawChart: ->
     @drawCircles()
-    @prepareLinePath()
     @drawPath()
+    @drawArea() if @fillArea
 
   drawCircles: ->
     el = @chart.select("circle")
@@ -40,6 +40,19 @@ class helpers.TimeChart
     el.on('mouseover', @tip.show)
       .on('mouseout', @tip.hide)
       
+  prepareArea: ->
+    xPos = 0
+    @area = d3.svg.area()
+      .x( (d) => @xScale (xPos += 1))
+      .y0((d) => @yScale(0))
+      .y1((d) => @yScale(d[@dataName()]))
+
+  drawArea: ->
+    @prepareArea()
+    @chart.insert("path",":first-child")
+    .attr("d", @area(@data))
+    .attr("class", "area")
+    
   prepareLinePath: ->
     xPos = 0
     @line = d3.svg.line()
@@ -48,6 +61,7 @@ class helpers.TimeChart
       .interpolate(@interpolation())
   
   drawPath: ->
+    @prepareLinePath()
     @chart.insert("path",":first-child")
     .attr("d", @line(@data))
     .attr("class", "line")
