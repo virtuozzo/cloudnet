@@ -1,5 +1,5 @@
 # Cloud.net's definition of a server. As opposed to OnApp's definition of a server. It should 
-# reliably reflect the existience and state of an OnApp Federation server.
+# reliably reflect the existence and state of an OnApp Federation server.
 class Server < ActiveRecord::Base
   include PublicActivity::Common
   include Billing::ServerInvoiceable
@@ -63,10 +63,18 @@ class Server < ActiveRecord::Base
     state_changed_at || created_at
   end
 
-  def notify_if_stuck_state
-    return if state.in? [:off, :on] # These are known stable states
-    return unless Time.zone.now - last_state_change > MAX_TIME_FOR_INTERMEDIATE_STATES
-    AdminMailer.notify_stuck_server_state(self).deliver_now
+  def detect_stuck_state
+    detected_stuck = false
+    has_intermediate_state = !state.in?([:off, :on])
+    time_in_state = Time.zone.now - last_state_change
+    if has_intermediate_state && time_in_state > MAX_TIME_FOR_INTERMEDIATE_STATES
+      # Only respond to a stuck state the first time it is detected
+      unless stuck
+        detected_stuck = true
+        AdminMailer.notify_stuck_server_state(self).deliver_now
+      end
+    end
+    update_attributes(stuck: detected_stuck) if detected_stuck != stuck
   end
 
   # Change the resources for a server in our DB. Does not sync these changes to the server on the

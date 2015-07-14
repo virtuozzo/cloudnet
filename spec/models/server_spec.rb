@@ -37,26 +37,47 @@ describe Server do
   end
 
   describe 'Notifying of stuck states', type: :mailer  do
-    xit 'should notify when a server has been building for an hour' do
-      # Simulate creating the server 1 hour ago
-      server.created_at = Time.zone.now - 1.hour
-      server.save!
-
-      # Refresh the server's state from the API without any state change
-      squall = double
-      allow(Squall::VirtualMachine).to receive(:new).and_return(squall)
-      allow(squall).to receive(:show).and_return(
-        {}
-      )
+    def refresh_server
       ServerTasks.new.perform(:refresh_server, server.user.id, server.id)
+    end
 
+    before :each do
+      @squall = double
+      allow(Squall::VirtualMachine).to receive(:new).and_return(@squall)
+      allow(@squall).to receive(:show).and_return({})
+      # Simulate creating the server 1 hour ago.
       # Notifications should be triggered because the server has been building for longer
       # than Server::MAX_TIME_FOR_INTERMEDIATE_STATES
+      server.update_attributes created_at: Time.zone.now - 1.hour
+    end
+
+    it 'should notify when a server has been building for an hour' do
+      refresh_server
       email = ActionMailer::Base.deliveries.find do |e|
         e.subject =~ /Server stuck in intermediate stat/
       end
       expect(email.body).to match(/stuck in the building state/)
       expect(email.body).to match(/#{server.identifier}/)
+    end
+
+    it 'should only notify once' do
+      refresh_server
+      refresh_server
+      emails = ActionMailer::Base.deliveries.select do |e|
+        e.subject =~ /Server stuck in intermediate stat/
+      end
+      expect(emails.count).to eq 1
+    end
+
+    it 'should mark a server as unstuck after being stuck' do
+      refresh_server
+      server.reload
+      expect(server.stuck).to be true
+
+      allow(@squall).to receive(:show).and_return('booted' => true)
+      refresh_server
+      server.reload
+      expect(server.stuck).to be false
     end
   end
 end
