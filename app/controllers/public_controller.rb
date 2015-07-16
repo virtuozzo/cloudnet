@@ -17,6 +17,6 @@ class PublicController < ApplicationController
   end
   
   def analytics_info
-    Analytics.track(current_user, event: 'Main Page')
+    Analytics.track(current_user, {event: 'Main Page'}, anonymous_id)
   end
 end

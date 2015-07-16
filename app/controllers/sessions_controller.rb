@@ -11,6 +11,6 @@ class SessionsController < Devise::SessionsController
   private
   
   def analytics_info
-    Analytics.track(current_user, event: 'Login Page')
+    Analytics.track(current_user, {event: 'Login Page'}, anonymous_id)
   end
 end

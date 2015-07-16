@@ -6,7 +6,8 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
   before_action :check_user_status, unless: :controller_allowed?
-
+  before_action :set_session_id
+  
   helper_method :is_admin_user?
   helper_method :logged_in_as?
 
@@ -78,4 +79,13 @@ class ApplicationController < ActionController::Base
       render 'app/suspended'
     end
   end
+  
+  def anonymous_id
+    session.id
+  end
+
+  def set_session_id
+    Thread.current[:session_id] = anonymous_id
+  end
+  
 end

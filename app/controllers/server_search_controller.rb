@@ -14,6 +14,6 @@ class ServerSearchController < ApplicationController
   private
   def analytics_info
     event = current_user ? "online" : "offline"
-    Analytics.track(current_user, event: 'Marketplace - ' + event)
+    Analytics.track(current_user, {event: 'Marketplace - ' + event}, anonymous_id)
   end
 end

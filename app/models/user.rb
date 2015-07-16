@@ -67,6 +67,9 @@ class User < ActiveRecord::Base
   end
 
   def track_analytics
+    Analytics.service.alias(previous_id: anonymous_id, user_id: id)
+    Analytics.service.flush
+    
     Analytics.service.identify(
       user_id: id,
       traits: {
@@ -75,8 +78,13 @@ class User < ActiveRecord::Base
         created_at: created_at
       }
     )
+    Analytics.track(self, event: "New User Created")
   end
 
+  def anonymous_id
+    Thread.current[:session_id]
+  end
+  
   # def whitelisted_email
   #   if Rails.env.production? && EmailWhitelist.find_by_email(self.email).nil?
   #     errors.add(:email, "currently hasn't received an invite. Please use the exact email you used to signup to the Cloud.net Beta")

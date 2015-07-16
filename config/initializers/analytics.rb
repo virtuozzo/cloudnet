@@ -1,12 +1,11 @@
 require 'segment/analytics'
 
 class Analytics
-  def self.track(user, events = {})
+  def self.track(user, events = {}, anonymous_id = nil)
     user_traits = user ? {
       user_id: user.id,
-      username: user.email,
       context: { traits: { email: user.email, name: user.full_name } }
-      } : {anonymous_id: 'guest'}
+      } : {anonymous_id: anonymous_id ? anonymous_id : 'guest'}
       
     service.track(events.merge(user_traits))
   end
