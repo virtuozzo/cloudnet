@@ -61,8 +61,7 @@ describe Server do
     end
 
     it 'should only notify once' do
-      refresh_server
-      refresh_server
+      5.times { refresh_server }
       emails = ActionMailer::Base.deliveries.select do |e|
         e.subject =~ /Server stuck in intermediate stat/
       end
@@ -74,7 +73,11 @@ describe Server do
       server.reload
       expect(server.stuck).to be true
 
-      allow(@squall).to receive(:show).and_return('booted' => true)
+      allow(@squall).to receive(:show).and_return(
+        'locked' => false,
+        'booted' => true
+      )
+
       refresh_server
       server.reload
       expect(server.stuck).to be false
