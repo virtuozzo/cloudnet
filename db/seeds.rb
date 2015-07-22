@@ -8,6 +8,3 @@ admin = User.find_or_create_by(email: 'admin@cloud.net') do |u|
   u.admin = true
 end
 admin.confirm! unless admin.confirmed?
-
-# Get the available providers from the Onapp installation's federation
-UpdateFederationResources.run
