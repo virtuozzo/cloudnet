@@ -4,7 +4,7 @@ class Uptime < ActiveRecord::Base
   default_scope {order('starttime ASC')}
   scope :downtimes, -> {select(:downtime, :starttime).where("downtime > 0")}
   
-  MAX_DATA_PER_LOCATION = 400 #days
+  MAX_DATA_PER_LOCATION = 150 #days
   
   def self.create_or_update(params=nil)
     new(params).save_or_update
