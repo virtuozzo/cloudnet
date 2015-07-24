@@ -45,6 +45,8 @@ RSpec.describe Uptime, :type => :model do
   
   context "restrict number of records" do
     let(:max_number) {Uptime::MAX_DATA_PER_LOCATION}
+    let!(:other_uptime) {FactoryGirl.create(:uptime)}
+    
     before(:each) do
       (max_number+3).times do |t|
         current = uptime.dup
@@ -54,18 +56,19 @@ RSpec.describe Uptime, :type => :model do
     end
     
     it "should store MAX_DATA_PER_LOCATION records" do
-      expect(Uptime.count).to eq max_number
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number
     end
     
     it "should store most recent data points" do
-      oldest = Uptime.minimum(:starttime)
+      oldest = Uptime.where(location_id: uptime.location_id).minimum(:starttime)
       expect {
         current = uptime.dup
         current.starttime = uptime.starttime + 1.day
         current.save_or_update
-      }.not_to change{Uptime.count}
-    
-      expect(Uptime.find_by_starttime(oldest)).to be_nil
+      }.not_to change{Uptime.where(location_id: uptime.location_id).count}
+      
+      expect(Uptime.where(location_id: uptime.location_id, starttime: oldest).first)
+        .to be_nil
     end
     
     it "should remove all exceeding records in one 'save_or_update' call" do
@@ -74,11 +77,17 @@ RSpec.describe Uptime, :type => :model do
         current.starttime = uptime.starttime + (t+1).day
         current.save!
       end
-      expect(Uptime.count).to eq max_number + 3
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number + 3
+      
+      other_old_uptime = other_uptime.dup
+      other_old_uptime.starttime = other_uptime.starttime - 360.days
+      other_old_uptime.save_or_update
+      expect(Uptime.where(location_id: other_uptime.location_id).count).to eq 2
       
       new_uptime.starttime = uptime.starttime + 4.days
       new_uptime.save_or_update
-      expect(Uptime.count).to eq max_number
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number
+      expect(Uptime.where(location_id: other_uptime.location_id).count).to eq 2
     end
   end
 end

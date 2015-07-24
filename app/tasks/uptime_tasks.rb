@@ -20,7 +20,7 @@ class UptimeTasks < BaseTasks
   
   def update_server(pingdom_id, location_id, raw_data = nil, days = 30)
     return [] if pingdom_id.nil? or location_id.nil?
-    
+
     raw_data ||= performance_data(pingdom_id, days)
     perf = server_performance(raw_data, location_id)
     perf.each { |d| Uptime.create_or_update(d) }
@@ -29,7 +29,7 @@ class UptimeTasks < BaseTasks
   def update_servers(pingdom_id, days = 30)
     location = Location.where(pingdom_id: pingdom_id)
     return false if location.empty?
-    
+
     raw_data = performance_data(pingdom_id, days)
     location.each { |loc| update_server(pingdom_id, loc.id, raw_data, days) }
   end

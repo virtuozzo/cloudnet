@@ -37,7 +37,9 @@ class Uptime < ActiveRecord::Base
   end
   
   def remove_old_data
-    self.class.order(:starttime).limit(number_of_records - MAX_DATA_PER_LOCATION).destroy_all
+    self.class.where(location_id: self.location_id).order(:starttime)
+        .limit(number_of_records - MAX_DATA_PER_LOCATION)
+        .destroy_all
   end
 
   def data_number_exceeded?
@@ -45,7 +47,7 @@ class Uptime < ActiveRecord::Base
   end
 
   def number_of_records
-    self.class.count
+    self.class.where(location_id: self.location_id).count
   end
     
   def for_update
