@@ -44,11 +44,7 @@
       if @regionId >= 0 then location.region?.id == @regionId else true
       
     currentUptime: (location) ->
-      data = location?.indices
-      if data?.length > 0
-        data[data.length-1].indexUptime 
-      else
-        0
+      new helpers.AverageUptimeBuilder(location).average()
         
     locationSort: ->
       [(location) =>
