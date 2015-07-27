@@ -139,21 +139,26 @@ $server-search-text-gray: #5F8093;
           stroke-width: 0;
           opacity: 0.6;
         }
-        .axis path{ 
-          fill: none;
-          stroke: $server-search-border; 
+        .axis {
+          path{ 
+            fill: none;
+            stroke: $server-search-border;
+          }
+          &.x path {stroke-width: 0.5;}
+            
+          text { 
+            font-size: 6pt;
+            font-family: sans-serif; 
+          }
         }
-        .axis text{ 
-          font-size: 6pt;
-          font-family: sans-serif; 
-        }
+       
 
         circle{ 
           stroke: black;
           stroke-width: 0.5px; 
           fill: RoyalBlue; 
-          opacity:0.6;
-          &:hover{fill: darkorange; stroke: darkorange;};
+          opacity:1;
+          &:hover{fill: darkorange !important; stroke: darkorange;};
         }
       }
       

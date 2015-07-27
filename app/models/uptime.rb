@@ -4,7 +4,7 @@ class Uptime < ActiveRecord::Base
   default_scope {order('starttime ASC')}
   scope :downtimes, -> {select(:downtime, :starttime).where("downtime > 0")}
   
-  MAX_DATA_PER_LOCATION = 400 #days
+  MAX_DATA_PER_LOCATION = 150 #days
   
   def self.create_or_update(params=nil)
     new(params).save_or_update
@@ -37,7 +37,9 @@ class Uptime < ActiveRecord::Base
   end
   
   def remove_old_data
-    self.class.order(:starttime).limit(number_of_records - MAX_DATA_PER_LOCATION).destroy_all
+    self.class.where(location_id: self.location_id).order(:starttime)
+        .limit(number_of_records - MAX_DATA_PER_LOCATION)
+        .destroy_all
   end
 
   def data_number_exceeded?
@@ -45,7 +47,7 @@ class Uptime < ActiveRecord::Base
   end
 
   def number_of_records
-    self.class.count
+    self.class.where(location_id: self.location_id).count
   end
     
   def for_update

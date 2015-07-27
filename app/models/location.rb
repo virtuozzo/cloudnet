@@ -17,6 +17,7 @@ class Location < ActiveRecord::Base
   validate :verify_valid_country_code
 
   def country_name
+    return unless country
     Rails.cache.fetch([self, :country_name]) do
       IsoCountryCodes.find(country).name
     end

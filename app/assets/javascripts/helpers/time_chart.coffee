@@ -1,75 +1,58 @@
 class helpers.TimeChart
-  constructor: (@elem, @data, @popup, @fillArea) ->
+  constructor: (@elem, @data, @popup) ->
     @initialize()
     @addTooltips() if @popup
-    @appendData()
 
   draw: ->
-    @drawChart()
     #@addXaxis()
     @addYaxis()
-    
-  appendData: ->
-    @chart
-      .attr("viewBox", @viewBoxValues())
-      .selectAll("circle").data(@data)
-      .enter().append("circle")
-      
+    @drawChart()
+
   drawChart: ->
-    @drawCircles()
     @drawPath()
-    @drawArea() if @fillArea
+    @appendCircles()
+    @drawCircles()
 
-  drawCircles: ->
-    el = @chart.select("circle")
-               .attr("cx", (d) => @xScale(1))
-               .attr("cy", (d) => @yScale(d[@dataName()]))
-               .attr("r", 2)
+  appendCircles: ->
+    @chart.selectAll("circle").data(@data)
+          .enter().append("circle")
+      
+  drawCircle: (el, x) ->
+    el.attr("cx", (d) => @xScale(x))
+      .attr("cy", (d) => @yScale(d[@dataName()]))
+      .attr("r", 2)
     @addCircleTooltip(el) if @popup
+    
+  drawCircles: ->
+    elems = @chart.selectAll("circle")
+    last = elems.size()
+    firstCircle = d3.select(elems[0][0])
+    lastCircle = d3.select(elems[0][last-1]) if last > 1
+    
+    @drawCircle(firstCircle, 1)
+    @drawCircle(lastCircle, last) if lastCircle
 
-    elem = @chart.selectAll("circle")
-    last = elem.size()
-    if last > 1
-      el = d3.select(elem[0][last-1])
-             .attr("cx", (d) => @xScale(last))
-             .attr("cy", (d) => @yScale(d[@dataName()]))
-             .attr("r", 2)
-      @addCircleTooltip(el) if @popup
-  
   addCircleTooltip: (el) ->
     el.on('mouseover', @tip.show)
       .on('mouseout', @tip.hide)
-      
-  prepareArea: ->
-    xPos = 0
-    @area = d3.svg.area()
-      .x( (d) => @xScale (xPos += 1))
-      .y0((d) => @yScale(0))
-      .y1((d) => @yScale(d[@dataName()]))
 
-  drawArea: ->
-    @prepareArea()
-    @chart.insert("path",":first-child")
-    .attr("d", @area(@data))
-    .attr("class", "area")
-    
   prepareLinePath: ->
     xPos = 0
     @line = d3.svg.line()
       .x( (d) => @xScale (xPos += 1)) 
       .y( (d) => @yScale(d[@dataName()]))
-      .interpolate(@interpolation())
+      .interpolate("cardinal")
   
   drawPath: ->
     @prepareLinePath()
-    @chart.insert("path",":first-child")
+    @chart.append("path")
     .attr("d", @line(@data))
     .attr("class", "line")
       
   addXaxis: ->
     @chart.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0, 45)").call(@xAxis)
+    .attr("transform", "translate(0, 65)").call(@xAxis)
 
   addYaxis: ->
     @chart.append("g")
@@ -78,13 +61,16 @@ class helpers.TimeChart
     
   initialize: ->
     d3.select(@elem).selectAll("*").remove()
+    @format = d3.time.format("%b %d")
     @chart = d3.select(@elem).append("svg")
     @yScale = d3.scale.linear().range([60,5]).domain(@yDomain());
-    @xScale = d3.scale.linear().range(@xRange()).domain([1, @data.length])
-    @xAxis = d3.svg.axis().scale(@xScale).tickValues([])
+    @xScale = d3.time.scale().range(@xRange()).domain(@xDomain())
+    @xAxis = d3.svg.axis().scale(@xScale).orient("bottom")
+             .tickFormat(d3.time.format("%b %d")).ticks(4)
     @yAxis = d3.svg.axis().scale(@yScale).orient("left").tickValues(@yTicks())
              .innerTickSize([2]).outerTickSize([2]).tickPadding([1])
-  
+    @chart.attr("viewBox", @viewBoxValues())
+    
   addTooltips: ->
     @tip = @prepareTooltips()
     @chart.call(@tip)
@@ -95,12 +81,12 @@ class helpers.TimeChart
       .html (d) => @popup(data: d)
       .offset [0,9]
       .direction 'e'
-      
-  interpolation: ->
-    "cardinal"
-    
+
   xRange: ->
     throw "implement me"
+    
+  xDomain: ->
+    [1, @data.length]
     
   yDomain: ->
     throw "implement me"
