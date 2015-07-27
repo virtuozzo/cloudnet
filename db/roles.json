@@ -1,0 +1,313 @@
+[{
+  "identifier": "backups.convert.own",
+  "label": "Convert own backup to template"
+}, {
+  "identifier": "backups.create.own",
+  "label": "Create an own backup"
+}, {
+  "identifier": "backups.delete.own",
+  "label": "Destroy own backup"
+}, {
+  "identifier": "backups.read.own",
+  "label": "See own backups"
+}, {
+  "identifier": "backups.update.own",
+  "label": "Update own backup"
+}, {
+  "identifier": "base_resources.read.own",
+  "label": "See own base resources"
+}, {
+  "identifier": "billing_plans.read.own",
+  "label": "See own billing plan"
+}, {
+  "identifier": "cdn_resources.create",
+  "label": "Create a new CDN resource"
+}, {
+  "identifier": "cdn_resources.delete.own",
+  "label": "Destroy own CDN resource"
+}, {
+  "identifier": "cdn_resources.read.own",
+  "label": "See own CDN resources"
+}, {
+  "identifier": "cdn_resources.update.own",
+  "label": "Update own CDN resource"
+}, {
+  "identifier": "cdn_usage_stats.read.own",
+  "label": "User can see own CDN usage statistics"
+}, {
+  "identifier": "customer_networks.create.own",
+  "label": "Create own customer networks"
+}, {
+  "identifier": "customer_networks.delete.own",
+  "label": "Delete own customer networks"
+}, {
+  "identifier": "customer_networks.read.own",
+  "label": "See own customer networks"
+}, {
+  "identifier": "dashboard.show_cloud_dashboard",
+  "label": "See Cloud Dashboard"
+}, {
+  "identifier": "data_stores.read",
+  "label": "See all data_stores"
+}, {
+  "identifier": "disks.autobackup.own",
+  "label": "Autobackup for own disk"
+}, {
+  "identifier": "disks.create",
+  "label": "Create a new disk"
+}, {
+  "identifier": "disks.delete.own",
+  "label": "Destroy own disk"
+}, {
+  "identifier": "disks.read.own",
+  "label": "See own disks"
+}, {
+  "identifier": "disks.unlock",
+  "label": "Unlock any disk"
+}, {
+  "identifier": "disks.update.own",
+  "label": "Update own disk"
+}, {
+  "identifier": "dns_zone.create",
+  "label": "Create a new DNS zone"
+}, {
+  "identifier": "dns_zone.delete.own",
+  "label": "Destroy own DNS zone"
+}, {
+  "identifier": "dns_zone.read.own",
+  "label": "See own DNS zones"
+}, {
+  "identifier": "dns_zone.record_create",
+  "label": "Create a new DNS record"
+}, {
+  "identifier": "dns_zone.record_read.own",
+  "label": "See own DNS records"
+}, {
+  "identifier": "dns_zone.record_update.own",
+  "label": "Update own DNS records"
+}, {
+  "identifier": "edge_groups.read",
+  "label": "See all edge groups"
+}, {
+  "identifier": "firewall_rules.create.own",
+  "label": "Add own Firewall Rules"
+}, {
+  "identifier": "firewall_rules.delete.own",
+  "label": "Destroy own Firewall Rules"
+}, {
+  "identifier": "firewall_rules.read.own",
+  "label": "See own Firewall Rules"
+}, {
+  "identifier": "firewall_rules.update.own",
+  "label": "Update own Firewall Rules"
+}, {
+  "identifier": "groups.read",
+  "label": "See all groups"
+}, {
+  "identifier": "hypervisors.read",
+  "label": "See all hypervisors"
+}, {
+  "identifier": "hypervisors.read_vm_creation",
+  "label": "Show Hypervisors on VirtualMachine creation."
+}, {
+  "identifier": "image_template_groups.read",
+  "label": "See details of any template group"
+}, {
+  "identifier": "io_stats.read.own",
+  "label": "See own IO Statistics"
+}, {
+  "identifier": "ip_address_joins.create.own",
+  "label": "Add IP address to own virtual machine"
+}, {
+  "identifier": "ip_address_joins.delete.own",
+  "label": "Remove IP address from own virtual machine"
+}, {
+  "identifier": "ip_address_joins.read",
+  "label": "See IP addresses assigned to any virtual machines"
+}, {
+  "identifier": "ip_addresses.read",
+  "label": "See all ip addresses"
+}, {
+  "identifier": "load_balancers.migrate.own",
+  "label": "Migrate own load balancer"
+}, {
+  "identifier": "load_balancing_clusters.create",
+  "label": "Create a new relation load_balancing"
+}, {
+  "identifier": "load_balancing_clusters.delete.own",
+  "label": "Delete own load_balancing"
+}, {
+  "identifier": "load_balancing_clusters.read.own",
+  "label": "See details of own load_balancing"
+}, {
+  "identifier": "load_balancing_clusters.update.own",
+  "label": "Change own load_balancing"
+}, {
+  "identifier": "log_items.delete.own",
+  "label": "Delete own log item"
+}, {
+  "identifier": "log_items.list.own",
+  "label": "See list of own log items"
+}, {
+  "identifier": "log_items.read.own",
+  "label": "See details of own log item"
+}, {
+  "identifier": "monthly_bills.read.own",
+  "label": "See own Monthly Bills Statistics"
+}, {
+  "identifier": "nameservers.read",
+  "label": "See all nameservers"
+}, {
+  "identifier": "networks.read",
+  "label": "See all networks"
+}, {
+  "identifier": "payments.read",
+  "label": "See all payments"
+}, {
+  "identifier": "payments.read.own",
+  "label": "See own payments"
+}, {
+  "identifier": "recipe_groups.list",
+  "label": "See list of recipe groups"
+}, {
+  "identifier": "recipe_groups.read",
+  "label": "Read recipe groups"
+}, {
+  "identifier": "recipe_group_relations.list",
+  "label": "See list of recipe group relations"
+}, {
+  "identifier": "recipe_group_relations.read",
+  "label": "Read recipe group relations"
+}, {
+  "identifier": "recipes.create",
+  "label": "Create recipes"
+}, {
+  "identifier": "recipes.delete.own",
+  "label": "Delete own recipes"
+}, {
+  "identifier": "recipes.edit.own",
+  "label": "Edit own recipes"
+}, {
+  "identifier": "recipes.read.own",
+  "label": "Read own recipes"
+}, {
+  "identifier": "roles.read",
+  "label": "See all Roles"
+}, {
+  "identifier": "templates.manage.own",
+  "label": "Manage Own Templates"
+}, {
+  "identifier": "transactions.delete.own",
+  "label": "Delete own transactions from logs"
+}, {
+  "identifier": "transactions.list.own",
+  "label": "See list of own transactions"
+}, {
+  "identifier": "transactions.read.own",
+  "label": "See details of own transaction"
+}, {
+  "identifier": "users.change_password.own",
+  "label": "Change own password"
+}, {
+  "identifier": "users.read.own",
+  "label": "See own users"
+}, {
+  "identifier": "users.read_prices.backups_templates",
+  "label": "See User Backups/Templates prices"
+}, {
+  "identifier": "users.read_prices.billing_plan",
+  "label": "See User billing plan"
+}, {
+  "identifier": "users.read_prices.monthly_price",
+  "label": "See User monthly prices"
+}, {
+  "identifier": "users.read_prices.outstanding_amount",
+  "label": "See User outstanding amount"
+}, {
+  "identifier": "users.read_prices.summary_payments",
+  "label": "See User summary payments"
+}, {
+  "identifier": "users.update.own",
+  "label": "Update own user"
+}, {
+  "identifier": "users.update_api_key.own",
+  "label": "Generate Own API key"
+}, {
+  "identifier": "virtual_machine_snapshots.create.own",
+  "label": "Create/Restore own virtual machine snapshots"
+}, {
+  "identifier": "virtual_machine_snapshots.delete.own",
+  "label": "Delete own virtual machine snapshots"
+}, {
+  "identifier": "virtual_machine_snapshots.read.own",
+  "label": "See own virtual machine snapshots"
+}, {
+  "identifier": "virtual_machines.console.own",
+  "label": "Console to own virtual machine"
+}, {
+  "identifier": "virtual_machines.create",
+  "label": "Create a new virtual machine"
+}, {
+  "identifier": "virtual_machines.delete.own",
+  "label": "Destroy own virtual machine"
+}, {
+  "identifier": "virtual_machines.migrate.own",
+  "label": "Migrate own virtual machine"
+}, {
+  "identifier": "virtual_machines.power.own",
+  "label": "Any power action on own virtual machines"
+}, {
+  "identifier": "virtual_machines.read.own",
+  "label": "See own virtual machines"
+}, {
+  "identifier": "virtual_machines.rebuild_network.own",
+  "label": "Rebuild Network to own virtual machine"
+}, {
+  "identifier": "virtual_machines.recipe_manage.own",
+  "label": "Manage recipes joins for own virtual servers"
+}, {
+  "identifier": "virtual_machines.reset_root_password.own",
+  "label": "Reset root password to own virtual machine"
+}, {
+  "identifier": "virtual_machines.update.own",
+  "label": "Update own virtual machine"
+}, {
+  "identifier": "virtual_machines.read_root_password",
+  "label": "Read Virtual Machine's root password"
+}, {
+  "identifier": "virtual_machines.manage_publications",
+  "label": "Manage publications for all virtual servers"
+}, {
+  "identifier": "virtual_machines.read_root_password.own",
+  "label": "Read own Virtual Machine's root password"
+}, {
+  "identifier": "virtual_machines.set_ssh_keys",
+  "label": "Add ssh keys for this virtual machine"
+}, {
+  "identifier": "virtual_machines.set_vip",
+  "label": "Set vip status"
+}, {
+  "identifier": "virtual_machines.suspend",
+  "label": "Change Suspended status for Virtual Machine"
+}, {
+  "identifier": "templates.read.public",
+  "label": "See all public templates"
+}, {
+  "identifier": "vm_stats.read.own",
+  "label": "See Own Virtual Machine Statistics"
+}, {
+  "identifier": "activity_logs.read.own",
+  "label": "See details of own activity log"
+}, {
+  "identifier": "cdn_ssl_certificates.create",
+  "label": "Create a new CDN SSL Certificate"
+}, {
+  "identifier": "cdn_ssl_certificates.delete.own",
+  "label": "Destroy own CDN SSL Certificates"
+}, {
+  "identifier": "cdn_ssl_certificates.read.own",
+  "label": "See own CDN SSL Certificates"
+}, {
+  "identifier": "cdn_ssl_certificates.update.own",
+  "label": "Update own CDN SSL Certificates"
+}]
