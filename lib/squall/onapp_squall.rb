@@ -32,7 +32,20 @@ module Squall
         end
       end
 
-      response = conn.send(request_method, path)
+      begin
+        response = conn.send(request_method, path)
+      rescue Faraday::Error::ClientError => e
+        ErrorLogging.new.track_exception(
+          e,
+          extra: {
+            request: {
+              config: @config,
+              options: options
+            },
+            response: e.response
+          }
+        )
+      end
 
       @success = (200..207).include?(response.env[:status])
       @result  = JSON.parse response.body unless response.body.strip.empty?
