@@ -2,6 +2,12 @@
   .jg-widget-form.pure-g.pure-u-1
     %div.cc_card_alert#cc_card_alert
 
+    - unless Rails.env == 'production'
+      This is a non-production environment, so please use Stripe's test card numbers.
+      All test cards can be found
+      %a{:href => "https://stripe.com/docs/testing#cards"} here.
+      The simplest test card is: 4242424242424242. All other fields are arbitrary.
+
     .form-group.pure-u-1.jg-inline
       .pure-u-1.pure-u-md-3-4
         = label_tag 'cc_number_label', 'Card Number' , {for: '#cc_number', class: 'pure-u-1 jg-mandatory'}
