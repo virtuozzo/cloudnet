@@ -45,6 +45,7 @@ module Squall
             response: e.response
           }
         )
+        raise e
       end
 
       @success = (200..207).include?(response.env[:status])
