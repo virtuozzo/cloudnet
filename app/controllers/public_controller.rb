@@ -24,8 +24,7 @@ class PublicController < ApplicationController
     {event: 'Main Page',
       properties: {
         environment: Rails.env,
-        agent: request.user_agent,
-        ip: request.remote_ip
+        agent: request.user_agent
       }
     }
   end
