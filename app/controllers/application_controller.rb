@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-
+  MONITOR_SERV = %w(Zabbix NewRelicPinger UptimeRobot)
+    
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
   before_action :check_user_status, unless: :controller_allowed?
@@ -10,6 +11,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :is_admin_user?
   helper_method :logged_in_as?
+
 
   def is_admin_user?
     current_user && current_user.admin?
@@ -85,8 +87,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_session_id
-    logger.info "INFO: #{request.user_agent}"
     Thread.current[:session_id] = anonymous_id
+  end
+  
+  def monitoring_service?
+    MONITOR_SERV.any? {|serv| /#{serv}/ =~ request.user_agent}
   end
   
 end
