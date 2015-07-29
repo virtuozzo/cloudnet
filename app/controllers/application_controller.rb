@@ -85,6 +85,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_session_id
+    logger.info "INFO: #{request.user_agent}"
     Thread.current[:session_id] = anonymous_id
   end
   
