@@ -17,6 +17,15 @@ class PublicController < ApplicationController
   end
   
   def analytics_info
-    Analytics.track(current_user, {event: 'Main Page'}, anonymous_id)
+    Analytics.track(current_user, event_details, anonymous_id)
+  end
+  
+  def event_details
+    {event: 'Main Page',
+      properties: {
+        environment: Rails.env,
+        agent: request.user_agent
+      }
+    }
   end
 end
