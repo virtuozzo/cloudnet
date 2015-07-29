@@ -23,7 +23,7 @@ class CreateServer
       required_ip_address_assignment: 1
     }
 
-    params.merge!(swap_disk_size: template.required_swap) unless location.provider.scan(/vmware/).length > 1
+    params.merge!(swap_disk_size: template.required_swap) unless location.provider.scan(/vmware/).length > 0
     params.merge!(rate_limit: location.network_limit) if location.network_limit.present? && location.network_limit > 0
     params.merge!(licensing_type: 'mak') if template.os_type.include?('windows') || template.os_distro.include?('windows')
     params.merge!(note: 'Created with Cloud.net')
