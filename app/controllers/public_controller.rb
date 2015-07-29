@@ -4,7 +4,7 @@ class PublicController < ApplicationController
   
   def main
     @regions = Region.active_regions
-    analytics_info
+    analytics_info unless monitoring_service?
   end
   
   def user_message
