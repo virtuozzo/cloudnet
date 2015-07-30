@@ -39,7 +39,7 @@
   var inactive_pin = "#{asset_path('pins/inactive-pin.png')}";
   var active_pin = "#{asset_path('pins/active-pin.png')}";
   var fiveHundredPxKey = "#{KEYS[:five_hundred_px][:api_key]}";
-  ga('send', 'event', 'Marketplace - ' + "#{@event}", 'View');
+  ga('send', 'event', 'Page', 'View', 'Marketplace - ' + "#{@event}");
 %script{type: "text/ng-template", id: "mapPopup.html"}
   =render 'angular_templates/map_popup'
 %script{type: "text/ng-template", id: "indexChartPopup.html"}

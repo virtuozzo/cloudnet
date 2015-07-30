@@ -2,3 +2,6 @@
 - title "Create Server"
 
 = render 'form'
+
+:javascript
+  ga('send', 'event', 'Page', 'View', "#{@event_name}");
