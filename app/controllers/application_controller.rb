@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  MONITOR_SERV = %w(Zabbix NewRelicPinger UptimeRobot DomainTuno Baiduspider HaosouSpider Googlebot MJ12bot Slurp Feedfetcher SkypeUriPreview Exabot bingbot CCBot)
+  MONITOR_SERV = %w(bot spider crawl scraper indexer Zabbix NewRelicPinger UptimeRobot DomainTuno Baiduspider HaosouSpider Googlebot MJ12bot Slurp Feedfetcher SkypeUriPreview Exabot bingbot CCBot DuckDuckGo favicon)
     
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
   end
   
   def monitoring_service?
-    MONITOR_SERV.any? {|serv| /#{serv}/ =~ request.user_agent}
+    MONITOR_SERV.any? {|serv| /#{serv}/i =~ request.user_agent}
   end
   
 end

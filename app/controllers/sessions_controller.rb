@@ -3,7 +3,7 @@ class SessionsController < Devise::SessionsController
   before_action :prepare_order
   
   def new
-    analytics_info
+    analytics_info unless monitoring_service?
     flash[:notice] = session.delete(:registration_flash) if session[:registration_flash]
     super
   end
