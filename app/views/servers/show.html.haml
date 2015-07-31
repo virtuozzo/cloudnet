@@ -100,3 +100,10 @@
   = render partial: 'server_event'
 
 = render partial: 'server_delete_dialog', locals: { server: @server }
+
+- if flash.notice =~ /successfully created/
+  :javascript
+    ga('send', 'event', 'Page', 'View', "New Server - Created Server");
+- else
+  :javascript
+    ga('send', 'event', 'Page', 'View', "Server Show Page");

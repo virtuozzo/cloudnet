@@ -7,6 +7,7 @@ class ServerWizardsController < ServerCommonController
     @wizard_object.current_step = 2 if location_id_in_params?
     return unless meets_minimum_server_requirements
     send("step#{@wizard_object.current_step}".to_sym)
+    set_event_name
   end
 
   def create
@@ -27,6 +28,7 @@ class ServerWizardsController < ServerCommonController
     else
       @wizard_object.errors.add(:base, create_task.errors.join(', ')) if create_task.errors?
       send("step#{@wizard_object.current_step}".to_sym)
+      set_event_name
       render :new
     end
   end
@@ -68,5 +70,13 @@ class ServerWizardsController < ServerCommonController
     @budget_locations = @locations.where(budget_vps: true)
 
     Analytics.track(current_user, event: 'Server Wizard Step 1')
+  end
+  
+  def set_event_name
+    @event_name = case @wizard_object.current_step
+      when 1 then "New Server - Should not be here"
+      when 2 then "New Server - Options"
+      when 3 then "New Server - Billing Options"
+    end
   end
 end

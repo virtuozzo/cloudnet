@@ -55,3 +55,7 @@
         %a{class: 'jg-previous icon-arrow-left', "ng-click" => "currentPage = currentPage - 1", "ng-show" => "currentPage > 0"}
         %span Page {{ currentPage + 1 }} of {{ numberOfPages() }}
         %a{class: 'jg-next icon-arrow-right', "ng-click" => " currentPage = currentPage + 1", "ng-show" => "currentPage < servers.length/pageSize - 1"}
+
+- if flash.notice =~ /scheduled for deletion/
+  :javascript
+    ga('send', 'event', 'Page', 'View', "Destroyed Server");

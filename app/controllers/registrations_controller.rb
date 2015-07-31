@@ -12,7 +12,7 @@ class RegistrationsController < Devise::RegistrationsController
   def new
     # We want to have the ability to fill in some params
     #prepare_order if session[:user_return_to]
-    analytics_info
+    analytics_info unless monitoring_service?
     build_resource(sign_up_params)
     respond_with resource
   end
