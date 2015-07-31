@@ -8,7 +8,7 @@
   %body{class: body_class}
     .public-layout
       = menu_header
-      
+      = render partial: 'shared/alerts'
       = yield
 
       = render partial: 'shared/footer'
