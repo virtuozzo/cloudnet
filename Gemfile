@@ -83,6 +83,9 @@ gem 'capistrano-rails-console'
 # Fixtures
 gem 'yaml_db'
 
+# General purpose API wrapper. Used to communicate with Onapp API
+gem 'blanket_wrapper', require: 'blanket'
+
 group :development, :test do
   gem 'guard'
   gem 'guard-rails'

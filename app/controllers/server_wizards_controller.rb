@@ -13,17 +13,30 @@ class ServerWizardsController < ServerCommonController
     process_server_wizard
 
     return unless meets_minimum_server_requirements
+
+    vapp = false
     create_task =
-    if @wizard_object.prepaid?
-      CreateServerTask.new(@wizard_object, current_user)
+    if @wizard.object.template.os_distro.scan(/vcd/i).length > 0
+      vapp = true
+      CreateVappTask.new(@wizard_object, current_user)
     else
-      CreatePaygServerTask.new(@wizard_object, current_user)
+      if @wizard_object.prepaid?
+        CreateServerTask.new(@wizard_object, current_user)
+      else
+        CreatePaygServerTask.new(@wizard_object, current_user)
+      end
     end
 
     if @wizard.save && create_task.process
-      create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
-      track_analytics_for_server(create_task.server)
-      redirect_to server_path(create_task.server), notice: 'Server successfully created and will be booted shortly'
+      if vapp
+        notice = 'vApp created successfully and will be deployed shortly'
+        redirect_to '/', notice: notice
+      else
+        create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
+        track_analytics_for_server(create_task.server)
+        notice = 'Server successfully created and will be booted shortly'
+        redirect_to server_path(create_task.server), notice: notice
+      end
     else
       @wizard_object.errors.add(:base, create_task.errors.join(', ')) if create_task.errors?
       send("step#{@wizard_object.current_step}".to_sym)

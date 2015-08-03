@@ -2,7 +2,7 @@ ActiveAdmin.register Template do
   config.clear_action_items!
   actions :all, except: [:new, :destroy]
 
-  permit_params :os_type, :os_distro, :identifier, :name, :min_memory, :min_disk, :hidden, :hourly_cost
+  permit_params :os_type, :os_distro, :identifier, :name, :min_memory, :min_disk, :hidden, :hourly_cost, :vmid
 
   sidebar :control_panel_links do
     ul do
