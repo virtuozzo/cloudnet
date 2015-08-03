@@ -11,10 +11,10 @@ class helpers.MapSearchWidget
   initializeMap: ->
     @map = L.mapbox.map @mapElem, @keys.mapboxKey,
       accessToken: @keys.mapboxPublicToken,
-      minZoom: 2,
+      minZoom: 1,
       maxZoom: 8
       closePopupOnClick: true
-    @map.setView [40.0, -20.0], 2
+    @map.setView [40.0, -20.0], 1
     
   attachMapToModelChange: ->
     @ctrl.$render = =>
