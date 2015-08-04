@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803161358) do
+ActiveRecord::Schema.define(version: 20150804145615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -413,6 +413,7 @@ ActiveRecord::Schema.define(version: 20150803161358) do
     t.string   "payment_type",           limit: 255, default: "prepaid"
     t.time     "state_changed_at"
     t.boolean  "stuck",                              default: false
+    t.integer  "vcd_id"
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree
@@ -421,6 +422,7 @@ ActiveRecord::Schema.define(version: 20150803161358) do
   add_index "servers", ["primary_ip_address"], name: "index_servers_on_primary_ip_address", using: :btree
   add_index "servers", ["template_id"], name: "index_servers_on_template_id", using: :btree
   add_index "servers", ["user_id"], name: "index_servers_on_user_id", using: :btree
+  add_index "servers", ["vcd_id"], name: "index_servers_on_vcd_id", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", limit: 255, null: false
@@ -551,7 +553,23 @@ ActiveRecord::Schema.define(version: 20150803161358) do
   add_index "users", ["otp_session_challenge"], name: "index_users_on_otp_session_challenge", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "vcds", force: :cascade do |t|
+    t.string   "identifier"
+    t.string   "name"
+    t.string   "status", default: 'building'
+    t.integer  "user_id"
+    t.integer  "template_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "vcds", ["template_id"], name: "index_vcds_on_template_id", using: :btree
+  add_index "vcds", ["user_id"], name: "index_vcds_on_user_id", using: :btree
+
   add_foreign_key "indices", "locations"
   add_foreign_key "locations", "regions"
+  add_foreign_key "servers", "vcds"
   add_foreign_key "uptimes", "locations"
+  add_foreign_key "vcds", "templates"
+  add_foreign_key "vcds", "users"
 end

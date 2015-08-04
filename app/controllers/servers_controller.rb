@@ -3,6 +3,7 @@ class ServersController < ServerCommonController
 
   def index
     @servers = current_user.servers.order(id: :asc)
+    @vcds = VCD.where(user: current_user).order(id: :asc)
   end
 
   def show

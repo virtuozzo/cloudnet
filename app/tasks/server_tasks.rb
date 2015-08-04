@@ -6,12 +6,8 @@ class ServerTasks < BaseTasks
     squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: user.onapp_user, pass: user.onapp_password)
     run_task(action, server, squall, *args)
   end
-
-  private
-
-  def refresh_server(server, squall)
-    info = squall.show(server.identifier)
-
+  
+  def self.get_server_state(info, server)
     # Don't update our state if our server is locked
     new_state = server.state
     if info['locked'] == false
@@ -27,10 +23,18 @@ class ServerTasks < BaseTasks
 
     if old_state != new_state
       server.note_time_of_state_change
-      state = new_state
+      new_state
     else
-      state = old_state
+      old_state
     end
+  end
+
+  private
+  
+  def refresh_server(server, squall)
+    info = squall.show(server.identifier)
+
+    state = self.class.get_server_state(info, server)
 
     server.detect_stuck_state
 

@@ -11,6 +11,7 @@ class Server < ActiveRecord::Base
   belongs_to :user
   belongs_to :template
   belongs_to :location
+  belongs_to :vcd
   has_many :server_events, dependent: :destroy
   has_many :server_usages, dependent: :destroy
   has_many :server_backups, dependent: :destroy

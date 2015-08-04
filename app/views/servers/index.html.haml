@@ -1,6 +1,8 @@
 - breadcrumb :servers
 - title "Servers"
 
+= render partial: 'servers/vcds', locals: { vcds: @vcds }
+
 %div{data: {"ng-controller" => "ServersCtrl"}}
   .jg-widget-content
     %header.jg-widget-header.pure-g.clearfix

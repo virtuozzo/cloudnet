@@ -1,0 +1,21 @@
+%div
+  .jg-widget-content
+    %header.jg-widget-header.pure-g.clearfix
+      %h2.pure-u-1-2.jg-icon.icon-cloud vCDs
+    .jg-widget-body
+      %table.table.table-hover.jg-tables
+        %thead
+          %tr
+            %th= "Name"
+            %th.visible-md.visible-lg= "VMs"
+            %th.visible-md.visible-lg= "Status"
+            %th.visible-md.visible-lg= "Template"
+
+        %tbody
+          - @vcds.each do |vcd|
+            %tr
+              %td= vcd.name
+              %td= vcd.servers.count
+              %td= vcd.status
+              %td= vcd.template.name
+            

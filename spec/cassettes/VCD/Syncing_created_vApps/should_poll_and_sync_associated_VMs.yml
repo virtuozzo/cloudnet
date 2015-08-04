@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://<%= ENV['ONAPP_USER'] %>vcd:<%= ENV['VCDEMO_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/vapps/371/associated_virtual_machines.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 04 Aug 2015 15:45:36 GMT
+      Server:
+      - Apache/2.2.15 (CentOS)
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"fd5cabfd56e32028d6dd48fc53dea51d"'
+      Cache-Control:
+      - must-revalidate, private, max-age=0
+      X-Request-Id:
+      - 0ecd2e62c4735615c20b594148e01d06
+      X-Runtime:
+      - '0.231538'
+      X-Rack-Cache:
+      - miss
+      X-Powered-By:
+      - Phusion Passenger 4.0.35
+      Set-Cookie:
+      - _session_id=175c9c10360b1dd8fa99fd3b8b17905f; path=/; HttpOnly
+      Status:
+      - 200 OK
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: '[{"virtual_machine":{"add_to_marketplace":null,"admin_note":null,"allowed_hot_migrate":null,"allowed_swap":true,"booted":false,"built":true,"cores_per_socket":1,"cpu_shares":1,"cpu_sockets":null,"cpu_threads":null,"cpu_units":null,"cpus":1,"created_at":"2015-08-04T12:03:15+01:00","customer_network_id":null,"deleted_at":null,"edge_server_type":null,"enable_autoscale":null,"enable_monitis":false,"firewall_notrack":false,"hostname":"ubuntu-serv-001","hot_add_cpu":false,"hot_add_memory":false,"hypervisor_id":71,"id":459,"identifier":"vm-249aba26-ba4f-486c-9679-0aaf765e192f","initial_root_password_encrypted":false,"instance_type_id":null,"iso_id":null,"label":"CentOS","local_remote_access_ip_address":null,"local_remote_access_port":null,"locked":false,"memory":1024,"min_disk_size":null,"note":null,"operating_system":null,"operating_system_distro":"ubuntu64Guest","preferred_hvs":[],"recovery_mode":null,"remote_access_password":null,"service_password":null,"state":"new","storage_server_type":null,"strict_virtual_machine_id":null,"suspended":false,"template_id":null,"template_label":null,"time_zone":null,"updated_at":"2015-08-04T12:13:15+01:00","user_id":323,"vip":null,"xen_id":null,"ip_addresses":[],"monthly_bandwidth_used":"0","total_disk_size":10,"price_per_hour":0,"price_per_hour_powered_off":0,"support_incremental_backups":false,"cpu_priority":1}}]'
+    http_version: 
+  recorded_at: Tue, 04 Aug 2015 15:45:36 GMT
+recorded_with: VCR 2.9.3
