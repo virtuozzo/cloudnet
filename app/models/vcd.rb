@@ -78,8 +78,8 @@ class VCD < ActiveRecord::Base
         vapp: {
           name: wizard.name,
           vapp_template_id: wizard.template.identifier,
-          vdc_id: 72,
-          network: 359,
+          vdc_id: ENV['VCD_ID'],
+          network: ENV['VCD_NETWORK_ID'],
           virtual_machine_params: {
             wizard.template.vmid => {
               name: wizard.template.name,
