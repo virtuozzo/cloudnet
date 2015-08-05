@@ -6,7 +6,10 @@ class VCD < ActiveRecord::Base
   
   def self.poll_all
     VCD.all.each do |vcd|
-      vcd.poll
+      begin
+        vcd.poll
+      rescue Blanket::ResourceNotFound
+      end
     end
   end
   
