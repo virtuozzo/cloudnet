@@ -1,0 +1,96 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.jg-icon.icon-cloud.pure-u vCD Details
+  .jg-widget-body
+    .jg-widget-form.pure-u-1.clearfix
+      .form-group.jg-inline.pure-u-1.pure-g
+        .form-group.pure-u-md-1-2
+          = f.label :name, {class: 'pure-u-1 jg-mandatory'}
+          = f.text_field :name, class: 'form-control', value: (@server.name if @server)
+        .form-group.pure-u-md-1-2{:class => "hidden"}
+          = f.label :hostname, {class: 'pure-u-1 jg-mandatory'}
+          = f.text_field :hostname, class: 'form-control', value: 'vCDhostnameplaceholder'
+
+.jg-widget-content{:class => ("hidden" if @server)}
+  .jg-widget-header.pure-g.clearfix
+    %h2.jg-icon.icon-cloud.pure-u Select Template
+    - if @server
+      %em.pure-u-1.alert.alert-warning.edit-server-warning Changing OS Type or Template will destroy all data
+  .jg-widget-body
+    .jg-widget-form.pure-g-r.clearfix
+      .form-group.jg-inline.pure-u-1.pure-g
+        - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
+          .pure-u-1.pure-u-md-1-2{:class => "hidden"}
+            = label_tag :os_type, 'OS Type', {class: 'jg-mandatory'}
+            = f.hidden_field :os_type, value: @templates.first[1].first.os_distro
+        - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
+          .pure-u-1.pure-u-md-1-2
+            = label_tag :template, 'Template', {class: 'jg-mandatory'}
+            = hidden_field_tag :template
+            = f.hidden_field :template_id, value: (@server.template_id if @server)
+    .jg-widget-footer.actions.clearfix
+      .templates-total
+        %span.pure-u
+          Template Cost:
+          %span.hourly-cost.pure-u
+            %b#template-hourly-price
+              $0.000000
+            per hour,
+          %span.monthly-cost.pure-u
+            %b#template-monthly-price
+              $0.000000
+            per month
+
+
+.jg-widget-content.resource-tabs{data: {params: "{#{@wizard_object.string_wizard_params}}"}}
+  .jg-widget-header.pure-g.jg-form-withTabs.clearfix{:class => "hidden"}
+    %h2.jg-icon.icon-cloud.pure-u Select Resources
+    - if @server
+      - if @wizard_object.location.budget_vps
+        %em.pure-u-1.alert.alert-warning.edit-server-warning Editing VPS server resources is not currently supported
+      - else
+        %em.pure-u-1.alert.alert-warning.edit-server-warning Disk resizing is currently unsupported
+  .jg-widget-body
+    %span{:class => "hidden"}
+      %ul#resourceTabs.nav.nav-tabs
+        // Whilst we don't support disk-resizing, don't show the package options when editing
+        %li{:class => (activate_slider_tab ? (@server ? 'hidden' : nil) : 'active')}
+          %a{href: '#packages', data: {'toggle' => 'tab'}} Packages
+        - unless @wizard_object.location.budget_vps
+          %li{:class => ("active" if activate_slider_tab)}
+            %a{href: '#chooseyourown', data: {'toggle' => 'tab'}}
+              - if @server
+                Update resources
+              - else
+                Choose your own
+      .tab-content
+        #packages.tab-pane.fade.in{:class => ('active' unless activate_slider_tab)}
+          = render "server_wizards/steps/partials/resource_packages", packages: @wizard_object.packages
+        #chooseyourown.tab-pane.fade.in{:class => ('active' if activate_slider_tab)}
+          = render "server_wizards/steps/partials/resource_sliders", f: f, location: @wizard_object.location
+
+    .jg-widget-footer.actions.clearfix
+      = hidden_field_tag :hourly
+      = hidden_field_tag :monthly
+      .resources-total.pure-g.no-costs
+        .resources-cost.clearfix
+          %span.pure-u
+            Total Cost:
+          %span.total-cost.pure-u
+            %b#hourly-price 
+            per hour,
+            %b#monthly-price
+            per month. 
+            Today you will be charged
+            %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}
+            - if @server
+              (includes reimbursement for old server)
+          %span.pure-u
+            (Coupon Discounts & EU VAT are added on the final step if applicable)
+
+      %ul.jg-widget-controls
+        - if @server
+          %li= f.button @wizard_object.last_step? ? false: "Go to payment", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+        - else
+          %li= f.button @wizard_object.last_step? ? false: "Go to Step #{@wizard_object.current_step + 1}", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button cancel'

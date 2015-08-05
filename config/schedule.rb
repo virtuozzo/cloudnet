@@ -22,7 +22,7 @@
 env :PATH, ENV['PATH']
 set :output, 'log/cron.log'
 
-every 10.minutes, roles: [:app] do
+every 2.minutes, roles: [:app] do
   runner 'RefreshAllServers.perform_in(2.minutes)'
 end
 

@@ -3,6 +3,8 @@ class RefreshAllServers
   sidekiq_options unique: true
 
   def perform
+    VCD.poll_all
+    
     Server.select('id, user_id').each do |server|
       begin
         manager = ServerTasks.new

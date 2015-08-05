@@ -278,6 +278,7 @@ $ ->
 
   # Fill the template dropdown
   populateTemplateSelect = (distro) ->
+    console.log templates
     if distro
       options = templates[distro]
       enable = true
@@ -312,7 +313,7 @@ $ ->
     populateTemplateSelect(distro)
     # Ensure there is no template selected yet
     $templateId.val(-1)
-
+  
   # Initialise the templates dropdown
   if server
     # Preselect the server's distro and template if editing an existing server
@@ -320,6 +321,10 @@ $ ->
     $distro.select2 'val', distro_of_existing_server
     populateTemplateSelect distro_of_existing_server
     templateChosen server.template
+  else if vcd_location.provider == 'vCD'
+    distro_of_existing_server = "vApp-vCD"
+    $distro.select2 'val', distro_of_existing_server
+    populateTemplateSelect distro_of_existing_server
   else
     # Show an empty and disabled template dropdown
     populateTemplateSelect()

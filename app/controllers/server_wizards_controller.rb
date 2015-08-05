@@ -30,7 +30,7 @@ class ServerWizardsController < ServerCommonController
     if @wizard.save && create_task.process
       if vapp
         notice = 'vApp created successfully and will be deployed shortly'
-        redirect_to '/', notice: notice
+        redirect_to '/servers', notice: notice
       else
         create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
         track_analytics_for_server(create_task.server)

@@ -27,7 +27,6 @@ class VCD < ActiveRecord::Base
   
   def check_vms
     vms = api.get "vapps/#{identifier}/associated_virtual_machines"
-    return unless vms.count > 0
     vm = vms.virtual_machine
     server = Server.find_or_initialize_by identifier: vm['identifier']
     params = {
@@ -78,17 +77,17 @@ class VCD < ActiveRecord::Base
         vapp: {
           name: wizard.name,
           vapp_template_id: wizard.template.identifier,
-          vdc_id: ENV['VCD_ID'],
+          vdc_id: ENV['VDC_ID'],
           network: ENV['VCD_NETWORK_ID'],
           virtual_machine_params: {
             wizard.template.vmid => {
               name: wizard.template.name,
               vcpu_per_vm: 1,
               core_per_socket: 1,
-              memory: 1024,
+              memory: 2048,
               hard_disks: {
                 'Hard disk 1' => {
-                  storage_policy: 126,
+                  storage_policy: ENV['VCD_HD_POLICY'],
                   disk_space: 10
                 }
               }

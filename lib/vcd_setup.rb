@@ -7,7 +7,7 @@ class VCDSetup
     def import_templates
       html = open("#{ENV['ONAPP_CP']}/vapps/new",
         {
-          http_basic_authentication: ['cloudnetvcd', ENV['VCDEMO_PASS']],
+          http_basic_authentication: ['cloudnetvcd@onapp', ENV['VCDEMO_PASS']],
           ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
         }
       )
@@ -15,15 +15,16 @@ class VCDSetup
       options = doc.css '#vapp_vapp_template_id option'
       options.each do |template|
         id = template.attributes['value'].value
-        Template.create!(
-          location: 1,
-          identifier: id,
-          vmid: get_vmid id,
-          name: template.content,
-          os_type: 'vCD',
-          onapp_os_distro: 'vCD',
-          os_distro: 'vCD'
-        )
+        get_vmid id
+        # Template.create!(
+        #   location: 1,
+        #   identifier: id,
+        #   vmid: get_vmid id,
+        #   name: template.content,
+        #   os_type: 'vCD',
+        #   onapp_os_distro: 'vCD',
+        #   os_distro: 'vCD'
+        # )
       end
     end
     
@@ -32,7 +33,8 @@ class VCDSetup
         "/vapp_templates/#{id}/hardware_customization",
         params: { vdc_id: ENV['VCD_ID'] }
       )
-      details.indentifier
+      p details
+      details.identifier
     end
   end
 end
