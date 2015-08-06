@@ -2,7 +2,7 @@ class ServersController < ServerCommonController
   before_action :set_server, except: [:index, :new, :create]
 
   def index
-    @servers = current_user.servers.order(id: :asc)
+    @servers = current_user.servers.where(vcd_id: nil).order(id: :asc)
     @vcds = VCD.where(user: current_user).order(id: :asc)
   end
 

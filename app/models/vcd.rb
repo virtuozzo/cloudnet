@@ -52,6 +52,7 @@ class VCD < ActiveRecord::Base
       location: template.location,
       primary_ip_address: vm['ip_addresss'].try(:first),
       payment_type: :prepaid,
+      vcd_id: self.id
     }
     server.update_attributes! params
     server.state = ServerTasks.get_server_state(vm, server)
@@ -101,3 +102,5 @@ class VCD < ActiveRecord::Base
     end
   end
 end
+
+Vcd = VCD
