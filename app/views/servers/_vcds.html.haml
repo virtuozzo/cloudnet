@@ -20,26 +20,26 @@
               %td= vcd.template.name
             - if vcd.servers.count > 0
               %tr
-                %table.table.table-hover.jg-tables.vcd-vms
-                  %thead
-                    %tr
-                      %th= "Name"
-                      %th.visible-md.visible-lg= "CPU"
-                      %th.visible-md.visible-lg= "RAM"
-                      %th.visible-md.visible-lg= "Disk"
-                      %th.visible-md.visible-lg= "Location"
-                      %th= "Status"
-
-                  %tbody
-                    %h2.vcd-vms-title VMs
-                    - vcd.servers.each do |server|
+                %td
+                  %table.table.table-hover.jg-tables.vcd-vms
+                    %thead
                       %tr
-                        %td
-                          %a{"href" => "/servers/#{server.id}"}= server.name
-                        %td.visible-md.visible-lg= "#{server.cpus} Cores"
-                        %td.visible-md.visible-lg= "#{server.memory} MB"
-                        %td.visible-md.visible-lg= "#{server.disk_size} GB"
-                        %td.visible-md.visible-lg= "#{server.location.city}, #{server.location.country_name}"
-                        %td
-                          %span{class: "tags #{server.state}"}= "#{server.state}"
+                        %th= "Name"
+                        %th.visible-md.visible-lg= "CPU"
+                        %th.visible-md.visible-lg= "RAM"
+                        %th.visible-md.visible-lg= "Disk"
+                        %th.visible-md.visible-lg= "Location"
+                        %th= "Status"
+                    %tbody
+                      %h2.vcd-vms-title VMs
+                      - vcd.servers.each do |server|
+                        %tr
+                          %td
+                            %a{"href" => "/servers/#{server.id}"}= server.name
+                          %td.visible-md.visible-lg= "#{server.cpus} Cores"
+                          %td.visible-md.visible-lg= "#{server.memory} MB"
+                          %td.visible-md.visible-lg= "#{server.disk_size} GB"
+                          %td.visible-md.visible-lg= "#{server.location.city}, #{server.location.country_name}"
+                          %td
+                            %span{class: "tags #{server.state}"}= "#{server.state}"
             
