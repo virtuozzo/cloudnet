@@ -6,7 +6,7 @@
       %table.table.table-hover.jg-tables
         %thead
           %tr
-            %th= "Name"
+            %th.vcd-name-brace= "Name"
             %th.visible-md.visible-lg= "VMs"
             %th.visible-md.visible-lg= "Status"
             %th.visible-md.visible-lg= "Template"
@@ -14,14 +14,17 @@
         %tbody
           - @vcds.each do |vcd|
             %tr
-              %td= vcd.name
+              %td
+                = vcd.name
+                - if vcd.servers.count > 0
+                  %a.hide-show-vcd-vms{href: 'javascript:;'} +[expand]
               %td= vcd.servers.count
               %td= vcd.status
               %td= vcd.template.name
             - if vcd.servers.count > 0
-              %tr
+              %tr.vcd-vms
                 %td
-                  %table.table.table-hover.jg-tables.vcd-vms
+                  %table.table.table-hover.jg-tables
                     %thead
                       %tr
                         %th= "Name"

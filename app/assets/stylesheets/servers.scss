@@ -181,11 +181,23 @@ ul.resources-footer {
 }
 
 .vcd-vms {
+  display: none;
+
+  table {
+    margin-left: 10%;
+    width: 75%;
+  }
+}
+
+.hide-show-vcd-vms {
+  outline: none;
+}
+
+.vcd-name-brace {
   width: 75%;
-  margin-left: 10%;
 }
 
 .vcd-vms-title {
-  margin-left: 10%;
   font-size: 16px;
+  margin-left: 10%;
 }

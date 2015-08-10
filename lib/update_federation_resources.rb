@@ -46,7 +46,7 @@ class UpdateFederationResources
     details = template['image_template']
     location = Location.find_by hv_group_id: datacentre['hypervisor_group_id']
     Template.where(
-      identifier: template['id'].to_s,
+      identifier: template['template_id'].to_s,
     ).first_or_initialize(
       location: location,
       name: details['label'],

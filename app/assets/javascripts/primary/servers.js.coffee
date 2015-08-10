@@ -66,3 +66,9 @@ $ ->
       button.removeAttr('disabled');
     else
       button.attr('disabled','disabled');
+      
+  # Hide show VCD VMs
+  $('.hide-show-vcd-vms').click (e) ->
+    e.target.text = if e.target.text == '+[expand]' then '-[collapse]' else '+[expand]'
+    vms_row = $(e.target).closest('tr').next()
+    vms_row.toggle()
