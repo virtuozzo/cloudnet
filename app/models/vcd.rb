@@ -3,7 +3,7 @@ class VCD < ActiveRecord::Base
   belongs_to :user
   belongs_to :template
   has_many :servers
-  
+
   def self.poll_all
     VCD.all.each do |vcd|
       begin
@@ -12,25 +12,29 @@ class VCD < ActiveRecord::Base
       end
     end
   end
-  
+
   def api
     @api ||= OnappBlanketAPI.new.connection user
   end
-  
+
   def poll
     check_status
     check_vms
   end
-  
+
   def check_status
     details = api.get "/vapps/#{identifier}"
     self.status = details.vapp.status
     self.save!
   end
-  
+
   def check_vms
     vms = api.get "vapps/#{identifier}/associated_virtual_machines"
-    vm = vms.virtual_machine
+    begin
+      vm = vms.virtual_machine
+    rescue
+      return
+    end
     server = Server.find_or_initialize_by identifier: vm['identifier']
     params = {
       identifier: vm['identifier'],
@@ -58,7 +62,7 @@ class VCD < ActiveRecord::Base
     server.state = ServerTasks.get_server_state(vm, server)
     server.save!
   end
-  
+
   class << self
     def create_vapp(wizard)
       api = OnappBlanketAPI.new.connection wizard.user
