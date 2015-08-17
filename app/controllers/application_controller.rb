@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   MONITOR_SERV = %w(bot spider crawl scraper indexer Zabbix NewRelicPinger UptimeRobot DomainTuno Baiduspider HaosouSpider Googlebot MJ12bot Slurp Feedfetcher SkypeUriPreview Exabot bingbot CCBot DuckDuckGo favicon wget Snippet_Validator HubSpot)
-    
+
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
   before_action :check_user_status, unless: :controller_allowed?
