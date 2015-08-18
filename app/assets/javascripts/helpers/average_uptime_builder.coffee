@@ -1,6 +1,6 @@
 class helpers.AverageUptimeBuilder
   constructor: (location) ->
-    @data = location?.uptimes
+    @data = $.extend({}, location?.uptimes)
 
   average: (@daysAgo = 30) ->
     return 0 unless (@data and @data.end)
