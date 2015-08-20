@@ -8,19 +8,19 @@ defaults: &defaults
     departments:
       general: 
         name: General/Server Support
-        group_id: 21693402
+        group_id: 24737381
       billing: 
         name: Billing Issue
-        group_id: 22441742
+        group_id: 24737391
       abuse: 
-        name: DDOS/Abuse
+        name: 24737411
         group_id: 22447691
       sales:
         name: Sales
-        group_id: 22441752
+        group_id: 24734092
       other: 
         name: Other Issue
-        group_id: 22447961
+        group_id: 24737431
     trigger_auth:
       user: <%= ENV["ZENDESK_TRIGGER_USER"] %>
       pass: <%= ENV["ZENDESK_TRIGGER_PASS"] %>
