@@ -14,75 +14,51 @@ The recommended installation method is with [Docker](http://www.docker.com). Alt
 methods should also work, see `Dockerfile` and this README as a guide.
 
 **Dependencies**    
-Cloud.net has various dependencies;
+Before installing you will need the following:
   * [OnApp](http://onapp.com/platform/pricing-packages/): cloud provision
   * [Postgres](https://wiki.postgresql.org/wiki/Detailed_installation_guides): main database
   * [Redis](http://redis.io/): message queuing
-  * [Memcache](http://memcached.org/): caching
-  * [Zendesk API](https://developer.zendesk.com/rest_api/docs/core/introduction#content): customer support
-  * [Maxmind API](http://dev.maxmind.com/): credit card fraud detection
-  * [Segment API](https://segment.com/): custom analytics
-  * [Sentry](https://getsentry.com/welcome/): exception logging
-  * [Stripe API](https://stripe.com): payment gateway
-  * [500PX API](http://developers.500px.com/): photo library
-  * [Mapbox API](https://www.mapbox.com/developers/api/): displaying maps
-  * An SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
-
-You will need to either install or register API keys for all these dependencies.
+  * Optional: an SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
 
 **Building/retrieving the Cloud.net Docker image**    
-You can either pull the latest image from the Docker registry with `docker pull Onapp/cloudnet`
+First make sure you have the repo with:
+`git clone https://github.com/OnApp/cloudnet`
 
-Or build the image yourself. First make sure you have the repo with
-`git clone https://github.com/OnApp/cloudnet` then run `docker build -t cloudnet .`
+For VMWare you will need the `vmware-lab` branch, so `git checkout vmware-lab`.
+
+Then run `docker build -t cloudnet .`
 
 **Initial config**    
-Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
+Firstly you will need to populate your environment file, then name it `.env` and place
+it in the project's root folder.
 
-Generate symmetric encryption key. First you will need to temporarily add `RAILS_ENV=test` to your `.env` file.
-Then run`docker run --env-file=.env --rm cloudnet rails generate symmetric_encryption:new_keys production`.
-That KEY will need to be added to the `SYMMETRIC_ENCRYPTION_KEY` setting in `.env`. Make sure to remove the
-`RAILS_ENV=test` line.
+Then create the database and structure with:
 
-Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
-of the created ID;
-`docker run --env-file=.env --rm cloudnet rake create_onapp_role`.
-That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
+`docker run --env-file=.env --rm cloudnet rake db:create`
 
-Then create the database and structure with 
+`docker run --env-file=.env --rm cloudnet rake db:schema:load`
 
-`docker run --env-file=.env --rm cloudnet rake db:create` 
-
-`docker run --env-file=.env --rm cloudnet rake db:schema:load`.
-
-And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will
-add the available providers from your OnApp installation and an initial admin user with
+And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will add the available providers from your OnApp installation and an initial admin user with;    
 email: 'admin@cloud.net' and password: 'adminpassword'.
-
-You will then need to change the admin password and fill out the extra details for the providers
-that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
-You can edit these details through the admin interface at `/admin/locations`.
 
 **Running the Docker containers**    
 You will need at least 2 containers:
 
-Note that the web server is set to use HTTPS, so you will need to provide SSL certificates using
-the `-v` (mount argument) as shown in the `docker run` comman below. The certificates must be named;
-`server.key` and `server.crt`.
+Note that the web server is set to use HTTPS, default self-signed certificates have been provided for localhost domains.
+Certificates are the mounted via the `-v` (mount argument) as shown in the `docker run` command below. The certificates must be named;
+`server.key` and `server.crt`. General guide to self-signing can be found here: https://gist.github.com/tadast/9932075
 
   * Web container:
 ```
 docker run \
   --env-file=.env \
   -p 443:3443 \
-  -v /local/path/to/ssl-keys:/mnt/certs \
+  -v $(pwd):/mnt/certs \
   --restart=always \
   --name cloudnet-web \
-  --detach \
+  --detach
   cloudnet foreman run web
 ```
-
-NB. This web process will only accept HTTPS traffic
 
   * Worker container:
 ```
@@ -93,6 +69,11 @@ docker run \
   --detach \
   cloudnet foreman run sidekiq --logfile /dev/stdout
 ```
+
+##MISC
+To get a rails console:
+
+`docker run -it --env-file=.env.vmware-lab --rm cloudnet rails console`
 
 ##TODO
 Document scaling with Docker using a [Swarm](http://docs.docker.com/swarm/) and a load balancer.

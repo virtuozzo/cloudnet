@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   after_create :create_onapp_user
 
   # Analytics tracking
-  after_create :track_analytics
+  # after_create :track_analytics
 
   scope :created_this_month, -> { where('created_at > ? AND created_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }

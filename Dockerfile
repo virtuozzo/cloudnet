@@ -1,4 +1,4 @@
-FROM atlashealth/ruby:2.2.1
+FROM atlashealth/ruby:2.2.2
 
 RUN apt-get update \
   && apt-get install -y \
