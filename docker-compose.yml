@@ -1,0 +1,35 @@
+cloudnet-web:
+  image: cloudnet
+  env_file: .env.vmware-lab
+  restart: always
+  ports:
+   - "443:3443"
+  volumes:
+   - .:/mnt/certs
+  links:
+   - cloudnet-redis
+   - cloudnet-db
+  command: foreman run web
+
+cloudnet-worker:
+  image: cloudnet
+  env_file: .env.vmware-lab
+  restart: always
+  links:
+   - cloudnet-redis
+   - cloudnet-db
+  command: foreman run sidekiq --logfile /dev/stdout
+
+cloudnet-redis:
+  image: redis
+
+cloudnet-dbdata:
+  image: postgres
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
+cloudnet-db:
+  image: postgres
+  volumes_from:
+    - cloudnet-dbdata

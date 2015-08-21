@@ -10,70 +10,47 @@ You will find this repository useful if you have your own installation of OnApp 
 
 ##Installation
 
-The recommended installation method is with [Docker](http://www.docker.com). Although traditional
-methods should also work, see `Dockerfile` and this README as a guide.
-
 **Dependencies**    
 Before installing you will need the following:
-  * [OnApp](http://onapp.com/platform/pricing-packages/): cloud provision
-  * [Postgres](https://wiki.postgresql.org/wiki/Detailed_installation_guides): main database
-  * [Redis](http://redis.io/): message queuing
+  * [OnApp](http://onapp.com/platform/pricing-packages/)
+  * [Docker Compose](https://docs.docker.com/compose/install/)
   * Optional: an SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
+  
+NB. You will need about 4GB to run all containers on a single machine.
 
 **Building/retrieving the Cloud.net Docker image**    
 First make sure you have the repo with:
 `git clone https://github.com/OnApp/cloudnet`
 
-For VMWare you will need the `vmware-lab` branch, so `git checkout vmware-lab`.
+For VMWare you will need the `vmware-lab` branch, so `git checkout vmware-lab` inside the repo.
 
-Then run `docker build -t cloudnet .`
+**Running the Docker containers**    
+First you will need to populate your environment file with connection details to your OnApp
+control panel, ensure it is named `.env.vmware-lab` and placed in the root of the cloned cloud.net repo folder.
 
-**Initial config**    
-Firstly you will need to populate your environment file, then name it `.env` and place
-it in the project's root folder.
+Inside the cloud.net repo run `docker-compose up`
 
 Then create the database and structure with:
 
-`docker run --env-file=.env --rm cloudnet rake db:create`
+`docker exec -it cloudnet_cloudnet-web_1 rake db:create`    
+`docker exec -it cloudnet_cloudnet-web_1 rake db:schema:load`    
+`docker exec -it cloudnet_cloudnet-web_1 rake db:seed`    
 
-`docker run --env-file=.env --rm cloudnet rake db:schema:load`
+**Accessing cloud.net**    
+By default cloud.net will be accessible via: https://localhost
 
-And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will add the available providers from your OnApp installation and an initial admin user with;    
-email: 'admin@cloud.net' and password: 'adminpassword'.
+Note that the web server is set to use HTTPS and that default self-signed certificates have been provided for localhost domains.
+If you need to access cloud.net from another domain, you can recreate the certificates using this guide: https://gist.github.com/tadast/9932075
+Ensure the certificates are named `server.key` and `server.crt`, and are placed in the root of the cloud.net repo.
 
-**Running the Docker containers**    
-You will need at least 2 containers:
+To login, goto: https://localhost/users/sign_in    
+email: 'admin@cloud.net'    
+pass: 'adminpassword'    
 
-Note that the web server is set to use HTTPS, default self-signed certificates have been provided for localhost domains.
-Certificates are the mounted via the `-v` (mount argument) as shown in the `docker run` command below. The certificates must be named;
-`server.key` and `server.crt`. General guide to self-signing can be found here: https://gist.github.com/tadast/9932075
+**Misc**    
+To run arbitrary commands, eg; rails console:
 
-  * Web container:
-```
-docker run \
-  --env-file=.env \
-  -p 443:3443 \
-  -v $(pwd):/mnt/certs \
-  --restart=always \
-  --name cloudnet-web \
-  --detach
-  cloudnet foreman run web
-```
-
-  * Worker container:
-```
-docker run \
-  --env-file=.env \
-  --restart=always \
-  --name cloudnet-worker \
-  --detach \
-  cloudnet foreman run sidekiq --logfile /dev/stdout
-```
-
-##MISC
-To get a rails console:
-
-`docker run -it --env-file=.env.vmware-lab --rm cloudnet rails console`
+`docker exec -it cloudnet_cloudnet-web_1 rails console`
 
 ##TODO
 Document scaling with Docker using a [Swarm](http://docs.docker.com/swarm/) and a load balancer.
