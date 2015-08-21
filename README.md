@@ -24,6 +24,8 @@ First make sure you have the repo with:
 
 For VMWare you will need the `vmware-lab` branch, so `git checkout vmware-lab` inside the repo.
 
+Then build the image with: `docker build -t cloudnet .`
+
 **Running the Docker containers**    
 First you will need to populate your environment file with connection details to your OnApp
 control panel, ensure it is named `.env.vmware-lab` and placed in the root of the cloned cloud.net repo folder.
