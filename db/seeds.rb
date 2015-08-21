@@ -54,4 +54,5 @@ Location.find_or_create_by(provider: 'vCenter') do |l|
   l.summary = ''
 end
 
+UpdateFederationResources.run
 VCDSetup.import_templates
