@@ -33,6 +33,9 @@ Ensure it is named `.env.vmware-lab` and placed in the root of the cloned cloud.
 
 Inside the cloud.net repo run `docker-compose up`
 
+If the above command doesn't exit, then cloud.net should be up and running. The `docker-compose up` command
+is now a live log of all cloud.net's various logs.
+
 Then create the database and structure with:
 
 `docker exec -it cloudnet_cloudnet-web_1 rake db:create`    
