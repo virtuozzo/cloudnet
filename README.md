@@ -28,7 +28,8 @@ Then build the image with: `docker build -t cloudnet .`
 
 **Running the Docker containers**    
 First you will need to populate your environment file with connection details to your OnApp
-control panel, ensure it is named `.env.vmware-lab` and placed in the root of the cloned cloud.net repo folder.
+control panel. The only required values that *must* be added are marked with '[REQUIRED]' at the top of the environment file.
+Ensure it is named `.env.vmware-lab` and placed in the root of the cloned cloud.net repo folder.
 
 Inside the cloud.net repo run `docker-compose up`
 
