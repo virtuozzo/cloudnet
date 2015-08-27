@@ -30,6 +30,7 @@ class BillingController < ApplicationController
 
   def remove_card
     card = current_user.account.billing_cards.find params[:card_id]
+    card.set_new_primary if card.primary
     BillingCard.find(card).destroy
     respond_to do |format|
       format.json { render layout: false, text: true }
