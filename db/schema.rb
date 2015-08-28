@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804145615) do
+ActiveRecord::Schema.define(version: 20150828144915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,10 @@ ActiveRecord::Schema.define(version: 20150804145615) do
     t.text     "summary"
     t.integer  "pingdom_id"
     t.string   "pingdom_name"
+    t.string   "vdc_id"
+    t.string   "vcd_network_id"
+    t.string   "vcd_hd_policy"
+    t.string   "key"
   end
 
   add_index "locations", ["country"], name: "index_locations_on_country", using: :btree
@@ -434,6 +438,13 @@ ActiveRecord::Schema.define(version: 20150804145615) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
+  create_table "settings", force: :cascade do |t|
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "templates", force: :cascade do |t|
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255
@@ -556,11 +567,11 @@ ActiveRecord::Schema.define(version: 20150804145615) do
   create_table "vcds", force: :cascade do |t|
     t.string   "identifier"
     t.string   "name"
-    t.string   "status", default: 'building'
+    t.string   "status",      default: "building"
     t.integer  "user_id"
     t.integer  "template_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   add_index "vcds", ["template_id"], name: "index_vcds_on_template_id", using: :btree

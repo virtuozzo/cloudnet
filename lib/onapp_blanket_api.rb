@@ -27,6 +27,9 @@ class OnappBlanketAPI
     if user.is_a? User
       username = user.onapp_user
       password = user.onapp_password
+    elsif user.is_a? Array
+      username = user[0]
+      password = user[1]
     elsif user == :admin
       username = API_USER
       password = API_PASS

@@ -14,7 +14,7 @@ class VCD < ActiveRecord::Base
   end
 
   def api
-    @api ||= OnappBlanketAPI.new.connection user
+    @api ||= OnappBlanketAPI.new.connection template.location.credentials
   end
 
   def poll
@@ -65,19 +65,18 @@ class VCD < ActiveRecord::Base
 
   class << self
     def create_vapp(wizard)
-      api = OnappBlanketAPI.new.connection wizard.user
+      api = OnappBlanketAPI.new.connection wizard.template.location.credentials
       params = generate_vapp_params(wizard)
       result = api.post(:vapps, body: params).vapp
       Rails.logger.info result
-      if result.id
-        VCD.create(
-          user: wizard.user,
-          identifier: result.id,
-          name: wizard.name,
-          template: wizard.template,
-          status: 'building'
-        )
-      end
+      return unless result.id
+      VCD.create(
+        user: wizard.user,
+        identifier: result.id,
+        name: wizard.name,
+        template: wizard.template,
+        status: 'building'
+      )
     end
 
     def generate_vapp_params(wizard)
@@ -85,8 +84,8 @@ class VCD < ActiveRecord::Base
         vapp: {
           name: wizard.name,
           vapp_template_id: wizard.template.identifier,
-          vdc_id: ENV['VDC_ID'],
-          network: ENV['VCD_NETWORK_ID'],
+          vdc_id: wizard.template.location.vdc_id,
+          network: wizard.template.location.vcd_network_id,
           virtual_machine_params: {
             wizard.template.vmid => {
               name: wizard.template.name,
@@ -95,7 +94,7 @@ class VCD < ActiveRecord::Base
               memory: 2048,
               hard_disks: {
                 'Hard disk 1' => {
-                  storage_policy: ENV['VCD_HD_POLICY'],
+                  storage_policy: wizard.template.location.vcd_hd_policy,
                   disk_space: 10
                 }
               }

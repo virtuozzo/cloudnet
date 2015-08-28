@@ -5,7 +5,7 @@ class UpdateFederationResources
   end
 
   def run
-    squall = Squall::Template.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
+    squall = Squall::Template.new(uri: ONAPP_CP[:uri], user: ENV['VCENTER_USER'], pass: ENV['VCENTER_PASS'])
     @store = squall.template_store
     loop_through_datacentres
   end
@@ -26,7 +26,7 @@ class UpdateFederationResources
   def upsert_template(template)
     details = template['image_template']
     Template.find_or_create_by!(identifier: template['template_id'].to_s) do |t|
-      t.location = Location.find(2)
+      t.location = Location.find_by provider: 'vCenter'
       t.name = details['label']
       t.os_type = details['operating_system']
       t.onapp_os_distro = details['operating_system_distro']

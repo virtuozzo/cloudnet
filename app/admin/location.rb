@@ -5,13 +5,13 @@ ActiveAdmin.register Location do
   menu priority: 5
   scope :all
   scope("Active", default: true) { |scope| scope.where(hidden: false) }
-  
+
   permit_params :latitude, :longitude, :provider, :region_id, :country, :city, :memory, :disk, :cpu,
                 :hidden, :price_memory, :price_disk, :price_cpu, :price_bw, :country_code,
                 :hv_group_id, :provider_link, :network_limit, :photo_ids, :price_ip_address,
                 :pingdom_id, :budget_vps, :inclusive_bandwidth, :ssd_disks, :summary,
-                certificate_ids: []
-                
+                :vdc_id, :vcd_hd_policy, :vcd_network_id, certificate_ids: []
+
   sidebar :control_panel_links do
     ul do
       li link_to('Dashboard', root_path)
@@ -30,10 +30,10 @@ ActiveAdmin.register Location do
     column "Certificates" do |loc|
       loc.certificates.map(&:name).join(', ')
     end
-    
+
     actions
   end
-  
+
   form do |f|
     semantic_errors *object.errors.keys
 
@@ -62,7 +62,16 @@ ActiveAdmin.register Location do
       input :price_bw
       input :price_ip_address
     end
-    
+
+    inputs 'VMWare environment' do
+      location = Location.find(params[:id])
+      unless location.provider == 'vCenter'
+        input :vdc_id, collection: location.vdc_ids
+        input :vcd_network_id, collection: location.network_ids
+        input :vcd_hd_policy, collection: location.hd_policies
+      end
+    end
+
     inputs 'Additional Info' do
       input :certificates, :multiple => true, as: :check_boxes
       input :summary
@@ -105,7 +114,7 @@ ActiveAdmin.register Location do
   action_item :view, only: :show do
     link_to 'Edit Indices', admin_location_indices_path(location)
   end
-  
+
   action_item :edit, only: :show do
     link_to 'Sync Templates', sync_templates_admin_location_path(location), method: :post
   end
@@ -113,14 +122,14 @@ ActiveAdmin.register Location do
   action_item :edit, only: :show do
     link_to 'Notify Users in Location', notify_users_admin_location_path(location)
   end
-  
+
   controller do
     attr_accessor :not_connected
-    
+
     def find_resource
       Location.find_by_id(params[:id])
     end
-    
+
     def pingdom_servers
       @pingdom_servers ||= begin
         data = pingdom_servers_cached
@@ -140,7 +149,7 @@ ActiveAdmin.register Location do
         loc.pingdom_name = params["location"]["pingdom_id"].split(":")[1]
         return true
       end
-      
+
       def update_new_uptimes(loc)
         return false if loc.errors.count > 0
         return true unless loc.previous_changes["pingdom_id"]
@@ -151,7 +160,7 @@ ActiveAdmin.register Location do
       def pingdom_servers_cached
         Rails.cache.fetch(pingdom_cache_key, expires_in: 30.seconds) {pingdom_servers_raw}
       end
-      
+
       def pingdom_servers_raw
         UptimeTasks.new.perform(:pingdom_servers)
       end
@@ -164,18 +173,18 @@ ActiveAdmin.register Location do
           pingdom_options_with_current_values(location)
         end
       end
-      
+
       def pingdom_options_with_current_values(location)
         if location.try(:pingdom_id)
-          [[location.pingdom_name, 
-            "#{location.pingdom_id}:#{location.pingdom_name}", 
+          [[location.pingdom_name,
+            "#{location.pingdom_id}:#{location.pingdom_name}",
             {selected: true}]
           ]
         else
           []
         end
       end
-    
+
       def pingdom_options_mark_selected(location, options)
         options = pingdom_servers_cached if options[0][1].to_i == -1
         unless location.try(:pingdom_id).nil?
@@ -184,11 +193,11 @@ ActiveAdmin.register Location do
         end
         options
       end
-      
+
       def pingdom_connected?
         pingdom_servers_cached && pingdom_servers_cached[0][1].to_i > -1
       end
-      
+
       def pingdom_cache_key
         "pingdom_servers"
       end

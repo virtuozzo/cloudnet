@@ -8,7 +8,7 @@ class CreateServer
     location = @data.location
     template = @data.template
 
-    squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: @user.onapp_user, pass: @user.onapp_password)
+    squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: ENV['VCENTER_USER'], pass: ENV['VCENTER_PASS'])
     params = {
       label: @data.name,
       hypervisor_group_id: location.hv_group_id,
