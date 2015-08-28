@@ -95,7 +95,7 @@ class VCD < ActiveRecord::Base
               hard_disks: {
                 'Hard disk 1' => {
                   storage_policy: wizard.template.location.vcd_hd_policy,
-                  disk_space: 10
+                  disk_space: 25
                 }
               }
             }
