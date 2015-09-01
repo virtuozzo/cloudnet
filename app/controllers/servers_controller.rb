@@ -14,9 +14,9 @@ class ServersController < ServerCommonController
   def edit
     @server = Server.find(params[:id])
     # When first visiting the edit wizard reset the user session
-    user_session.delete :server_wizard_params if request.method == 'GET'
-    unless user_session.key? :server_wizard_params
-      user_session[:server_wizard_params] = {
+    session.delete :server_wizard_params if request.method == 'GET'
+    unless session.key? :server_wizard_params
+      session[:server_wizard_params] = {
         memory: @server.memory,
         cpus: @server.cpus,
         disk_size: @server.disk_size,
@@ -189,7 +189,7 @@ class ServersController < ServerCommonController
   def schedule_edit
     # as_json() effectively serializes and bypasses any pass-by-ref prolems
     old_server_specs = Server.new @server.as_json
-    @server.edit(user_session[:server_wizard_params])
+    @server.edit(session[:server_wizard_params])
     # Bit of an ugly hack to piggy back off the server wizard. We're pretending as if the current
     # server with new specs is being asked to be built from scratch - that's what the wizard was
     # orginally designed to do, ie; building servers from scratch.

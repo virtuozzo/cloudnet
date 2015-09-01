@@ -11,6 +11,7 @@
   - r = @wizard_object.remaining_resources.to_json
   = raw "var defaults = #{r}"
   
+=# render partial: "shared/order_progress" if params[:id]
 %ul.jg-step-box.pure-g-r
   = render partial: "server_wizards/steps/helpers/location_summary"
 
@@ -97,10 +98,11 @@
             per hour,
             %b#monthly-price
             per month. 
-            Today you will be charged
-            %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}
-            - if @server
-              (includes reimbursement for old server)
+            - if current_user
+              Today you will be charged
+              %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}
+              - if @server
+                (includes reimbursement for old server)
           %span.pure-u
             (Coupon Discounts & EU VAT are added on the final step if applicable)
 
@@ -125,7 +127,7 @@
 %script
   - r = render partial: 'locations/location.json', formats: [:json], locals: { location: @wizard_object.location }
   = raw "var selected_location = #{r}" 
-  = raw "var hours_remaining = #{Invoice.hours_till_next_invoice(current_user.account)}"
+  = raw "var hours_remaining = #{Invoice.hours_till_next_invoice(current_user.try(:account))}"
   = raw "var max_hours = #{Account::HOURS_MAX}"
   = raw "var millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}"
 

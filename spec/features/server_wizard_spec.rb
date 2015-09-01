@@ -2,9 +2,9 @@ require 'rails_helper'
 
 feature 'Server Wizard' do
   context 'as a user not signed in' do
-    scenario 'should redirect me to the sign up page' do
+    scenario 'should show me the server options page page' do
       visit servers_create_path
-      expect(current_path).to eq(new_user_registration_path)
+      expect(current_path).to eq(servers_create_path)
     end
   end
   feature 'Step 1' do

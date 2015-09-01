@@ -22,7 +22,7 @@ class ModelWizard
   end
 
   def process
-    @session[@session_params].deep_merge!(@params[@param_key]) if @params and @params[@param_key]
+    @session[@session_params].deep_merge!(@params[@param_key].symbolize_keys) if @params and @params[@param_key]
     set_object
     @object.assign_attributes(@session[@session_params]) unless class?
     self

@@ -1,17 +1,8 @@
 class RegistrationsController < Devise::RegistrationsController
   include SessionOrderReport
   before_action :prepare_order
-  # def new
-  # end
-  #
-  # def create
-  #   flash[:info] = 'Registrations are not open yet for the Cloud.net beta, but please check back soon'
-  #   redirect_to :back
-  # end
 
   def new
-    # We want to have the ability to fill in some params
-    #prepare_order if session[:user_return_to]
     analytics_info unless monitoring_service?
     build_resource(sign_up_params)
     respond_with resource

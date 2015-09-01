@@ -29,6 +29,7 @@ CloudNet::Application.routes.draw do
   
   get 'servers/create', to: 'server_wizards#new'
   resources :server_wizards, only: [:new, :create], path: 'servers/create'
+  get 'servers/create/payment_step', to: 'server_wizards#payment_step'
   get 'servers/create/location_packages', to: 'server_wizards#location_packages'
   get 'servers/create/prepaid_server_cost', to: 'server_wizards#prepaid_server_cost'
   get 'servers/create/payg_server_cost', to: 'server_wizards#payg_server_cost'
