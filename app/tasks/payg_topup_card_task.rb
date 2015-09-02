@@ -1,7 +1,7 @@
 class PaygTopupCardTask < BaseTask
   def initialize(account, usd_amount)
-    @usd_amount = usd_amount
-    @amount     = usd_amount * Payg::CENTS_IN_DOLLAR
+    @usd_amount = usd_amount.to_f
+    @amount     = (@usd_amount * Payg::CENTS_IN_DOLLAR).to_i
 
     @account = account
     @user    = account.user
