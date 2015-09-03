@@ -80,7 +80,7 @@ Location.find_or_create_by!(provider: 'vCenter') do |l|
   l.summary = ''
 end
 
-# UpdateFederationResources.run
+UpdateFederationResources.run
 
 Location.all.each do |l|
   next unless l.key
