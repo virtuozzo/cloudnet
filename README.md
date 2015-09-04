@@ -38,9 +38,7 @@ is now a live log of all cloud.net's various logs.
 
 Then create the database and structure with:
 
-`docker exec -it cloudnet_cloudnet-web_1 rake db:create`    
-`docker exec -it cloudnet_cloudnet-web_1 rake db:schema:load`    
-`docker exec -it cloudnet_cloudnet-web_1 rake db:seed`    
+`docker exec -it cloudnet_cloudnet-web_1 bash -c db/setup.sh`    
 
 **Accessing cloud.net**    
 By default cloud.net will be accessible via: https://localhost
