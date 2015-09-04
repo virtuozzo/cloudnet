@@ -58,6 +58,7 @@ end
 
 Location.find_or_create_by!(provider: 'vCenter') do |l|
   l.id = 3
+  l.key = 'VCENTER'
   l.latitude = '51.5072'
   l.longitude = '0.0000'
   l.country = 'GB'
@@ -83,7 +84,7 @@ end
 UpdateFederationResources.run
 
 Location.all.each do |l|
-  next unless l.key
+  next if l.key == 'VCENTER'
   l.import_vcd_ids
   l.reload
   l.import_templates
