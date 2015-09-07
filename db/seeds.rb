@@ -6,6 +6,11 @@ admin = User.find_or_create_by(email: 'admin@cloud.net') do |u|
 end
 admin.confirm! unless admin.confirmed?
 
+# Allow admin to enter test cards
+account = admin.account
+account.maxmind_exempt = true
+account.save!
+
 Location.find_or_create_by!(provider: 'vCloud Director') do |l|
   l.id = 1
   l.key = 'VCLOUD_DIRECTOR'
