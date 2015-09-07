@@ -11,7 +11,7 @@ module MultiStepModel
   end
 
   def all_steps_valid?
-    (1..self.class.total_steps).all? do |step|
+    (1..self.total_steps).all? do |step|
       @current_step = step
       current_step_valid?
     end
@@ -30,7 +30,7 @@ module MultiStepModel
   end
 
   def last_step?
-    step?(self.class.total_steps)
+    step?(self.total_steps)
   end
 
   def first_step?
