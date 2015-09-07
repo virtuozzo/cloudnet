@@ -44,8 +44,8 @@ class ServerWizard
   end
 
 
-  def self.total_steps
-    3
+  def total_steps
+    card.nil? ? 3 : [current_step, 2].max
   end
 
   def current_step_name
@@ -104,7 +104,7 @@ class ServerWizard
   end
 
   def card=(card)
-    self.card_id = card.id
+    self.card_id = card.try(:id)
   end
 
   def payment_type

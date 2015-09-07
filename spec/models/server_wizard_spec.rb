@@ -8,8 +8,13 @@ describe ServerWizard do
     expect(server_wizard.id).to be_nil
   end
 
+  it 'should have two steps' do
+    expect(server_wizard.total_steps).to eq(2)
+  end
+  
   it 'should have three steps' do
-    expect(ServerWizard.total_steps).to eq(3)
+    server_wizard.card_id = nil
+    expect(server_wizard.total_steps).to eq(3)
   end
 
   it "isn't valid without a location" do

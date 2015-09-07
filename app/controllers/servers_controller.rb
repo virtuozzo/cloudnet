@@ -28,7 +28,7 @@ class ServersController < ServerCommonController
     @wizard_object.submission_path = edit_server_path @server
     @wizard.save
     # Prob not the right way to check, but it's unclear how else to do it
-    if params[:server_wizard] && params[:server_wizard][:payment_type]
+    if params[:server_wizard] && (@wizard_object.card || params[:server_wizard][:payment_type])
       schedule_edit
       flash[:info] = 'Server scheduled for updating'
       redirect_to server_path(@server)

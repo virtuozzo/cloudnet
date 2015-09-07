@@ -8,6 +8,7 @@ class ServerWizardsController < ServerCommonController
     @wizard = ModelWizard.new(ServerWizard, session, params, :server_wizard).start
     @wizard_object = @wizard.object
     @wizard_object.user = current_user
+    @wizard_object.card = current_user.account.primary_billing_card
     @wizard_object.current_step = 2 if location_id_in_params?
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
