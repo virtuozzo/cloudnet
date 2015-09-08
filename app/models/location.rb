@@ -103,7 +103,9 @@ class Location < ActiveRecord::Base
   end
 
   def vdc_ids
-    [api.get('vdcs').first.vdc.id]
+    response = Location.find(2).api.get('vdcs')
+    response = response.try(:first) || response
+    [response.vdc.id]
   end
 
   def hd_net_data
