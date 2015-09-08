@@ -260,6 +260,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (0.4.2)
       faraday (~> 0.8)
+    faraday_curl (0.0.2)
+      faraday (>= 0.9.0)
     faraday_middleware (0.9.1)
       faraday (>= 0.7.4, < 0.10)
     fastercsv (1.5.5)
@@ -651,6 +653,7 @@ DEPENDENCIES
   faker
   faraday (~> 0.9.0)
   faraday-http-cache (~> 0.4.0)
+  faraday_curl
   faraday_middleware
   figaro
   foreman

@@ -1,3 +1,5 @@
+require 'faraday_curl'
+
 module Squall
   # Squall (the gem used to interface with the OnApp API) uses class
   # variables to define the auth params and server params. Unfortunately
@@ -26,6 +28,7 @@ module Squall
         c.adapter :net_http
         c.use Faraday::Response::RaiseError
         c.use Faraday::HttpCache, store: Rails.cache, logger: Rails.logger, shared_cache: false
+        c.request :curl, Rails.logger, :info
 
         if @config[:debug]
           c.use Faraday::Response::Logger

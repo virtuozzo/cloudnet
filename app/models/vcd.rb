@@ -67,6 +67,8 @@ class VCD < ActiveRecord::Base
     def create_vapp(wizard)
       api = OnappBlanketAPI.new.connection wizard.template.location.credentials
       params = generate_vapp_params(wizard)
+      Rails.logger.info wizard.template.location.credentials
+      Rails.logger.info params
       result = api.post(:vapps, body: params).vapp
       Rails.logger.info result
       return unless result.id

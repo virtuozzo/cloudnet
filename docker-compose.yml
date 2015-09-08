@@ -20,10 +20,14 @@ cloudnet-worker:
    - cloudnet-db
   command: foreman run sidekiq --logfile /dev/stdout
 
+# Incomplete. Cron env doesn't get access to docker's env vars :(
+# So hacked solution with RefreshAllServers.perform_async in ApplicationController
 cloudnet-cron:
   image: cloudnet
   env_file: .env.vmware-lab
   restart: always
+  volumes:
+   - .env.vmware-lab:/app/env/.env
   links:
    - cloudnet-redis
    - cloudnet-db

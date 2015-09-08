@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   MONITOR_SERV = %w(Zabbix NewRelicPinger UptimeRobot DomainTuno)
     
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_filter :cron_hack
   before_action :authenticate_user!
   before_action :check_user_status, unless: :controller_allowed?
   before_action :set_session_id
@@ -92,6 +93,11 @@ class ApplicationController < ActionController::Base
   
   def monitoring_service?
     MONITOR_SERV.any? {|serv| /#{serv}/ =~ request.user_agent}
+  end
+  
+  def cron_hack
+    RefreshAllServers.perform_async
+    RefreshServerUsages.perform_async
   end
   
 end
