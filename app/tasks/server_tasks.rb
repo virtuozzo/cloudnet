@@ -3,7 +3,11 @@ class ServerTasks < BaseTasks
     user = User.find(user_id)
     server = Server.find(server_id)
 
-    squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: user.onapp_user, pass: user.onapp_password)
+    credentials = server.location.credentials
+    username = credentials[0]
+    password = credentials[1]
+
+    squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: username, pass: password)
     run_task(action, server, squall, *args)
   end
   
