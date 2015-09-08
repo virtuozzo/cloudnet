@@ -20,6 +20,15 @@ cloudnet-worker:
    - cloudnet-db
   command: foreman run sidekiq --logfile /dev/stdout
 
+cloudnet-cron:
+  image: cloudnet
+  env_file: .env.vmware-lab
+  restart: always
+  links:
+   - cloudnet-redis
+   - cloudnet-db
+  command: ./cron.sh
+  
 cloudnet-redis:
   image: redis
 

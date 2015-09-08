@@ -7,6 +7,7 @@ RUN apt-get update \
     libssl-dev \
     libpq-dev \
     nodejs \
+    cron \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
