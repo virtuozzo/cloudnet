@@ -6,7 +6,7 @@ class ServerCommonController < ApplicationController
     @wizard = ModelWizard.new(ServerWizard, session, params, :server_wizard).process
     @wizard_object = @wizard.object
     @wizard_object.user = current_user
-    @wizard_object.card = current_user.account.primary_billing_card
+    @wizard_object.card = current_user.account.primary_billing_card if current_user
   end
 
   def location_packages

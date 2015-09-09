@@ -99,7 +99,7 @@ class ServerWizard
   end
 
   def card
-    @card = BillingCard.where(account: user.account).find_by_id(card_id)
+    @card = BillingCard.where(account: user.account).find_by_id(card_id) if user
     @card
   end
 

@@ -16,6 +16,13 @@ describe ServerWizard do
     server_wizard.card_id = nil
     expect(server_wizard.total_steps).to eq(3)
   end
+  
+  it 'should be valid even if user is not logged in' do
+    server_wizard.user = nil
+    expect(server_wizard.total_steps).to eq(3)
+    server_wizard.current_step = 2
+    expect(server_wizard).to be_valid
+  end
 
   it "isn't valid without a location" do
     server_wizard.current_step = 1
