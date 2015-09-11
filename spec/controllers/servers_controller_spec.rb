@@ -140,14 +140,12 @@ describe ServersController do
             expect(@payments).to receive(:auth_charge)
               .with(@current_user.account.gateway_id, @card.processor_token, pretty_total(cost_difference_cents))
               .and_return(charge_id: 12_345)
-
+              
             expect(@server_tasks).to receive(:perform).with(:edit, @current_user.id, @server.id)
-            session['warden.user.user.session'] = {
-              server_wizard_params: {
-                cpus: @new_server.cpus,
-                memory: @new_server.memory,
-                disk_size: @new_server.disk_size
-              }
+            session[:server_wizard_params] = {
+              cpus: @new_server.cpus,
+              memory: @new_server.memory,
+              disk_size: @new_server.disk_size
             }
             params = { id: @server.id, server_wizard: { payment_type: 'prepaid' } }
             post :edit, params
@@ -164,12 +162,10 @@ describe ServersController do
             expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
             allow(@server_tasks).to receive(:perform).and_raise(Faraday::Error::ClientError.new('Test'))
             expect(@payments).to_not receive(:capture_charge)
-            session['warden.user.user.session'] = {
-              server_wizard_params: {
-                cpus: 3,
-                memory: 2096,
-                disk_size: 10
-              }
+            session[:server_wizard_params] = {
+              cpus: 3,
+              memory: 2096,
+              disk_size: 10
             }
             params = { id: @server.id, server_wizard: { payment_type: 'prepaid' } }
             post :edit, params

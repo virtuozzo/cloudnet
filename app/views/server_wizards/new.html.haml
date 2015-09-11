@@ -1,7 +1,7 @@
 - breadcrumb :new_server
 - title "Create Server"
-
-= render 'form'
+%section.container
+  = render 'form'
 
 :javascript
   ga('send', 'event', 'Page', 'View', "#{@event_name}");

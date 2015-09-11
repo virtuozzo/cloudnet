@@ -16,23 +16,28 @@ $ ->
       flagButton = $el.hasClass(clazzName)
       $el[{true: 'removeClass', false: 'addClass'}[flagButton]](clazzName)
       return flagButton
-
-  $('.jg-toggle').click (e) ->
-    $parent = $(@).parent()
+      
+  toggleBillingInfo = ($el) ->
+    $parent = $el.parent()
     activeClass = simplyToggleClass($parent, 'open')
-    $(@).find('.jg-disclosure').toggleClass('icon-arrow-down icon-arrow-up active')
-    $el = $parent.find('.jg-toggleable')
+    $parent.find('.jg-disclosure').toggleClass('icon-arrow-down icon-arrow-up active')
+    $tgbl = $parent.find('.jg-toggleable')
     if activeClass is false
-      $el.css
+      $tgbl.css
         display: 'inline-block'
       .animo( { animation: 'fadeInDown', duration: 0.2 })
     else
-      $el.animo( { animation: 'fadeOutUp', duration: 0.2, keep: true}, ->
-        $el.css
+      $tgbl.animo( { animation: 'fadeOutUp', duration: 0.2, keep: true}, ->
+        $tgbl.css
           display: 'none'
       )
-
+      
     return
+    
+  $('.jg-toggle').click (e) ->
+    toggleBillingInfo $(@)
+  
+  toggleBillingInfo $('#jg-add-card') unless account_cards.length
 
   reactivateTooltip = ($el) ->
     $el.tooltip

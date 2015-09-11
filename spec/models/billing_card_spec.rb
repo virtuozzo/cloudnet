@@ -198,5 +198,19 @@ describe BillingCard do
       expect(card2.primary).to be false
       expect(card3.primary).to be true
     end
+    
+    it 'should set a new primary card' do
+      card1 = FactoryGirl.create(:billing_card, account: user.account, primary: true)
+      card2 = FactoryGirl.create(:billing_card, account: user.account)
+      
+      expect(card1.primary).to be true
+      expect(card2.primary).to be false
+      
+      card1.set_new_primary
+      [card1, card2].each(&:reload)
+      
+      expect(card1.primary).to be false
+      expect(card2.primary).to be true
+    end
   end
 end

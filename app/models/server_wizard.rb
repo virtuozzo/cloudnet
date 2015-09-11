@@ -44,8 +44,8 @@ class ServerWizard
   end
 
 
-  def self.total_steps
-    3
+  def total_steps
+    card.nil? ? 3 : [current_step, 2].max
   end
 
   def current_step_name
@@ -77,6 +77,10 @@ class ServerWizard
     true
   end
 
+  def no_errors?
+    errors.messages.count == 0
+  end
+  
   def location
     @location = Location.where(hidden: false).find_by_id(location_id) if location_id
   end
@@ -95,12 +99,12 @@ class ServerWizard
   end
 
   def card
-    @card = BillingCard.where(account: user.account).find_by_id(card_id)
+    @card = BillingCard.where(account: user.account).find_by_id(card_id) if user
     @card
   end
 
   def card=(card)
-    self.card_id = card.id
+    self.card_id = card.try(:id)
   end
 
   def payment_type
@@ -228,20 +232,18 @@ class ServerWizard
   end
 
   def can_create_new_server?
-    number_of_servers = user.servers.count
-    number_of_servers < user.vm_max
+    user.servers.count < user.vm_max
   end
 
   def has_minimum_resources?
     minimum = minimum_resources
-    max = remaining_server_resources
-    max.each { |k, v| return false if minimum[k] > v }
+    remaining_server_resources.each { |k, v| return false if minimum[k] > v }
     true
   end
 
   def packages
     packages = location.packages
-    packages.select { |package| has_enough_remaining_resources?(package) }
+    packages.select { |package| @user ? has_enough_remaining_resources?(package) : true }
   end
 
   def bandwidth
@@ -341,15 +343,19 @@ class ServerWizard
   end
 
   def remaining_server_resources
-    servers = user.servers
-    memory_used = servers.map(&:memory).reduce(:+) || 0
-    storage_used = servers.map(&:disk_size).reduce(:+) || 0
+    if user
+      servers = user.servers
+      memory_used = servers.map(&:memory).reduce(:+) || 0
+      storage_used = servers.map(&:disk_size).reduce(:+) || 0
 
-    {
-      memory:       user.memory_max - memory_used,
-      cpus:         user.cpu_max,
-      disk_size:    user.storage_max - storage_used
-    }
+      {
+        memory:       user.memory_max - memory_used,
+        cpus:         user.cpu_max,
+        disk_size:    user.storage_max - storage_used
+      }
+    else
+      { memory: 7680, cpus: 4, disk_size: 100 }
+    end
   end
 
   def within_package_if_budget_vps_package

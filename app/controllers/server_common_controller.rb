@@ -3,9 +3,10 @@ class ServerCommonController < ApplicationController
 
   # When the Server Wizard is setup at a step after step 1
   def process_server_wizard
-    @wizard = ModelWizard.new(ServerWizard, user_session, params, :server_wizard).process
+    @wizard = ModelWizard.new(ServerWizard, session, params, :server_wizard).process
     @wizard_object = @wizard.object
     @wizard_object.user = current_user
+    @wizard_object.card = current_user.account.primary_billing_card if current_user
   end
 
   def location_packages

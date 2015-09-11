@@ -14,9 +14,9 @@ class ServersController < ServerCommonController
   def edit
     @server = Server.find(params[:id])
     # When first visiting the edit wizard reset the user session
-    user_session.delete :server_wizard_params if request.method == 'GET'
-    unless user_session.key? :server_wizard_params
-      user_session[:server_wizard_params] = {
+    session.delete :server_wizard_params if request.method == 'GET'
+    unless session.key? :server_wizard_params
+      session[:server_wizard_params] = {
         memory: @server.memory,
         cpus: @server.cpus,
         disk_size: @server.disk_size,
@@ -28,7 +28,7 @@ class ServersController < ServerCommonController
     @wizard_object.submission_path = edit_server_path @server
     @wizard.save
     # Prob not the right way to check, but it's unclear how else to do it
-    if params[:server_wizard] && params[:server_wizard][:payment_type]
+    if params[:server_wizard] && (@wizard_object.card || params[:server_wizard][:payment_type])
       schedule_edit
       flash[:info] = 'Server scheduled for updating'
       redirect_to server_path(@server)
@@ -189,7 +189,7 @@ class ServersController < ServerCommonController
   def schedule_edit
     # as_json() effectively serializes and bypasses any pass-by-ref prolems
     old_server_specs = Server.new @server.as_json
-    @server.edit(user_session[:server_wizard_params])
+    @server.edit(session[:server_wizard_params])
     # Bit of an ugly hack to piggy back off the server wizard. We're pretending as if the current
     # server with new specs is being asked to be built from scratch - that's what the wizard was
     # orginally designed to do, ie; building servers from scratch.

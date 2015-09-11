@@ -91,6 +91,7 @@ module InvoiceCreditShared
     end
 
     def hours_till_next_invoice(account)
+      return 0 unless account
       [account.hours_till_next_invoice, Account::HOURS_MAX].min
     end
 

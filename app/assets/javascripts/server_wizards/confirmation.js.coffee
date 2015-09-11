@@ -4,6 +4,7 @@ generate_card_html = ->
   card_output = ""
   _.each account_cards, (card) ->
     if card.primary is true
+      check_primary = "checked"
       primary = """
         <div class="pure-u-1-6">
           <span class="tags primary">Primary Card</span>
@@ -11,12 +12,13 @@ generate_card_html = ->
       """
     else
       primary = ""
+      check_primary = ""
 
     card_output += 
       """
         <tr class="selectable" data-id="#{card.id}" data-validation="#{card.requires_validation}">
           <td>
-            <input id="server_wizard_card_id_#{card.id}" name="server_wizard[card_id]" type="radio" value="#{card.id}">
+            <input id="server_wizard_card_id_#{card.id}" name="server_wizard[card_id]" type="radio" value="#{card.id}" #{check_primary}>
           </td>
           <td>
             <div class="pure-g">

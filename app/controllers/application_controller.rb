@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  MONITOR_SERV = %w(bot spider crawl scraper indexer Zabbix NewRelicPinger UptimeRobot DomainTuno Baiduspider HaosouSpider Googlebot MJ12bot Slurp Feedfetcher SkypeUriPreview Exabot bingbot CCBot DuckDuckGo favicon wget Snippet_Validator HubSpot)
+  MONITOR_SERV = %w(bot spider crawl scraper indexer Zabbix NewRelicPinger UptimeRobot DomainTuno Baiduspider HaosouSpider Googlebot MJ12bot Slurp Feedfetcher SkypeUriPreview Exabot bingbot CCBot DuckDuckGo favicon wget Snippet_Validator HubSpot WinHttp)
 
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   private
 
   def controller_allowed?
-    controllers = %w(tickets ticket_replies public server_search)
+    controllers = %w(tickets ticket_replies public server_search server_wizards)
     devise_controller? || controllers.include?(params[:controller])
   end
 

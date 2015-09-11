@@ -48,6 +48,11 @@ class BillingCard < ActiveRecord::Base
 
     write_attribute(:primary, primary)
   end
+  
+  def set_new_primary
+    card = BillingCard.where(account: account, primary: false).order(created_at: :desc).first
+    card.update(primary: true) unless card.blank?
+  end
 
   private
 

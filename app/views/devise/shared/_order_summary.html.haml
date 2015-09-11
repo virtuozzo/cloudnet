@@ -1,15 +1,16 @@
 #order-summary
   %h3 Order Summary:
   %p 
-    = @location.try(:budget_vps) ? "VPS Server" : "Cloud Server"
+    =# @location.try(:budget_vps) ? "VPS Server" : "Cloud Server"
+    = @server_params[:name]
     %br
     %span.order-provider
       with 
       = @location.try(:provider)
       
-  =summary_param("Memory", "MB", @server_params[:mem])
-  =summary_param("CPU(s)", "Core", @server_params[:cpu])
-  =summary_param("Disk Space", "GB", @server_params[:disk])
+  =summary_param("Memory", "MB", @server_params[:memory])
+  =summary_param("CPU(s)", "Core", @server_params[:cpus])
+  =summary_param("Disk Space", "GB", @server_params[:disk_size])
   %p
     Location
     %span.pull-right.value= @location.city
