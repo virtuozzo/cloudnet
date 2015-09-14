@@ -41,9 +41,17 @@ class ServerCommonController < ApplicationController
 
   def step2
     @templates = Location.find(@wizard_object.location_id).templates.where(hidden: false).group_by { |t| "#{t.os_type}-#{t.os_distro}" }
-    Analytics.track(current_user, event: 'New Server - Options', properties: { location: @wizard_object.location.to_s })
+    Analytics.track(current_user, event_details_step2, anonymous_id, request)
   end
 
+  def event_details_step2
+    {event: 'New Server - Options',
+      properties: {
+        location: @wizard_object.location.to_s
+      }
+    }
+  end
+  
   def step3
     calculate_costs
 
