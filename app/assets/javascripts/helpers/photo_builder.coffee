@@ -16,9 +16,14 @@ class helpers.PhotoBuilder
     deferred = Q.defer()
     _500px.api "/photos/#{@grabPhotoId()}", (response) =>
       if response.error
-        console.log response.error_message
-        deferred.reject(response.err)
-      deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo))
+        console.log @city + ": " + response.error_message
+        _500px.api "/photos/#{@defaultPhoto}", (response) =>
+          if response.error
+            deferred.reject(response.err)
+          else
+            deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo))
+      else
+        deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo))
     return deferred.promise
     
   cityPhotoObject: (obj) ->
