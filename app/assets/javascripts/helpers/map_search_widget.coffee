@@ -1,12 +1,7 @@
 class helpers.MapSearchWidget
   constructor: (@scope, @mapElem, @ctrl, @state, @keys, @popup, @pins) ->
-    @initialize500px()
     @initializeMap()
     @attachMapToModelChange()
-    
-  initialize500px: ->
-    _500px.init
-      sdk_key: @keys.fiveHundredPxKey
 
   initializeMap: ->
     @map = L.mapbox.map @mapElem, @keys.mapboxKey,
@@ -46,12 +41,16 @@ class helpers.MapSearchWidget
     new helpers.GeoJsonBuilder(@ctrl.$viewValue, @pins.inactivePin).generate()
     
   attachPhotoToPopup: (properties, layer) ->
-    photoBuilder = new helpers.PhotoBuilder(properties, layer)
-    photoBuilder.fetchPhoto().then (photo) =>
-      data   = photo.marker.feature.properties
-      newContent = @popup({photo: photo, data: data})
-      photo.marker.bindPopup(newContent)
+    if _.isUndefined(properties.photoData.city)
+      properties.photoData.then =>
+        @addPhotoToLayer(properties, layer)
+    else
+      @addPhotoToLayer(properties, layer)
   
+  addPhotoToLayer: (properties, layer) ->
+    newContent = @popup({photo: properties.photoData, data: properties})
+    layer.bindPopup(newContent)
+    
   attachClickHandler: (marker) ->
     marker.on 'click', (e) =>
       marker  =   e.target

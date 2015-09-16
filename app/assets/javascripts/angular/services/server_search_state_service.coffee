@@ -60,5 +60,4 @@
       loc = @filter('filter')(loc, @packageFilter)
       loc = @filter('filter')(loc, @cloudIndexUptimeFilter)
       @filter('orderBy')(loc, @locationSort(), @sortBy.rev)
-      
 ]
