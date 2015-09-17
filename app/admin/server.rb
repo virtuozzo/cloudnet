@@ -5,6 +5,10 @@ ActiveAdmin.register Server do
   permit_params :name, :hostname, :state, :built, :locked, :suspended, :root_password,
                 :cpus, :memory, :disk_size, :bandwidth
 
+  scope("Existing", default: true) { |scope| scope.where(:deleted_at => nil) }
+  scope :with_deleted
+  scope :only_deleted
+  
   sidebar :control_panel_links do
     ul do
       li link_to('Dashboard', root_path)
@@ -12,7 +16,7 @@ ActiveAdmin.register Server do
       li link_to('Tickets', tickets_path)
     end
   end
-
+  
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
@@ -39,6 +43,7 @@ ActiveAdmin.register Server do
     column :user
     column :location
     column :primary_ip_address
+    column :deleted_at
 
     actions
   end
@@ -72,4 +77,5 @@ ActiveAdmin.register Server do
   action_item :edit, only: :index do
     link_to 'Zombies', zombies_admin_servers_path
   end
+  
 end
