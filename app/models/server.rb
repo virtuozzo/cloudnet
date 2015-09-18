@@ -30,10 +30,17 @@ class Server < ActiveRecord::Base
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :deleted_this_month, -> { where('deleted_at > ? AND deleted_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :deleted_last_month, -> { where('deleted_at > ? AND deleted_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
-
+  
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
 
+  def self.purchased_resources
+    sums = pluck(:cpus, :memory, :disk_size)
+      .inject([0,0,0]) {|sum, o| [sum,o].transpose.map {|x| x.reduce(:+)}}
+
+    {cpu: sums[0], mem: sums[1], disc: sums[2]}
+  end
+  
   def name_with_ip
     "#{name} (IP: #{primary_ip_address})"
   end

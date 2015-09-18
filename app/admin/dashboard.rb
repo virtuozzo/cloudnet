@@ -20,6 +20,10 @@ ActiveAdmin.register_page 'Dashboard' do
     columns do
       column do
         panel 'Statistics' do
+          def resources
+            @resources ||= Server.purchased_resources
+          end
+          
           table do
             tr do
               td 'Total Servers Running/Present'
@@ -74,6 +78,20 @@ ActiveAdmin.register_page 'Dashboard' do
               td Ticket.created_this_month.count
             end
 
+            tr do
+              td 'Cores'
+              td resources[:cpu]
+            end
+            
+            tr do
+              td 'Memory [MB]'
+              td  number_with_delimiter(resources[:mem])
+            end
+            
+            tr do
+              td 'Disc Space [GB]'
+              td  number_with_delimiter(resources[:disc])
+            end
           end
         end
       end
