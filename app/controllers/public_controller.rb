@@ -25,7 +25,7 @@ class PublicController < ApplicationController
       properties: {
         environment: Rails.env,
         agent: request.user_agent
-      }
+      }.merge(UtmTracker.extract_properties(params))
     }
   end
 end

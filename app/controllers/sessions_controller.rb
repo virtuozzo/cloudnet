@@ -11,6 +11,12 @@ class SessionsController < Devise::SessionsController
   private
   
   def analytics_info
-    Analytics.track(current_user, {event: 'Login Page'}, anonymous_id, request)
+    Analytics.track(current_user, event_details, anonymous_id, request)
+  end
+  
+  def event_details
+    {event: 'Login Page',
+      properties: UtmTracker.extract_properties(params)
+    }
   end
 end

@@ -48,7 +48,7 @@ class ServerCommonController < ApplicationController
     {event: 'New Server - Options',
       properties: {
         location: @wizard_object.location.to_s
-      }
+      }.merge(UtmTracker.extract_properties(params))
     }
   end
   
