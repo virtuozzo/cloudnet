@@ -3,11 +3,9 @@ class IpAddressesController < ApplicationController
   before_action :set_ip_address, except: [:index, :create]
   
   def index
-    @ip_address = @server.server_ip_addresses.new
-    @ip_addresses = @server.server_ip_addresses.order(primary: :desc, id: :asc)
     respond_to do |format|
-      format.html { @ip_addresses = @ip_addresses.page(params[:page]).per(10) }
-      format.json
+      format.html { @ip_address = @server.server_ip_addresses.new }
+      format.json { @ip_addresses = @server.server_ip_addresses.order(primary: :desc, id: :asc) }
     end
   end
   
