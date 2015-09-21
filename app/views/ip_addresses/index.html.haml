@@ -8,7 +8,8 @@
     %ul.pure-u-1-2.jg-widget-controls
       %li
         %a.btn.jg-submit-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow"} Add IP Address
-      %li= link_to "Rebuild Network", rebuild_network_server_path(@server), method: :post
+      %li
+        %a.btn.jg-submit-button{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
   .jg-widget-body
     %table.table.table-hover.jg-tables
       %thead
@@ -28,7 +29,11 @@
             %td= ip_address.network
             %td= ip_address.broadcast
             %td= ip_address.gateway
-            %td= ip_address.primary? ? "PRIMARY" : (link_to "Remove", server_ip_address_path(@server.id, ip_address.id), method: :delete, data: { confirm: "Are you sure you want to remove the IP address #{ip_address.address} ?" })
+            %td
+              - if ip_address.primary?
+                %span.tags.primary Primary
+              - else
+                = link_to "Remove", server_ip_address_path(@server.id, ip_address.id), method: :delete, data: { confirm: "Are you sure you want to remove the IP address #{ip_address.address} ?" }
             
 
         - if @ip_addresses.size == 0 
@@ -45,3 +50,4 @@
         = link_to_next_page @ip_addresses, '', class: 'jg-previous icon-arrow-right'
 
 = render partial: 'new_ip_popover'
+= render partial: 'rebuild_network_popover'
