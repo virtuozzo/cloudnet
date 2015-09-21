@@ -47,15 +47,7 @@
         .server-location-presence.pure-u-1.pure-u-md-1-4
           #jg-map{"locate-presence" => "{{ server.location }}"}
     .server-additional-info.pure-g
-      %table.ip-address-table.table.table-hover.jg-tables.pure-u-1.pure-u-md-1-2
-        %thead.pure-u-1-1
-          %tr.pure-u-1-1
-            %td.pure-u-1-2 IP Addresses
-            %td.pure-u-1-2 Network
-        %tbody.pure-u-1-1{"scrollable" => ""}
-          %tr.pure-u-1-1
-            %td.pure-u-1-2= "{{ server.primary_ip_address }}"
-            %td.pure-u-1-2= "eth0"
+      = render :partial => 'ip_addresses'
 
       .basic-server-info.pure-u-1.pure-u-md-1-2
         %dl

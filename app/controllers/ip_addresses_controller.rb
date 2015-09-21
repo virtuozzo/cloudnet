@@ -4,7 +4,7 @@ class IpAddressesController < ApplicationController
   
   def index
     @ip_address = @server.server_ip_addresses.new
-    @ip_addresses = @server.server_ip_addresses.order(id: :asc)
+    @ip_addresses = @server.server_ip_addresses.order(primary: :desc, id: :asc)
     respond_to do |format|
       format.html { @ip_addresses = @ip_addresses.page(params[:page]).per(10) }
       format.json
