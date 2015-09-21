@@ -14,4 +14,5 @@
         .modal-footer
           - if true # TODO: Location supports multiple IPs
             = form_for @ip_address do |f|
+              %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
               = f.submit "Add IP Address", class: "btn jg-submit-button"

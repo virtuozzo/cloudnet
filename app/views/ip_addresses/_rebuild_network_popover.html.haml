@@ -12,4 +12,5 @@
             %p Please confirm you would like to continue.
       
         .modal-footer
+          %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
           = link_to "Rebuild Network", rebuild_network_server_path(@server), method: :post, class: "btn jg-submit-button"

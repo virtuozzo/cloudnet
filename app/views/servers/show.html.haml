@@ -26,6 +26,8 @@
                 %li
                   %a{"href" => "/servers/{{ server.id }}/console", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Server Console
                 %li
+                  %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
+                %li
                   %a{"data-target" => "#destroy-server", "data-toggle" => "modal", "rel" => "nofollow"} Destroy Server
           %li
             %span{class: "tags {{ server.state }}"}= "{{ server.state | actionTitleize }}"
@@ -92,6 +94,7 @@
   = render partial: 'server_event'
 
 = render partial: 'server_delete_dialog', locals: { server: @server }
+= render partial: 'ip_addresses/rebuild_network_popover'
 
 - if flash.notice =~ /successfully created/
   :javascript
