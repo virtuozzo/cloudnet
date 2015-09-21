@@ -37,7 +37,7 @@ gem 'sidekiq-unique-jobs'
 
 gem 'faraday', '~> 0.9.0'
 gem 'faraday-http-cache', '~> 0.4.0'
-gem 'squall', git: 'https://github.com/suhailpatel/squall.git', ref: '49d5db8'
+gem 'squall', git: 'https://github.com/OnApp/squall.git', ref: '87d6d68'
 gem 'symmetric-encryption', '~> 3.4.0'
 gem 'iso_country_codes', '~> 0.4.4'
 gem 'country_select', github: 'stefanpenner/country_select'

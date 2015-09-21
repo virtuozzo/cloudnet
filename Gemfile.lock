@@ -36,6 +36,15 @@ GIT
       sort_alphabetical (~> 1.0)
 
 GIT
+  remote: https://github.com/OnApp/squall.git
+  revision: 87d6d6824403aadcf5fd9aefec7b6b62514aa171
+  ref: 87d6d68
+  specs:
+    squall (1.4.0)
+      faraday (~> 0.9.0)
+      json (~> 1.7)
+
+GIT
   remote: https://github.com/getsentry/raven-ruby.git
   revision: 8ea61f94b7a9ece8ed69e796d326f10c7800127c
   specs:
@@ -63,15 +72,6 @@ GIT
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
       rest-client (~> 1.4)
-
-GIT
-  remote: https://github.com/suhailpatel/squall.git
-  revision: 49d5db8f63962419f011dd6ecb6b43f72fcf4511
-  ref: 49d5db8
-  specs:
-    squall (1.4.0)
-      faraday (~> 0.9.0)
-      json (~> 1.7)
 
 GEM
   remote: https://rubygems.org/
@@ -708,3 +708,6 @@ DEPENDENCIES
   whenever
   yaml_db
   zendesk_api (~> 1.5.0)
+
+BUNDLED WITH
+   1.10.6

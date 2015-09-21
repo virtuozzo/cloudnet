@@ -9,6 +9,9 @@ class MonitorServer
     manager = ServerTasks.new
     server  = manager.perform(:refresh_server, user_id, server_id)
     manager.perform(:refresh_events, user_id, server_id)
+    
+    ip_address_task = IpAddressTasks.new
+    ip_address_task.perform(:refresh_ip_addresses, user_id, server_id)
 
     pending_events = server.server_events.where.not(status: :complete)
 

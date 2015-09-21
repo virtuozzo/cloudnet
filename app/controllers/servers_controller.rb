@@ -153,6 +153,15 @@ class ServersController < ServerCommonController
     net_cost = 0 if @server.in_beta?
     render json: { credit: net_cost }
   end
+  
+  def rebuild_network
+    RebuildNetwork.new(@server, current_user).process
+    redirect_to :back, notice: 'Network rebuild has been scheduled'
+  rescue Exception => e
+    ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Servers#rebuild_network' })
+    flash.now[:alert] = 'Could not rebuild network. Please try again later'
+    redirect_to :back
+  end
 
   private
 

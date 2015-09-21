@@ -15,6 +15,7 @@ class Server < ActiveRecord::Base
   has_many :server_usages, dependent: :destroy
   has_many :server_backups, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
+  has_many :server_ip_addresses, dependent: :destroy
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
@@ -40,6 +41,18 @@ class Server < ActiveRecord::Base
 
   def to_s
     "#{name}, #{hostname} (Belongs to: #{user})"
+  end
+  
+  def primary_ip_address
+    return (server_ip_addresses.with_deleted.find(&:primary?) || server_ip_addresses.with_deleted.first).address if server_ip_addresses.with_deleted.present?
+    nil
+  end
+  
+  def primary_network_interface
+    server_task = ServerTasks.new
+    interfaces = server_task.perform(:get_network_interfaces, user.id, id)
+    primary = interfaces.find { |interface| interface['network_interface']['primary'] == true }
+    primary['network_interface']
   end
 
   def destroy_with_ip(ip)

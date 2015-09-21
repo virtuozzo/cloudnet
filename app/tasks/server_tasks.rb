@@ -47,8 +47,7 @@ class ServerTasks < BaseTasks
       memory:                 info['memory'],
       disk_size:              disk_size > 0 ? disk_size.to_s : server.disk_size,
       os:                     info['operating_system'],
-      state:                  state,
-      primary_ip_address:     CreateServer.extract_ip(info)
+      state:                  state
     )
 
     server
@@ -95,6 +94,10 @@ class ServerTasks < BaseTasks
     cpu_type = server.server_usages.find_or_initialize_by(usage_type: :cpu)
     cpu_type.usages = parsed.to_json
     cpu_type.save!
+  end
+  
+  def get_network_interfaces(server, squall)
+    squall.network_interfaces(server.identifier)
   end
 
   def refresh_network_usages(server, squall)
@@ -166,7 +169,8 @@ class ServerTasks < BaseTasks
       :shutdown,
       :startup,
       :console,
-      :destroy
+      :destroy,
+      :get_network_interfaces
     ] + super
   end
 end

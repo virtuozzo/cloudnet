@@ -1,0 +1,47 @@
+- breadcrumb :ip_addresses, @server
+- title "IP Addresses"
+
+= render partial: 'servers/nav', locals: { server: @server }
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u-1-2.jg-icon.icon-cloud= "#{@server.name} - IP Addresses"
+    %ul.pure-u-1-2.jg-widget-controls
+      %li
+        %a.btn.jg-submit-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow"} Add IP Address
+      %li= link_to "Rebuild Network", rebuild_network_server_path(@server), method: :post
+  .jg-widget-body
+    %table.table.table-hover.jg-tables
+      %thead
+        %tr
+          %th IP Address
+          %th Netmask
+          %th Network
+          %th Broadcast
+          %th Gateway
+          %th Actions
+          
+      %tbody
+        - @ip_addresses.each do |ip_address|
+          %tr
+            %td= ip_address.address
+            %td= ip_address.netmask
+            %td= ip_address.network
+            %td= ip_address.broadcast
+            %td= ip_address.gateway
+            %td= ip_address.primary? ? "PRIMARY" : (link_to "Remove", server_ip_address_path(@server.id, ip_address.id), method: :delete, data: { confirm: "Are you sure you want to remove the IP address #{ip_address.address} ?" })
+            
+
+        - if @ip_addresses.size == 0 
+          %tr
+            %td.no-data{colspan: "6"}
+              %p= "This server does not have any IP Addresses."
+
+  
+  .jg-widget-footer.jg-pagination
+    - if @ip_addresses.size > 0 
+      .jg-pagination-controls
+        = link_to_previous_page @ip_addresses, '', class: 'jg-previous icon-arrow-left'
+        %span= "Page #{@ip_addresses.current_page} of #{@ip_addresses.total_pages}"
+        = link_to_next_page @ip_addresses, '', class: 'jg-previous icon-arrow-right'
+
+= render partial: 'new_ip_popover'

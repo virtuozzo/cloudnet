@@ -50,6 +50,7 @@ CloudNet::Application.routes.draw do
       get :events
       get :console
       get :calculate_credit
+      post :rebuild_network
     end
 
     resources :backups, only: [:index, :create, :destroy] do
@@ -57,6 +58,8 @@ CloudNet::Application.routes.draw do
         post :restore
       end
     end
+    
+    resources :ip_addresses
   end
 
   resources :billing, only: [:index] do

@@ -1,0 +1,18 @@
+#new-ip.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "new-ip-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#new-ip-label.modal-title Add new IP Address
+
+      .modal-body
+        .jg-widget-form.pure-g-r.clearfix
+          %div
+            %p You will be charged $X for a new public IP address.
+            %p Please confirm you would like to continue.
+      
+        .modal-footer
+          - if true # TODO: Location supports multiple IPs
+            = form_for @ip_address do |f|
+              = f.submit "Add IP address"
+              / %a.btn.jg-submit-button#new-ip-address Add IP address

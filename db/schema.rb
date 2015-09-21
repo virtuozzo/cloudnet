@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714151345) do
+ActiveRecord::Schema.define(version: 20150916185449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -355,6 +355,24 @@ ActiveRecord::Schema.define(version: 20150714151345) do
   add_index "server_hourly_transactions", ["coupon_id"], name: "index_server_hourly_transactions_on_coupon_id", using: :btree
   add_index "server_hourly_transactions", ["server_id"], name: "index_server_hourly_transactions_on_server_id", using: :btree
 
+  create_table "server_ip_addresses", force: :cascade do |t|
+    t.string   "address"
+    t.string   "netmask"
+    t.string   "network"
+    t.string   "broadcast"
+    t.string   "gateway"
+    t.integer  "server_id"
+    t.string   "identifier"
+    t.boolean  "primary",    default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "server_ip_addresses", ["address"], name: "index_server_ip_addresses_on_address", using: :btree
+  add_index "server_ip_addresses", ["identifier"], name: "index_server_ip_addresses_on_identifier", using: :btree
+  add_index "server_ip_addresses", ["server_id"], name: "index_server_ip_addresses_on_server_id", using: :btree
+
   create_table "server_usages", force: :cascade do |t|
     t.integer  "server_id"
     t.text     "usages"
@@ -405,7 +423,6 @@ ActiveRecord::Schema.define(version: 20150714151345) do
     t.integer  "location_id"
     t.integer  "template_id"
     t.datetime "deleted_at"
-    t.string   "primary_ip_address",     limit: 255
     t.string   "delete_ip_address",      limit: 255
     t.boolean  "in_beta",                            default: false
     t.integer  "ip_addresses",                       default: 1
@@ -418,7 +435,6 @@ ActiveRecord::Schema.define(version: 20150714151345) do
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree
   add_index "servers", ["identifier"], name: "index_servers_on_identifier", using: :btree
   add_index "servers", ["location_id"], name: "index_servers_on_location_id", using: :btree
-  add_index "servers", ["primary_ip_address"], name: "index_servers_on_primary_ip_address", using: :btree
   add_index "servers", ["template_id"], name: "index_servers_on_template_id", using: :btree
   add_index "servers", ["user_id"], name: "index_servers_on_user_id", using: :btree
 
@@ -552,5 +568,6 @@ ActiveRecord::Schema.define(version: 20150714151345) do
 
   add_foreign_key "indices", "locations"
   add_foreign_key "locations", "regions"
+  add_foreign_key "server_ip_addresses", "servers"
   add_foreign_key "uptimes", "locations"
 end
