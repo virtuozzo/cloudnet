@@ -25,7 +25,7 @@ class CreatePaygServerTask < BaseTask
       return false
     end
 
-    MonitorServer.perform_async(@server.id, @user.id)
+    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id)
     true
   end
 
