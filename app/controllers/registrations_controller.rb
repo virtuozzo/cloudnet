@@ -16,6 +16,12 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def analytics_info
-    Analytics.track(current_user, {event: 'Registration Page'}, anonymous_id, request)
+    Analytics.track(current_user, event_details, anonymous_id, request)
+  end
+  
+  def event_details
+    {event: 'Registration Page',
+      properties: UtmTracker.extract_properties(params)
+    }
   end
 end

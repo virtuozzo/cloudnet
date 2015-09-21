@@ -1,7 +1,7 @@
 class helpers.PhotoBuilder
   defaultPhoto: "61344979"
 
-  constructor: (properties, @marker) ->
+  constructor: (properties) ->
     @ids = properties.photoIds
     @city = properties.city
 
@@ -10,15 +10,20 @@ class helpers.PhotoBuilder
       @defaultPhoto
     else
       idsAr = @ids.split(',')
-      idsAr[Math.floor(Math.random()*idsAr.length)];
+      idsAr[Math.floor(Math.random()*idsAr.length)]
     
   fetchPhoto: ->
     deferred = Q.defer()
     _500px.api "/photos/#{@grabPhotoId()}", (response) =>
-      if response.err?
-        console.log '!!!! ERROR !!!!'
-        deferred.reject(response.err)
-      deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo), marker: @marker)
+      if response.error
+        console.log @city + ": " + response.error_message
+        _500px.api "/photos/#{@defaultPhoto}", (response) =>
+          if response.error
+            deferred.reject(response.err)
+          else
+            deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo))
+      else
+        deferred.resolve(city: @city, data: @cityPhotoObject(response.data.photo))
     return deferred.promise
     
   cityPhotoObject: (obj) ->
