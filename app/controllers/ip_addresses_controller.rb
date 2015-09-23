@@ -19,6 +19,7 @@ class IpAddressesController < ApplicationController
   end
   
   def destroy
+    raise "Cannot remove Primary IP address" if @ip_address.primary?
     IpAddressTasks.new.perform(:remove_ip, current_user.id, @server.id, @ip_address.identifier)
     @ip_address.destroy!
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'
