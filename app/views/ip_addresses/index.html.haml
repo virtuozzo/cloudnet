@@ -31,8 +31,8 @@
             %td= "{{ ip.gateway }}"
             %td
               %span.tags.primary{data: {"ng-if" => "ip.primary == true"}} Primary
-              %div{data: {"ng-if" => "ip.primary != true"}} 
-                %a{"data-method" => "delete", "href" => "/servers/{{ server.id }}/ip_addresses/{{ ip.id }}", "ng-class" => "{disabled: disabled(server)}"} Remove
+              %div{data: {"ng-if" => "ip.primary != true"}}
+                = link_to "Remove", "/servers/{{ server.id }}/ip_addresses/{{ ip.id }}", method: :delete, data: { "confirm" => "Are you sure you want to remove the IP address {{ ip.address }} ?", "ng-class" => "{disabled: disabled(server)}" }
 
           %tr{data: {"ng-if" => "ips && ips.length === 0"}}
             %td.no-data{colspan: "6"}
