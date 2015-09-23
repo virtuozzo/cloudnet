@@ -7,6 +7,9 @@ class Server < ActiveRecord::Base
   
   # Maximum time for server to be in states such as building, booting, etc
   MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
+  
+  # Maximum number of IPs that can be added to a server
+  MAX_IPS = 2
 
   belongs_to :user
   belongs_to :template
@@ -34,6 +37,8 @@ class Server < ActiveRecord::Base
   
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
+  
+  IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)
@@ -135,6 +140,11 @@ class Server < ActiveRecord::Base
       reload
       break if Time.now - start > 10.minutes
     end
+  end
+  
+  def can_add_ips?
+    ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
+    ips_count < MAX_IPS
   end
 
   private
