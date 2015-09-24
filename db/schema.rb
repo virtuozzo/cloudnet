@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916185449) do
+ActiveRecord::Schema.define(version: 20150923131338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 20150916185449) do
     t.text     "summary"
     t.integer  "pingdom_id"
     t.string   "pingdom_name"
+    t.string   "hv_group_version"
   end
 
   add_index "locations", ["country"], name: "index_locations_on_country", using: :btree
