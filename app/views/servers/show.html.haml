@@ -25,8 +25,9 @@
                   %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/start_up", "ng-show" => "server.state == 'off'", "rel" => "nofollow"} Start Up Server
                 %li
                   %a{"href" => "/servers/{{ server.id }}/console", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Server Console
-                %li
-                  %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
+                - if @server.supports_multiple_ips?
+                  %li
+                    %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
                 %li
                   %a{"data-target" => "#destroy-server", "data-toggle" => "modal", "rel" => "nofollow"} Destroy Server
           %li
@@ -94,7 +95,7 @@
   = render partial: 'server_event'
 
 = render partial: 'server_delete_dialog', locals: { server: @server }
-= render partial: 'ip_addresses/rebuild_network_popover'
+= render partial: 'ip_addresses/rebuild_network_popover' if @server.supports_multiple_ips?
 
 - if flash.notice =~ /successfully created/
   :javascript

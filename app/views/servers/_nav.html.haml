@@ -1,8 +1,10 @@
-%nav.jg-navbar.navbar.navbar-default{"role"=>"navigation"}
-  .navbar-header
-    .navbar-collapse.collapse
-      %ul.nav.navbar-nav
-        %li= link_to server.name, server
-        %li= link_to 'Backups', server_backups_path(server)
-        %li= link_to 'Console', console_server_path(server)
-        %li= link_to 'IP Addresses', server_ip_addresses_path(server)
+- if server.supports_multiple_ips?
+  %nav.jg-navbar.navbar.navbar-default{"role"=>"navigation"}
+    .navbar-header
+      .navbar-collapse.collapse
+        %ul.nav.navbar-nav
+          %li= link_to server.name, server
+          - if development?
+            %li= link_to 'Backups', server_backups_path(server)
+          %li= link_to 'Console', console_server_path(server)
+          %li= link_to 'IP Addresses', server_ip_addresses_path(server)

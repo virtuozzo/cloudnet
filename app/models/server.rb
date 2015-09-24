@@ -144,7 +144,11 @@ class Server < ActiveRecord::Base
   
   def can_add_ips?
     ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
-    ips_count < MAX_IPS
+    supports_multiple_ips? && (ips_count < MAX_IPS)
+  end
+  
+  def supports_multiple_ips?
+    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
 
   private

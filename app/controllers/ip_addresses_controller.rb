@@ -1,10 +1,14 @@
 class IpAddressesController < ApplicationController
   before_action :set_server
   before_action :set_ip_address, except: [:index, :create]
+  before_action :check_multiple_ip_support, except: [:index]
   
   def index
     respond_to do |format|
-      format.html { @ip_address = @server.server_ip_addresses.new }
+      format.html { 
+        check_multiple_ip_support
+        @ip_address = @server.server_ip_addresses.new 
+      }
       format.json { @ip_addresses = @server.server_ip_addresses.order(primary: :desc, id: :asc) }
     end
   end
@@ -44,5 +48,9 @@ class IpAddressesController < ApplicationController
   
   def set_ip_address
     @ip_address = @server.server_ip_addresses.find(params[:id])
+  end
+  
+  def check_multiple_ip_support
+    redirect_to_dashboard unless @server.supports_multiple_ips?
   end
 end
