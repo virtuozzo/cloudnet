@@ -67,7 +67,6 @@ ActiveAdmin.register User do
         user.delete('password')
         user.delete('password_confirmation')
       end
-
       update!
     end
   end

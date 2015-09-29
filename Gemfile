@@ -119,6 +119,7 @@ group :test do
 end
 
 gem 'puma', '~> 2.9.0'
+gem 'tubesock'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

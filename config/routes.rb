@@ -4,6 +4,8 @@ CloudNet::Application.routes.draw do
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)
+  
+  get 'sockets/event' => 'events#event'
   get 'search' => 'server_search#index'
   get 'features' => 'public#features', as: 'public_features'
   get 'about_us' => 'public#about_us', as: 'public_about_us'
