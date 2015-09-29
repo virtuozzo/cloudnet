@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
-      after_initialize :set_limitable_attributes
+      before_create :set_limitable_attributes
     end
 
     def set_limitable_attributes

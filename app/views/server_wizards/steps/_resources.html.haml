@@ -1,4 +1,3 @@
-- @submit_button_title = @server ? "Update Server" : "Create Server"
 %script
   - t = render partial: 'locations/templates.json', formats: [:json], locals: { templates: @templates }
   = raw "var templates = #{t}"
@@ -109,9 +108,9 @@
 
       %ul.jg-widget-controls
         - if @server
-          %li= f.button @wizard_object.last_step? ? @submit_button_title : "Go to payment", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? false: "Go to payment", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
         - else
-          %li= f.button @wizard_object.last_step? ? @submit_button_title : "Go to Step #{@wizard_object.current_step + 1}", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? false: "Go to Step #{@wizard_object.current_step + 1}", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
           %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button cancel'
 
 / %ul.jg-step-box.pure-g-r
