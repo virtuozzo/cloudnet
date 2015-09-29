@@ -4,6 +4,6 @@ class ServerIpAddress < ActiveRecord::Base
   
   belongs_to :server
   
-  validates :address, :identifier, :server, presence: true
+  validates :address, :server, presence: true
   
 end

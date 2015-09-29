@@ -8,8 +8,6 @@ class RefreshAllServers
         manager = ServerTasks.new
         manager.perform(:refresh_server, server.user_id, server.id)
         manager.perform(:refresh_events, server.user_id, server.id)
-        ip_address_task = IpAddressTasks.new
-        ip_address_task.perform(:refresh_ip_addresses, server.user_id, server.id)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { source: 'RefreshAllServers', server_id: server.id })
       end

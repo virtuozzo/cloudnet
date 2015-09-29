@@ -15,12 +15,13 @@ class IpAddressTasks < BaseTasks
     ip_addresses.each do |ip_address|
       ip_attrs = ip_address['ip_address']
       primary = server.server_ip_addresses.empty?
-      server.server_ip_addresses.where(identifier: ip_address['id'].to_s).first_or_initialize(
-        address: ip_attrs['address'],
-        netmask: ip_attrs['netmask'],
-        network: ip_attrs['network_address'],
-        broadcast: ip_attrs['broadcast'],
-        gateway: ip_attrs['gateway'],
+      server.server_ip_addresses.where("identifier = ? OR address = ?", ip_address['id'].to_s, ip_attrs['address'].to_s).first_or_initialize(
+        address: ip_attrs['address'].to_s,
+        identifier: ip_address['id'].to_s,
+        netmask: ip_attrs['netmask'].to_s,
+        network: ip_attrs['network_address'].to_s,
+        broadcast: ip_attrs['broadcast'].to_s,
+        gateway: ip_attrs['gateway'].to_s,
         primary: primary
       ).save
     end

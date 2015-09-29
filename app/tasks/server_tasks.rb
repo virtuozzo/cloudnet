@@ -49,6 +49,13 @@ class ServerTasks < BaseTasks
       os:                     info['operating_system'],
       state:                  state
     )
+    
+    if server.supports_multiple_ips?
+      ip_address_task = IpAddressTasks.new
+      ip_address_task.perform(:refresh_ip_addresses, server.user_id, server.id)
+    else
+      server.server_ip_addresses.where(address: CreateServer.extract_ip(info)).first_or_initialize(primary: true).save
+    end
 
     server
   end
