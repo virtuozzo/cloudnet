@@ -14,7 +14,8 @@ class @Sockets
     @socket = @socket || @createSocket()
     
   createSocket: (path) ->
-    new WebSocket("ws://#{window.location.host}/sockets/event")
+    protocol = if /https/.test(window.location.protocol) then "wss" else "ws"
+    new WebSocket("#{protocol}://#{window.location.host}/sockets/event")
     
   sendMessage: (m) ->
     s = @socket
