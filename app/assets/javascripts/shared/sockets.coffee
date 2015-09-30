@@ -8,7 +8,8 @@ class @Sockets
     
     @socket.onmessage = (e) ->
       if e.data
-        el.text(e.data)
+        value = Math.round(parseFloat(e.data) / 1000) / 100
+        el.text(value)
         
   checkSocket: ->
     @socket = @socket || @createSocket()
