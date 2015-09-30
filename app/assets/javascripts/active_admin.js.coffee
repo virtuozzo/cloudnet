@@ -9,5 +9,6 @@ $ ->
   $('form').on 'blur', 'input[type=number]', (e) -> 
     $(this).off('mousewheel.disableScroll')
   
-  serverData = new Sockets
-  serverData.updateUnbilledRevenue($('#unbilled_revenue')) if PageIs.adminDashboard()
+  if PageIs.adminDashboard()
+    serverData = new Sockets
+    serverData.updateUnbilledRevenue($('#unbilled_revenue')) 
