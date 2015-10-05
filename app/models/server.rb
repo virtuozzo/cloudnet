@@ -60,6 +60,7 @@ class Server < ActiveRecord::Base
     nil
   end
   
+  # Returns the primary network interface of server from Onapp, useful when assigning new IP
   def primary_network_interface
     server_task = ServerTasks.new
     interfaces = server_task.perform(:get_network_interfaces, user.id, id)
@@ -142,11 +143,13 @@ class Server < ActiveRecord::Base
     end
   end
   
+  # Check temp cache of IP count is withing permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
   def can_add_ips?
     ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
     supports_multiple_ips? && (ips_count < MAX_IPS)
   end
   
+  # Check if version of Onapp supports multiple IPs - should be 4.1.0+
   def supports_multiple_ips?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end

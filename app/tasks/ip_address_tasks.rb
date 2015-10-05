@@ -9,7 +9,7 @@ class IpAddressTasks < BaseTasks
   
   private
 
-  # Fetch IP addresses from Onapp and update or insert them into the database
+  # Fetch IP addresses from Onapp and insert them into the database
   def refresh_ip_addresses(server, squall)
     ip_addresses = squall.list(server.identifier)
     ip_addresses.each do |ip_address|

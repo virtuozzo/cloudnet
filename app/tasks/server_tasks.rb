@@ -50,6 +50,7 @@ class ServerTasks < BaseTasks
       state:                  state
     )
     
+    # For backwards compatibility sake, check if location supports multiple IPs. If it does, then go ahead and schedule a fetch, otherwise extract IP address from server info.
     if server.supports_multiple_ips?
       ip_address_task = IpAddressTasks.new
       ip_address_task.perform(:refresh_ip_addresses, server.user_id, server.id)

@@ -89,6 +89,15 @@ describe ServersController do
         expect(response).to redirect_to(servers_path)
         expect(flash[:warning]).to eq('Could not schedule starting up of server. Please try again later')
       end
+      
+      it 'should rebuild network of a server' do
+        rebuild_network = double('RebuildNetwork', process: true)
+        allow(RebuildNetwork).to receive(:new).and_return(rebuild_network)
+        
+        post :rebuild_network, id: server.id
+        expect(rebuild_network).to have_received(:process)
+        expect(flash[:notice]).to eq('Network rebuild has been scheduled')
+      end
 
       describe 'editing server' do
         context 'before editing' do

@@ -35,6 +35,24 @@ describe Server do
     server.template = nil
     expect(server).not_to be_valid
   end
+  
+  it 'should have a primary IP address' do
+    server_ip_address = FactoryGirl.create(:server_ip_address, server: server)
+    expect(server.primary_ip_address).to eq('123.456.789.1')
+  end
+  
+  it 'should be true for locations with multiple IP compatibility' do
+    expect(server.can_add_ips?).to eq(true)
+  end
+  
+  it 'should be true for locations with multiple IP compatibility' do
+    expect(server.supports_multiple_ips?).to eq(true)
+  end
+  
+  it 'should be false for older locations without multiple IP compatibility' do
+    server.location.hv_group_version = '4.0.0'
+    expect(server.supports_multiple_ips?).to eq(false)
+  end
 
   describe 'Notifying of stuck states', type: :mailer  do
     def refresh_server
@@ -44,7 +62,9 @@ describe Server do
     before :each do
       @squall = double
       allow(Squall::VirtualMachine).to receive(:new).and_return(@squall)
+      allow(Squall::IpAddressJoin).to receive(:new).and_return(@squall)
       allow(@squall).to receive(:show).and_return({})
+      allow(@squall).to receive(:list).and_return({})
       # Simulate creating the server 1 hour ago.
       # Notifications should be triggered because the server has been building for longer
       # than Server::MAX_TIME_FOR_INTERMEDIATE_STATES
