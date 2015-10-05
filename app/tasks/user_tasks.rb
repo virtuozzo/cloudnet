@@ -9,6 +9,10 @@ class UserTasks < BaseTasks
     run_task(action, user, squall)
   end
 
+  def self.total_unbilled_revenue
+    User.all.to_a.sum {|u| u.try(:account).try(:used_payg_balance).to_f}
+  end
+  
   private
 
   def create(user, squall)

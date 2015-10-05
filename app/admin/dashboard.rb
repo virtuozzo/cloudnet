@@ -92,6 +92,11 @@ ActiveAdmin.register_page 'Dashboard' do
               td 'Disc Space [GB]'
               td  number_with_delimiter(resources[:disc])
             end
+            
+            tr do 
+              td 'Unbilled Revenue [USD]'
+              td 'calculating ...', id: 'unbilled_revenue'
+            end
           end
         end
       end

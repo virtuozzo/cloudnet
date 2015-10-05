@@ -575,6 +575,9 @@ GEM
     timers (4.0.1)
       hitimes
     ttfunk (1.4.0)
+    tubesock (0.2.5)
+      rack (>= 1.5.0)
+      websocket (>= 1.1.0)
     turbolinks (2.5.3)
       coffee-rails
     turnout (2.1.0)
@@ -699,6 +702,7 @@ DEPENDENCIES
   stripe!
   symmetric-encryption (~> 3.4.0)
   timecop
+  tubesock
   turbolinks
   turnout
   uglifier (~> 2.5.0)
