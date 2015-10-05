@@ -163,13 +163,13 @@ $ ->
     updateSliderRange(options)
     $elements[options.field].val(value, true)
 
-  # updates sliders if current slider value is smaller 
+  # updates sliders if current slider value is smaller
   # then 'value' passed as parameter
   updateSliderIfSmaller = (options, value) ->
     updateSliderRange(options)
     el = $elements[options.field]
     el.val(value) if parseInt(el.val(),10) < value
-    
+
   initializeSlider = (options) ->
     $elements[options.field].noUiSlider
       start: options.min
@@ -388,4 +388,4 @@ $ ->
   setSliderPositions(slider_data)
 
   # Until the Federation supports disk resizing hide and fade the slider
-  $('#disk_size-slider').attr('disabled', 'disabled') if server
+  $('#disk_size-slider').attr('disabled', 'disabled') if server && server.template.os_distro.match(/bsd/)

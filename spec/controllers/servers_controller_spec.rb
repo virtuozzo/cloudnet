@@ -140,8 +140,8 @@ describe ServersController do
             expect(@payments).to receive(:auth_charge)
               .with(@current_user.account.gateway_id, @card.processor_token, pretty_total(cost_difference_cents))
               .and_return(charge_id: 12_345)
-              
-            expect(@server_tasks).to receive(:perform).with(:edit, @current_user.id, @server.id)
+
+            expect(@server_tasks).to receive(:perform).with(:edit, @current_user.id, @server.id, false)
             session[:server_wizard_params] = {
               cpus: @new_server.cpus,
               memory: @new_server.memory,

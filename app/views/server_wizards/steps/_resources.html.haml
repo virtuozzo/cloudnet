@@ -10,7 +10,7 @@
   = raw "var activePack = #{activePack}"
   - r = @wizard_object.remaining_resources.to_json
   = raw "var defaults = #{r}"
-  
+
 =# render partial: "shared/order_progress" if params[:id]
 %ul.jg-step-box.pure-g-r
   = render partial: "server_wizards/steps/helpers/location_summary"
@@ -65,13 +65,10 @@
     - if @server
       - if @wizard_object.location.budget_vps
         %em.pure-u-1.alert.alert-warning.edit-server-warning Editing VPS server resources is not currently supported
-      - else
-        %em.pure-u-1.alert.alert-warning.edit-server-warning Disk resizing is currently unsupported
   .jg-widget-body
     %span{:class => ("hidden" if @server && @wizard_object.location.budget_vps)}
       %ul#resourceTabs.nav.nav-tabs
-        // Whilst we don't support disk-resizing, don't show the package options when editing
-        %li{:class => (activate_slider_tab ? (@server ? 'hidden' : nil) : 'active')}
+        %li{:class => (activate_slider_tab ? nil : 'active')}
           %a{href: '#packages', data: {'toggle' => 'tab'}} Packages
         - unless @wizard_object.location.budget_vps
           %li{:class => ("active" if activate_slider_tab)}
@@ -94,10 +91,10 @@
           %span.pure-u
             Total Cost:
           %span.total-cost.pure-u
-            %b#hourly-price 
+            %b#hourly-price
             per hour,
             %b#monthly-price
-            per month. 
+            per month.
             - if current_user
               Today you will be charged
               %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}
@@ -126,7 +123,7 @@
 
 %script
   - r = render partial: 'locations/location.json', formats: [:json], locals: { location: @wizard_object.location }
-  = raw "var selected_location = #{r}" 
+  = raw "var selected_location = #{r}"
   = raw "var hours_remaining = #{Invoice.hours_till_next_invoice(current_user.try(:account))}"
   = raw "var max_hours = #{Account::HOURS_MAX}"
   = raw "var millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}"
