@@ -11,11 +11,11 @@ class CreateServerTask < BaseTask
 
   def process
     @server = @wizard.create_server
-    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id)
     if @wizard.build_errors.length > 0
       errors.concat @wizard.build_errors
       false
     else
+      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id)
       true
     end
   end
