@@ -1,10 +1,10 @@
-# Cloud.net's definition of a server. As opposed to OnApp's definition of a server. It should 
+# Cloud.net's definition of a server. As opposed to OnApp's definition of a server. It should
 # reliably reflect the existence and state of an OnApp Federation server.
 class Server < ActiveRecord::Base
   include PublicActivity::Common
   include Billing::ServerInvoiceable
   acts_as_paranoid
-  
+
   # Maximum time for server to be in states such as building, booting, etc
   MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
   
@@ -34,7 +34,7 @@ class Server < ActiveRecord::Base
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :deleted_this_month, -> { where('deleted_at > ? AND deleted_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :deleted_last_month, -> { where('deleted_at > ? AND deleted_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
-  
+
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
   
@@ -46,7 +46,7 @@ class Server < ActiveRecord::Base
 
     {cpu: sums[0], mem: sums[1], disc: sums[2]}
   end
-  
+
   def name_with_ip
     "#{name} (IP: #{primary_ip_address})"
   end
@@ -109,7 +109,7 @@ class Server < ActiveRecord::Base
   # `resources` hash, new resources for server
   def edit(resources)
     resources.stringify_keys!
-    editable_properties = %w(name cpus memory)
+    editable_properties = %w(name cpus memory disk_size)
     updates = {}
     editable_properties.each do |field|
       updates[field] = resources[field] if resources.key? field

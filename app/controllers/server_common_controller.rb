@@ -50,7 +50,7 @@ class ServerCommonController < ApplicationController
       }.merge(UtmTracker.extract_properties(params))
     }
   end
-  
+
   def step3
     calculate_costs
 
