@@ -16,6 +16,7 @@ class IpAddressesController < ApplicationController
   def create
     if @server.can_add_ips?
       AssignIpAddress.perform_async(current_user.id, @server.id)
+      Analytics.track(current_user, event: 'Added a new IP address')
       # Write to cache so we have a temporary count of IP addresses on server until the real IPs are added to db
       Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count + 1)
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
@@ -33,6 +34,7 @@ class IpAddressesController < ApplicationController
     raise "Cannot remove Primary IP address" if @ip_address.primary?
     IpAddressTasks.new.perform(:remove_ip, current_user.id, @server.id, @ip_address.identifier)
     @ip_address.destroy!
+    Analytics.track(current_user, event: 'Removed IP address')
     # Update cache for IP address count
     Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count)
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'

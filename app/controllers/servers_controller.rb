@@ -156,6 +156,7 @@ class ServersController < ServerCommonController
   
   def rebuild_network
     RebuildNetwork.new(@server, current_user).process
+    Analytics.track(current_user, event: 'Rebuilt network')
     redirect_to :back, notice: 'Network rebuild has been scheduled'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Servers#rebuild_network' })
