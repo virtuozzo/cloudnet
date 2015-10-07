@@ -100,17 +100,30 @@ xdescribe ServerTasks do
       end.to raise_error Faraday
     end
 
-    it 'should change the resources of an existing server' do
-      @server.cpus = 2
-      @server.memory = 1024
-      @server.save!
-      @server_task.perform(:edit, @user.id, @server.id)
+    describe 'Editing a server' do
+      it 'should change the disk size of an existing server' do
+        @server.disk_size = 25
+        @server.save!
+        @server_task.perform(:edit, @user.id, @server.id)
 
-      @server.wait_until_ready
-      @server_task.perform(:refresh_server, @server.user.id, @server.id)
-      @server.reload
-      expect(@server.cpus).to eq 2
-      expect(@server.memory).to eq 1024
+        @server.wait_until_ready
+        @server_task.perform(:refresh_server, @server.user.id, @server.id)
+        @server.reload
+        expect(@server.disk_size).to eq 25
+      end
+
+      it 'should change the resources of an existing server' do
+        @server.cpus = 2
+        @server.memory = 1024
+        @server.save!
+        @server_task.perform(:edit, @user.id, @server.id)
+
+        @server.wait_until_ready
+        @server_task.perform(:refresh_server, @server.user.id, @server.id)
+        @server.reload
+        expect(@server.cpus).to eq 2
+        expect(@server.memory).to eq 1024
+      end
     end
   end
 end

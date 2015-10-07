@@ -1,7 +1,7 @@
 class ServerWizardsController < ServerCommonController
   skip_before_action :authenticate_user!, only: [:new, :create]
   layout proc { "public" unless user_signed_in? }
-  
+
   def new
     params = location_id_in_params? ? prepare_fake_params : params
 
@@ -24,7 +24,7 @@ class ServerWizardsController < ServerCommonController
     else
       CreatePaygServerTask.new(@wizard_object, current_user)
     end
-    
+
     if @wizard.save && create_task.process
       create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
       track_analytics_for_server(create_task.server)
@@ -41,7 +41,7 @@ class ServerWizardsController < ServerCommonController
       end
     end
   end
-  
+
   def payment_step
     create
   end
@@ -69,16 +69,16 @@ class ServerWizardsController < ServerCommonController
     p = session[:server_wizard_params]
     {mem: p[:memory], cpu: p[:cpus], disc: p[:disk_size]}
   end
-  
+
   def step3_non_logged?
     !current_user and @wizard_object.step3? and @wizard_object.no_errors?
   end
-  
+
   def force_authentication!
     session[:user_return_to] = servers_create_payment_step_path
     authenticate_user!
   end
-  
+
   def meets_minimum_server_requirements?
     return true unless current_user
     if !@wizard_object.can_create_new_server?
@@ -99,7 +99,7 @@ class ServerWizardsController < ServerCommonController
 
     Analytics.track(current_user, event: 'Server Wizard Step 1')
   end
-  
+
   def set_event_name
     @event_name = case @wizard_object.current_step
       when 1 then "New Server - Should not be here"

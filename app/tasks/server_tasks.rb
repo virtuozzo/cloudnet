@@ -113,7 +113,19 @@ class ServerTasks < BaseTasks
     network_type.save!
   end
 
-  def edit(server, squall)
+  def edit(server, squall, *args)
+    user = server.user
+
+    # First deal with disk resizing, as it requires a separate API call
+    requested_size = args.first
+    if requested_size.is_a? Integer
+      disk = Squall::Disk.new(uri: ONAPP_CP[:uri], user: user.onapp_user, pass: user.onapp_password)
+      disks = disk.vm_disk_list(server.identifier)
+      primary = disks.select{|d| d['primary'] == true}.first['id'].to_s
+      disk.edit(primary, {disk_size: requested_size})
+    end
+
+    # Edit non-disk resources
     options = {
       label: server.name,
       cpus: server.cpus,

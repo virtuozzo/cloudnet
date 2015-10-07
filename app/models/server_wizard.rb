@@ -80,7 +80,7 @@ class ServerWizard
   def no_errors?
     errors.messages.count == 0
   end
-  
+
   def location
     @location = Location.where(hidden: false).find_by_id(location_id) if location_id
   end
@@ -212,7 +212,12 @@ class ServerWizard
   end
 
   def request_server_edit
-    ServerTasks.new.perform(:edit, user.id, existing_server_id)
+    if disk_size != @old_server_specs.disk_size
+      disk_resize = disk_size
+    else
+      disk_resize = false
+    end
+    ServerTasks.new.perform(:edit, user.id, existing_server_id, disk_resize)
   end
 
   def persisted?
