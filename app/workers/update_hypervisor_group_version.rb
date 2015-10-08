@@ -3,6 +3,7 @@ class UpdateHypervisorGroupVersion
   sidekiq_options unique: true
   
   # Get HV zones from Onapp, match with existing location and update hv_group_version which is basically version of Onapp
+  # NOTE: This requires the permission 'See list of all compute zones' for the ONAPP_CP user role at Onapp
   def perform
     squall = Squall::HypervisorZone.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
     hv_zones = squall.list
