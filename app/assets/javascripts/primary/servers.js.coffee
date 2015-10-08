@@ -31,7 +31,6 @@
   }
 ]
 
-
 @app.controller "ServerIndividualCtrl", ["$scope", "$timeout", "Servers", "ServerEvents", ($scope, $timeout, Servers, ServerEvents) ->
   tick = (serverId) ->
     Servers.get {serverId: serverId}, (response) ->
@@ -45,7 +44,7 @@
     $timeout (() -> tick(serverId)), 10 * 1000
 
   $scope.disabled = (server) ->
-    server.state != 'on' && server.state != 'off'    
+    server.state != 'on' && server.state != 'off'
 
   $scope.init = (serverId) ->
     tick(serverId)

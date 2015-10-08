@@ -142,7 +142,6 @@ class ServerWizard
       template:               template,
       location:               location,
       bandwidth:              bandwidth,
-      primary_ip_address:     CreateServer.extract_ip(server),
       payment_type:           payment_type.to_sym
     )
   end

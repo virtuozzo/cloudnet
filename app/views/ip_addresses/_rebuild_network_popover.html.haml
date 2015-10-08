@@ -1,0 +1,16 @@
+#rebuild-network.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "rebuild-network-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#rebuild-network-label.modal-title Rebuild Network
+
+      .modal-body
+        .jg-widget-form.pure-g-r.clearfix
+          %div
+            %p The server will reboot during the process of rebuilding the network.
+            %p Please confirm you would like to continue.
+      
+        .modal-footer
+          %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
+          = link_to "Rebuild Network", rebuild_network_server_path(@server), method: :post, class: "btn jg-submit-button"

@@ -67,7 +67,9 @@ ActiveAdmin.register Server do
   member_action :ip_usage, method: :get do
     server = Server.find(params[:id])
     @page_title = "IP Usage: #{server.primary_ip_address}"
-    @servers = Server.with_deleted.includes(:user).find_by(primary_ip_address: server.primary_ip_address)
+    @servers = Server.with_deleted.joins(
+    "LEFT JOIN server_ip_addresses ON server_ip_addresses.server_id = servers.id").includes(
+    :user).where(["server_ip_addresses.address = ?", server.primary_ip_address])
   end
 
   action_item :edit, only: :show do

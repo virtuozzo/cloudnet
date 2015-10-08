@@ -1,0 +1,21 @@
+#new-ip.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "new-ip-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#new-ip-label.modal-title Add new IP Address
+
+      .modal-body
+        .jg-widget-form.pure-g-r.clearfix
+          %div
+            - if @server.can_add_ips?
+              %p A new IP address will be added to the server without rebooting. You may then click on the 'Rebuild Network' button to have the IP address automatically configured on your server.
+              %p Please confirm you would like to continue.
+            - else
+              %p= "Sorry, you cannot add anymore IP addresses to this server. We currently allow a maximum of #{Server::MAX_IPS} IP addresses per server."
+      
+        .modal-footer
+          - if @server.can_add_ips?
+            = form_for @ip_address do |f|
+              %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
+              = f.submit "Add IP Address", class: "btn jg-submit-button"

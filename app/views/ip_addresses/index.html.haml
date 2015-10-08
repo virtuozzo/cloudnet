@@ -1,0 +1,49 @@
+- breadcrumb :ip_addresses, @server
+- title "IP Addresses"
+
+= render partial: 'servers/nav', locals: { server: @server }
+%div{data: {"ng-controller" => "ServerIpsCtrl", "ng-init" => "init(#{@server.id})"}}
+  .jg-widget-content
+    .jg-widget-header.pure-g.clearfix
+      %h2.pure-u-1-2.jg-icon.icon-cloud= "#{@server.name} - IP Addresses"
+      %ul.pure-u-1-2.jg-widget-controls
+        %li
+          %a.jg-button-lilac.jg-new-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow"} Add IP Address
+        %li
+          %a.jg-button-lilac.jg-new-button{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
+    .jg-widget-body
+      %table.table.table-hover.jg-tables
+        %thead
+          %tr
+            %th IP Address
+            %th Netmask
+            %th Network
+            %th Broadcast
+            %th Gateway
+            %th Actions
+          
+        %tbody
+          %tr{data: {"ng-repeat" => "ip in ips | startFrom:currentPage * pageSize | limitTo:pageSize"}}
+            %td= "{{ ip.address }}"
+            %td= "{{ ip.netmask }}"
+            %td= "{{ ip.network }}"
+            %td= "{{ ip.broadcast }}"
+            %td= "{{ ip.gateway }}"
+            %td
+              %span.tags.primary{data: {"ng-if" => "ip.primary == true"}} Primary
+              %div{data: {"ng-if" => "ip.primary != true"}}
+                = link_to "Remove", "/servers/{{ #{@server.id} }}/ip_addresses/{{ ip.id }}", method: :delete, data: { "confirm" => "Are you sure you want to remove the IP address {{ ip.address }} ?" }
+
+          %tr{data: {"ng-if" => "ips && ips.length === 0"}}
+            %td.no-data{colspan: "6"}
+              %p= "This server does not have any IP Addresses."
+
+    .jg-widget-footer.jg-pagination
+      .jg-pagination-controls{"ng-show" => "ips"}
+        %a{class: 'jg-previous icon-arrow-left', "ng-click" => "currentPage = currentPage - 1", "ng-show" => "currentPage > 0"}
+        %span Page {{ currentPage + 1 }} of {{ numberOfPages() }}
+        %a{class: 'jg-next icon-arrow-right', "ng-click" => " currentPage = currentPage + 1", "ng-show" => "currentPage < ips.length/pageSize - 1"}
+  
+
+= render partial: 'new_ip_popover'
+= render partial: 'rebuild_network_popover'

@@ -7,6 +7,9 @@ class Server < ActiveRecord::Base
 
   # Maximum time for server to be in states such as building, booting, etc
   MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
+  
+  # Maximum number of IPs that can be added to a server
+  MAX_IPS = 2
 
   belongs_to :user
   belongs_to :template
@@ -15,6 +18,7 @@ class Server < ActiveRecord::Base
   has_many :server_usages, dependent: :destroy
   has_many :server_backups, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
+  has_many :server_ip_addresses, dependent: :destroy
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
@@ -33,6 +37,8 @@ class Server < ActiveRecord::Base
 
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
+  
+  IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)
@@ -47,6 +53,19 @@ class Server < ActiveRecord::Base
 
   def to_s
     "#{name}, #{hostname} (Belongs to: #{user})"
+  end
+  
+  def primary_ip_address
+    return (server_ip_addresses.with_deleted.find(&:primary?) || server_ip_addresses.with_deleted.first).address if server_ip_addresses.with_deleted.present?
+    nil
+  end
+  
+  # Returns the primary network interface of server from Onapp, useful when assigning new IP
+  def primary_network_interface
+    server_task = ServerTasks.new
+    interfaces = server_task.perform(:get_network_interfaces, user.id, id)
+    primary = interfaces.find { |interface| interface['network_interface']['primary'] == true }
+    primary['network_interface']
   end
 
   def destroy_with_ip(ip)
@@ -122,6 +141,17 @@ class Server < ActiveRecord::Base
       reload
       break if Time.now - start > 10.minutes
     end
+  end
+  
+  # Check temp cache of IP count is withing permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
+  def can_add_ips?
+    ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
+    supports_multiple_ips? && (ips_count < MAX_IPS)
+  end
+  
+  # Check if version of Onapp supports multiple IPs - should be 4.1.0+
+  def supports_multiple_ips?
+    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
 
   private

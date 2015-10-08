@@ -68,6 +68,11 @@ every 1.day, at: '3:00am' do
   runner 'UpdateIndices.perform_in(3.minutes)'
 end
 
+# Update Onapp version for each locations
+every 1.day, at: '3:30am' do
+  runner 'UpdateHypervisorGroupVersion.perform_in(2.minutes)'
+end
+
 # Email monthly financial reports
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'

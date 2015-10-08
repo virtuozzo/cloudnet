@@ -55,6 +55,7 @@ FactoryGirl.define do
     price_disk 60
     price_bw 100
     price_memory 100
+    hv_group_version '4.1.0'
     after(:build) do |location|
       3.times {|i| create("pack#{i}".to_sym, location: location) }
     end
@@ -225,5 +226,12 @@ FactoryGirl.define do
     index_iops 187
     index_bandwidth 453
     association :location, factory: :location
+  end
+  
+  factory :server_ip_address do
+    address '123.456.789.1'
+    identifier 'xyz987'
+    primary true
+    association :server, factory: :server
   end
 end

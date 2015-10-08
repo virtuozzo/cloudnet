@@ -28,3 +28,5 @@ end
 json.template do
   json.extract! server.template, :id, :name, :os_type, :os_distro, :location_id, :min_disk, :min_memory, :hourly_cost
 end
+
+json.server_ip_addresses server.server_ip_addresses, :address, :primary
