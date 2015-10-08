@@ -31,13 +31,7 @@
   }
 ]
 
-@app.factory "ServerIps", ["$resource", ($resource) ->
-  $resource "/servers/:serverId/ip_addresses.json", {}, {
-    'get': {method: 'get', isArray: true}
-  }
-]
-
-@app.controller "ServerIndividualCtrl", ["$scope", "$timeout", "Servers", "ServerEvents", "ServerIps", ($scope, $timeout, Servers, ServerEvents, ServerIps) ->
+@app.controller "ServerIndividualCtrl", ["$scope", "$timeout", "Servers", "ServerEvents", ($scope, $timeout, Servers, ServerEvents) ->
   tick = (serverId) ->
     Servers.get {serverId: serverId}, (response) ->
       $scope.server = response
@@ -46,14 +40,11 @@
       $scope.events = response
       $scope.numberOfPages  = ->
         Math.ceil $scope.events.length / $scope.pageSize
-        
-    ServerIps.get {serverId: serverId}, (response) ->
-      $scope.ips = response
 
     $timeout (() -> tick(serverId)), 10 * 1000
 
   $scope.disabled = (server) ->
-    server.state != 'on' && server.state != 'off'    
+    server.state != 'on' && server.state != 'off'
 
   $scope.init = (serverId) ->
     tick(serverId)
