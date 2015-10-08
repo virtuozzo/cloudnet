@@ -13,7 +13,7 @@ class Location < ActiveRecord::Base
 
   validates :provider, :country, :city, :hv_group_id, :photo_ids, presence: true
   validates :price_memory, :price_disk, :price_cpu, numericality: true
-  validates :max_index_cpu, :max_index_iops, :max_index_bandwidth, :max_index_uptime, numericality: true
+  validates :max_index_cpu, :max_index_iops, :max_index_bandwidth, numericality: true
   validate :verify_valid_country_code
 
   def country_name

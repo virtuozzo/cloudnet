@@ -219,4 +219,11 @@ FactoryGirl.define do
     uptime 86300
     association :location, factory: :location
   end
+  
+  factory :index do
+    index_cpu 235
+    index_iops 187
+    index_bandwidth 453
+    association :location, factory: :location
+  end
 end

@@ -44,6 +44,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.cassette_library_dir = 'spec/cassettes'
   c.configure_rspec_metadata!
+  c.allow_http_connections_when_no_cassette = true
 
   # Filter out sensitive data and replace with ERB interpolation.
   # Assuming that you're using .env to store your sensitive app credentials, then you can

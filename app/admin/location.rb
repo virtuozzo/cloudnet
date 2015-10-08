@@ -27,6 +27,7 @@ ActiveAdmin.register Location do
     column :provider
     column :pingdom_name
     column :hidden
+    column :network_limit
     column "Certificates" do |loc|
       loc.certificates.map(&:name).join(', ')
     end
@@ -46,7 +47,7 @@ ActiveAdmin.register Location do
       input :provider_link
       input :latitude
       input :longitude
-      input :network_limit, include_blank: 'Leave Blank for Unlimited (Mbit)', hint: 'Leave Blank for Unlimited (Mbit)'
+      input :network_limit, include_blank: '0 for Unlimited (Mbit)', hint: 'Type 0 for Unlimited (Mbit)'
       input :hv_group_id, label: 'Hypervisor Group ID for this Location'
       input :photo_ids
       input :hidden

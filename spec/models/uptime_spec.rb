@@ -61,14 +61,15 @@ RSpec.describe Uptime, :type => :model do
     
     it "should store most recent data points" do
       oldest = Uptime.where(location_id: uptime.location_id).minimum(:starttime)
+      expect(Uptime.where(location_id: uptime.location_id, starttime: oldest).first).to be
+      
       expect {
         current = uptime.dup
         current.starttime = uptime.starttime + 1.day
         current.save_or_update
       }.not_to change{Uptime.where(location_id: uptime.location_id).count}
       
-      expect(Uptime.where(location_id: uptime.location_id, starttime: oldest).first)
-        .to be_nil
+      expect(Uptime.where(location_id: uptime.location_id, starttime: oldest).first).to be_nil
     end
     
     it "should remove all exceeding records in one 'save_or_update' call" do

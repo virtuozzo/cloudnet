@@ -3,7 +3,7 @@ class Index < ActiveRecord::Base
 
   belongs_to :location
   after_save :integration_check
-  validates :index_cpu, :index_iops, :index_bandwidth, :index_uptime, numericality: {greater_than_or_equal_to: 0.0}
+  validates :index_cpu, :index_iops, :index_bandwidth, numericality: {greater_than_or_equal_to: 0.0}
   default_scope {order(:created_at)}
   
   MAX_INDICES_PER_LOCATION = 30
@@ -33,9 +33,11 @@ class Index < ActiveRecord::Base
     end
     
     def max_attributes_changed?
-      max_indices_from_collection != current_max_indices
+      #max_indices_from_collection != current_max_indices
+      index_cpu > location.max_index_cpu ||
+      index_iops > location.max_index_iops ||
+      index_bandwidth > location.max_index_bandwidth
     end
-    
 
     private 
     
@@ -51,8 +53,7 @@ class Index < ActiveRecord::Base
       @collection_max ||= attributes_hash(
         max_index(:index_cpu),
         max_index(:index_iops),
-        max_index(:index_bandwidth),
-        max_index(:index_uptime)
+        max_index(:index_bandwidth)
       )
     end
     
@@ -64,17 +65,15 @@ class Index < ActiveRecord::Base
       @current_max ||= attributes_hash(
         location.max_index_cpu,
         location.max_index_iops,
-        location.max_index_bandwidth,
-        location.max_index_uptime
+        location.max_index_bandwidth
       )
     end
 
-    def attributes_hash(cpu, iops, bandwidth, uptime)
+    def attributes_hash(cpu, iops, bandwidth)
       {
         max_index_cpu: cpu,
         max_index_iops: iops,
         max_index_bandwidth: bandwidth,
-        max_index_uptime: uptime
       }
     end
 
@@ -91,14 +90,14 @@ class Index < ActiveRecord::Base
     end
     
     def invalidate_specific_indices_cache
-      Rails.cache.write([SPECIFIC_INDICES_CACHE, id], updated_at)
+      Rails.cache.write([SPECIFIC_INDICES_CACHE, id], SecureRandom.hex)
     end
     
     def invalidate_current_indices_cache
-      Rails.cache.write([CURRENT_INDICES_CACHE, location.id], updated_at)
+      Rails.cache.write([CURRENT_INDICES_CACHE, location.id], SecureRandom.hex)
     end
     
     def invalidate_max_indices_cache_namespace
-      Rails.cache.write(MAX_INDICES_NAMESPACE, updated_at)
+      Rails.cache.write(MAX_INDICES_NAMESPACE, SecureRandom.hex)
     end
 end
