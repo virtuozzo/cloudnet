@@ -3,10 +3,6 @@ class EventsController < ApplicationController
   
   def event
     hijack do |tubesock|
-      tubesock.onopen do
-        tubesock.send_data "Hello, friend"
-      end
-      
       tubesock.onmessage do |m|
         case m
         when "getUnbilledRevenue"
