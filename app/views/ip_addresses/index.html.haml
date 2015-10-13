@@ -8,7 +8,7 @@
       %h2.pure-u-1-2.jg-icon.icon-cloud= "#{@server.name} - IP Addresses"
       %ul.pure-u-1-2.jg-widget-controls
         %li
-          %a.jg-button-lilac.jg-new-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow"} Add IP Address
+          %a.jg-button-lilac.jg-new-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow", "ng-class" => "{disabled: #{!@server.can_add_ips?}}"} Add IP Address
         %li
           %a.jg-button-lilac.jg-new-button{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
     .jg-widget-body
