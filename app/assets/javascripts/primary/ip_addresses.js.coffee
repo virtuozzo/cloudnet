@@ -14,13 +14,16 @@
       $scope.ips = response
       $scope.numberOfPages  = ->
         Math.ceil $scope.ips.length / $scope.pageSize
+      $scope.addedNewIp = ->
+        ($scope.ips.length > $scope.originalIpsCount) ? true : false
 
       $timeout (() -> tick(serverId)), 10 * 1000
 
   $scope.init = (serverId) ->
     tick(serverId)
-    $scope.currentPage    = 0;
-    $scope.pageSize       = 10;
+    $scope.currentPage      = 0;
+    $scope.pageSize         = 10;
+    $scope.originalIpsCount = 1;
 
   return
 ]

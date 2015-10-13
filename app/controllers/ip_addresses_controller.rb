@@ -19,6 +19,7 @@ class IpAddressesController < ApplicationController
       Analytics.track(current_user, event: 'Added a new IP address')
       # Write to cache so we have a temporary count of IP addresses on server until the real IPs are added to db
       Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count + 1)
+      Rails.cache.write([Server::IP_ADDRESS_ADDED_CACHE, @server.id], true)
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
       return
     else
@@ -37,6 +38,7 @@ class IpAddressesController < ApplicationController
     Analytics.track(current_user, event: 'Removed IP address')
     # Update cache for IP address count
     Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count)
+    Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Destroy' })
