@@ -99,7 +99,7 @@ ActiveAdmin.register User do
   end
 
   member_action :activity, method: :get do
-    @activities = PublicActivity::Activity.where(owner_id: params[:id], owner_type: 'User').order('updated_at DESC')
+    @activities = PublicActivity::Activity.where(owner_id: params[:id], owner_type: 'User').order('created_at DESC')
   end
 
   # Display form to manually add credit note
