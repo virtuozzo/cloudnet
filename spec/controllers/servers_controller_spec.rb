@@ -91,6 +91,7 @@ describe ServersController do
       end
       
       it 'should rebuild network of a server' do
+        server.update(state: :on)
         rebuild_network = double('RebuildNetwork', process: true)
         allow(RebuildNetwork).to receive(:new).and_return(rebuild_network)
         

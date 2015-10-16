@@ -10,6 +10,7 @@ RSpec.describe IpAddressesController, :type => :controller do
     before(:each) { 
       sign_in_onapp_user
       @server = FactoryGirl.create(:server, user: @current_user)
+      @server.update(state: :on)
       @server_ip_address = FactoryGirl.create(:server_ip_address, server: @server)
     }
     

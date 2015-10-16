@@ -155,7 +155,7 @@ class ServersController < ServerCommonController
   end
   
   def rebuild_network
-    raise "Server is not built" unless @server.built?
+    raise "Server is not built" if @server.state != :on && @server.state != :off
     RebuildNetwork.new(@server, current_user).process
     Analytics.track(current_user, event: 'Rebuilt network')
     redirect_to :back, notice: 'Network rebuild has been scheduled'
