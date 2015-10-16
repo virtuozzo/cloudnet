@@ -221,6 +221,13 @@ FactoryGirl.define do
     association :location, factory: :location
   end
   
+  factory :index do
+    index_cpu 235
+    index_iops 187
+    index_bandwidth 453
+    association :location, factory: :location
+  end
+  
   factory :server_ip_address do
     address '123.456.789.1'
     identifier 'xyz987'

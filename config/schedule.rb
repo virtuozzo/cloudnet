@@ -58,9 +58,14 @@ every 1.day, at: '2:30 am' do
   runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
-# Update uptime for servers
+# Update uptime for locations
 every 1.day, at: '3:00am' do
   runner 'UptimeAllUpdate.perform_in(5.minutes)'
+end
+
+# Update indices for locations
+every 1.day, at: '3:00am' do
+  runner 'UpdateIndices.perform_in(3.minutes)'
 end
 
 # Update Onapp version for each locations

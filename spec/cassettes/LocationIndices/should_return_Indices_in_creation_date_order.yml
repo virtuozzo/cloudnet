@@ -1,0 +1,112 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%=
+      extract_domain ENV['ONAPP_CP'] %>/settings/hypervisor_zones/7.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 06 Oct 2015 14:33:12 GMT
+      Server:
+      - Apache/2.2.15 (CentOS)
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"4585e6fa5b7be215c7acaa937cc3d81a"'
+      Cache-Control:
+      - must-revalidate, private, max-age=0
+      X-Request-Id:
+      - 067524854b456ac0611c1430de2966a1
+      X-Runtime:
+      - '0.188145'
+      X-Rack-Cache:
+      - miss
+      X-Powered-By:
+      - Phusion Passenger 4.0.35
+      Set-Cookie:
+      - _session_id=cabcc12a4d94c81d6be243ef1217534d; path=/; HttpOnly
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Status:
+      - 200 OK
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: '{"hypervisor_group":{"closed":false,"created_at":"2015-06-24T15:33:51+00:00","federation_enabled":false,"federation_id":"resource:compute:onapp-pJrxhNrW3xxVBcnfJyEv5AISjPg","hypervisor_id":null,"id":7,"identifier":"bnj5qmgecoxg0z","label":"Cloud.net
+        Budget US Dallas Zone","location_group_id":null,"server_type":"virtual","traded":true,"updated_at":"2015-09-14T15:00:12+00:00","max_host_free_memory":113386,"max_host_cpu":24,"prefer_local_reads":false,"vlan":null,"release_resource_type":"memory_guarantee","network_failure":false,"storage_channel":3,"run_sysprep":true,"default_gateway":null,"recovery_type":"roundrobin","failover_timeout":15,"cpu_units":1000,"supplier_version":"4.1.0","supplier_provider":"onapp","provider_name":null}}'
+    http_version: 
+  recorded_at: Tue, 06 Oct 2015 14:33:13 GMT
+- request:
+    method: get
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%=
+      extract_domain ENV['ONAPP_CP'] %>/federation/hypervisor_zones/resource:compute:onapp-pJrxhNrW3xxVBcnfJyEv5AISjPg/scores.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 06 Oct 2015 14:33:13 GMT
+      Server:
+      - Apache/2.2.15 (CentOS)
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"683987816814795fc6016875c7972c07"'
+      Cache-Control:
+      - must-revalidate, private, max-age=0
+      X-Request-Id:
+      - ce1f3f269c8d754bb682b15a5784fb16
+      X-Runtime:
+      - '0.583547'
+      X-Rack-Cache:
+      - miss
+      X-Powered-By:
+      - Phusion Passenger 4.0.35
+      Set-Cookie:
+      - _session_id=467cc5bc5864311c469b88d2ab17d2ef; path=/; HttpOnly
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Status:
+      - 200 OK
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+      Content-Type:
+      - application/json; charset=utf-8
+    body:
+      encoding: UTF-8
+      string: '[{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":80.75834748160725,"disk_index":32.25806451612903,"bandwidth_index":63.31360946745562,"cloud_index":58.77667382173063,"created_at":"2015-07-27T11:32:21.652Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":99.79020979020979,"disk_index":69.36416184971098,"bandwidth_index":26.034063260340634,"cloud_index":65.06281163342048,"created_at":"2015-05-06T14:29:00.000Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":80.75834748160725,"disk_index":32.25806451612903,"bandwidth_index":55.44041450777202,"cloud_index":56.152275501836094,"created_at":"2015-06-05T07:43:52.000Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":59.285417532197755,"disk_index":41.666666666666664,"bandwidth_index":31.65680473372781,"cloud_index":44.20296297753074,"created_at":"2015-07-28T14:58:07.796Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":60.160202360876895,"disk_index":20.512820512820515,"bandwidth_index":36.148648648648646,"cloud_index":38.94055717411535,"created_at":"2015-08-07T13:46:21.155Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":59.58246346555324,"disk_index":31.007751937984494,"bandwidth_index":36.89655172413793,"cloud_index":42.49558904255856,"created_at":"2015-08-11T11:32:51.668Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":60.67176870748299,"disk_index":38.095238095238095,"bandwidth_index":42.125984251968504,"cloud_index":46.9643303515632,"created_at":"2015-08-06T13:56:16.925Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":80.75834748160725,"disk_index":32.25806451612903,"bandwidth_index":63.31360946745562,"cloud_index":58.77667382173063,"created_at":"2015-07-23T10:37:55.288Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":99.79020979020979,"disk_index":96.7741935483871,"bandwidth_index":21.314741035856574,"cloud_index":72.62638145815116,"created_at":"2015-05-14T09:32:47.000Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":62.56028057869356,"disk_index":31.25,"bandwidth_index":66.04938271604938,"cloud_index":53.286554431580974,"created_at":"2015-09-02T07:30:14.152Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":61.962657403386885,"disk_index":37.38317757009346,"bandwidth_index":66.04938271604938,"cloud_index":55.13173922984324,"created_at":"2015-09-23T11:18:26.167Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":80.75834748160725,"disk_index":32.25806451612903,"bandwidth_index":63.31360946745562,"cloud_index":58.77667382173063,"created_at":"2015-07-22T12:55:28.206Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":60.59447983014862,"disk_index":29.12621359223301,"bandwidth_index":31.19533527696793,"cloud_index":40.30534289978319,"created_at":"2015-08-10T13:40:40.421Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":99.79020979020979,"disk_index":96.7741935483871,"bandwidth_index":90.67796610169492,"cloud_index":95.74745648009726,"created_at":"2015-04-03T13:01:36.000Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":59.58246346555324,"disk_index":26.373626373626372,"bandwidth_index":36.89655172413793,"cloud_index":40.95088052110585,"created_at":"2015-08-28T12:30:57.966Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":61.962657403386885,"disk_index":32.967032967032964,"bandwidth_index":66.04938271604938,"cloud_index":53.65969102882307,"created_at":"2015-10-03T08:52:59.559Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":59.85738255033557,"disk_index":30.76923076923077,"bandwidth_index":30.140845070422536,"cloud_index":40.25581946332963,"created_at":"2015-07-29T15:34:56.303Z"}},{"hypervisor_zone_score":{"cpu_score":1427,"disk_score":120,"bandwidth_score":107,"cpu_index":99.79020979020979,"disk_index":96.7741935483871,"bandwidth_index":18.166383701188455,"cloud_index":71.57692901326179,"created_at":"2015-04-23T08:42:05.000Z"}}]'
+    http_version: 
+  recorded_at: Tue, 06 Oct 2015 14:33:13 GMT
+recorded_with: VCR 2.9.3

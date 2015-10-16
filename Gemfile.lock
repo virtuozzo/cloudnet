@@ -36,11 +36,10 @@ GIT
       sort_alphabetical (~> 1.0)
 
 GIT
-  remote: https://github.com/OnApp/squall.git
-  revision: 87d6d6824403aadcf5fd9aefec7b6b62514aa171
-  ref: 87d6d68
+  remote: https://github.com/OnApp/squall
+  revision: 229fde5599abd072f46d2ed333f3c2db9e7f752c
   specs:
-    squall (1.4.0)
+    squall (1.4.1)
       faraday (~> 0.9.0)
       json (~> 1.7)
 
@@ -712,6 +711,3 @@ DEPENDENCIES
   whenever
   yaml_db
   zendesk_api (~> 1.5.0)
-
-BUNDLED WITH
-   1.10.6

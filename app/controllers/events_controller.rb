@@ -7,8 +7,6 @@ class EventsController < ApplicationController
         case m
         when "getUnbilledRevenue"
           unbilled_revenue(tubesock)
-        when "sec"
-          tubesock.send_data("ooooo")
         end
       end
     end

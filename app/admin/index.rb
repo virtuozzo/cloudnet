@@ -1,6 +1,6 @@
 ActiveAdmin.register Index do
   belongs_to :location
-  permit_params :index_cpu,  :index_iops, :index_bandwidth, :index_uptime, :location_id, :created_at
+  permit_params :index_cpu,  :index_iops, :index_bandwidth, :location_id, :created_at
   menu false
   navigation_menu :default
   config.filters = false
@@ -10,7 +10,6 @@ ActiveAdmin.register Index do
     column :index_cpu
     column :index_iops
     column :index_bandwidth
-    column :index_uptime
     column :created_at
 
     actions
@@ -23,7 +22,6 @@ ActiveAdmin.register Index do
       input :index_cpu
       input :index_iops
       input :index_bandwidth
-      input :index_uptime
       input(:created_at, hint: 'Only if you want to change the chart points order') unless object.new_record?
     end
 

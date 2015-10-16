@@ -6,7 +6,6 @@ json.array! @locations do |loc|
                      :summary, :inclusive_bandwidth
   json.indices loc.indices do |i|
      json.date i.created_at
-     json.index_uptime i.index_uptime
      json.cloud_index i.cloud_index
      json.index_cpu i.index_cpu
      json.index_iops i.index_iops
