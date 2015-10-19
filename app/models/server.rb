@@ -146,6 +146,7 @@ class Server < ActiveRecord::Base
   
   # Check temp cache of IP count is withing permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
   def can_add_ips?
+    return false if state != :on && state != :off
     ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
     supports_multiple_ips? && (ips_count < MAX_IPS)
   end

@@ -30,3 +30,4 @@ json.template do
 end
 
 json.server_ip_addresses server.server_ip_addresses, :address, :primary
+json.ips_available server.can_add_ips?

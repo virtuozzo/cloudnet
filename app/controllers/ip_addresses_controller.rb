@@ -18,7 +18,7 @@ class IpAddressesController < ApplicationController
       AssignIpAddress.perform_async(current_user.id, @server.id)
       Analytics.track(current_user, event: 'Added a new IP address')
       # Write to cache so we have a temporary count of IP addresses on server until the real IPs are added to db
-      Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count + 1)
+      Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], (Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, @server.id]) || @server.server_ip_addresses.count) + 1)
       Rails.cache.write([Server::IP_ADDRESS_ADDED_CACHE, @server.id], true)
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
       return

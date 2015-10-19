@@ -8,9 +8,9 @@
       %h2.pure-u-1-2.jg-icon.icon-cloud= "#{@server.name} - IP Addresses"
       %ul.pure-u-1-2.jg-widget-controls
         %li
-          %a.jg-button-lilac.jg-new-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow", "ng-class" => "{disabled: #{!@server.can_add_ips?}}"} Add IP Address
+          %a.jg-button-lilac.jg-new-button{"data-target" => "#new-ip", "data-toggle" => "modal", "rel" => "nofollow", "ng-class" => "{disabled: ips_disabled(server), 'inactive-link': disabled(server)}"} Add IP Address
         %li
-          %a.jg-button-lilac.jg-new-button{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
+          %a.jg-button-lilac.jg-new-button{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow", "ng-class" => "{'disabled inactive-link': disabled(server)}"} Rebuild Network
     .jg-widget-body
       %table.table.table-hover.jg-tables
         %thead
@@ -40,7 +40,7 @@
 
           %tr{data: {"ng-if" => "ips && ips.length === 0"}}
             %td.no-data{colspan: "6"}
-              %p= "This server does not have any IP Addresses."
+              %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any IP Addresses." }}
 
     .jg-widget-footer.jg-pagination
       .jg-pagination-controls{"ng-show" => "ips"}
@@ -49,5 +49,5 @@
         %a{class: 'jg-next icon-arrow-right', "ng-click" => " currentPage = currentPage + 1", "ng-show" => "currentPage < ips.length/pageSize - 1"}
   
 
-= render partial: 'new_ip_popover'
-= render partial: 'rebuild_network_popover'
+  = render partial: 'new_ip_popover'
+  = render partial: 'rebuild_network_popover'

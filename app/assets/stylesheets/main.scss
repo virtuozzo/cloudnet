@@ -679,3 +679,8 @@ Hides the menu at `48em`, but modify this based on your app's needs.
 .disabled {
   opacity: 0.6;
 }
+
+.inactive-link {
+   pointer-events: none;
+   cursor: default;
+}

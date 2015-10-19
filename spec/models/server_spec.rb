@@ -41,7 +41,12 @@ describe Server do
     expect(server.primary_ip_address).to eq('123.456.789.1')
   end
   
+  it 'should be false for servers that are building' do
+    expect(server.can_add_ips?).to eq(false)
+  end
+  
   it 'should be true for locations with multiple IP compatibility' do
+    server.state = :on
     expect(server.can_add_ips?).to eq(true)
   end
   
