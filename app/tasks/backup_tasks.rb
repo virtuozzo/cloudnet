@@ -23,8 +23,16 @@ class BackupTasks < BaseTasks
 
     backup
   end
+  
+  def delete_backup(_server, squall, backup)
+    squall.delete(backup.backup_id)
+  end
+  
+  def restore_backup(_server, squall, backup)
+    squall.restore(backup.backup_id)
+  end
 
   def allowable_methods
-    super + [:refresh_backup]
+    super + [:refresh_backup, :delete_backup, :restore_backup]
   end
 end

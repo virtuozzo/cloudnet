@@ -1,5 +1,4 @@
 class BackupsController < ApplicationController
-  before_filter :redirect_to_dashboard, unless: :development?
   before_action :set_server
   before_action :set_backup, except: [:index, :create]
 
@@ -12,19 +11,17 @@ class BackupsController < ApplicationController
     end
   end
 
-  def create
-    backup = RequestBackup.new(@server, current_user).process
-    object = ServerBackup.create_backup(@server, backup)
-    MonitorBackup.perform_async(@server.id, object.id, current_user.id)
+  def create    
+    CreateBackup.perform_async(current_user.id, @server.id)
+    Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })    
     redirect_to server_backups_path(@server), notice: 'Backup has been requested and will be created shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Create' })
-    flash.now[:alert] = 'Could not schedule backup. Please try again later'
-    redirect_to server_backups_path
+    redirect_to server_backups_path, alert: 'Could not schedule backup. Please try again later'
   end
 
   def restore
-    RestoreBackup.new(@server, @backup, current_user).process
+    BackupTasks.new.perform(:restore_backup, current_user.id, @server.id, @backup.id)
     MonitorServer.perform_async(@server.id, current_user.id)
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
   rescue
@@ -34,7 +31,7 @@ class BackupsController < ApplicationController
   end
 
   def destroy
-    DeleteBackup.new(@server, @backup, current_user).process
+    BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
     @backup.destroy!
     redirect_to server_backups_path, notice: 'Backup has been deleted'
   rescue Exception => e
