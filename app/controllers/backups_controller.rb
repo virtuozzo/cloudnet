@@ -1,6 +1,7 @@
 class BackupsController < ApplicationController
   before_action :set_server
   before_action :set_backup, except: [:index, :create]
+  before_action :check_manual_backup_support
 
   def index
     @backups = @server.server_backups.order(id: :asc)
@@ -48,5 +49,9 @@ class BackupsController < ApplicationController
 
   def set_backup
     @backup = @server.server_backups.find(params[:id])
+  end
+  
+  def check_manual_backup_support
+    redirect_to_dashboard unless @server.supports_manual_backups?
   end
 end
