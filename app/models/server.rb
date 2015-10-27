@@ -40,6 +40,7 @@ class Server < ActiveRecord::Base
   
   IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
+  BACKUP_CREATED_CACHE = "backup_created_cache"
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)

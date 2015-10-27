@@ -4,17 +4,17 @@ class BackupsController < ApplicationController
   before_action :check_manual_backup_support
 
   def index
-    @backups = @server.server_backups.order(id: :asc)
-
     respond_to do |format|
-      format.html { @backups = @backups.page(params[:page]).per(10) }
-      format.json { render json: @backups }
+      format.html { @backups_count = @server.server_backups.count }
+      format.json { @backups = @server.server_backups.order(id: :desc) }
     end
   end
 
   def create    
+    # raise "A backup is being built" if @server.server_backups.select {|backup| backup.built == false}.size > 0 or Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])
     CreateBackup.perform_async(current_user.id, @server.id)
-    Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })    
+    Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })
+    Rails.cache.write([Server::BACKUP_CREATED_CACHE, @server.id], true)
     redirect_to server_backups_path(@server), notice: 'Backup has been requested and will be created shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Create' })
@@ -23,6 +23,7 @@ class BackupsController < ApplicationController
 
   def restore
     BackupTasks.new.perform(:restore_backup, current_user.id, @server.id, @backup.id)
+    Analytics.track(current_user, event: 'Restored a backup', properties: { server_id: @server.id })
     MonitorServer.perform_async(@server.id, current_user.id)
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
   rescue
@@ -33,6 +34,7 @@ class BackupsController < ApplicationController
 
   def destroy
     BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
+    Analytics.track(current_user, event: 'Deleted a backup', properties: { server_id: @server.id })
     @backup.destroy!
     redirect_to server_backups_path, notice: 'Backup has been deleted'
   rescue Exception => e

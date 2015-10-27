@@ -3,7 +3,7 @@
 
 = render partial: 'servers/nav', locals: { server: @server }
 %div{data: {"ng-controller" => "ServerIpsCtrl", "ng-init" => "init(#{@server.id})"}}
-  .jg-widget-content
+  .jg-widget-content{"ng-if" => "server"}
     .jg-widget-header.pure-g.clearfix
       %h2.pure-u-1-2.jg-icon.icon-cloud= "#{@server.name} - IP Addresses"
       %ul.pure-u-1-2.jg-widget-controls
