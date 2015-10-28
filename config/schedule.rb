@@ -58,6 +58,11 @@ every 1.day, at: '2:30 am' do
   runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
 end
 
+# Prepare values for forecast revenue
+every 1.day, at: '3:00am' do
+  runner 'ForecastedRevenue.perform_in(1.minutes)'
+end
+
 # Update uptime for locations
 every 1.day, at: '3:00am' do
   runner 'UptimeAllUpdate.perform_in(5.minutes)'

@@ -15,6 +15,7 @@
 /log/*.log
 /tmp
 *.csv
+*.log
 
 .DS_Store
 .AppleDouble
