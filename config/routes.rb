@@ -110,8 +110,9 @@ CloudNet::Application.routes.draw do
 
   post 'login_as', to: 'login_as#new'
   delete 'login_as', to: 'login_as#destroy'
-
-
+  
+  resources :keys
+  
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
       resources :server_search, only: [:index, :create]

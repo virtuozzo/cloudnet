@@ -1,0 +1,14 @@
+// Place all the styles related to the keys controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "partials/base";
+
+table.ssh-keys {
+    td.fingerprint {
+      font-family: monospace;
+    }
+    td.title {
+      font-weight: bold;
+    }
+}

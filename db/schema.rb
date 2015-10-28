@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001125755) do
+ActiveRecord::Schema.define(version: 20151028135752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,6 +232,17 @@ ActiveRecord::Schema.define(version: 20151001125755) do
   end
 
   add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
+
+  create_table "keys", force: :cascade do |t|
+    t.string   "title"
+    t.text     "key"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "keys", ["user_id"], name: "index_keys_on_user_id", using: :btree
 
   create_table "locations", force: :cascade do |t|
     t.string   "latitude",            limit: 255
@@ -567,10 +578,8 @@ ActiveRecord::Schema.define(version: 20151001125755) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "indices", "locations"
-  add_foreign_key "indices", "locations"
-  add_foreign_key "locations", "regions"
+  add_foreign_key "keys", "users"
   add_foreign_key "locations", "regions"
   add_foreign_key "server_ip_addresses", "servers"
-  add_foreign_key "uptimes", "locations"
   add_foreign_key "uptimes", "locations"
 end

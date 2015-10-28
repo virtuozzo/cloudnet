@@ -234,4 +234,10 @@ FactoryGirl.define do
     primary true
     association :server, factory: :server
   end
+  
+  factory :key do
+    title 'joeys-macbook-pro'
+    key 'ssh-rsa abc1234== joe@joeys-macbook-pro'
+    association :user, factory: :user_onapp
+  end
 end
