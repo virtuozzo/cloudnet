@@ -40,6 +40,7 @@ class Server < ActiveRecord::Base
   
   IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
+  BACKUP_CREATED_CACHE = "backup_created_cache"
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)
@@ -153,7 +154,14 @@ class Server < ActiveRecord::Base
   
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+
   def supports_multiple_ips?
+    # Disabling this because of the Onapp bug re: multiple IPs
+    return false if Rails.env.production?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
+  end
+  
+  # Check if version of Onapp supports manual backups - should be 3.5.0+
+  def supports_manual_backups?
+    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('3.5.0')
   end
 
   private

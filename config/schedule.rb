@@ -69,10 +69,9 @@ every 1.day, at: '3:00am' do
 end
 
 # Update Onapp version for each locations
-# Disabling this because of the Onapp bug re: multiple IPs
-# every 1.day, at: '3:30am' do
-#   runner 'UpdateHypervisorGroupVersion.perform_in(2.minutes)'
-# end
+every 1.day, at: '3:30am' do
+  runner 'UpdateHypervisorGroupVersion.perform_in(2.minutes)'
+end
 
 # Email monthly financial reports
 every '0 1 1 * *' do

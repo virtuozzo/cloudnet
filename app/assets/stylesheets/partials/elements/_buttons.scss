@@ -90,7 +90,7 @@ table {
   &.new, &.open, &.pending, &.backup-pending, &.partially_paid, &.uncredited, &.make_primary {
     background: #578edd;
   }
-  &.pending, &.building, &.starting_up, &.shutting_down, &.rebooting, &.running {
+  &.pending, &.building, &.starting_up, &.shutting_down, &.rebooting, &.running, &.backup-loading {
     background: #ffbc6d;
   }
   &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary {

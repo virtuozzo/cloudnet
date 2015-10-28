@@ -1,30 +1,29 @@
 class BackupsController < ApplicationController
-  before_filter :redirect_to_dashboard, unless: :development?
   before_action :set_server
   before_action :set_backup, except: [:index, :create]
+  before_action :check_manual_backup_support
 
   def index
-    @backups = @server.server_backups.order(id: :asc)
-
     respond_to do |format|
-      format.html { @backups = @backups.page(params[:page]).per(10) }
-      format.json { render json: @backups }
+      format.html { @backups_count = @server.server_backups.count }
+      format.json { @backups = @server.server_backups.order(id: :desc) }
     end
   end
 
-  def create
-    backup = RequestBackup.new(@server, current_user).process
-    object = ServerBackup.create_backup(@server, backup)
-    MonitorBackup.perform_async(@server.id, object.id, current_user.id)
+  def create    
+    # raise "A backup is being built" if @server.server_backups.select {|backup| backup.built == false}.size > 0 or Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])
+    CreateBackup.perform_async(current_user.id, @server.id)
+    Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })
+    Rails.cache.write([Server::BACKUP_CREATED_CACHE, @server.id], true)
     redirect_to server_backups_path(@server), notice: 'Backup has been requested and will be created shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Create' })
-    flash.now[:alert] = 'Could not schedule backup. Please try again later'
-    redirect_to server_backups_path
+    redirect_to server_backups_path, alert: 'Could not schedule backup. Please try again later'
   end
 
   def restore
-    RestoreBackup.new(@server, @backup, current_user).process
+    BackupTasks.new.perform(:restore_backup, current_user.id, @server.id, @backup.id)
+    Analytics.track(current_user, event: 'Restored a backup', properties: { server_id: @server.id })
     MonitorServer.perform_async(@server.id, current_user.id)
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
   rescue
@@ -34,7 +33,8 @@ class BackupsController < ApplicationController
   end
 
   def destroy
-    DeleteBackup.new(@server, @backup, current_user).process
+    BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
+    Analytics.track(current_user, event: 'Deleted a backup', properties: { server_id: @server.id })
     @backup.destroy!
     redirect_to server_backups_path, notice: 'Backup has been deleted'
   rescue Exception => e
@@ -51,5 +51,9 @@ class BackupsController < ApplicationController
 
   def set_backup
     @backup = @server.server_backups.find(params[:id])
+  end
+  
+  def check_manual_backup_support
+    redirect_to_dashboard unless @server.supports_manual_backups?
   end
 end

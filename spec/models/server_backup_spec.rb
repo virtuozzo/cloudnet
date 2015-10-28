@@ -38,19 +38,20 @@ describe ServerBackup do
     server = backup.server
 
     test_data = {
-      'id' => 1,
       'built' => true,
       'built_at' => Time.now.to_s,
       'created_at' => Time.now.to_s,
-      'identifier' => 1,
+      'identifier' => 123,
       'locked' => false,
       'disk_id' => 1,
       'min_disk_size' => 5,
       'min_memory_size' => 256,
-      'backup_size' => 3_243_434
+      'backup_size' => 3_243_434,
+      'backup_created' => Time.now.to_s,
+      'backup_id' => 23
     }
 
-    result = ServerBackup.create_backup(server, test_data)
+    result = server.server_backups.create(test_data)
     expect(result).to be_valid
   end
 end

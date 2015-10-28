@@ -54,6 +54,10 @@ describe Server do
     expect(server.supports_multiple_ips?).to eq(true)
   end
   
+  it 'should be true for locations with manual backup compatibility' do
+    expect(server.supports_manual_backups?).to eq(true)
+  end
+  
   it 'should be false for older locations without multiple IP compatibility' do
     server.location.hv_group_version = '4.0.0'
     expect(server.supports_multiple_ips?).to eq(false)

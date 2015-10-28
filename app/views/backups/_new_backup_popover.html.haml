@@ -1,0 +1,18 @@
+#new-backup.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "new-backup-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog{"ng-if" => "server"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#new-backup-label.modal-title Request new Backup
+
+      .modal-body
+        .jg-widget-form.pure-g-r.clearfix
+          %div
+            %p A new backup will be requested and will show up on the list once the backup is queued. Please note that the time taken to build a backup depends on the size of the disk.
+            %p Please confirm you would like to continue.
+      
+        .modal-footer
+          %div
+            = form_for :backups, url: server_backups_path do |f|
+              %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
+              = f.submit "Request Backup", class: "btn jg-submit-button", data: {"ng-hide" => "disabled(server)"}
