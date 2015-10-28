@@ -97,6 +97,12 @@ ActiveAdmin.register_page 'Dashboard' do
               td 'Unbilled Revenue [USD]'
               td 'calculating ...', id: 'unbilled_revenue'
             end
+            
+            tr do 
+              forecast = (Server.sum(:forecasted_rev) / Invoice::MILLICENTS_IN_DOLLAR).round(2)
+              td 'Forecasted Month Revenue [USD]'
+              td forecast
+            end
           end
         end
       end
