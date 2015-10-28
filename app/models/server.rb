@@ -159,9 +159,9 @@ class Server < ActiveRecord::Base
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
   
-  # Check if version of Onapp supports manual backups - should be 3.5.0+
+  # Check if version of Onapp supports manual backups - should be 4.0.0+
   def supports_manual_backups?
-    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('3.5.0')
+    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.0.0')
   end
 
   private
