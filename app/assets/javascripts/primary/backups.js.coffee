@@ -23,11 +23,15 @@
         Math.ceil $scope.backups.length / $scope.pageSize
       $scope.addedNewBackup = ->
         ($scope.backups.length > $scope.originalBackupsCount) ? true : false
+      
+      $scope.unbuiltBackups = 0
+      angular.forEach $scope.backups, (backup) ->
+        $scope.unbuiltBackups++ if backup.built == false
 
       $timeout (() -> tick(serverId)), 10 * 1000
       
   $scope.disabled = (server) ->
-    server.state != 'on' && server.state != 'off'
+    (server.state != 'on' && server.state != 'off') || $scope.unbuiltBackups > 0
   
   $scope.momentizedDate = (momentDate) ->
     format = "YYYY-MM-DDTHH:mm:ssZ"

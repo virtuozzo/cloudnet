@@ -11,7 +11,7 @@ class BackupsController < ApplicationController
   end
 
   def create    
-    # raise "A backup is being built" if @server.server_backups.select {|backup| backup.built == false}.size > 0 or Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])
+    raise "A backup is being built" if @server.server_backups.select {|backup| backup.built == false}.size > 0 or Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])
     CreateBackup.perform_async(current_user.id, @server.id)
     Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })
     Rails.cache.write([Server::BACKUP_CREATED_CACHE, @server.id], true)
@@ -24,7 +24,7 @@ class BackupsController < ApplicationController
   def restore
     BackupTasks.new.perform(:restore_backup, current_user.id, @server.id, @backup.id)
     Analytics.track(current_user, event: 'Restored a backup', properties: { server_id: @server.id })
-    MonitorServer.perform_async(@server.id, current_user.id)
+    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, current_user.id)
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
   rescue
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Restore' })

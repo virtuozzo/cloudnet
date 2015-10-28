@@ -27,6 +27,11 @@
                 .tags.backup-loading Loading
               %td
               %td
+          - else
+            %tr{data: {"ng-if" => "backups && backups.length === 0"}}
+              %td.no-data{colspan: "4"}
+                %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any backups. Why not create one?" }}
+                %a.jg-button-lilac.jg-new-button{"data-target" => "#new-backup", "data-toggle" => "modal", "rel" => "nofollow", "ng-if" => "!disabled(server)"} Request Backup
               
           %tr{data: {"ng-repeat" => "backup in backups | startFrom:currentPage * pageSize | limitTo:pageSize"}}
             %td.moment-date {{ momentizedDate(backup.backup_created) }}
@@ -44,11 +49,6 @@
                     = link_to "Restore Backup", "/servers/#{@server.id}/backups/{{ backup.id }}/restore", method: :post, data: {"ng-class" => "{'disabled inactive-link': disabled(server)}", confirm: "The server will reboot during the process of restoring the backup. Please confirm you would like to continue."}
                   %li
                     = link_to "Delete Backup", "/servers/#{@server.id}/backups/{{ backup.id }}", method: :delete, data: { confirm: "Are you sure you want to delete this backup?" }
-
-          %tr{data: {"ng-if" => "backups && backups.length === 0"}}
-            %td.no-data{colspan: "4"}
-              %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any backups. Why not create one?" }}
-              %a.jg-button-lilac.jg-new-button{"data-target" => "#new-backup", "data-toggle" => "modal", "rel" => "nofollow", "ng-if" => "!disabled(server)"} Request Backup
   
     .jg-widget-footer.jg-pagination
       .jg-pagination-controls{"ng-show" => "backups"}
