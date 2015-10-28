@@ -111,7 +111,7 @@ class Server < ActiveRecord::Base
   # `resources` hash, new resources for server
   def edit(resources)
     resources.stringify_keys!
-    editable_properties = %w(name cpus memory disk_size)
+    editable_properties = %w(name cpus memory disk_size template_id)
     updates = {}
     editable_properties.each do |field|
       updates[field] = resources[field] if resources.key? field
