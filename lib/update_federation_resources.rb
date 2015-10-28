@@ -46,7 +46,7 @@ class UpdateFederationResources
     details = template['image_template']
     location = Location.find_by hv_group_id: datacentre['hypervisor_group_id']
     Template.where(
-      identifier: template['id'].to_s,
+      identifier: details['id'].to_s,
     ).first_or_initialize(
       location: location,
       name: details['label'],
@@ -54,7 +54,8 @@ class UpdateFederationResources
       onapp_os_distro: details['operating_system_distro'],
       min_memory: details['min_memory_size'],
       min_disk: details['min_disk_size'],
-      hourly_cost: template['price']
+      hourly_cost: template['price'],
+      os_distro: details['operating_system'].to_s + "-" + details['operating_system_distro']
     ).save(validate: false)
   end
 end
