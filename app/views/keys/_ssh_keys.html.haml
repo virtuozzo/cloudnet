@@ -7,22 +7,22 @@
       .jg-widget.pure-u-1.pure-g
         %table.table.table-hover.jg-tables.ssh-keys
           %thead
-            %tr
-              %th Title
-              %th Key fingerprint
-              %th Remove
+            %tr.pure-g
+              %td.pure-u-7-24 Title
+              %td.pure-u-14-24 Key fingerprint
+              %td.pure-u-3-24 Remove
 
           %tbody
             - if @keys.empty?
-              %tr
-                %td.no-data{colspan: "3"}
+              %tr.pure-g
+                %td.pure-u-1-1.no-data{colspan: "3"}
                   %p= "You don't have any SSH keys stored"
             - else
               - @keys.each do |key|
-                %tr
-                  %td.title= key.title
-                  %td.fingerprint= fingerprint(key.key)
-                  %td= link_to "", key, method: :delete, class: "remove-billing-card jg-icon icon-close", data: { confirm: "Are you sure you want to remove this SSH key?" }
+                %tr.pure-g
+                  %td.pure-u-7-24.title= key.title
+                  %td.pure-u-14-24.fingerprint= fingerprint(key.key)
+                  %td.pure-u-3-24= link_to "", key, method: :delete, class: "remove-billing-card jg-icon icon-close", data: { confirm: "Are you sure you want to remove this SSH key?" }
         
     .jg-widget-form.pure-g.jg-disabled
       .jg-widget.pure-u-1
