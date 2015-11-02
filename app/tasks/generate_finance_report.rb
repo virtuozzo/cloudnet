@@ -16,7 +16,7 @@ class GenerateFinanceReport < BaseTask
   end
 
   def transaction_report
-    columns = %w(account_id type state item_id created_at net_cost tax_cost total_cost remaining_cost card_charges_total credit_note_charges_total)
+    columns = %w(account_id account_email account_full_name type state item_id created_at net_cost tax_cost total_cost remaining_cost card_charges_total credit_note_charges_total)
 
     CSV.generate do |csv|
       csv << columns
@@ -63,7 +63,7 @@ class GenerateFinanceReport < BaseTask
     both.sort! { |a, b| a.created_at <=> b.created_at }
 
     both.map do |item|
-      row = [account.id]
+      row = [account.id, user.email, user.full_name]
       row.concat [item.class.to_s.downcase, item.state.to_s, item.number, item.created_at]
 
       if item.is_a?(Invoice)

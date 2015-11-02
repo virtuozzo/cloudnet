@@ -211,14 +211,39 @@ class ServerWizard
   end
 
   def request_server_edit
-    if disk_size != @old_server_specs.disk_size
-      disk_resize = disk_size
-    else
-      disk_resize = false
-    end
-    ServerTasks.new.perform(:edit, user.id, existing_server_id, disk_resize)
+    return unless server_changed?
+    
+    ServerEdit.perform_async(user.id, existing_server_id,
+              disk_resize, template_reload, cpu_mem_changes) 
   end
 
+  # TODO: old_server_spec can be taken from onapp API
+  def disk_resize
+    disk_size == @old_server_specs.disk_size ? false : @old_server_specs.disk_size
+  end
+  
+  def template_reload
+    template_id == @old_server_specs.template_id ? false : template_id
+  end
+  
+  def cpu_mem_changes
+    changed = @old_server_specs.cpus != cpus ||
+              @old_server_specs.memory != memory ||
+              @old_server_specs.name != name
+    changed ? old_server_cpu_mem : false
+  end
+  
+  def old_server_cpu_mem
+    { "cpus" => @old_server_specs.cpus, 
+      "memory" => @old_server_specs.memory,
+      "name" => @old_server_specs.name
+    }
+  end
+  
+  def server_changed?
+    cpu_mem_changes || template_reload || disk_resize
+  end
+  
   def persisted?
     false
   end

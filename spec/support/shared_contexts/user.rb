@@ -7,7 +7,7 @@ shared_context :with_user do
       email: 'auto_rspec_user@onapp.com',
       password: 'Abcdef123456!'
     )
-
+    
     # Creating a cloud.net user without stripe triggers callback to create a Stripe user
     @user = FactoryGirl.create :user_without_stripe
     @user.reload # Update the new stripe data

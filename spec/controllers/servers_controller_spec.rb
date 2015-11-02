@@ -110,6 +110,9 @@ describe ServersController do
 
         context 'submitting an edit' do
           before :each do
+            @edit_server_task = double('EditServerTask', edit_server: true)
+            allow(EditServerTask).to receive_messages(new: @edit_server_task)
+            
             @card = FactoryGirl.create :billing_card, account: @current_user.account
             @payments = double('Payments', auth_charge: { charge_id: 12_345 }, capture_charge: { charge_id: 12_345 })
             @server = FactoryGirl.create(
@@ -119,6 +122,10 @@ describe ServersController do
               memory: 1024,
               disk_size: 10
             )
+            
+            @old_server_params = {"cpus"=>@server.cpus, 
+                                  "memory"=>@server.memory,
+                                  "name"=>@server.name}
             # We don't actually destroy the old server to make the edit, we just need 2 server
             # entities so that we can generate an invoice for both in order to figure out the price
             # difference
@@ -129,9 +136,14 @@ describe ServersController do
               memory: 4096,
               disk_size: 10
             )
-
+                                 
             allow(Payments).to receive_messages(new: @payments)
             allow(MonitorServer).to receive(:perform_async).and_return(true)
+            Sidekiq::Testing.inline!
+          end
+          
+          after(:each) do
+            Sidekiq::Testing.fake!
           end
 
           it 'should trigger the edit server task' do
@@ -151,7 +163,7 @@ describe ServersController do
               .with(@current_user.account.gateway_id, @card.processor_token, pretty_total(cost_difference_cents))
               .and_return(charge_id: 12_345)
 
-            expect(@server_tasks).to receive(:perform).with(:edit, @current_user.id, @server.id, false)
+            expect(@edit_server_task).to receive(:edit_server)
             session[:server_wizard_params] = {
               cpus: @new_server.cpus,
               memory: @new_server.memory,
@@ -170,7 +182,7 @@ describe ServersController do
 
           it 'should handle errors if updating resources fails' do
             expect_any_instance_of(SentryLogging).to receive(:raise).with(instance_of(Faraday::Error::ClientError))
-            allow(@server_tasks).to receive(:perform).and_raise(Faraday::Error::ClientError.new('Test'))
+            allow(@edit_server_task).to receive(:edit_server).and_raise(Faraday::Error::ClientError.new('Test'))
             expect(@payments).to_not receive(:capture_charge)
             session[:server_wizard_params] = {
               cpus: 3,

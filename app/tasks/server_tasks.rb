@@ -19,8 +19,12 @@ class ServerTasks < BaseTasks
         new_state = :building
       elsif info['booted'] == false
         new_state = :off
+        onapp_template = Template.where(identifier: info["template_id"],
+                                        location_id: server.location_id).first
       else
         new_state = :on
+        onapp_template = Template.where(identifier: info["template_id"],
+                                        location_id: server.location_id).first
       end
     end
     old_state = server.state
@@ -35,7 +39,7 @@ class ServerTasks < BaseTasks
     server.detect_stuck_state
 
     disk_size = info['total_disk_size'].to_i
-
+    
     server.update(
       built:                  info['built'],
       suspended:              info['suspended'],
@@ -47,7 +51,8 @@ class ServerTasks < BaseTasks
       memory:                 info['memory'],
       disk_size:              disk_size > 0 ? disk_size.to_s : server.disk_size,
       os:                     info['operating_system'],
-      state:                  state
+      state:                  state,
+      template_id:            onapp_template ? onapp_template.id : server.template_id
     )
     
     # For backwards compatibility sake, check if location supports multiple IPs. If it does, then go ahead and schedule a fetch, otherwise extract IP address from server info.
@@ -62,7 +67,7 @@ class ServerTasks < BaseTasks
   end
 
   def refresh_events(server, squall)
-    transactions = squall.transactions(server.identifier)
+    transactions = squall.transactions(server.identifier, 100)
 
     last_event = ServerEvent.select('reference').order('reference DESC').limit(1)
     last_ref   = (last_event.first.reference if last_event.size >= 1) || -1
@@ -123,29 +128,7 @@ class ServerTasks < BaseTasks
     network_type.usages = parsed.to_json
     network_type.save!
   end
-
-  def edit(server, squall, *args)
-    user = server.user
-
-    # First deal with disk resizing, as it requires a separate API call
-    requested_size = args.first
-    if requested_size.is_a? Integer
-      disk = Squall::Disk.new(uri: ONAPP_CP[:uri], user: user.onapp_user, pass: user.onapp_password)
-      disks = disk.vm_disk_list(server.identifier)
-      primary = disks.select{|d| d['primary'] == true}.first['id'].to_s
-      disk.edit(primary, {disk_size: requested_size})
-    end
-
-    # Edit non-disk resources
-    options = {
-      label: server.name,
-      cpus: server.cpus,
-      memory: server.memory
-    }
-    squall.edit(server.identifier, options)
-    server
-  end
-
+  
   def reboot(server, squall)
     squall.reboot(server.identifier)
     server.update!(state: :rebooting)
