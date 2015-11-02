@@ -1,0 +1,36 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u.jg-icon.icon-user SSH Keys
+    
+  .jg-widget-body.pure-u-1
+    .jg-widget-form.pure-g.jg-disabled
+      .jg-widget.pure-u-1.pure-g
+        %table.table.table-hover.jg-tables.ssh-keys
+          %thead
+            %tr.pure-g
+              %td.pure-u-7-24 Title
+              %td.pure-u-14-24 Key fingerprint
+              %td.pure-u-3-24 Remove
+
+          %tbody
+            - if @keys.empty?
+              %tr.pure-g
+                %td.pure-u-1-1.no-data{colspan: "3"}
+                  %p= "You don't have any SSH keys stored"
+            - else
+              - @keys.each do |key|
+                %tr.pure-g
+                  %td.pure-u-7-24.title= key.title
+                  %td.pure-u-14-24.fingerprint= fingerprint(key.key)
+                  %td.pure-u-3-24= link_to "", key, method: :delete, class: "remove-billing-card jg-icon icon-close", data: { confirm: "Are you sure you want to remove this SSH key?" }
+        
+    .jg-widget-form.pure-g.jg-disabled
+      .jg-widget.pure-u-1
+        .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+          %h2.icon-wallet.jg-icon.pure-u Add SSH Key
+          .jg-disclosure.icon-arrow-down
+        .pure-u-md-4-24
+        .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-add-ssh-key.jg-toggleable
+          = render partial: 'keys/add_ssh_key'
+
+= javascript_include_tag "shared/toggle_info"

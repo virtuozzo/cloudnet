@@ -31,7 +31,8 @@
             %tr{data: {"ng-if" => "backups && backups.length === 0"}}
               %td.no-data{colspan: "4"}
                 %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any backups. Why not create one?" }}
-                %a.jg-button-lilac.jg-new-button{"data-target" => "#new-backup", "data-toggle" => "modal", "rel" => "nofollow", "ng-if" => "!disabled(server)"} Request Backup
+                .jg-widget-controls
+                  %a.jg-button-lilac.jg-new-button{"data-target" => "#new-backup", "data-toggle" => "modal", "rel" => "nofollow", "ng-if" => "!disabled(server)", "href" => "#"} Request Backup
               
           %tr{data: {"ng-repeat" => "backup in backups | startFrom:currentPage * pageSize | limitTo:pageSize"}}
             %td.moment-date {{ momentizedDate(backup.backup_created) }}

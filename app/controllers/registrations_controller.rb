@@ -7,6 +7,11 @@ class RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
     respond_with resource
   end
+  
+  def edit
+    @keys = current_user.keys
+    super
+  end
 
   protected
 
