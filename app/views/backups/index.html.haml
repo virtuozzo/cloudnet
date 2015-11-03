@@ -22,7 +22,7 @@
         %tbody
           - if Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])
             %tr{data: {"ng-hide" => "addedNewBackup()"}}
-              %td
+              %td a few seconds ago
               %td
                 .tags.backup-loading Loading
               %td
