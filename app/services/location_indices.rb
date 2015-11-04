@@ -17,7 +17,8 @@ class LocationIndices
         index.symbolize_keys
       end.compact
     rescue Faraday::Error::ClientError => e
-      log_error(e)
+      #TODO: Enable error logs when all locations have performance tests enabled
+      #log_error(e)
       []
     end
   

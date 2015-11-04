@@ -15,6 +15,7 @@ class EditServerTask
       verifier = CoreTransactionVerifier.new(@user.id, @server.id)
       verifier.perform_transaction {send(task)}
     end
+  ensure
     ServerTasks.new.perform(:refresh_server, @user.id, @server.id)
   end
 

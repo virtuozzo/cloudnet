@@ -19,12 +19,10 @@ class ServerTasks < BaseTasks
         new_state = :building
       elsif info['booted'] == false
         new_state = :off
-        onapp_template = Template.where(identifier: info["template_id"],
-                                        location_id: server.location_id).first
+        onapp_template = active_template(info["template_id"], server.location_id)
       else
         new_state = :on
-        onapp_template = Template.where(identifier: info["template_id"],
-                                        location_id: server.location_id).first
+        onapp_template = active_template(info["template_id"], server.location_id)
       end
     end
     old_state = server.state
@@ -176,4 +174,9 @@ class ServerTasks < BaseTasks
       :get_network_interfaces
     ] + super
   end
+  
+  private
+    def active_template(template_id, location_id)
+      Template.where(identifier: template_id, location_id: location_id).first
+    end
 end
