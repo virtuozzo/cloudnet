@@ -37,6 +37,9 @@ class ServersController < ServerCommonController
       step3
     else
       step2
+    
+      #FIXME: Not allowing to rebuild into Windows until onapp core team fix the problem
+      @templates.reject! {|k,v| k.split("-")[0] == "windows"}
     end
     render 'server_wizards/edit'
   rescue Faraday::Error::ClientError => e
