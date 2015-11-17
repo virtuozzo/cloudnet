@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028135752) do
+ActiveRecord::Schema.define(version: 20151105123030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -568,6 +568,11 @@ ActiveRecord::Schema.define(version: 20151028135752) do
     t.string   "otp_session_challenge",    limit: 255
     t.datetime "otp_challenge_expires"
     t.string   "onapp_id"
+    t.integer  "notif_before_shutdown",                default: 3
+    t.integer  "notif_before_destroy",                 default: 21
+    t.integer  "notif_delivered",                      default: 0
+    t.datetime "last_notif_email_sent"
+    t.integer  "admin_destroy_request",                default: 0
   end
 
   add_index "users", ["account_id"], name: "index_users_on_account_id", using: :btree

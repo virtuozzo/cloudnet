@@ -3,7 +3,8 @@ ActiveAdmin.register User do
   menu priority: 6
   
   permit_params :email, :full_name, :admin, :onapp_user, :onapp_email, :vm_max, :cpu_max,
-                :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended
+                :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended,
+                :notif_before_shutdown, :notif_before_destroy
 
   sidebar :control_panel_links do
     ul do
@@ -13,18 +14,6 @@ ActiveAdmin.register User do
     end
   end
 
-  # See permitted parameters documentation:
-  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # permit_params :list, :of, :attributes, :on, :model
-  #
-  # or
-  #
-  # permit_params do
-  #  permitted = [:permitted, :attributes]
-  #  permitted << :other if resource.something?
-  #  permitted
-  # end
 
   index do
     column :id
@@ -57,6 +46,11 @@ ActiveAdmin.register User do
       f.input :bandwidth_max
     end
 
+    f.inputs 'Notification Limits - Before Action on Servers' do
+      f.input :notif_before_shutdown
+      f.input :notif_before_destroy
+    end
+    
     f.actions
   end
 

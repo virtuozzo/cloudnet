@@ -9,6 +9,8 @@ CloudNet::Application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  #eager load negative balance protection
+  Dir[Rails.root.join('app/services/negative_balance_protection/**/*.rb')].each { |file| load file }
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false

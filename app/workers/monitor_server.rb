@@ -12,7 +12,7 @@ class MonitorServer
 
     pending_events = server.server_events.where.not(status: :complete)
 
-    if (server.state != :on && server.state != :off) || pending_events.size > 0
+    if (server.state != :on && server.state != :off && server.state != :blocked) || pending_events.size > 0
       MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server_id, user_id)
     end
   end

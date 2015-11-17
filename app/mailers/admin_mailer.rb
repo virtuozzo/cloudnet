@@ -33,4 +33,31 @@ class AdminMailer < ActionMailer::Base
     @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
     mail(to: SUPPORT_RECIPIENTS, subject: 'Cloud.net Server stuck in intermediate state')
   end
+  
+  def shutdown_action(user)
+    @user = user
+    @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
+    mail(
+      to: ADMIN_RECIPIENTS,
+      subject: "Cloud.net: Automatic shutdown - #{user.full_name}"
+    )
+  end
+  
+  def destroy_warning(user)
+    @user = user
+    @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
+    mail(
+      to: ENV['MAILER_ADMIN_RECIPIENTS'],
+      subject: "Cloud.net: DESTROY warning! - #{user.full_name}"
+    )
+  end
+  
+  def request_for_server_destroy(user)
+    @user = user
+    @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
+    mail(
+      to: ENV['MAILER_ADMIN_RECIPIENTS'],
+      subject: "Cloud.net: DESTROY request! - #{user.full_name}"
+    )
+  end
 end
