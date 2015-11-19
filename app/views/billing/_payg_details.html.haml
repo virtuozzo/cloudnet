@@ -21,11 +21,8 @@
           - if defined?(wizard)
             %p
               - days = current_user.account.payg_server_days(wizard)
-              - if days < 1
-                = "You do not have enough credit to run this server for more than 24 hours. Please top up your PAYG account"
-              - elsif days > 28
-                = "You have enough credit to run this server for more than"
-                %strong= "28 days"
+              - if days < 30
+                = "You do not have enough credit to run this server for more than 30 days. Please top up your PAYG account."
               - else
                 = "You have enough available balance to run this server for approximately"
                 %strong= "#{days.round(1)} days"

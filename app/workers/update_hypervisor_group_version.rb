@@ -9,9 +9,11 @@ class UpdateHypervisorGroupVersion
     hv_zones = squall.list
     hv_zones.each do |hv_zone|
       begin
-        location = Location.where(hv_group_id: hv_zone["id"]).first
-        next if location.nil?
-        location.update_attribute(:hv_group_version, hv_zone["supplier_version"])
+        locations = Location.where(hv_group_id: hv_zone["id"])
+        next if locations.nil?
+        locations.each do |location|
+          location.update_attribute(:hv_group_version, hv_zone["supplier_version"])
+        end
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { source: 'UpdateHypervisorGroupVersion', hv_zone: hv_zone["id"] })
       end
