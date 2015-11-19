@@ -1,6 +1,6 @@
 module NegativeBalanceProtection
   module Actions
-    class ShutdownAllServers
+    class DestroyAllServersConfirmed
       attr_reader :user
       
       def initialize(user)
@@ -8,19 +8,20 @@ module NegativeBalanceProtection
       end
       
       def perform
-        user.servers.each { |server| shut_down(server) }
+        return nil unless destroy_confirmed_by_admin?
+        user.servers.each { |server| destroy(server) }
       end
       
-      def shut_down(server)
-        ServerTasks.new.perform(:shutdown, user.id, server.id)
+      def destroy_confirmed_by_admin?
+        user.server_destroy_scheduled?
+      end
+      
+      def destroy(server)
+        ServerTasks.new.perform(:destroy, user.id, server.id)
+        server.create_credit_note_for_time_remaining if server.prepaid?
+        server.destroy_with_ip("not paid invoices")
       rescue => e
         log_error(e, server)
-      end
-      
-      #FIXME: remove if not used
-      def server_not_off?(server)
-        updated_server = ServerTasks.new.perform(:refresh_server, user.id, server.id)
-        updated_server.state != :off
       end
       
       def log_error(e, server)

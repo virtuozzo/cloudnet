@@ -12,7 +12,16 @@ module NegativeBalanceProtection
       end
       
       def perform
+        send_email_to_admin
+        set_email_sent_status
+      end
+      
+      def send_email_to_admin
         AdminMailer.request_for_server_destroy(user).deliver_now
+      end
+      
+      def set_email_sent_status
+        user.update_attribute(:admin_destroy_request, REQUEST_SENT_NOT_CONFIRMED)
       end
     end
   end

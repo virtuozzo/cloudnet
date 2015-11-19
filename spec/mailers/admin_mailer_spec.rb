@@ -108,9 +108,45 @@ RSpec.describe AdminMailer, :type => :mailer do
         expect(response).to match("Admin DESTROY request!")
         expect(response).to match("all servers of #{CGI.escapeHTML(user.full_name)} are scheduled to be destroyed.")
         expect(response).to include("negative balance on this account by #{balance}")
-        expect(response).to match("There were 12 warnings delivered to that user.")
+        expect(response).to match("There were 11 warnings delivered to that user.")
         expect(response).to match("profile: #{admin_user_url(user) }")
         expect(response).to match("log in to your admin account and confirm destroy")
+      end
+    end
+  end
+  
+  describe "destroy_action" do
+    let(:mail) { AdminMailer.destroy_action(user) }
+
+    it "fills mailer queue" do
+      mail.deliver_now
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("Cloud.net: Automatic destroy - #{user.full_name}")
+      expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
+      expect(mail.from).to eq([from.address])
+    end
+    
+    context "rendering" do
+      before(:each) do
+        send_mail :destroy_action, user
+      end
+      
+      it "assigns variables" do
+        expect(assigns(:user)).to eq user
+        expect(assigns(:pretty_negative_balance)).to eq "$0.00"
+      end
+    
+      it "renders the body" do
+        balance = assigns(:pretty_negative_balance)
+        
+        expect(response).to match("Admin DESTROY notification!")
+        expect(response).to match("The automatic destroy was performed on all servers of #{CGI.escapeHTML(user.full_name)}.")
+        expect(response).to include("negative balance on this account by #{balance}")
+        expect(response).to match("There were 11 warnings delivered to that user.")
+        expect(response).to match("profile: #{admin_user_url(user) }")
       end
     end
   end

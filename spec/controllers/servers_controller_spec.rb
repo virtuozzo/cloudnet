@@ -103,7 +103,7 @@ describe ServersController do
       describe 'editing server' do
         context 'before editing' do
           it 'should preset the server wizard to step 2' do
-            expect_any_instance_of(ServersController).to receive(:step2)
+            expect_any_instance_of(ServersController).to receive(:step2).and_call_original
             get :edit, id: server.id
           end
         end

@@ -5,7 +5,7 @@ module NegativeBalanceProtection
       #Adding admin confirmation before destroying servers
       def action_list
         case
-        when user_has_no_servers? then clear_notifications
+        when no_servers_or_positive_balance? then clear_notifications
         when admin_acknowledge_for_destroy? then admin_acknowledge_actions
         else super
         end

@@ -14,17 +14,22 @@ module NegativeBalanceProtection
     end
   
     def counter_actions
+      Rails.logger.info "actions: #{actions}"
       actions.each do |task|
         action = action(task)
         action.perform unless action.nil?
       end
       
       increment_notifications if increment_user_notifications?
-      refresh_servers if servers_shut_down?
+      clear_notifications if clear_notifications?
+      refresh_servers if servers_for_refresh?
     end
   
     def action(task)
-      ("Actions::"+task.to_s.camelize).constantize.new(user) rescue nil
+      ("NegativeBalanceProtection::Actions::" + 
+        task.to_s.camelize).constantize.new(user) 
+    rescue 
+      nil
     end
     
     def actions
@@ -39,12 +44,24 @@ module NegativeBalanceProtection
       user.increment!(:notif_delivered)
     end
     
-    def servers_shut_down?
-      actions.present? && actions.include?(:shutdown_all_servers)
+    def servers_for_refresh?
+      actions.present? && 
+      [
+        :shutdown_all_servers, 
+        :clear_notifications_delivered
+      ].any? {|a| actions.include?(a)}
     end
     
     def refresh_servers
       user.refresh_my_servers
+    end
+    
+    def clear_notifications?
+      actions.present? && actions.include?(:clear_notifications_delivered)
+    end
+    
+    def clear_notifications
+      user.clear_unpaid_notifications
     end
   end
 end

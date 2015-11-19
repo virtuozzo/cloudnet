@@ -4,8 +4,12 @@ class ServerSearchController < ApplicationController
   layout "public"
   
   def index
-    @event = current_user ? "online" : "offline"
+    set_event
     analytics_info unless monitoring_service?
+    if current_user.try(:servers_blocked?)
+      redirect_to billing_index_path, 
+          notice: "You have to pay your invoice before creating a new server"
+    end
   end
   
   def create
@@ -21,5 +25,10 @@ class ServerSearchController < ApplicationController
     {event: 'Marketplace - ' + @event,
       properties: UtmTracker.extract_properties(params)
     }
+  end
+  
+  def set_event
+    @event = current_user ? "online" : "offline"
+    @event = "blocked - Billing" if current_user.try(:servers_blocked?)
   end
 end

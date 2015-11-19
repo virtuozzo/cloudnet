@@ -60,4 +60,13 @@ class AdminMailer < ActionMailer::Base
       subject: "Cloud.net: DESTROY request! - #{user.full_name}"
     )
   end
+  
+  def destroy_action(user)
+    @user = user
+    @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
+    mail(
+      to: ADMIN_RECIPIENTS,
+      subject: "Cloud.net: Automatic destroy - #{user.full_name}"
+    )
+  end
 end

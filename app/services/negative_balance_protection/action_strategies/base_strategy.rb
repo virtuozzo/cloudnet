@@ -11,7 +11,7 @@ module NegativeBalanceProtection
       #All tests must work independently and cannot overlap
       def action_list
         case
-        when user_has_no_servers? then clear_notifications
+        when no_servers_or_positive_balance? then clear_notifications
         when before_shutdown_warnings? then before_shutdown_actions
         when perform_shutdown? then shutdown_servers_actions
         when before_destroy_warnings? then before_destroy_actions
@@ -56,8 +56,8 @@ module NegativeBalanceProtection
         hours_since_last_email >= MIN_HOURS_BETWEEN_EMAILS
       end
 
-      def user_has_no_servers?
-        user.servers.empty?
+      def no_servers_or_positive_balance?
+        user.servers.empty? or user.account.remaining_balance < 100
       end
       
       def no_actions

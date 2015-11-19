@@ -9,12 +9,10 @@
 <p>
   This is your <%= (@user.notif_delivered + 1).ordinalize %> warning.
   
-  Please login to the control panel at <a href="https://www.cloud.net">https://www.cloud.net</a> and
-  add new funds to your account.
+  Please login to the control panel at <a href="https://www.cloud.net">https://www.cloud.net</a> and add new funds to your account.
 
-    Please note that all your servers have been shut down and we will destroy them after <%= @user.notif_before_destroy %> days 
-  with a negative balance. If you have any questions or need any help, please contact our 
-  support staff via the help-desk within the control panel.
+    Please note that all your servers have been shut down and we will destroy them after <%= @user.notif_before_destroy %> warnings of a negative balance. 
+    If you have any questions or need any help, please contact our support staff via the help-desk within the control panel.
 </p>
 
 <p>

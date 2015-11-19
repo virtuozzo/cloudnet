@@ -2,9 +2,9 @@ require 'rails_helper'
 include NegativeBalanceProtection
 include NegativeBalanceProtection::Actions
 
-describe DestroyActionEmailToAdmin do
+describe ShutdownActionEmailToAdmin do
   let(:user) { FactoryGirl.create(:user) }
-  let(:scope) {DestroyActionEmailToAdmin.new(user)}
+  let(:scope) {ShutdownActionEmailToAdmin.new(user)}
   
   it "should initialize properly" do
     expect(scope.instance_variable_get(:@user)).to be
@@ -12,7 +12,7 @@ describe DestroyActionEmailToAdmin do
   
   it "should send shutdown action email to admin" do
     mailer = double('Mailer')
-    expect(AdminMailer).to receive(:destroy_action).
+    expect(AdminMailer).to receive(:shutdown_action).
                                   with(user).and_return(mailer)
     expect(mailer).to receive(:deliver_now)
     scope.perform

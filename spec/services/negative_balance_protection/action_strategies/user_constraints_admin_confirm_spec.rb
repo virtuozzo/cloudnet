@@ -251,12 +251,18 @@ describe UserConstraintsAdminConfirm do
           :clear_notifications_delivered
         ]}
         
+    before(:each) do
+      allow_any_instance_of(Account).
+          to receive(:remaining_invoice_balance).and_return(200_000)
+    end
+    
     it "should return actions for no servers" do
       user1 = FactoryGirl.create(:user)
       expect(strategy.new(user1).action_list).to eq no_servers_actions
     end
     
     it "should return actions for before_shutdown_actions" do
+      
       user1 = FactoryGirl.create(:user, notif_delivered: user.notif_before_shutdown - 1,
                 last_notif_email_sent: time_passed)
       FactoryGirl.create(:server, user: user1)
