@@ -154,8 +154,6 @@ class Server < ActiveRecord::Base
   
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+
   def supports_multiple_ips?
-    # Disabling this because of the Onapp bug re: multiple IPs
-    return false if Rails.env.production?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
   
