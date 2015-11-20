@@ -17,12 +17,6 @@ module NegativeBalanceProtection
         log_error(e, server)
       end
       
-      #FIXME: remove if not used
-      def server_not_off?(server)
-        updated_server = ServerTasks.new.perform(:refresh_server, user.id, server.id)
-        updated_server.state != :off
-      end
-      
       def log_error(e, server)
         ErrorLogging.new.track_exception(
           e,
