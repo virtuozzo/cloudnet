@@ -152,6 +152,7 @@ class Account < ActiveRecord::Base
 
   def remaining_balance
     remaining_invoice_balance - remaining_credit_balance
+    
   end
 
   def self.in_gb?(code)

@@ -1,0 +1,18 @@
+<p>
+  Admin DESTROY notification!
+</p>
+
+<p>
+  The automatic destroy was performed on all servers of <%= @user.full_name %>.
+  There is a negative balance on this account by <%= @pretty_negative_balance %>.
+</p>
+
+<p>
+  There were <%= @user.notif_delivered %> warnings delivered to that user.
+  Link to the user's profile: <%= admin_user_url(@user) %>
+</p>
+
+<p>
+  Thank you
+  Negative Balance Checker
+</p>

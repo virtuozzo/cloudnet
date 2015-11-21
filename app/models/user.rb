@@ -1,7 +1,10 @@
 class User < ActiveRecord::Base
   include PublicActivity::Common
   include User::Limitable
-
+  include NegativeBalanceProtection
+  include NegativeBalanceProtection::ActionStrategies
+  include NegativeBalanceProtection::Actions
+  
   acts_as_paranoid
 
   devise :otp_authenticatable, :database_authenticatable, :registerable, :confirmable, :lockable,
@@ -34,7 +37,7 @@ class User < ActiveRecord::Base
 
   scope :created_this_month, -> { where('created_at > ? AND created_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
-
+  scope :servers_to_be_destroyed, -> { where("notif_delivered - notif_before_destroy >= 0")}
   def to_s
     "#{full_name}"
   end
@@ -47,6 +50,43 @@ class User < ActiveRecord::Base
     !suspended? ? super : :user_suspended
   end
 
+  def act_for_negative_balance
+    strategy = UserConstraintsAdminConfirm
+    Protector.fire_counter_actions(self, strategy)
+  end
+  
+  def clear_unpaid_notifications
+    update(
+      notif_delivered: 0,
+      last_notif_email_sent: nil,
+      admin_destroy_request: RequestForServerDestroyEmailToAdmin::REQUEST_NOT_SENT
+      )
+  end
+  
+  def refresh_my_servers
+    servers.each do |server|
+      ServerTasks.new.perform(:refresh_server, id, server.id) rescue nil
+    end
+  end
+    
+  def server_destroy_scheduled?
+    admin_destroy_request == RequestForServerDestroyEmailToAdmin::REQUEST_SENT_CONFIRMED
+  end
+  
+  def confirm_automatic_destroy
+    update_attribute(:admin_destroy_request, 
+                    RequestForServerDestroyEmailToAdmin::REQUEST_SENT_CONFIRMED)
+  end
+  
+  def unconfirm_automatic_destroy
+    update_attribute(:admin_destroy_request, 
+                    RequestForServerDestroyEmailToAdmin::REQUEST_SENT_NOT_CONFIRMED)
+  end
+  
+  def servers_blocked?
+    notif_delivered > notif_before_shutdown
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions

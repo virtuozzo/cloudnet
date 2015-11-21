@@ -25,7 +25,7 @@ class Server < ActiveRecord::Base
   validate :template_should_match_location, on: :create
   validates_with HostnameValidator
 
-  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off], default: :building
+  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked], default: :building
   enum_field :payment_type, allowed_values: [:prepaid, :payg], default: :prepaid
 
   scope :prepaid, -> { where(payment_type: :prepaid) }
@@ -93,7 +93,7 @@ class Server < ActiveRecord::Base
 
   def detect_stuck_state
     detected_stuck = false
-    has_intermediate_state = !state.in?([:off, :on])
+    has_intermediate_state = !state.in?([:off, :on, :blocked])
     time_in_state = Time.zone.now - last_state_change
     if has_intermediate_state && time_in_state > MAX_TIME_FOR_INTERMEDIATE_STATES
       detected_stuck = true
@@ -154,8 +154,6 @@ class Server < ActiveRecord::Base
   
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+
   def supports_multiple_ips?
-    # Disabling this because of the Onapp bug re: multiple IPs
-    return false if Rails.env.production?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
   

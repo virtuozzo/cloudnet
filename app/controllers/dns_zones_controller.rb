@@ -4,7 +4,6 @@ class DnsZonesController < ApplicationController
   def index
     @domains = current_user.dns_zones.order(id: :asc)
     Analytics.track(current_user, event: 'Viewed DNS Zones')
-
     respond_to do |format|
       format.html { @domains = @domains.page(params[:page]).per(10) }
       format.json { render json: @domains }

@@ -16,19 +16,6 @@ ActiveAdmin.register Server do
       li link_to('Tickets', tickets_path)
     end
   end
-  
-  # See permitted parameters documentation:
-  # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # permit_params :list, :of, :attributes, :on, :model
-  #
-  # or
-  #
-  # permit_params do
-  #  permitted = [:permitted, :attributes]
-  #  permitted << :other if resource.something?
-  #  permitted
-  # end
 
   index do
     column :id
@@ -42,6 +29,9 @@ ActiveAdmin.register Server do
     column :bandwidth
     column :user
     column :location
+    column "Forecasted Rev" do |server|
+      (server.forecasted_rev / Invoice::MILLICENTS_IN_DOLLAR).round(2)
+    end
     column :primary_ip_address
     column :deleted_at
 
