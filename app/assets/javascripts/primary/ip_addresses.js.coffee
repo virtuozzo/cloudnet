@@ -36,7 +36,7 @@
     tick(serverId)
     $scope.currentPage      = 0;
     $scope.pageSize         = 10;
-    $scope.originalIpsCount = 1;
+    $scope.originalIpsCount = document.getElementById('initial_ips_count').value;
 
   return
 ]

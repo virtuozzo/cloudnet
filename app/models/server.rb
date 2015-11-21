@@ -9,7 +9,7 @@ class Server < ActiveRecord::Base
   MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
   
   # Maximum number of IPs that can be added to a server
-  MAX_IPS = 2
+  MAX_IPS = 4
 
   belongs_to :user
   belongs_to :template
