@@ -37,8 +37,8 @@ RSpec.describe IpAddressesController, :type => :controller do
         expect(Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, @server.id])).to eq(2)
       end
       
-      it 'should not allow more than 2 IP addresses' do
-        Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], 2)
+      it 'should not allow more than MAX_IPS limit' do
+        Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], Server::MAX_IPS)
         post :create, { server_id: @server.id }
         expect(flash[:alert]).to eq('You cannot add anymore IP addresses to this server.')
       end
