@@ -15,7 +15,7 @@ class IpAddressTasks < BaseTasks
     ip_addresses.each do |ip_address|
       ip_attrs = ip_address['ip_address']
       primary = server.server_ip_addresses.empty?
-      server.server_ip_addresses.where("identifier = ? OR address = ?", ip_address['id'].to_s, ip_attrs['address'].to_s).first_or_initialize(
+      server_ip = server.server_ip_addresses.where("identifier = ? OR address = ?", ip_address['id'].to_s, ip_attrs['address'].to_s).first_or_initialize(
         address: ip_attrs['address'].to_s,
         identifier: ip_address['id'].to_s,
         netmask: ip_attrs['netmask'].to_s,
@@ -23,7 +23,9 @@ class IpAddressTasks < BaseTasks
         broadcast: ip_attrs['broadcast'].to_s,
         gateway: ip_attrs['gateway'].to_s,
         primary: primary
-      ).save
+      )
+      Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, server.id]) if server_ip.new_record?
+      server_ip.save
     end
     # Finally, remove any non-existing IP addresses
     # server.server_ip_addresses.where(["identifier NOT IN (?)", ip_addresses.map {|ip| ip["id"].to_s}]).map(&:destroy)

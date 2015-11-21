@@ -1,5 +1,6 @@
 - breadcrumb :ip_addresses, @server
 - title "IP Addresses"
+= hidden_field_tag :initial_ips_count, @ip_addresses_count
 
 = render partial: 'servers/nav', locals: { server: @server }
 %div{data: {"ng-controller" => "ServerIpsCtrl", "ng-init" => "init(#{@server.id})"}}
@@ -37,10 +38,10 @@
           - if Rails.cache.read([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
             %tr{data: {"ng-hide" => "addedNewIp()"}}
               %td{colspan: "6"}= "Loading..."
-
-          %tr{data: {"ng-if" => "ips && ips.length === 0"}}
-            %td.no-data{colspan: "6"}
-              %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any IP Addresses." }}
+          - else
+            %tr{data: {"ng-if" => "ips && ips.length === 0"}}
+              %td.no-data{colspan: "6"}
+                %p {{ disabled(server) ? "Please wait until your server is built." : "This server does not have any IP Addresses." }}
 
     .jg-widget-footer.jg-pagination
       .jg-pagination-controls{"ng-show" => "ips"}

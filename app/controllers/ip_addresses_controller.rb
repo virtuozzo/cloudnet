@@ -8,6 +8,7 @@ class IpAddressesController < ApplicationController
       format.html { 
         check_multiple_ip_support
         @ip_address = @server.server_ip_addresses.new 
+        @ip_addresses_count = @server.server_ip_addresses.count
       }
       format.json { @ip_addresses = @server.server_ip_addresses.order(primary: :desc, id: :asc) }
     end
