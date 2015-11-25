@@ -20,12 +20,12 @@
 
           - if defined?(wizard)
             %p
-              - days = current_user.account.payg_server_days(wizard)
-              - if days < 30
-                = "You do not have enough credit to run this server for more than 30 days. Please top up your PAYG account."
-              - else
+              - if wizard.enough_wallet_credit?
+                - days = current_user.account.wallet_server_days(wizard)
                 = "You have enough available balance to run this server for approximately"
                 %strong= "#{days.round(1)} days"
+              - else
+                = "You do not have enough credit to run this server until next invoice date. Please top up your PAYG account."
               .small
                 (this does not include any other PAYG servers which may be running, any coupon code discounts which may be applied to your account or any VAT you may need to pay)
         .pure-u-1-3

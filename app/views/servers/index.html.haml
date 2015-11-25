@@ -43,7 +43,7 @@
                     %li
                       %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/start_up", "ng-show" => "server.state == 'off'"} Start Up Server
                     %li
-                      %a{"data-method" => "get", "href" => "/servers/{{ server.id }}/edit"} Edit Server
+                      %a{"href" => "/servers/{{ server.id }}/edit"} Edit Server
 
           %tr{data: {"ng-if" => "servers && servers.length === 0"}}
             %td.no-data{colspan: "7"}

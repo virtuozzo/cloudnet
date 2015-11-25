@@ -31,8 +31,13 @@ class ServerCommonController < ApplicationController
   end
 
   def payg
+    server = Server.find(params[:id]) if params[:id]
     process_server_wizard
-
+    if server
+      @wizard_object.location_id = server.location_id
+      @wizard_object.template_id = server.template.id
+      @wizard_object.existing_server_id = server.id
+    end
     render partial: 'billing/payg_details', locals: { payg: payg_details, wizard: @wizard_object }
   end
 

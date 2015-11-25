@@ -18,12 +18,7 @@ class ServerWizardsController < ServerCommonController
     process_server_wizard
 
     return unless meets_minimum_server_requirements?
-    create_task =
-    if @wizard_object.prepaid?
-      CreateServerTask.new(@wizard_object, current_user)
-    else
-      CreatePaygServerTask.new(@wizard_object, current_user)
-    end
+    create_task = CreateServerTask.new(@wizard_object, current_user)
 
     if @wizard.save && create_task.process
       create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }

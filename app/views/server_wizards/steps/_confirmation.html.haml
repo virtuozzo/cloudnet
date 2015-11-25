@@ -3,6 +3,7 @@
 %script
   - r = render file: 'billing/cards.json', formats: [:json]
   = raw "var account_cards = #{r}" 
+  = raw "var serverId = #{@server.id}" if @server
 
 %ul.jg-step-box.pure-g-r
   = render partial: "server_wizards/steps/helpers/location_summary"
@@ -38,7 +39,7 @@
 
   - unless @server && @server.payment_type == :prepaid
     #step-wizard-payg
-      = render partial: 'server_wizards/steps/partials/confirm_payg', locals: { costs: @payg_costs, payg: @payg, f: f, coupon_multiplier: @coupon_multiplier }
+      = render partial: 'server_wizards/steps/partials/confirm_payg', locals: { costs: @costs, payg: @payg, f: f, coupon_multiplier: @coupon_multiplier }
 
 / %ul.jg-step-box.pure-g-r
 /   %li.disabled

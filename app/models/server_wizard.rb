@@ -29,7 +29,7 @@ class ServerWizard
   validates_with HostnameValidator, if: :step2?
 
   validate :valid_card?, if: :step3?
-  validate :enough_payg_credit?, if: :step3?
+  validate :validate_wallet_credit, if: :step3?
 
   validates :payment_type, inclusion: { in: %w(prepaid payg) }
 
@@ -164,7 +164,8 @@ class ServerWizard
     end
     # Calculate how much to charge for this server. Calculates time remaining in month and
     # user's credit notes. Does not actually make the charge, that happens later.
-    auth_charge
+    auth_charge if prepaid?
+    prepare_payment_receipts_charge if payg?
 
     if type == :create
       # Build the server through the Onapp API
@@ -175,7 +176,8 @@ class ServerWizard
     end
 
     # Actually make the charge against a card and fill in the relevant paperwork
-    make_charge
+    make_charge if prepaid?
+    charge_payment_receipts if payg?
 
     @newly_built_server
   rescue WizardError
@@ -301,6 +303,20 @@ class ServerWizard
     matches
   end
 
+  def enough_wallet_credit?    
+    server = Server.find existing_server_id if !existing_server_id.nil?
+    if server
+      credit = generate_credit_item(CreditNote.hours_till_next_invoice(user.account))
+      net_cost = credit[:net_cost]
+      net_cost = 0 if server.in_beta?
+    else
+      net_cost = 0
+    end
+    
+    billable_today = cost_for_hours Invoice.hours_till_next_invoice(user.account)
+    (user.account.available_wallet_balance + net_cost).to_f > billable_today.to_f
+  end
+
   private
 
   def wizard_params
@@ -404,10 +420,9 @@ class ServerWizard
       errors.add(:base, 'Card is not valid or not present')
     end
   end
-
-  def enough_payg_credit?
-    if payg? && user.account.payg_server_days(self) < 30
-      errors.add(:base, 'You do not have enough PAYG credit to run this server for more than 30 days. Please add more PAYG credit.')
-    end
+  
+  def validate_wallet_credit
+    return true unless payg?
+    errors.add(:base, 'You do not have enough credit to run this server until next invoice date. Please add more PAYG credit.') unless enough_wallet_credit?
   end
 end

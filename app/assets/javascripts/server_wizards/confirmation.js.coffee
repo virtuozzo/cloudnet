@@ -165,9 +165,10 @@ $ ->
         $('#jg-payg-confirmation-costs').html(response)
 
   $("#jg-payg-widget").on 'payg-topup-complete', (event) ->
+    urlPayg = if (serverId?) then "/servers/#{serverId}/create/payg" else "/servers/create/payg"
     $.ajax 
       type: "GET",
-      url: "/servers/create/payg",
+      url: urlPayg,
       dataType: "html",
       success: (response) ->
         $("#jg-payg-widget").html(response)

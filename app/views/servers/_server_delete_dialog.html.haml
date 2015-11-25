@@ -17,33 +17,30 @@
               below (without the quotation marks)
           .form-group.pure-u-1
             = text_field_tag :destroy_server_input, nil, placeholder: 'Type words in here', class: 'form-control focus', required: true, data: {expected: "#{expected_text}"}
-          - if server.prepaid?
-            %p
-              We will credit your account with
-              %strong#server-delete-credit (calculating...) 
-              (plus any EU VAT you may have paid if applicable. This amount does not include any coupons you may have used to pay for this server)
+          %p
+            We will credit your account with
+            %strong#server-delete-credit (calculating...) 
+            (plus any EU VAT you may have paid if applicable. This amount does not include any coupons you may have used to pay for this server)
       
         .modal-footer
           = form_tag server_path(server.id), method: :delete, role: 'form', class: 'jg-delete-server-form' do
             %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
             = button_tag "Destroy Server", disabled: true, id: 'destroy_server_button', class: 'btn jg-submit-button'
 
-- if server.prepaid?
-  :coffee
-    millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}
-  
-    formatCurrency = (data) ->
-      value = data / millicents_dollar
-      money = accounting.formatMoney(value, "$", 2, ",")
-      return money
-  
-    $ ->  
-      # Destroy Servers Calculation
-      $("#destroy-server").on 'show.bs.modal', (e) -> 
-        $.ajax 
-          type: "GET",
-          url: '/servers/#{server.id}/calculate_credit',
-          dataType: "JSON",
-          success: (response) ->
-            $("#server-delete-credit").html(formatCurrency(response.credit))
-    
+:coffee
+  millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}
+
+  formatCurrency = (data) ->
+    value = data / millicents_dollar
+    money = accounting.formatMoney(value, "$", 2, ",")
+    return money
+
+  $ ->  
+    # Destroy Servers Calculation
+    $("#destroy-server").on 'show.bs.modal', (e) -> 
+      $.ajax 
+        type: "GET",
+        url: '/servers/#{server.id}/calculate_credit',
+        dataType: "JSON",
+        success: (response) ->
+          $("#server-delete-credit").html(formatCurrency(response.credit))

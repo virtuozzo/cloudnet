@@ -38,6 +38,20 @@ class ChargeInvoicesTask < BaseTask
 
   end
 
+  def create_payment_receipt_charges(account, invoice, payment_receipts)
+    payment_receipts.each do |k, v|
+      source = PaymentReceipt.find(k)
+      Charge.create(source: source, invoice: invoice, amount: v)
+      account.create_activity :payment_receipt_charge, owner: @user, params: { invoice: invoice.id, amount: v, payment_receipt: k }
+    end
+
+    if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && payment_receipts.present?
+      invoice.update(state: :partially_paid)
+    elsif Invoice.milli_to_cents(invoice.remaining_cost) <= 0
+      invoice.update(state: :paid)
+    end
+  end
+
   private
 
   def charge_primary_card_for_invoices(account, invoices, card)
@@ -65,20 +79,6 @@ class ChargeInvoicesTask < BaseTask
     end
 
     if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && credit_notes.present?
-      invoice.update(state: :partially_paid)
-    elsif Invoice.milli_to_cents(invoice.remaining_cost) <= 0
-      invoice.update(state: :paid)
-    end
-  end
-
-  def create_payment_receipt_charges(account, invoice, payment_receipts)
-    payment_receipts.each do |k, v|
-      source = PaymentReceipt.find(k)
-      Charge.create(source: source, invoice: invoice, amount: v)
-      account.create_activity :payment_receipt_charge, owner: @user, params: { invoice: invoice.id, amount: v, payment_receipt: k }
-    end
-
-    if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && payment_receipts.present?
       invoice.update(state: :partially_paid)
     elsif Invoice.milli_to_cents(invoice.remaining_cost) <= 0
       invoice.update(state: :paid)

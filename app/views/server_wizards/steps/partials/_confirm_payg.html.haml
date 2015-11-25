@@ -9,7 +9,7 @@
 
   .jg-widget-footer.actions.clearfix
     .resources-total.pure-g.no-costs#jg-payg-confirmation-costs
-      = render partial: "server_wizards/steps/partials/payg_confirmation_costs", locals: { costs: costs, coupon_multiplier: coupon_multiplier }
+      = render partial: "server_wizards/steps/partials/prepaid_confirmation_costs", locals: { costs: costs, coupon_multiplier: coupon_multiplier }
 
     %ul.jg-widget-controls
       %li= f.button @submit_button_title, class: 'btn jg-submit-button', id: "jg-payg-create-server"

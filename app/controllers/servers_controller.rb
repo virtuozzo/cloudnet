@@ -26,9 +26,10 @@ class ServersController < ServerCommonController
     process_server_wizard
     @wizard_object.location_id = @server.location_id
     @wizard_object.submission_path = edit_server_path @server
+    @wizard_object.existing_server_id = @server.id
     @wizard.save
     # Prob not the right way to check, but it's unclear how else to do it
-    if params[:server_wizard] && params[:server_wizard][:payment_type]
+    if @wizard_object.current_step == 3 && @wizard_object.errors.blank? && params[:server_wizard] && params[:server_wizard][:payment_type]
       schedule_edit
       flash[:info] = 'Server scheduled for updating'
       redirect_to server_path(@server)
@@ -37,7 +38,7 @@ class ServersController < ServerCommonController
       step3
     else
       step2
-    
+  
       #FIXME: Not allowing to rebuild into Windows until onapp core team fix the problem
       @templates.reject! {|k,v| k.split("-")[0] == "windows"}
     end
@@ -127,11 +128,7 @@ class ServersController < ServerCommonController
   end
 
   def destroy
-    destroy = if @server.prepaid?
-                DestroyServerTask.new(@server, current_user, request.remote_ip)
-              else
-                DestroyPaygServerTask.new(@server, current_user, request.remote_ip)
-    end
+    destroy = DestroyServerTask.new(@server, current_user, request.remote_ip)
 
     if destroy.process && destroy.success?
       log_activity :destroy

@@ -139,6 +139,64 @@ module Billing
       @build_errors.push("Could not authorize charge using the card you've selected, please try again")
       raise ServerWizard::WizardError
     end
+    
+    def prepare_payment_receipts_charge
+      @charge = nil
+      @remaining_cost = calculate_amount_to_charge
+      if @remaining_cost > user.account.available_payg_balance
+        user.account.create_activity(
+          :charge_wallet_failed,
+          owner: user,
+          params: {
+            amount: Invoice.milli_to_cents(@remaining_cost),
+            reason: "Insufficient wallet funds"
+          }
+        )
+        @build_errors.push("Could not charge from Wallet, please try again")
+        raise ServerWizard::WizardError
+      end
+    end
+    
+    def charge_payment_receipts
+      if @remaining_cost > 0
+        payment_receipts_available = user.account.payment_receipts.with_remaining_cost
+        @payment_receipts_used = PaymentReceipt.charge_account(payment_receipts_available, @remaining_cost)
+        user.account.create_activity :charge_payment_account, owner: user, params: { notes: @payment_receipts_used } unless @payment_receipts_used.empty?
+      end
+      
+      charging_paperwork
+    rescue StandardError => e
+      # Clean up the lingering invoice and server
+      @invoice.save
+      @invoice.really_destroy!
+
+      if @newly_built_server
+        @newly_built_server.destroy
+      else
+        # Undo the server resize
+        edit(
+          server_wizard: {
+            name: @old_server_specs.name,
+            cpus: @old_server_specs.cpus,
+            memory: @old_server_specs.memory,
+            disk_size: @old_server_specs.disk_size
+          }
+        )
+        request_server_edit
+      end
+
+      ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'CreateServerTask' })
+      @build_errors.push('Could not charge your Wallet for the invoice amount. Please try again')
+      user.account.create_activity(
+        :charge_wallet_failed,
+        owner: user,
+        params: {
+          invoice: @invoice.id,
+          amount: @remaining_cost
+        }
+      )
+      raise ServerWizard::WizardError
+    end
 
     # Calculate how much the server is going to cost for the rest of the month and whether that cost
     # can be reduced with any remaining credit notes.
@@ -241,7 +299,12 @@ module Billing
 
       # Make a note of charges made for financial reports
       create_credit_note_charges
+      create_payment_receipt_charges if @payment_receipts_used.present?
       create_card_charges if @charge.present?
+    end
+    
+    def create_payment_receipt_charges
+      ChargeInvoicesTask.new(user, [@invoice], true).create_payment_receipt_charges(user.account, @invoice, @payment_receipts_used)
     end
 
     def create_credit_note_charges
