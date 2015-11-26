@@ -44,7 +44,7 @@
     $timeout (() -> tick(serverId)), 10 * 1000
 
   $scope.disabled = (server) ->
-    server.state != 'on' && server.state != 'off'
+    server.state != 'on' && server.state != 'off' && server.state != 'blocked'
 
   $scope.init = (serverId) ->
     tick(serverId)

@@ -1,0 +1,20 @@
+<p>
+  Admin DESTROY request!
+</p>
+
+<p>
+  Please, be informed that all servers of <%= @user.full_name %> are scheduled to be destroyed.
+  There is a negative balance on this account by <%= @pretty_negative_balance %>.
+</p>
+
+<p>
+  There were <%= @user.notif_delivered %> warnings delivered to that user.
+  Link to the user's profile: <%= admin_user_url(@user) %>
+
+  Please log in to your admin account and confirm destroy action on this user's servers.
+</p>
+
+<p>
+  Thank you
+  Negative Balance Checker
+</p>

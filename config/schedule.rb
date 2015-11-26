@@ -53,9 +53,9 @@ every 1.day, at: '2:00 am' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :daily)'
 end
 
-# Sending warning emails to users with negative balance
+# Actions against users with negative balance
 every 1.day, at: '2:30 am' do
-  runner 'NegativeBalanceCheckerTask.perform_in(4.minutes)'
+  runner 'NegativeBalanceChecker.perform_in(4.minutes)'
 end
 
 # Prepare values for forecast revenue

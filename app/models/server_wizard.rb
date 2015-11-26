@@ -406,8 +406,8 @@ class ServerWizard
   end
 
   def enough_payg_credit?
-    if payg? && user.account.payg_server_days(self) < 1
-      errors.add(:base, 'You do not have enough PAYG credit to run this server for more than 24 hours. Please add more PAYG credit')
+    if payg? && user.account.payg_server_days(self) < 30
+      errors.add(:base, 'You do not have enough PAYG credit to run this server for more than 30 days. Please add more PAYG credit.')
     end
   end
 end
