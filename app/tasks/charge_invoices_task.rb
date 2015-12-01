@@ -18,7 +18,7 @@ class ChargeInvoicesTask < BaseTask
     end
 
     # We're done if everything is paid off
-    @invoices.reload
+    @invoices.each(&:reload)
     return if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
 
     # Now try any cash that's credited in the user's account
