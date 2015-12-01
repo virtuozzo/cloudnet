@@ -22,20 +22,12 @@ class ChargeInvoicesTask < BaseTask
     return if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
 
     # Now try any cash that's credited in the user's account
-    invoices_to_card_charge = []
     @invoices.each do |invoice|
       payment_receipts = account.payment_receipts.with_remaining_cost
       notes_used = PaymentReceipt.charge_account(payment_receipts, invoice.remaining_cost)
       account.create_activity :charge_payment_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
       create_payment_receipt_charges(account, invoice, notes_used)
-      invoices_to_card_charge << invoice if Invoice.milli_to_cents(invoice.remaining_cost) > 0
     end
-
-    # Finally try to charge a credit card
-    if Invoice.milli_to_cents(invoices_to_card_charge.sum(&:remaining_cost)) >= Invoice::MIN_CHARGE_AMOUNT && card.present?
-      charge_primary_card_for_invoices(account, invoices_to_card_charge, card)
-    end
-
   end
 
   def create_payment_receipt_charges(account, invoice, payment_receipts)
