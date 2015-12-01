@@ -100,8 +100,6 @@ class ServerCommonController < ApplicationController
   end
 
   def payg_details
-    a = current_user.account
-    { balance: a.payg_balance, available: a.available_payg_balance, used: a.used_payg_balance }
   end
 
   def track_analytics_for_server(server)

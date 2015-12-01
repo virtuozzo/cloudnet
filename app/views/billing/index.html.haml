@@ -6,7 +6,7 @@
     %h2.pure-u-1-2.jg-icon.icon-tickets Invoices, Credit Notes & Payment Receipts
     %ul.pure-u-1-2.jg-widget-controls
       %li.billing-balance{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }
-        Your Balance:
+        Wallet Balance:
         %b= remaining_balance(current_user)
 
   .jg-widget-body.pure-u-1
@@ -46,6 +46,4 @@
 #jg-payg-widget
   = render partial: 'payg_details', locals: { payg: @payg }
 = render partial: 'payg/payg_popover'
-= javascript_include_tag "payg/payg_pie"
-
 = javascript_include_tag 'billing/billing_payg'

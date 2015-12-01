@@ -69,7 +69,6 @@ $ ->
   chooseActiveTab = (tab) ->
     if tab == "#step-wizard-payg"
       $(payment_type).val('payg')
-      createPaygPie(payg_stats, true)
     else
       $(payment_type).val('prepaid')
 
@@ -172,4 +171,3 @@ $ ->
       dataType: "html",
       success: (response) ->
         $("#jg-payg-widget").html(response)
-        createPaygPie(payg_stats, true)

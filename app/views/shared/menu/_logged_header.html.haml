@@ -30,7 +30,7 @@
             %li
               = link_to 'Manage Account', edit_user_registration_path, {class: 'jg-icon icon-user'}
             %li
-              = link_to "Your Balance: #{remaining_balance(current_user)}", billing_index_path, {class: 'jg-icon icon-wallet' }
+              = link_to "Wallet Balance: #{remaining_balance(current_user)}", billing_index_path, {class: 'jg-icon icon-wallet' }
             %li
               = link_to 'Sign out', destroy_user_session_path, {class: 'jg-icon icon-signout', :method => :delete }
 

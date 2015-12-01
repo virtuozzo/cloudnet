@@ -106,9 +106,9 @@
 
       %ul.jg-widget-controls
         - if @server
-          %li= f.button @wizard_object.last_step? ? false: "Go to payment", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? false : "Update Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
         - else
-          %li= f.button @wizard_object.last_step? ? false: "Go to Step #{@wizard_object.current_step + 1}", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? false : "Create Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
           %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button cancel'
 
 / %ul.jg-step-box.pure-g-r

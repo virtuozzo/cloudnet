@@ -1,7 +1,7 @@
 class Account < ActiveRecord::Base
   include PublicActivity::Common
   include Account::Couponable
-  include Account::Payg
+  include Account::Wallet
 
   acts_as_paranoid
 
@@ -151,8 +151,7 @@ class Account < ActiveRecord::Base
   end
 
   def remaining_balance
-    remaining_invoice_balance - remaining_credit_balance
-    
+    remaining_invoice_balance - wallet_balance
   end
 
   def self.in_gb?(code)

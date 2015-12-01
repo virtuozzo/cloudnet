@@ -1,15 +1,20 @@
 require 'rails_helper'
 
 describe ServerWizard do
-  let(:server_wizard) { FactoryGirl.create(:server_wizard_with_billing_card) }
+  let(:server_wizard) { FactoryGirl.create(:server_wizard, :with_wallet) }
 
   it 'should be valid' do
     expect(server_wizard).to be_valid
     expect(server_wizard.id).to be_nil
   end
 
+  it 'should have two steps' do
+    expect(server_wizard.total_steps).to eq(2)
+  end
+  
   it 'should have three steps' do
-    expect(ServerWizard.total_steps).to eq(3)
+    server_wizard = FactoryGirl.create(:server_wizard)
+    expect(server_wizard.total_steps).to eq(3)
   end
 
   it "isn't valid without a location" do
@@ -176,16 +181,13 @@ describe ServerWizard do
       server_wizard.current_step = 3
     end
 
-    it 'should allow a valid card' do
-      @card = FactoryGirl.create(:billing_card, account: server_wizard.user.account, fraud_verified: true)
-      server_wizard.card = @card
+    it 'should allow valid Wallet funds' do
+      server_wizard = FactoryGirl.create(:server_wizard, :with_wallet)
       expect(server_wizard).to be_valid
     end
 
-    it "shouldn't allow an empty/invalid card" do
-      server_wizard.card_id = nil
-      expect(server_wizard).not_to be_valid
-      server_wizard.card_id = -1
+    it "shouldn't allow an empty Wallet" do
+      server_wizard = FactoryGirl.create(:server_wizard)
       expect(server_wizard).not_to be_valid
     end
   end

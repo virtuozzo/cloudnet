@@ -137,6 +137,8 @@ describe ServersController do
               memory: 4096,
               disk_size: 10
             )
+            
+            @payment_receipts = FactoryGirl.create_list(:payment_receipt, 2, account: @current_user.account)
                                  
             allow(Payments).to receive_messages(new: @payments)
             allow(MonitorServer).to receive(:perform_async).and_return(true)
@@ -160,17 +162,15 @@ describe ServersController do
             RSpec::Matchers.define :pretty_total do |expected|
               match { |actual| Invoice.pretty_total(expected) == Invoice.pretty_total(actual) }
             end
-            expect(@payments).to receive(:auth_charge)
-              .with(@current_user.account.gateway_id, @card.processor_token, pretty_total(cost_difference_cents))
-              .and_return(charge_id: 12_345)
+            expect(@payments).to_not receive(:auth_charge)
 
             expect(@edit_server_task).to receive(:edit_server)
             session[:server_wizard_params] = {
-              cpus: @new_server.cpus,
-              memory: @new_server.memory,
-              disk_size: @new_server.disk_size
+              cpus: @server.cpus,
+              memory: @server.memory,
+              disk_size: @server.disk_size
             }
-            params = { id: @server.id, server_wizard: { payment_type: 'prepaid' } }
+            params = { id: @server.id, server_wizard: { current_step: 2, name: @new_server.name, hostname: @new_server.hostname, template_id: @server.template_id, memory: @new_server.memory, cpus: @new_server.cpus, disk_size: @new_server.disk_size }}
             post :edit, params
             @server.reload
             expect(@server.cpus).to eq @new_server.cpus
@@ -190,7 +190,7 @@ describe ServersController do
               memory: 2096,
               disk_size: 10
             }
-            params = { id: @server.id, server_wizard: { payment_type: 'prepaid' } }
+            params = { id: @server.id, server_wizard: { current_step: 2, name: @new_server.name, hostname: @new_server.hostname, template_id: @server.template_id, memory: @new_server.memory, cpus: @new_server.cpus, disk_size: @new_server.disk_size }, template: @server.template_id }
             post :edit, params
             expect(response).to redirect_to(servers_path)
             expect(flash[:warning]).to eq('Could not schedule update of server. Please try again later')

@@ -28,7 +28,6 @@ class ServerWizard
   validates :name, length: { minimum: 2, maximum: 48 }, if: :step2?
   validates_with HostnameValidator, if: :step2?
 
-  validate :valid_card?, if: :step3?
   validate :validate_wallet_credit, if: :step3?
 
   validates :payment_type, inclusion: { in: %w(prepaid payg) }
@@ -43,9 +42,8 @@ class ServerWizard
     end
   end
 
-
-  def self.total_steps
-    3
+  def total_steps
+    enough_wallet_credit? ? [current_step, 2].max : 3
   end
 
   def current_step_name
@@ -142,7 +140,7 @@ class ServerWizard
       template:               template,
       location:               location,
       bandwidth:              bandwidth,
-      payment_type:           payment_type.to_sym
+      payment_type:           'prepaid'
     )
   end
 
@@ -155,6 +153,7 @@ class ServerWizard
     create_or_edit_server(:edit)
   end
 
+  # Returns Server object for type = :create and true for :edit
   def create_or_edit_server(type = :create)
     if type == :edit
       # Issue a credit note for the server's old specs for the time remaining during this
@@ -162,31 +161,51 @@ class ServerWizard
       # new.
       @credit_note_for_time_remaining = @old_server_specs.create_credit_note_for_time_remaining
     end
-    # Calculate how much to charge for this server. Calculates time remaining in month and
-    # user's credit notes. Does not actually make the charge, that happens later.
-    auth_charge if prepaid?
-    prepare_payment_receipts_charge if payg?
-
+    
+    # Generate invoice, use credit notes if any, finally charge payment receipts
+    charge_wallet
+    
     if type == :create
       # Build the server through the Onapp API
       request_server_build
+      charging_paperwork
+      @newly_built_server
     else
       # Edit the server through the Onapp API
       request_server_edit
+      charging_paperwork
+      true
     end
-
-    # Actually make the charge against a card and fill in the relevant paperwork
-    make_charge if prepaid?
-    charge_payment_receipts if payg?
-
-    @newly_built_server
   rescue WizardError
     nil # Simply a means to abort the server creation process at any point
   ensure
     if @build_errors.length > 0
-      @credit_note_for_time_remaining.destroy if @credit_note_for_time_remaining
-      CreditNote.refund_used_notes(@notes_used)
-      user.account.create_activity :refund_used_notes, owner: user, params: { notes: @notes_used }
+      # Refund any payment receipts used
+      if @payment_receipts_used.present?
+        PaymentReceipt.refund_used_notes(@payment_receipts_used)
+        user.account.create_activity :refund_used_payment_receipts, owner: user, params: { notes: @payment_receipts_used }
+      end
+    
+      # Refund any credit notes used
+      if @notes_used.present?
+        CreditNote.refund_used_notes(@notes_used)
+        user.account.create_activity :refund_used_notes, owner: user, params: { notes: @notes_used }
+      end
+    
+      # Clean up the lingering invoice and server
+      if @invoice
+        @invoice.save
+        @invoice.really_destroy!
+      end
+      
+      # Delete any credit notes given for server edit
+      if @credit_note_for_time_remaining
+        @credit_note_for_time_remaining.destroy
+        user.account.create_activity :delete_credit_note, owner: user, params: { notes: @credit_note_for_time_remaining }
+      end
+
+      # Undo server creation
+      @newly_built_server.destroy if @newly_built_server
     end
   end
 
@@ -199,13 +218,12 @@ class ServerWizard
     end
 
     @newly_built_server = save_server_details(remote, user)
-  rescue Faraday::Error::ClientError => e
+  rescue Faraday::Error::ClientError, StandardError => e
     ErrorLogging.new.track_exception(
       e,
       extra: {
         current_user: user,
-        source: 'CreateServerTask',
-        faraday: e.response
+        source: 'CreateServerTask'
       }
     )
     @build_errors.push('Could not create server on remote system. Please try again later')
@@ -216,7 +234,7 @@ class ServerWizard
     return unless server_changed?
     
     ServerEdit.perform_async(user.id, existing_server_id,
-              disk_resize, template_reload, cpu_mem_changes) 
+              disk_resize, template_reload, cpu_mem_changes)
   end
 
   # TODO: old_server_spec can be taken from onapp API
@@ -303,10 +321,12 @@ class ServerWizard
     matches
   end
 
-  def enough_wallet_credit?    
+  def enough_wallet_credit?
+    return false if template.nil?
+    return false if user.nil?
     server = Server.find existing_server_id if !existing_server_id.nil?
     if server
-      credit = generate_credit_item(CreditNote.hours_till_next_invoice(user.account))
+      credit = server.generate_credit_item(CreditNote.hours_till_next_invoice(user.account))
       net_cost = credit[:net_cost]
       net_cost = 0 if server.in_beta?
     else
@@ -314,7 +334,7 @@ class ServerWizard
     end
     
     billable_today = cost_for_hours Invoice.hours_till_next_invoice(user.account)
-    (user.account.available_wallet_balance + net_cost).to_f > billable_today.to_f
+    ((user.account.remaining_balance * -1) + net_cost).to_f > billable_today.to_f
   end
 
   private
@@ -414,15 +434,8 @@ class ServerWizard
     errors.add(:base, "This location requires a package to be chosen (or the template you've chosen is incompatible with this package)") unless matches
     matches
   end
-
-  def valid_card?
-    if prepaid? && !card.present?
-      errors.add(:base, 'Card is not valid or not present')
-    end
-  end
   
   def validate_wallet_credit
-    return true unless payg?
-    errors.add(:base, 'You do not have enough credit to run this server until next invoice date. Please add more PAYG credit.') unless enough_wallet_credit?
+    errors.add(:base, 'You do not have enough credit to run this server until next invoice date. Please top up your Wallet.') unless enough_wallet_credit?
   end
 end

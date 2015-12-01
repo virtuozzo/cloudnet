@@ -14,9 +14,11 @@ class CreateServerTask < BaseTask
     if @wizard.build_errors.length > 0
       errors.concat @wizard.build_errors
       false
-    else
+    elsif @server
       MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id)
       true
+    else
+      false
     end
   end
 end

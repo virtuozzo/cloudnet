@@ -1,22 +1,14 @@
 .jg-widget-content
   .jg-widget-header.pure-g.clearfix
-    %h2.pure-u-1-2.jg-icon.icon-tickets PAYG Details
+    %h2.pure-u-1-2.jg-icon.icon-tickets Wallet Details
   .jg-widget-body.pure-u-1
     .jg-widget-form.pure-g-r.clearfix
       .form-group.jg-inline.pure-g-r.clearfix.pure-g.pure-u-1
-        .pure-u-1-3.billing-pie
+        .pure-u-1-3
           .jg-widget-body
-            .jg-chart.piechart.payg-chart
-              %svg
-          %p
-            PAYG Balance:
-            %strong= Invoice.pretty_total(payg[:balance])
-          %p.pie-balance-used
-            Balance Used:
-            %strong= Invoice.pretty_total(payg[:used])
-          %p.pie-balance-available
-            Available Balance:
-            %strong= Invoice.pretty_total(payg[:available])
+          %p{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }
+            Wallet Balance:
+            %strong= remaining_balance(current_user)
 
           - if defined?(wizard)
             %p
@@ -25,15 +17,12 @@
                 = "You have enough available balance to run this server for approximately"
                 %strong= "#{days.round(1)} days"
               - else
-                = "You do not have enough credit to run this server until next invoice date. Please top up your PAYG account."
+                = "You do not have enough credit to run this server until next invoice date. Please top up your Wallet account."
               .small
-                (this does not include any other PAYG servers which may be running, any coupon code discounts which may be applied to your account or any VAT you may need to pay)
+                (this does not include any coupon code discounts which may be applied to your account or any VAT you may need to pay)
         .pure-u-1-3
           = image_tag("/assets/paypalcards.png")
   .jg-widget-footer.actions.clearfix
     %ul.jg-widget-controls
       %li
         %a.btn.jg-submit-button{"data-target" => "#payg-add-funds", "data-toggle" => "modal", "rel" => "nofollow"} Add Funds
-
-:javascript
-  var payg_stats = [{"name": "Available", "y": #{payg[:available]}}, {"name": "Used", "y": #{payg[:used]}}]

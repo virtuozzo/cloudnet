@@ -17,6 +17,12 @@ FactoryGirl.define do
       status :active
       onapp_user 'user_onapp_test'
       onapp_password 'abcdef123456'
+      
+      trait :with_wallet do
+        after(:build) do |user|
+          create(:payment_receipt, account: user.account)
+        end
+      end
     end
 
     # The presence of user.account.gateway_id prevents the callback that makes a Stripe account for
@@ -112,9 +118,9 @@ FactoryGirl.define do
       s.template = FactoryGirl.create(:template, location: s.location)
     end
 
-    factory :server_wizard_with_billing_card do
+    trait :with_wallet do
       after(:build) do |s|
-        s.card_id  = FactoryGirl.create(:billing_card, account: s.user.account).id
+        create(:payment_receipt, account: s.user.account)
       end
     end
   end
@@ -207,7 +213,7 @@ FactoryGirl.define do
   end
 
   factory :payment_receipt do
-    net_cost 100_000
+    net_cost 200000_000
     association :account, factory: :account
     pay_source :paypal
   end

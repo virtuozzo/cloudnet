@@ -41,21 +41,17 @@ module ApplicationHelper
     Invoice.pretty_total(total, unit, precision)
   end
 
+  # Pending invoice amount (-) wallet balance
   def remaining_balance(user)
     balance = pretty_total user.account.remaining_balance
     # remaining_balance() is confusing, in the codebase negative values mean credit, but for users
     # we represent negative balances as being in debt.
     balance.gsub!('-', '')
-    remaining_balance_in_credit?(user) ? "+#{balance}" : "-#{balance}"
+    remaining_balance_in_credit?(user) ? "#{balance}" : "-#{balance}"
   end
 
   def remaining_balance_in_credit?(user)
     user.account.remaining_balance <= 0
-  end
-
-  def payg_balance(user)
-    balance = user.account.payment_receipts.to_a.sum(&:remaining_cost)
-    balance < 0 ? "(#{pretty_total(balance)})" : "#{pretty_total(balance)}"
   end
 
   def tag_string(tag)

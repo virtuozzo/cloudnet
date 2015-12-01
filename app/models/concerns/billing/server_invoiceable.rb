@@ -113,79 +113,17 @@ module Billing
         net_cost: template.hourly_cost * hours
       }
     end
-
-    # Used by prepaid servers. When creating or editing a server, the first step is to calculate
-    # the amount needed to be charged on card. If the user has any credit notes then they can be
-    # used to reduce the charge.
-    def auth_charge
-      @charge = nil
-      @billing_success = false
-
-      @remaining_cost = calculate_amount_to_charge
-      return unless Invoice.milli_to_cents(@remaining_cost) >= Invoice::MIN_CHARGE_AMOUNT
-
-      @charge = prepare_charge_on_payment_gateway
-    rescue Stripe::StripeError => e
-      ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'CreateServerTask' })
-      user.account.create_activity(
-        :auth_charge_failed,
-        owner: user,
-        params: {
-          card: card.id,
-          amount: Invoice.milli_to_cents(@remaining_cost),
-          reason: e.message
-        }
-      )
-      @build_errors.push("Could not authorize charge using the card you've selected, please try again")
-      raise ServerWizard::WizardError
-    end
     
-    def prepare_payment_receipts_charge
-      @charge = nil
+    def charge_wallet
       @remaining_cost = calculate_amount_to_charge
-      if @remaining_cost > user.account.available_payg_balance
-        user.account.create_activity(
-          :charge_wallet_failed,
-          owner: user,
-          params: {
-            amount: Invoice.milli_to_cents(@remaining_cost),
-            reason: "Insufficient wallet funds"
-          }
-        )
-        @build_errors.push("Could not charge from Wallet, please try again")
-        raise ServerWizard::WizardError
-      end
-    end
-    
-    def charge_payment_receipts
       if @remaining_cost > 0
         payment_receipts_available = user.account.payment_receipts.with_remaining_cost
+        raise "Insufficient funds" if @remaining_cost > payment_receipts_available.to_a.sum(&:remaining_cost)
         @payment_receipts_used = PaymentReceipt.charge_account(payment_receipts_available, @remaining_cost)
         user.account.create_activity :charge_payment_account, owner: user, params: { notes: @payment_receipts_used } unless @payment_receipts_used.empty?
       end
-      
-      charging_paperwork
     rescue StandardError => e
-      # Clean up the lingering invoice and server
-      @invoice.save
-      @invoice.really_destroy!
-
-      if @newly_built_server
-        @newly_built_server.destroy
-      else
-        # Undo the server resize
-        edit(
-          server_wizard: {
-            name: @old_server_specs.name,
-            cpus: @old_server_specs.cpus,
-            memory: @old_server_specs.memory,
-            disk_size: @old_server_specs.disk_size
-          }
-        )
-        request_server_edit
-      end
-
-      ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'CreateServerTask' })
+      ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'ChargeWallet' })
       @build_errors.push('Could not charge your Wallet for the invoice amount. Please try again')
       user.account.create_activity(
         :charge_wallet_failed,
@@ -204,8 +142,8 @@ module Billing
       # First calculate how much this server is going to cost for the rest of the month
       @invoice = Invoice.generate_prepaid_invoice([self], user.account)
 
-      # Then we need to know if the user has any spare credit notes that will reduced the amount of the
-      # billing card charge we're about to make.
+      # Then we need to know if the user has any spare credit notes that will be reduced from the amount of the
+      # Wallet charge we're about to make.
       credit_notes = user.account.credit_notes.with_remaining_cost
       # Deduct any unused value from the user's credit notes
       @notes_used = CreditNote.charge_account(credit_notes, @invoice.total_cost)
@@ -221,72 +159,6 @@ module Billing
       calculate_remaining_cost(@invoice.total_cost, @notes_used)
     end
 
-    def prepare_charge_on_payment_gateway
-      charge = Payments.new.auth_charge(
-        user.account.gateway_id,
-        card.processor_token,
-        Invoice.milli_to_cents(@remaining_cost)
-      )
-      user.account.create_activity(
-        :auth_charge,
-        owner: user,
-        params: {
-          card: card.id,
-          amount: Invoice.milli_to_cents(@remaining_cost),
-          charge_id: charge[:charge_id]
-        }
-      )
-      charge
-    end
-
-    # Actually make the charge against a card.
-    def make_charge
-      if @charge.present?
-        Payments.new.capture_charge(@charge[:charge_id], "Cloud.net Invoice #{@invoice.invoice_number}")
-        user.account.create_activity(
-          :capture_charge,
-          owner: user,
-          params: {
-            card: card.id,
-            charge: @charge[:charge_id]
-          }
-        )
-      end
-
-      charging_paperwork
-    rescue StandardError => e
-      # Clean up the lingering invoice and server
-      @invoice.save
-      @invoice.really_destroy!
-
-      if @newly_built_server
-        @newly_built_server.destroy
-      else
-        # Undo the server resize
-        edit(
-          server_wizard: {
-            name: @old_server_specs.name,
-            cpus: @old_server_specs.cpus,
-            memory: @old_server_specs.memory,
-            disk_size: @old_server_specs.disk_size
-          }
-        )
-        request_server_edit
-      end
-
-      ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'CreateServerTask' })
-      @build_errors.push('Could not charge your card for the invoice amount. Please try again')
-      user.account.create_activity(
-        :capture_charge_failed,
-        owner: user,
-        params: {
-          card: card.id,
-          charge: @charge[:charge_id]
-        }
-      )
-      raise ServerWizard::WizardError
-    end
-
     def charging_paperwork
       @invoice.invoice_items.first.source = self
       @invoice.save
@@ -298,9 +170,8 @@ module Billing
       end
 
       # Make a note of charges made for financial reports
-      create_credit_note_charges
+      create_credit_note_charges if @notes_used.present?
       create_payment_receipt_charges if @payment_receipts_used.present?
-      create_card_charges if @charge.present?
     end
     
     def create_payment_receipt_charges
@@ -321,24 +192,6 @@ module Billing
           }
         )
       end
-    end
-
-    def create_card_charges
-      Charge.create(
-        source: card,
-        invoice: @invoice,
-        amount: @remaining_cost,
-        reference: @charge[:charge_id]
-      )
-      user.account.create_activity(
-        :card_charge,
-        owner: user,
-        params: {
-          invoice: @invoice.id,
-          amount: @remaining_cost,
-          card: card.id
-        }
-      )
     end
 
     def calculate_remaining_cost(total_cost, notes_used)

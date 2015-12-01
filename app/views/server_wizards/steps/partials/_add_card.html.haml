@@ -1,0 +1,19 @@
+%script
+  - r = render file: 'billing/cards.json', formats: [:json]
+  = raw "var account_cards = #{r}"
+
+.jg-widget-form.pure-g.jg-disabled
+  .jg-widget.pure-u-1
+    .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+      %h2.icon-wallet.jg-icon.pure-u Add new card
+      .jg-disclosure.icon-arrow-down
+    .pure-u-md-4-24
+    .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-add-card.jg-toggleable
+      = render partial: 'billing/add_card/add_card_form'
+
+:javascript
+  Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");
+  maxmind_user_id = "#{KEYS[:maxmind][:user_id]}";
+
+= javascript_include_tag "billing/add_card_visual"
+= javascript_include_tag "billing/add_card_process"

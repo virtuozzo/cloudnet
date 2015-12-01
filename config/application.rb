@@ -39,6 +39,7 @@ module CloudNet
       server_wizards/locations.js
       server_wizards/resources.js
       server_wizards/confirmation.js
+      server_wizards/payg_confirmation.js
     )
 
     config.i18n.enforce_available_locales = true

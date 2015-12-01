@@ -1,11 +1,14 @@
 .jg-widget-body.clearfix
-  .pure-g.clearfix
-    .pure-u-1-24
-    .pure-u-11-12
-      #jg-payg-widget
-        = render partial: 'billing/payg_details', locals: { payg: payg, wizard: @wizard_object }
-      = render partial: 'payg/payg_popover'
-      = javascript_include_tag "payg/payg_pie"
+
+  - if @cards.empty?
+    = render partial: 'server_wizards/steps/partials/add_card'
+  - else
+    .pure-g.clearfix
+      .pure-u-1-24
+      .pure-u-11-12
+        #jg-payg-widget
+          = render partial: 'billing/payg_details', locals: { payg: payg, wizard: @wizard_object }
+        = render partial: 'payg/payg_popover'
 
   .jg-widget-footer.actions.clearfix
     .resources-total.pure-g.no-costs#jg-payg-confirmation-costs

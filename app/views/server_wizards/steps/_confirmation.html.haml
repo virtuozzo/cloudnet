@@ -1,8 +1,6 @@
 - @submit_button_title = @server ? "Update Server" : "Create Server"
 
 %script
-  - r = render file: 'billing/cards.json', formats: [:json]
-  = raw "var account_cards = #{r}" 
   = raw "var serverId = #{@server.id}" if @server
 
 %ul.jg-step-box.pure-g-r
@@ -11,35 +9,10 @@
 
 .jg-widget-content#jg-payment
   .jg-widget-header.pure-g.clearfix
-    %h2.jg-icon.icon-pin-2.pure-u-1.pure-u-md-1-3= "Confirm & Pay"
-    #viewTabs.pure-u.pure-u-1.pure-u-md-1-3
-      %ul.nav.nav-tabs#jg-tabs
-        - if @server
-          - if @server.payment_type == :prepaid
-            %li.active
-              %a.jg-icon.icon-list{href: "#step-wizard-prepaid"} Prepaid (CC)
-          -else
-            %li.active
-              %a.jg-icon.icon-list{href: "#step-wizard-payg"} PAYG (CC/Paypal)
-        - else
-          %li.active
-            %a.jg-icon.icon-list{href: "#step-wizard-prepaid"} Prepaid (CC)
-          %li
-            %a.jg-icon.icon-list{href: "#step-wizard-payg"} PAYG (CC/Paypal)
-    %ul.pure-u-1-3.jg-widget-controls
-      %li.billing-balance
-        Your Balance:
-        %b= remaining_balance(current_user)
+    %h2.jg-icon.icon-pin-2.pure-u-1-2= "Confirm & Pay"
 
-  = f.hidden_field :payment_type
-
-  - unless @server && @server.payment_type == :payg
-    #step-wizard-prepaid
-      = render partial: 'server_wizards/steps/partials/confirm_prepaid', locals: { costs: @costs, coupon_multiplier: @coupon_multiplier, f: f }
-
-  - unless @server && @server.payment_type == :prepaid
-    #step-wizard-payg
-      = render partial: 'server_wizards/steps/partials/confirm_payg', locals: { costs: @costs, payg: @payg, f: f, coupon_multiplier: @coupon_multiplier }
+  #step-wizard-payg
+    = render partial: 'server_wizards/steps/partials/confirm_payg', locals: { costs: @costs, payg: @payg, f: f, coupon_multiplier: @coupon_multiplier }
 
 / %ul.jg-step-box.pure-g-r
 /   %li.disabled
@@ -51,10 +24,4 @@
 /       .pure-u.icon-arrow-down#toggle
 /     .step-body
 
-:javascript
-  Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");
-  maxmind_user_id = "#{KEYS[:maxmind][:user_id]}";
-
-= javascript_include_tag "billing/add_card_visual"
-= javascript_include_tag "billing/add_card_process"
-= javascript_include_tag "server_wizards/confirmation"
+= javascript_include_tag "server_wizards/payg_confirmation"

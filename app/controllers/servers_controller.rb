@@ -27,14 +27,18 @@ class ServersController < ServerCommonController
     @wizard_object.location_id = @server.location_id
     @wizard_object.submission_path = edit_server_path @server
     @wizard_object.existing_server_id = @server.id
-    @wizard.save
-    # Prob not the right way to check, but it's unclear how else to do it
-    if @wizard_object.current_step == 3 && @wizard_object.errors.blank? && params[:server_wizard] && params[:server_wizard][:payment_type]
-      schedule_edit
-      flash[:info] = 'Server scheduled for updating'
-      redirect_to server_path(@server)
-      return
+    if @wizard.save
+      log_activity :edit
+      if schedule_edit
+        flash[:info] = 'Server scheduled for updating'
+        redirect_to server_path(@server)
+        return
+      else
+        @wizard_object.errors.add(:base, @edit_wizard.build_errors.join(', ')) if @edit_wizard.build_errors.length > 0
+        step3
+      end
     elsif @wizard_object.current_step == 3
+      flash.now[:warning] = 'Please top up your Wallet to upgrade your server'
       step3
     else
       step2
@@ -205,12 +209,11 @@ class ServersController < ServerCommonController
     # server with new specs is being asked to be built from scratch - that's what the wizard was
     # orginally designed to do, ie; building servers from scratch.
     server_hash = @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
-    wizard = ServerWizard.new server_hash
-    wizard.existing_server_id = @server.id
-    wizard.card = current_user.account.billing_cards.first
-    wizard.user = current_user
+    @edit_wizard = ServerWizard.new server_hash
+    @edit_wizard.existing_server_id = @server.id
+    @edit_wizard.card = current_user.account.billing_cards.first
+    @edit_wizard.user = current_user
     # Send the old server so that a credit note can be issued for it
-    wizard.edit_server(old_server_specs)
-    log_activity :edit
+    @edit_wizard.edit_server(old_server_specs)
   end
 end

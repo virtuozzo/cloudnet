@@ -16,7 +16,7 @@ class PaygTopupPaypalResponseTask < BaseTask
     )
 
     details = request.details(@token) # GetExpressCheckoutDetails
-    payment = Paypal::Payment::Request.new(amount: details.amount, description: 'Cloud.net PAYG')
+    payment = Paypal::Payment::Request.new(amount: details.amount, description: 'Cloud.net Wallet')
 
     response = request.checkout!(@token, @payer_id, payment)  # DoExpressCheckoutPayment
     create_payment_receipt(details.amount, response.token, response_to_hash(response))

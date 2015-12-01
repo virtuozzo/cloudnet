@@ -9,8 +9,8 @@
   .jg-widget-form.pure-g-r.clearfix
     %div
       %p 
-        Thank you for topping up your account using your card. Your new PAYG balance is
-        %strong= payg_balance(current_user)
+        Thank you for topping up your account using your card. Your new Wallet balance is
+        %strong{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }= remaining_balance(current_user)
       %p= link_to 'Download Payment Receipt', billing_payment_receipt_pdf_path(@task.payment_receipt.sequential_id), target: '_blank'
   
 .modal-footer
