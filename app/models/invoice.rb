@@ -44,6 +44,20 @@ class Invoice < ActiveRecord::Base
     invoice.invoice_items = items
     invoice
   end
+  
+  # Generate PAYG invoice from last invoiced date until today, to the hour
+  def self.generate_final_payg_invoice(invoiceables, account)
+    invoice = Invoice.new(account: account, invoice_type: :payg)
+
+    date_range = account.past_invoice_due..Time.now
+    items = invoiceables.map do |i|
+      transactions = i.transactions(date_range)
+      InvoiceItem.new i.generate_payg_invoice_item(transactions).merge(invoice: invoice)
+    end
+
+    invoice.invoice_items = items
+    invoice
+  end
 
   def items?
     invoice_items.length > 0

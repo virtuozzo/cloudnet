@@ -125,7 +125,7 @@ class InvoicePdf < BillingPdf
   def invoice_payment
     items = [
       ['Invoice Payment'],
-      ['Payment for your invoice will be processed against your specified credit card and any balance which you may have remaining']
+      ['Payment for your invoice will be processed against your remaining Wallet balance']
     ]
 
     table items, width: bounds.width, cell_style: { border_widths: [1] * 4, border_colors: ['999999'] * 4 } do

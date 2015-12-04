@@ -9,7 +9,7 @@
     %b#monthly-price= billing_cost(costs[:monthly] * coupon_multiplier, costs[:monthly_with_vat] * coupon_multiplier)
     per month. 
     Today you'll be charged
-    %b.bs-tooltip.price-round{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}= billing_cost(costs[:today] * coupon_multiplier, costs[:today_with_vat] * coupon_multiplier)
+    %b.bs-tooltip.price-round{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_date.to_formatted_s(:long)} at 1:00am GMT)"}= billing_cost(costs[:today] * coupon_multiplier, costs[:today_with_vat] * coupon_multiplier)
 
     - if coupon.present?
       = "(inclusive of #{coupon.percentage}% coupon discount)"

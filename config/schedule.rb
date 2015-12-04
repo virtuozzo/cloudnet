@@ -34,9 +34,10 @@ every 1.hour, at: '12:30 am' do
   runner 'RemoveCouponCodes.perform_in(2.minutes)'
 end
 
-every '0 * * * *', roles: [:app] do
-  runner 'ServerUsageHourly.perform_in(1.minute)'
-end
+## We don't need this anymore as we won't have any PAYG servers anymore
+# every '0 * * * *', roles: [:app] do
+#   runner 'ServerUsageHourly.perform_in(1.minute)'
+# end
 
 # Create invoices (does not create charges)
 every 1.day, at: '1:00 am' do

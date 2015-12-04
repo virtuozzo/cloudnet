@@ -98,7 +98,7 @@
             per month.
             - if current_user
               Today you will be charged
-              %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_formatted_s(:long)} at 1:00am GMT)"}
+              %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_date.to_formatted_s(:long)} at 1:00am GMT)"}
               - if @server
                 (includes reimbursement for old server)
           %span.pure-u
