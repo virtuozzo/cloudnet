@@ -103,6 +103,18 @@ FactoryGirl.define do
     association :template, factory: :template
 
     after(:build) { |s| s.update location: s.template.location }
+    
+    trait :payg do
+      after(:build) do |s|
+        s.payment_type = :payg
+        10.times {|i| create(:server_hourly_transaction, server: s, account: s.user.account) }
+      end
+    end
+  end
+  
+  factory :server_hourly_transaction do
+    association :server, factory: :server
+    association :account, factory: :account
   end
 
   factory :server_wizard do
