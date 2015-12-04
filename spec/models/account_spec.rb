@@ -118,28 +118,28 @@ describe Account do
 
     describe 'Number of hours till next invoice' do
       it 'should give us the ceiling number for hours left' do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 1, min: 15) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 1, min: 15) do
           account = FactoryGirl.create(:account, invoice_day: 26)
           expect(account.hours_till_next_invoice).to eq(24)
         end
       end
 
       it "should give us the a number of hours if we've passed it" do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 1) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 1) do
           account = FactoryGirl.create(:account, invoice_day: 24)
           expect(account.hours_till_next_invoice).to eq(30 * 24)
         end
       end
 
       it "should give us at least 1 hour even if it's less than that left" do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 0, min: 15) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 0, min: 15) do
           account = FactoryGirl.create(:account, invoice_day: 25)
-          expect(account.hours_till_next_invoice).to eq(1)
+          expect(account.hours_till_next_invoice(Time.zone.now, Time.zone.now)).to eq(1)
         end
       end
 
       it "should give us the ceiling if we've just passed invoice day and time" do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 1, min: 0, sec: 1) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 1, min: 0, sec: 1) do
           account = FactoryGirl.create(:account, invoice_day: 25)
           expect(account.hours_till_next_invoice).to eq(31 * 24)
         end
@@ -148,28 +148,28 @@ describe Account do
 
     describe 'Number of hours since past invoice' do
       it "should give us the past date hours if the invoice day is today and it's before 1am" do
-        Timecop.freeze Time.now.change(day: 26, month: 2, hour: 0, min: 15) do
+        Timecop.freeze Time.zone.now.change(day: 26, month: 2, hour: 0, min: 15) do
           account = FactoryGirl.create(:account, invoice_day: 26)
-          expect(account.hours_since_past_invoice).to eq(31 * 24)
+          expect(account.hours_since_past_invoice(Time.zone.now)).to eq(31 * 24)
         end
       end
 
       it 'should give us the past date hours if the invoice day has not passed' do
-        Timecop.freeze Time.now.change(day: 25, month: 2, hour: 1) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 2, hour: 1) do
           account = FactoryGirl.create(:account, invoice_day: 26)
           expect(account.hours_since_past_invoice).to eq(30 * 24)
         end
       end
 
       it "should give us 1 hour if invoice day is today but it's past 1am" do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 1, min: 0, sec: 3) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 1, min: 0, sec: 3) do
           account = FactoryGirl.create(:account, invoice_day: 25)
           expect(account.hours_since_past_invoice).to eq(1)
         end
       end
 
       it "should give us today's hours if invoice day for this month has passed" do
-        Timecop.freeze Time.now.change(day: 25, month: 1, hour: 6, min: 0, sec: 0) do
+        Timecop.freeze Time.zone.now.change(day: 25, month: 1, hour: 6, min: 0, sec: 0) do
           account = FactoryGirl.create(:account, invoice_day: 25)
           expect(account.hours_since_past_invoice).to eq(5)
         end

@@ -29,8 +29,8 @@ class Account < ActiveRecord::Base
     ((due_date - from_time) / 1.hour).ceil.abs
   end
 
-  def hours_since_past_invoice
-    due_date = past_invoice_due
+  def hours_since_past_invoice(today=Time.now)
+    due_date = past_invoice_due(today)
     ((Time.now - due_date) / 1.hour).ceil.abs
   end
 
