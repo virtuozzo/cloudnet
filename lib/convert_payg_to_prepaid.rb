@@ -1,4 +1,8 @@
-# Convert all PAYG servers to Prepaid servers
+## Converts all PAYG servers to Prepaid servers
+## Gets all PAYG servers and generates an invoice from last invoice date to current date using
+## server hourly transactions. Then generates a Prepaid invoice from current date to next
+## invoice date.
+
 class ConvertPaygToPrepaid
   def self.run
     new.run

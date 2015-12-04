@@ -49,7 +49,7 @@ class Invoice < ActiveRecord::Base
   def self.generate_final_payg_invoice(invoiceables, account)
     invoice = Invoice.new(account: account, invoice_type: :payg)
 
-    date_range = account.past_invoice_due..Time.now
+    date_range = account.past_invoice_due..Time.zone.now
     items = invoiceables.map do |i|
       transactions = i.transactions(date_range)
       InvoiceItem.new i.generate_payg_invoice_item(transactions).merge(invoice: invoice)
