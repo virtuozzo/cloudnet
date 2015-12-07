@@ -51,9 +51,9 @@ class ChargeInvoicesTask < BaseTask
 
     begin
       charge = Payments.new.auth_charge(account.gateway_id, card.processor_token, Invoice.milli_to_cents(remaining_cost))
-      account.create_activity :auth_charge, owner: @user, params: { card: card.id, amount: Invoice.milli_to_cents(remaining_cost) }
+      account.create_activity :auth_charge, owner: @user, params: { card: card.id, amount: Invoice.milli_to_cents(remaining_cost), charge_id: charge[:charge_id] }
       Payments.new.capture_charge(charge[:charge_id], card_description(invoices))
-      account.create_activity :capture_charge, owner: @user, params: { card: card.id, charge: charge[:charge_id] }
+      account.create_activity :capture_charge, owner: @user, params: { card: card.id, charge_id: charge[:charge_id] }
       create_card_charges_for_invoices(account, invoices, card, charge)
       mark_invoices_as_paid(invoices)
       track_invoice_revenue(remaining_cost)

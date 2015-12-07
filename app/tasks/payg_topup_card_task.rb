@@ -17,9 +17,9 @@ class PaygTopupCardTask < BaseTask
 
     begin
       charge = Payments.new.auth_charge(@account.gateway_id, card.processor_token, @amount)
-      @account.create_activity :auth_charge, owner: @user, params: { card: card.id, amount: @amount }
+      @account.create_activity :auth_charge, owner: @user, params: { card: card.id, amount: @amount, charge_id: charge[:charge_id] }
       Payments.new.capture_charge(charge[:charge_id], 'Cloud.net Top Up')
-      @account.create_activity :capture_charge, owner: @user, params: { card: card.id, charge: charge[:charge_id] }
+      @account.create_activity :capture_charge, owner: @user, params: { card: card.id, charge_id: charge[:charge_id] }
       create_payment_receipt(charge[:charge_id])
       return true
     rescue Stripe::StripeError => e
