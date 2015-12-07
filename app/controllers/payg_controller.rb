@@ -19,8 +19,13 @@ class PaygController < ApplicationController
   def card_payment
     @amount = params[:amount]
     @task = PaygTopupCardTask.new(current_user.account, @amount)
-    @task.process
-
+    if @task.process
+      unpaid_invoices = current_user.account.invoices.not_paid
+      ChargeInvoicesTask.new(current_user, unpaid_invoices).process unless unpaid_invoices.empty?
+    end
+  rescue => e
+    ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Payg#CardPayment' })
+  ensure
     render partial: 'card_payment_complete', layout: false
   end
 
