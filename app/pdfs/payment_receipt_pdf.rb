@@ -83,7 +83,7 @@ class PaymentReceiptPdf < BillingPdf
   def receipt_payment
     items = [
       ['Payment Receipt'],
-      ['Your payment has been credited to your account and can be used for the provisioning of Pay-as-you-go services']
+      ['Your payment has been credited to your Wallet account and can be used to pay off invoices']
     ]
 
     table items, width: bounds.width, cell_style: { border_widths: [1] * 4, border_colors: ['999999'] * 4 } do
