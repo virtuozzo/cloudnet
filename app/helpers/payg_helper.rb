@@ -1,7 +1,7 @@
 module PaygHelper
   def payg_options(account)
     @account = account
-    @amounts = Payg::VALID_TOP_UP_AMOUNTS
+    @amounts = Payg::VALID_TOP_UP_AMOUNTS.dup
     balance_option = add_option_to_pay_off_balance
     options = @amounts.map { |amount| ["$#{amount} USD", amount] }
     options[0][0] = "#{options[0][0]} (Outstanding balance)" if balance_option
