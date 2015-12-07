@@ -1,2 +1,2 @@
 <% card = BillingCard.with_deleted.find(activity.parameters[:card]) %>
-Authorize charge success on Card ID: <%= card.id %> (Last 4: <%= card.last4 %>) for <%= Invoice.pretty_total(activity.parameters[:amount]) %>. Charge ID: <%= activity.parameters[:charge_id] %>
+Authorize charge success on Card ID: <%= card.id %> (Last 4: <%= card.last4 %>) for <%= Invoice.pretty_total(activity.parameters[:amount] * Invoice::CENTS_IN_DOLLAR) %>. Charge ID: <%= activity.parameters[:charge] || activity.parameters[:charge_id] %>

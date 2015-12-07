@@ -1,2 +1,2 @@
 <% card = BillingCard.with_deleted.find(activity.parameters[:card]) %>
-Capture charge failed on Card ID: <%= card.id %> (Last 4: <%= card.last4 %>) for Charge ID: <%= activity.parameters[:charge_id] %>
+Capture charge failed on Card ID: <%= card.id %> (Last 4: <%= card.last4 %>) for Charge ID: <%= activity.parameters[:charge] || activity.parameters[:charge_id] %>
