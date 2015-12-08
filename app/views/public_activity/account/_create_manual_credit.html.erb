@@ -1,0 +1,3 @@
+<%- issued_by = User.find activity.parameters[:issued_by] %>
+<% credit = CreditNote.with_deleted.find(activity.parameters[:credit_note]) %>
+Issued manual Credit Note #<%= credit.credit_number %> for <%= Invoice.pretty_total(activity.parameters[:amount]) %> by <%= link_to issued_by.full_name, admin_user_path(issued_by) %>

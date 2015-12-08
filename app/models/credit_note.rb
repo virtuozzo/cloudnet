@@ -92,5 +92,6 @@ class CreditNote < ActiveRecord::Base
     )
     credit_note.credit_note_items = [credit_item]
     credit_note.save!
+    account.create_activity(:create_manual_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost, issued_by: user_that_issued_note.id })
   end
 end
