@@ -87,6 +87,10 @@ class User < ActiveRecord::Base
     notif_delivered > notif_before_shutdown
   end
   
+  def trial_credit_eligible?
+    account.billing_cards.with_deleted.count == 0
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions

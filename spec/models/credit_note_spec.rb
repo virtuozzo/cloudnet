@@ -257,4 +257,22 @@ describe CreditNote do
       expect(@cn.coupon).to eq nil
     end
   end
+  
+  describe 'Trial issued credit notes' do
+    before :each do
+      recipient = FactoryGirl.create(:user)
+      @account = FactoryGirl.create(:account, user: recipient)
+      CreditNote.trial_issue(@account)
+      @cn = CreditNote.first
+    end
+
+    it 'should create trial credit notes' do
+      expect(@cn.account).to eq @account
+      expect(@cn.remaining_cost).to eq CreditNote::TRIAL_CREDIT * Invoice::MILLICENTS_IN_DOLLAR
+      items = @cn.credit_note_items
+      expect(items.count).to eq 1
+      only_item = items.first
+      expect(only_item.description).to eq 'Trial Credit'
+    end
+  end
 end

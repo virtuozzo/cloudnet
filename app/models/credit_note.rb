@@ -17,6 +17,8 @@ class CreditNote < ActiveRecord::Base
   enum_field :state, allowed_values: [:uncredited, :credited], default: :credited
 
   validate :remaining_cost_can_not_be_negative
+  
+  TRIAL_CREDIT = 10
 
   # `invoiceables` are generally servers
   def self.generate_credit_note(invoiceables, account, last_invoice = nil)
@@ -93,5 +95,17 @@ class CreditNote < ActiveRecord::Base
     credit_note.credit_note_items = [credit_item]
     credit_note.save!
     account.create_activity(:create_manual_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost, issued_by: user_that_issued_note.id })
+  end
+  
+  def self.trial_issue(account)
+    credit_note = CreditNote.new account: account
+    credit_item = CreditNoteItem.new(
+      net_cost: TRIAL_CREDIT * Invoice::MILLICENTS_IN_DOLLAR,
+      tax_cost: 0,
+      description: 'Trial Credit'
+    )
+    credit_note.credit_note_items = [credit_item]
+    credit_note.save!
+    account.create_activity(:create_trial_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost })
   end
 end

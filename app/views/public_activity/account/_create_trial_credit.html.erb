@@ -1,0 +1,2 @@
+<% credit = CreditNote.with_deleted.find(activity.parameters[:credit_note]) %>
+Issued trial Credit Note #<%= credit.credit_number %> for <%= Invoice.pretty_total(activity.parameters[:amount]) %>

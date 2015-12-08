@@ -65,4 +65,13 @@ describe User do
   xit "should use protection" do
     user.act_for_negative_balance
   end
+  
+  it 'should be eligible for trial credit' do
+    expect(user.trial_credit_eligible?).to eq(true)
+  end
+  
+  it 'should not be eligible for trial credit' do
+    FactoryGirl.create(:billing_card, account: user.account)
+    expect(user.trial_credit_eligible?).to eq(false)
+  end
 end
