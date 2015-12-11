@@ -12,6 +12,11 @@ class RegistrationsController < Devise::RegistrationsController
     @keys = current_user.keys
     super
   end
+  
+  def update
+    @keys = current_user.keys
+    super
+  end
 
   protected
 

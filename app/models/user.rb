@@ -31,6 +31,9 @@ class User < ActiveRecord::Base
   # TODO: Make sure our worker is triggered. This should probably be in the controller
   # since it's triggering a worker we can only guarantee it in the model for each user
   after_create :create_onapp_user
+  
+  # Create contact at AgileCRM
+  after_create :update_agilecrm_contact
 
   # Analytics tracking
   after_create :track_analytics
@@ -38,6 +41,7 @@ class User < ActiveRecord::Base
   scope :created_this_month, -> { where('created_at > ? AND created_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :servers_to_be_destroyed, -> { where("notif_delivered - notif_before_destroy >= 0")}
+  
   def to_s
     "#{full_name}"
   end
@@ -91,6 +95,10 @@ class User < ActiveRecord::Base
     account.billing_cards.with_deleted.count == 0
   end
   
+  def after_database_authentication
+    update_agilecrm_contact
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions
@@ -109,6 +117,10 @@ class User < ActiveRecord::Base
 
   def create_onapp_user
     CreateOnappUser.perform_async(id)
+  end
+  
+  def update_agilecrm_contact
+    UpdateAgilecrmContact.perform_async(id)
   end
 
   def track_analytics

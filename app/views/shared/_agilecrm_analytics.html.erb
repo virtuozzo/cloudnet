@@ -1,7 +1,10 @@
-<script type="text/javascript" src="https://cloudnet.agilecrm.com/stats/min/agile-min.js"> 
-</script> 
-<script type="text/javascript" > 
-  _agile.set_account('shji6udkeqaa5rj33hjbs6iqcb', 'cloudnet'); 
-  _agile.track_page_view(); 
-  _agile_execute_web_rules(); 
+<script type="text/javascript" src="https://cloudnet.agilecrm.com/stats/min/agile-min.js">
+</script>
+<script type="text/javascript" >
+  _agile.set_account('<%= ENV['AGILECRM_JS_API_KEY'] %>', '<%= ENV['AGILECRM_DOMAIN'] %>');
+  <%- if current_user and !logged_in_as? %>
+  _agile.set_email('<%= current_user.email %>');
+  <%- end %>
+  _agile.track_page_view();
+  _agile_execute_web_rules();
 </script>

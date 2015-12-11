@@ -14,7 +14,7 @@ CloudNet::Application.routes.draw do
   
   get 'public/howitworks'
   get 'payg/add_funds'
-  devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', tokens: 'tokens' }
+  devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', tokens: 'tokens', confirmations: 'confirmations' }
   devise_scope :user do
     post 'users/enable_otp', to: 'tokens#enable_otp', as: 'user_tokens_enable_otp'
     post 'users/disable_otp', to: 'tokens#disable_otp', as: 'user_tokens_disable_otp'

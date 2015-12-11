@@ -1,0 +1,117 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://<%= CGI.escape ENV['AGILECRM_EMAIL'] %>:<%= ENV['AGILECRM_API_KEY']
+      %>@<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/dev/api/contacts/search/email
+    body:
+      encoding: UTF-8
+      string: email_ids=["bella@thiel.name"]
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Faraday v0.9.2
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 11 Dec 2015 10:10:43 GMT
+      Server:
+      - Google Frontend
+      Cache-Control:
+      - private
+      Alt-Svc:
+      - clear
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: "[null]"
+    http_version:
+  recorded_at: Fri, 11 Dec 2015 10:10:43 GMT
+- request:
+    method: post
+    uri: https://<%= CGI.escape ENV['AGILECRM_EMAIL'] %>:<%= ENV['AGILECRM_API_KEY']
+      %>@<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/dev/api/contacts
+    body:
+      encoding: UTF-8
+      string: '{"properties":[{"type":"SYSTEM","name":"first_name","value":"Clint"},{"type":"SYSTEM","name":"last_name","value":"Anderson"},{"type":"SYSTEM","name":"email","value":"bella@thiel.name"},{"type":"CUSTOM","name":"CloudnetID","value":18386},{"type":"CUSTOM","name":"StripeID","value":"cn_abc123456"},{"type":"CUSTOM","name":"EmailVerified","value":false}]}'
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Faraday v0.9.2
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 11 Dec 2015 10:10:44 GMT
+      Server:
+      - Google Frontend
+      Cache-Control:
+      - private
+      Alt-Svc:
+      - clear
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":5670052883857408,"type":"PERSON","created_time":1449828644,"updated_time":0,"last_contacted":0,"last_emailed":0,"last_campaign_emaild":0,"last_called":0,"viewed_time":0,"viewed":{"viewed_time":0},"star_value":0,"lead_score":0,"tags":[],"tagsWithTime":[],"properties":[{"type":"SYSTEM","name":"first_name","value":"Clint"},{"type":"SYSTEM","name":"last_name","value":"Anderson"},{"type":"SYSTEM","name":"email","value":"bella@thiel.name"},{"type":"CUSTOM","name":"CloudnetID","value":"18386"},{"type":"CUSTOM","name":"StripeID","value":"cn_abc123456"},{"type":"CUSTOM","name":"EmailVerified","value":"false"}],"campaignStatus":[],"entity_type":"contact_entity","unsubscribeStatus":[],"emailBounceStatus":[],"formId":0,"owner":{"id":6668978039029760,"domain":"<%= ENV['AGILECRM_DOMAIN'] %>","email":"<%= ENV['AGILECRM_EMAIL'] %>","referer":{"referral_count":0},"is_admin":<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>,"is_account_owner":<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>,"is_disabled":false,"is_send_password":false,"scopes":["VIEW_CONTACTS","CREATE_CONTACT","EXPORT_CONTACTS","IMPORT_CONTACTS","DELETE_CONTACTS","UPDATE_CONTACT","ADD_NEW_TAG"],"newscopes":["VIEW_CONTACTS","CREATE_CONTACT","EXPORT_CONTACTS","IMPORT_CONTACTS","DELETE_CONTACTS","UPDATE_CONTACT","ADD_NEW_TAG"],"newMenuScopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"menu_scopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"restricted_menu_scopes":[],"name":"Bernino","password":"PASSWORD","info_json_string":"{\"lat_long\":\"51.508515,-0.125487\",\"ip_address\":\"\",\"last_logged_in_time\":\"1449783535\",\"logged_in_time\":1449828478,\"created_time\":1440157244,\"city\":\"london\",\"country\":\"GB\"}","schedule_id":"bernino","meeting_types":"In Person, Phone, Skype, Google Hangouts","business_hours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","meeting_durations":"{\"15mins\":\"say hi\",\"30mins\":\"let''s keep it short\",\"60mins\":\"let''s chat\"}","calendar_url":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino","is_forms_updated":true,"defaultBusinessHours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","ownerPic":"https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/62.png","createdTime":1440157244,"hashedString":"8258932b87df9d7f6bbac2cc29d6c17f","calendarURL":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino"}}'
+    http_version:
+  recorded_at: Fri, 11 Dec 2015 10:10:45 GMT
+- request:
+    method: post
+    uri: https://<%= CGI.escape ENV['AGILECRM_EMAIL'] %>:<%= ENV['AGILECRM_API_KEY']
+      %>@<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/dev/api/contacts/search/email
+    body:
+      encoding: UTF-8
+      string: email_ids=["bella@thiel.name"]
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Faraday v0.9.2
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 11 Dec 2015 14:29:02 GMT
+      Server:
+      - Google Frontend
+      Cache-Control:
+      - private
+      Alt-Svc:
+      - clear
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":5704837555552256,"type":"PERSON","created_time":1449844140,"updated_time":0,"last_contacted":0,"last_emailed":0,"last_campaign_emaild":0,"last_called":0,"viewed_time":0,"viewed":{"viewed_time":0},"star_value":0,"lead_score":0,"tags":[],"tagsWithTime":[],"properties":[{"type":"SYSTEM","name":"first_name","value":"Astrid"},{"type":"SYSTEM","name":"last_name","value":"Bartell"},{"type":"SYSTEM","name":"email","value":"bella@thiel.name"},{"type":"CUSTOM","name":"CloudnetID","value":"21984"},{"type":"CUSTOM","name":"StripeID","value":"cn_abc123456"},{"type":"CUSTOM","name":"EmailVerified","value":"false"}],"campaignStatus":[],"entity_type":"contact_entity","unsubscribeStatus":[],"emailBounceStatus":[],"formId":0,"owner":{"id":6668978039029760,"domain":"<%= ENV['AGILECRM_DOMAIN'] %>","email":"<%= ENV['AGILECRM_EMAIL'] %>","referer":{"referral_count":0},"is_admin":true,"is_account_owner":true,"is_disabled":false,"is_send_password":false,"scopes":["ADD_NEW_TAG","EXPORT_CONTACTS","CREATE_CONTACT","IMPORT_CONTACTS","VIEW_CONTACTS","DELETE_CONTACTS","UPDATE_CONTACT"],"newscopes":["ADD_NEW_TAG","EXPORT_CONTACTS","CREATE_CONTACT","IMPORT_CONTACTS","VIEW_CONTACTS","DELETE_CONTACTS","UPDATE_CONTACT"],"newMenuScopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"menu_scopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"restricted_menu_scopes":[],"name":"Bernino","password":"PASSWORD","info_json_string":"{\"lat_long\":\"51.508515,-0.125487\",\"ip_address\":\"\",\"last_logged_in_time\":\"1449842377\",\"logged_in_time\":1449843893,\"created_time\":1440157244,\"city\":\"london\",\"country\":\"GB\"}","schedule_id":"bernino","meeting_types":"In Person, Phone, Skype, Google Hangouts","business_hours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","meeting_durations":"{\"15mins\":\"say hi\",\"30mins\":\"let''s keep it short\",\"60mins\":\"let''s chat\"}","calendar_url":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino","is_forms_updated":true,"defaultBusinessHours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","ownerPic":"https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/62.png","createdTime":1440157244,"calendarURL":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino","hashedString":"8258932b87df9d7f6bbac2cc29d6c17f"}}]'
+    http_version:
+  recorded_at: Fri, 11 Dec 2015 14:29:02 GMT
+recorded_with: VCR 2.9.3
