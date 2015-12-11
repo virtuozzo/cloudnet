@@ -5,7 +5,8 @@ class UpdateAgilecrmContact
     user = User.find user_id
     first_name = user.full_name.split(' ').first
     last_name = user.full_name.split(' ').last
-    params = { first_name: first_name, last_name: last_name, email: user.email, CloudnetID: user.id, StripeID: user.account.gateway_id, EmailVerified: !user.confirmed_at.nil? }
+    email_verified = !user.confirmed_at.nil? ? 'on' : 'off'
+    params = { first_name: first_name, last_name: last_name, email: user.email, CloudnetID: user.id, StripeID: user.account.gateway_id, EmailVerified: email_verified, company: user.account.company_name, created: user.created_at.strftime("%m/%d/%y"), SignIn: user.current_sign_in_at.strftime("%m/%d/%y") }
     email = old_email || user.email
     contact = AgileCRMWrapper::Contact.search_by_email(email)
     if contact.nil?

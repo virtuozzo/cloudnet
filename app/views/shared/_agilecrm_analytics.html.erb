@@ -1,4 +1,4 @@
-<script type="text/javascript" src="https://cloudnet.agilecrm.com/stats/min/agile-min.js">
+<script type="text/javascript" src="<%= "https://#{ENV['AGILECRM_DOMAIN']}.agilecrm.com/stats/min/agile-min.js" %>">
 </script>
 <script type="text/javascript" >
   _agile.set_account('<%= ENV['AGILECRM_JS_API_KEY'] %>', '<%= ENV['AGILECRM_DOMAIN'] %>');
