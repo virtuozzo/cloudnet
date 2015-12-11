@@ -102,7 +102,7 @@ class ServerWizard
   end
 
   def card=(card)
-    self.card_id = card.id
+    self.card_id = card.try(:id)
   end
 
   def payment_type
