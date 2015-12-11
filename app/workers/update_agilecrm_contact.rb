@@ -1,12 +1,23 @@
 class UpdateAgilecrmContact
   include Sidekiq::Worker
 
-  def perform(user_id, old_email = nil)
+  def perform(user_id, old_email = nil, tags = [])
     user = User.find user_id
     first_name = user.full_name.split(' ').first
     last_name = user.full_name.split(' ').last
     email_verified = !user.confirmed_at.nil? ? 'on' : 'off'
-    params = { first_name: first_name, last_name: last_name, email: user.email, CloudnetID: user.id, StripeID: user.account.gateway_id, EmailVerified: email_verified, company: user.account.company_name, created: user.created_at.strftime("%m/%d/%y"), SignIn: user.current_sign_in_at.strftime("%m/%d/%y") }
+    params = {
+      first_name: first_name,
+      last_name: last_name,
+      email: user.email,
+      CloudnetID: user.id,
+      StripeID: user.account.gateway_id,
+      EmailVerified: email_verified,
+      company: user.account.company_name,
+      created: user.created_at,
+      SignIn: user.current_sign_in_at,
+      tags: tags
+    }
     email = old_email || user.email
     contact = AgileCRMWrapper::Contact.search_by_email(email)
     if contact.nil?
