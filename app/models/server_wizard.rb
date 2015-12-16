@@ -332,9 +332,10 @@ class ServerWizard
     else
       net_cost = 0
     end
-    
-    billable_today = cost_for_hours Invoice.hours_till_next_invoice(user.account)
-    ((user.account.remaining_balance * -1) + net_cost).to_f > billable_today.to_f
+
+    coupon_percentage = user.account.coupon.present? ? user.account.coupon.percentage_decimal : 0
+    billable_today = cost_for_hours(Invoice.hours_till_next_invoice(user.account)) * (1 - coupon_percentage)
+    billable_today.to_f == 0.0 || ((user.account.remaining_balance * -1) + net_cost).to_f >= billable_today.to_f
   end
 
   private
