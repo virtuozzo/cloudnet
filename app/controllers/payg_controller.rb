@@ -45,8 +45,13 @@ class PaygController < ApplicationController
     payer_id = params[:PayerID]
 
     @task = PaygTopupPaypalResponseTask.new(current_user.account, token, payer_id)
-    @task.process
-
+    if @task.process
+      unpaid_invoices = current_user.account.invoices.not_paid
+      ChargeInvoicesTask.new(current_user, unpaid_invoices).process unless unpaid_invoices.empty?
+    end
+  rescue => e
+    ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Payg#PaypalSuccess' })
+  ensure
     render partial: 'paypal_success', layout: false
   end
 
