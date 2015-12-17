@@ -119,7 +119,7 @@ group :test do
   gem 'mock_redis'
 end
 
-gem 'puma', '~> 2.9.0'
+gem 'puma', '~> 2.15.0'
 gem 'tubesock'
 gem 'agilecrm-wrapper'
 
