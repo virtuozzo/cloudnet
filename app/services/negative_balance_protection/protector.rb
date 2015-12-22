@@ -42,6 +42,7 @@ module NegativeBalanceProtection
     
     def increment_notifications
       user.increment!(:notif_delivered)
+      user.update_attribute(:last_notif_email_sent, Time.now)
     end
     
     def servers_for_refresh?
