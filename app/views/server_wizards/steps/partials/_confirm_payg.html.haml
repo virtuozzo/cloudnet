@@ -1,15 +1,16 @@
+%script
+  - r = render file: 'billing/cards.json', formats: [:json]
+  = raw "var account_cards = #{r}"
+
 .jg-widget-body.clearfix
 
-  - if @cards.empty?
-    = render partial: 'server_wizards/steps/partials/add_card'
-  - else
-    .pure-g.clearfix
-      .pure-u-1-24
-      .pure-u-11-12
-        #jg-payg-widget
-          = render partial: 'billing/payg_details', locals: { payg: payg, wizard: @wizard_object }
-        = render partial: 'payg/payg_popover'
-
+  .pure-g.clearfix
+    .pure-u-1-24
+    .pure-u-11-12
+      #jg-payg-widget
+        = render partial: 'billing/payg_details', locals: { payg: payg, wizard: @wizard_object }
+      = render partial: 'payg/payg_popover'
+      
   .jg-widget-footer.actions.clearfix
     .resources-total.pure-g.no-costs#jg-payg-confirmation-costs
       = render partial: "server_wizards/steps/partials/prepaid_confirmation_costs", locals: { costs: costs, coupon_multiplier: coupon_multiplier }
@@ -17,3 +18,10 @@
     %ul.jg-widget-controls
       %li= f.button @submit_button_title, class: 'btn jg-submit-button', id: "jg-payg-create-server"
       %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button'
+
+:javascript
+  Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");
+  maxmind_user_id = "#{KEYS[:maxmind][:user_id]}";
+
+= javascript_include_tag "billing/add_card_visual"
+= javascript_include_tag "billing/add_card_process"

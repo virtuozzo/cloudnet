@@ -3,7 +3,7 @@
   = raw "var account_cards = #{r}" 
 
 .jg-widget-content
-  .jg-widget-header.pure-g.clearfix
+  .jg-widget-header.pure-g.clearfix#add-new-card
     %h2.pure-u-1-2.jg-icon.icon-tickets Billing Cards
 
   .jg-widget-body.pure-u-1
@@ -21,15 +21,6 @@
               %tr
                 %td.no-data{colspan: "2"}
                   %p= "You don't have any card details stored"
-          
-    .jg-widget-form.pure-g.jg-disabled#add-new-card
-      .jg-widget.pure-u-1
-        .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
-          %h2.icon-wallet.jg-icon.pure-u Add new card
-          .jg-disclosure.icon-arrow-down
-        .pure-u-md-4-24
-        .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-add-card.jg-toggleable
-          = render partial: 'billing/add_card/add_card_form'
 
     .jg-widget-form.pure-g.jg-disabled
       .jg-widget.pure-u-1
@@ -40,7 +31,10 @@
         .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-coupon-code.jg-toggleable
           = render partial: 'billing/coupon_code/coupon_code_form'
 
-
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      %li
+        %a.btn.jg-submit-button#add-card-button Add Card
 
 :javascript
   Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");

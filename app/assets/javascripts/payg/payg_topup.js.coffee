@@ -1,5 +1,5 @@
 $ ->
-  $('#payg-top-up-card').on 'click', (e) ->
+  $(document).on "click", "#payg-top-up-card", (e) ->
     amount = $('#payg_amount').val()
 
     $('#payg-confirm-payg-dialog').on 'show.bs.modal', (e) -> 
@@ -39,7 +39,7 @@ $ ->
           $("#payg-confirm-payg-dialog #confirm-payg-content").html(response)
           $('#jg-payg-widget').trigger('payg-topup-complete')
 
-  $('#payg_paypal_button').on 'click', (e) ->
+  $(document).on "click", "#payg_paypal_button", (e) ->
     amount = $('#payg_amount').val()
     link_with_amount = $(this).attr('href') + "?amount=#{amount}"
     $(this).attr('href', link_with_amount)

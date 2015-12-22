@@ -2,6 +2,10 @@ class PaygController < ApplicationController
   def add_funds
     render 'add_funds', layout: false
   end
+  
+  def show_add_funds
+    render partial: 'show_add_funds', layout: false
+  end
 
   def confirm_card_payment
     @amount = params[:amount]

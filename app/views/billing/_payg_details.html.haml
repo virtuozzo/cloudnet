@@ -17,7 +17,7 @@
                 = "You have enough available balance to run this server for approximately"
                 %strong= "#{days.round(1)} days"
               - else
-                = "You do not have enough credit to run this server until next invoice date. Please top up your Wallet account."
+                = "You do not have enough credit to run this server until next invoice date. Please add funds to your Wallet."
               .small
                 (this does not include any coupon code discounts which may be applied to your account or any VAT you may need to pay)
         .pure-u-1-3
@@ -25,4 +25,4 @@
   .jg-widget-footer.actions.clearfix
     %ul.jg-widget-controls
       %li
-        %a.btn.jg-submit-button{"data-target" => "#payg-add-funds", "data-toggle" => "modal", "rel" => "nofollow"} Add Funds
+        %a.btn.jg-submit-button#add-funds-button Add Funds

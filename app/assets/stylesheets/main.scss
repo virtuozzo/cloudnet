@@ -684,3 +684,7 @@ Hides the menu at `48em`, but modify this based on your app's needs.
    pointer-events: none;
    cursor: default;
 }
+
+body #payg-add-card .modal-dialog {
+    width: 750px;
+}

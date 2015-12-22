@@ -33,6 +33,8 @@
             %td.no-data.pure-u-1{colspan: 5}
               %p= "You don't have any invoices, credit notes or payment receipts."
 
+    = render partial: 'payg/payg_popover'
+    
   - if @billing.size > 0 
     .jg-widget-footer.jg-pagination
       .jg-pagination-controls
@@ -45,5 +47,4 @@
 
 #jg-payg-widget
   = render partial: 'payg_details', locals: { payg: @payg }
-= render partial: 'payg/payg_popover'
 = javascript_include_tag 'billing/billing_payg'
