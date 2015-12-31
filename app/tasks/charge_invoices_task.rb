@@ -19,7 +19,10 @@ class ChargeInvoicesTask < BaseTask
 
     # We're done if everything is paid off
     @invoices.each(&:reload)
-    return if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
+    if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
+      unblock_servers
+      return
+    end
 
     # Now try any cash that's credited in the user's account
     @invoices.each do |invoice|
@@ -28,6 +31,11 @@ class ChargeInvoicesTask < BaseTask
       account.create_activity :charge_payment_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
       create_payment_receipt_charges(account, invoice, notes_used)
     end
+    unblock_servers
+  end
+  
+  def unblock_servers
+    @user.clear_unpaid_notifications unless @user.account.remaining_balance > 100_000
   end
 
   def create_payment_receipt_charges(account, invoice, payment_receipts)
