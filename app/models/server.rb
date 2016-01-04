@@ -98,7 +98,10 @@ class Server < ActiveRecord::Base
     if has_intermediate_state && time_in_state > MAX_TIME_FOR_INTERMEDIATE_STATES
       detected_stuck = true
       # Only respond to a stuck state the first time it is detected
-      AdminMailer.notify_stuck_server_state(self).deliver_now unless stuck
+      unless stuck
+        AdminMailer.notify_stuck_server_state(self).deliver_now
+        NotifyUsersMailer.notify_stuck_state(user, self).deliver_now
+      end
     end
     update_attributes(stuck: detected_stuck) if detected_stuck != stuck
   end
