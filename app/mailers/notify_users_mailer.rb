@@ -14,4 +14,11 @@ class NotifyUsersMailer < ActionMailer::Base
     @servers = @user.servers.select { |s| s.location_id == @location.id }
     mail(to: @user.email, subject: subject)
   end
+  
+  def notify_stuck_state(user, server)
+    @user = user
+    @server = server
+    recipients = [@user.email, "support@cloud.net"]
+    mail(to: recipients.join(","), subject: 'Your server is still building')
+  end
 end
