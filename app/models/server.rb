@@ -12,6 +12,8 @@ class Server < ActiveRecord::Base
   MAX_IPS = 4
 
   belongs_to :user
+  belongs_to :unscoped_user, -> { unscope(where: :deleted_at) }, foreign_key: :user_id, class_name: "User"
+  belongs_to :unscoped_location, -> { unscope(where: :deleted_at) }, foreign_key: :location_id, class_name: "Location"
   belongs_to :template
   belongs_to :location
   has_many :server_events, dependent: :destroy
@@ -19,6 +21,7 @@ class Server < ActiveRecord::Base
   has_many :server_backups, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
   has_many :server_ip_addresses, dependent: :destroy
+  has_many :unscoped_server_ip_addresses, -> { unscope(where: :deleted_at) }, foreign_key: :server_id, class_name: "ServerIpAddress"
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
