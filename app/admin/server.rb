@@ -27,12 +27,14 @@ ActiveAdmin.register Server do
     column :memory
     column :disk_size
     column :bandwidth
-    column :user
-    column :location
+    column "User", :unscoped_user
+    column "Location", :unscoped_location
     column "Forecasted Rev" do |server|
       (server.forecasted_rev / Invoice::MILLICENTS_IN_DOLLAR).round(2)
     end
-    column :primary_ip_address
+    column :primary_ip_address do |server|
+      (server.unscoped_server_ip_addresses.find(&:primary?) || server.unscoped_server_ip_addresses.first).address rescue nil
+    end
     column :deleted_at
 
     actions
@@ -68,6 +70,12 @@ ActiveAdmin.register Server do
 
   action_item :edit, only: :index do
     link_to 'Zombies', zombies_admin_servers_path
+  end
+  
+  controller do
+    def scoped_collection
+      super.includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
+    end
   end
   
 end
