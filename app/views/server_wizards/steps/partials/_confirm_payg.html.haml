@@ -1,6 +1,9 @@
 .jg-widget-body.clearfix
 
   - if @cards.empty?
+    - if current_user.trial_credit_eligible?
+      .jg-widget-form.pure-g.pure-u-1
+        .alert.alert-info= "Add your credit card and get $#{CreditNote::TRIAL_CREDIT} as credits in your Wallet!"
     = render partial: 'server_wizards/steps/partials/add_card'
   - else
     .pure-g.clearfix
