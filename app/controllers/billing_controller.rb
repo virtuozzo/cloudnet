@@ -70,7 +70,6 @@ class BillingController < ApplicationController
       if @card.valid? && fraud_check.call(current_user, @card) && @card.save
         assessment = @card.fraud_assessment
         @card.account.calculate_risky_card(assessment[:assessment])
-        CreditNote.trial_issue @account if @account.billing_cards.with_deleted.count == 1
         format.json { render json: assessment.merge(card_id: @card.id) }
       else
         format.json { render json: @card.errors, status: :unprocessable_entity }

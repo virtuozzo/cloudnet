@@ -7,7 +7,10 @@ class AssociateCard
 
   def process
     card = Payments.new.add_card(@account.gateway_id, @token)
-    @card.update(processor_token: card[:card_id], card_type: card[:card_type])
+    if @card.update(processor_token: card[:card_id], card_type: card[:card_type])
+      CreditNote.trial_issue(@account, @card) if @account.billing_cards.with_deleted.count == 1
+      true
+    end
   rescue Exception => e
     p e
     ErrorLogging.new.track_exception(e, extra: { source: 'AssociateCard', account: @account })
