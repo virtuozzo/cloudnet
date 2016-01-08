@@ -260,9 +260,13 @@ describe CreditNote do
   
   describe 'Trial issued credit notes' do
     before :each do
+      @payments = double(Payments, auth_charge: { charge_id: 12_345 }, capture_charge: { charge_id: 12_345 })
+      allow(Payments).to receive_messages(new: @payments)
+      
       recipient = FactoryGirl.create(:user)
       @account = FactoryGirl.create(:account, user: recipient)
-      CreditNote.trial_issue(@account)
+      card = FactoryGirl.create(:billing_card, account: @account, fraud_verified: true, processor_token: 'abcd1234')
+      CreditNote.trial_issue(@account, card)
       @cn = CreditNote.first
     end
 
