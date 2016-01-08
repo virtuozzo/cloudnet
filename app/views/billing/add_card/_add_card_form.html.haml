@@ -1,12 +1,17 @@
 .jg-widget-body#jg-card-form
   .jg-widget-form.pure-g.pure-u-1
     %div.cc_card_alert#cc_card_alert
+    
+    - if current_user.trial_credit_eligible?
+      %div.alert.alert-warning
+        Please note that your card might be charged for $1 for the purpose of authentication. This charge will be reversed automatically in a week.
 
     - unless Rails.env == 'production'
-      This is a non-production environment, so please use Stripe's test card numbers.
-      All test cards can be found
-      %a{:href => "https://stripe.com/docs/testing#cards"} here.
-      The simplest test card is: 4242424242424242. All other fields are arbitrary.
+      %div.alert.alert-info
+        This is a non-production environment, so please use Stripe's test card numbers.
+        All test cards can be found
+        %a{:href => "https://stripe.com/docs/testing#cards"} here.
+        The simplest test card is: 4242424242424242. All other fields are arbitrary.
 
     .form-group.pure-u-1.jg-inline
       .pure-u-1.pure-u-md-3-4

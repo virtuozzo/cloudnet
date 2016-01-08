@@ -97,7 +97,13 @@ class CreditNote < ActiveRecord::Base
     account.create_activity(:create_manual_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost, issued_by: user_that_issued_note.id })
   end
   
-  def self.trial_issue(account)
+  def self.trial_issue(account, card)
+    amount = Invoice.milli_to_cents(100_000)
+    charge = Payments.new.auth_charge(account.gateway_id, card.processor_token, amount)
+    return unless charge[:charge_id]
+    
+    account.create_activity :auth_charge, owner: account.user, params: { card: card.id, amount: amount, charge_id: charge[:charge_id] }
+    
     credit_note = CreditNote.new account: account
     credit_item = CreditNoteItem.new(
       net_cost: TRIAL_CREDIT * Invoice::MILLICENTS_IN_DOLLAR,
