@@ -4,7 +4,7 @@
     
     - if current_user.trial_credit_eligible?
       %div.alert.alert-warning
-        Please note that your card might be charged for $1 for the purpose of authentication. This charge will be reversed automatically in a week.
+        Please note that your card will be authorising $1 for authentication purposes. This authorisation will be reversed automatically in a week.
 
     - unless Rails.env == 'production'
       %div.alert.alert-info
