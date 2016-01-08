@@ -98,6 +98,7 @@ class CreditNote < ActiveRecord::Base
   end
   
   def self.trial_issue(account, card)
+    # Auth $1 on the card to verify card before issuing trial credit
     amount = Invoice.milli_to_cents(100_000)
     charge = Payments.new.auth_charge(account.gateway_id, card.processor_token, amount)
     return unless charge[:charge_id]
