@@ -38,7 +38,6 @@ class Server < ActiveRecord::Base
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
   
-  IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
 
@@ -145,11 +144,14 @@ class Server < ActiveRecord::Base
     end
   end
   
-  # Check temp cache of IP count is withing permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
+  # Check temp cache of IP count is within permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
   def can_add_ips?
     return false if state != :on && state != :off
-    ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
-    supports_multiple_ips? && (ips_count < MAX_IPS)
+    supports_multiple_ips? && (ips_chargeable? || ip_addresses < MAX_IPS)
+  end
+  
+  def ips_chargeable?
+    location.price_ip_address.to_f > 0
   end
   
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+

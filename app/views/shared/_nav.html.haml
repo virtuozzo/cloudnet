@@ -2,7 +2,7 @@
   %ul.nav.navbar-nav
     - if current_user
       = navigation_link %w(dashboard), 'Dashboard', dashboard_index_path
-      = navigation_link %w(servers server_wizards backups), 'Servers', servers_path
+      = navigation_link %w(servers server_wizards backups ip_addresses), 'Servers', servers_path
       = navigation_link %w(dns_zones), 'DNS', dns_zones_path
       = navigation_link %w(billing), 'Billing', billing_index_path
       = navigation_link %w(tickets ticket_replies), 'Support', tickets_path

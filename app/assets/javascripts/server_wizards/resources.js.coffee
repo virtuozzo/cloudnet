@@ -49,6 +49,7 @@ $ ->
   $disk             = $('#server_wizard_disk_size')
   $memory           = $('#server_wizard_memory')
   $cpus             = $('#server_wizard_cpus')
+  $ips              = $('#server_wizard_ip_addresses')
   $resourcesSummary = $('#resources-selection').find('.step-value')
 
   createMonthlyTooltip = =>
@@ -94,6 +95,7 @@ $ ->
     hourly_price += $memory.val() * selected_location.prices.price_memory
     hourly_price += $cpus.val() * selected_location.prices.price_cpu
     hourly_price += $disk.val() * selected_location.prices.price_disk
+    hourly_price += ($ips.val() - 1) * selected_location.prices.price_ip_address
 
     if @selectedTemplate?
       hourly_price += @selectedTemplate.hourly_cost

@@ -55,5 +55,7 @@
         %span.resource-value#inclusive-bandwidth
         %span.resource Inclusive Bandwidth
       %li.pure-u-1-2
-        %span.resource-value#inclusive-ip-address 1 IP
-        %span.resource Allocated IP Address
+        - #ips_count = @server ? @server.ip_addresses : 1
+        = f.hidden_field :ip_addresses #, value: ips_count
+        %span.resource-value#inclusive-ip-address= pluralize(@wizard_object.ip_addresses, "IP")
+        %span.resource Allocated IP Addresses
