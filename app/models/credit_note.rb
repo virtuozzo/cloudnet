@@ -101,7 +101,14 @@ class CreditNote < ActiveRecord::Base
     ChargeInvoicesTask.new(account.user, unpaid_invoices).process unless unpaid_invoices.empty?
   end
   
-  def self.trial_issue(account)
+  def self.trial_issue(account, card)
+    # Auth $1 on the card to verify card before issuing trial credit
+    amount = Invoice.milli_to_cents(100_000)
+    charge = Payments.new.auth_charge(account.gateway_id, card.processor_token, amount)
+    return unless charge[:charge_id]
+    
+    account.create_activity :auth_charge, owner: account.user, params: { card: card.id, amount: amount, charge_id: charge[:charge_id] }
+    
     credit_note = CreditNote.new account: account
     credit_item = CreditNoteItem.new(
       net_cost: TRIAL_CREDIT * Invoice::MILLICENTS_IN_DOLLAR,

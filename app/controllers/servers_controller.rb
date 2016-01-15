@@ -27,6 +27,7 @@ class ServersController < ServerCommonController
     @wizard_object.location_id = @server.location_id
     @wizard_object.submission_path = edit_server_path @server
     @wizard_object.existing_server_id = @server.id
+    @wizard_object.ip_addresses = @server.ip_addresses
     if @wizard.save
       log_activity :edit
       if schedule_edit
@@ -213,6 +214,7 @@ class ServersController < ServerCommonController
     @edit_wizard.existing_server_id = @server.id
     @edit_wizard.card = current_user.account.billing_cards.first
     @edit_wizard.user = current_user
+    @edit_wizard.ip_addresses = @server.ip_addresses
     # Send the old server so that a credit note can be issued for it
     @edit_wizard.edit_server(old_server_specs)
   end

@@ -260,6 +260,21 @@ ul.nav.nav-tabs {
 
 }
 
+.ip-resources-total {
+  font-size: $fourteen;
+  margin: 0 0 15px 0;
+
+  .total-cost {
+    color: $jg-green;
+  }
+
+  span {
+    display: inline;
+  }
+
+}
+
+
 .templates-total {
   font-size: $fourteen;
   padding: 20px 20px 20px;
