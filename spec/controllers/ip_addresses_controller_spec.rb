@@ -34,11 +34,12 @@ RSpec.describe IpAddressesController, :type => :controller do
         expect(AssignIpAddress).to have_received(:perform_async)
         expect(response).to redirect_to(server_ip_addresses_path(@server))
         expect(flash[:notice]).to eq('IP address has been requested and will be added shortly')
-        expect(Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, @server.id])).to eq(2)
+        @server.reload
+        expect(@server.ip_addresses).to eq(2)
       end
       
       it 'should not allow more than MAX_IPS limit' do
-        Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], Server::MAX_IPS)
+        @server.update_attribute :ip_addresses, Server::MAX_IPS
         post :create, { server_id: @server.id }
         expect(flash[:alert]).to eq('You cannot add anymore IP addresses to this server.')
       end

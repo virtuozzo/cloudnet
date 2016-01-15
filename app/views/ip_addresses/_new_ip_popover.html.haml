@@ -9,9 +9,15 @@
         .jg-widget-form.pure-g-r.clearfix
           %div{data: {"ng-hide" => "ips_disabled(server)"}}
             %p A new IP address will be added to the server without rebooting. You may then click on the 'Rebuild Network' button to have the IP address automatically configured on your server.
+            
+            - if @server.ips_chargeable?
+              .ip-resources-total.pure-g
+                = render partial: "server_wizards/steps/partials/prepaid_confirmation_costs", locals: { costs: @costs, coupon_multiplier: @coupon_multiplier }
+            
             %p Please confirm you would like to continue.
+            
           %div{data: {"ng-show" => "ips_disabled(server)"}}
-            %p= "Sorry, you cannot add anymore IP addresses to this server. We currently allow a maximum of #{Server::MAX_IPS} IP addresses per server."
+            %p= "Sorry, you cannot add anymore IP addresses to this server. We currently allow a maximum of #{Server::MAX_IPS} IP addresses per server on this location."
       
         .modal-footer
           %div{data: {"ng-hide" => "ips_disabled(server)"}}

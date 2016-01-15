@@ -95,12 +95,13 @@ module Billing
     end
 
     def ip_invoice_item(hours)
+      additional_ips = ip_addresses.to_i - 1
       {
         name: 'IP Address',
         unit_cost: location.price_ip_address,
-        units: ip_addresses,
-        description: "#{ip_addresses} IP(s) for #{hours} hours",
-        net_cost: 0.0
+        units: additional_ips,
+        description: "#{additional_ips} additional IP(s) for #{hours} hours",
+        net_cost: location.price_ip_address.to_f * additional_ips * hours
       }
     end
 
