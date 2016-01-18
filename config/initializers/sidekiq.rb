@@ -1,5 +1,5 @@
 redis_config = {
-  url: ENV['REDIS_URI'] || 'redis://localhost:6379',
+  url: "redis://#{ENV['CLOUDNET_REDIS_PORT_6379_TCP_ADDR']}:#{ENV['CLOUDNET_REDIS_PORT_6379_TCP_PORT']}",
   namespace: 'cloudnet'
 }
 
