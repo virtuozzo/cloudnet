@@ -1,6 +1,6 @@
 cloudnet-web:
   image: cloudnet
-  env_file: .env
+  env_file: .env.docker
   restart: always
   ports:
    - "443:3443"
@@ -13,7 +13,7 @@ cloudnet-web:
 
 cloudnet-worker:
   image: cloudnet
-  env_file: .env
+  env_file: .env.docker
   restart: always
   links:
    - cloudnet-redis
