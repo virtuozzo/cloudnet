@@ -1,4 +1,4 @@
-FROM atlashealth/ruby:2.2.2
+FROM healthcareblocks/ruby:2.2.4
 
 RUN apt-get update \
   && apt-get install -y \
