@@ -4,8 +4,8 @@ defaults: &defaults
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASSWD'] %>
   encoding: utf8
-  host: <%= ENV['CLOUDNET_DB_PORT_5432_TCP_ADDR'] %>
-  port: <%= ENV['CLOUDNET_DB_PORT_5432_TCP_PORT'] %>
+  host: <%= ENV['DB_HOST'] || '127.0.0.1' %>
+  port: <%= ENV['DB_PORT'] || '6000' %>
   pool: 25
   timeout: 20000
 
