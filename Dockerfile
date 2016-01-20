@@ -7,6 +7,9 @@ RUN apt-get update \
     libssl-dev \
     libpq-dev \
     nodejs \
+    g++ \
+    gcc \
+    make \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
