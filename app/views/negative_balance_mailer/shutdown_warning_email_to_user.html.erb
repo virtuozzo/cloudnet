@@ -8,14 +8,16 @@
 
 <p>
   This is your <%= (@user.notif_delivered + 1).ordinalize %> warning.
-  
+  <br>
   Please login to the control panel at <a href="https://www.cloud.net">https://www.cloud.net</a> and add new funds to your account.
-
+  <br>
   Please note that we will shutdown all your servers after <%= @user.notif_before_shutdown %> warnings of a negative balance. 
+  <br>
   If you have any questions or need any help, please contact our support staff via the help-desk within the control panel.
 </p>
 
 <p>
   Thank you
+  <br>
   Cloud.net Team
 </p>

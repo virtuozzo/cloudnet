@@ -23,14 +23,17 @@ set :format, :pretty
 
 # Puma related config variables
 set :puma_default_hooks, false
-set :puma_threads, [4, 8]
-set :puma_workers, 4
+set :puma_threads, [1, 4]
+set :puma_workers, 2
 set :puma_preload_app, true
 set :puma_init_active_record, false
 set :puma_jungle_conf, '/etc/puma.conf'
 set :puma_run_path, '/usr/local/bin/run-puma'
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
+
+set :sidekiq_timeout, 40
+set :sidekiq_run_in_background, true
 
 set :config_files, %w(.env)
 set :linked_files, %w(.env)
