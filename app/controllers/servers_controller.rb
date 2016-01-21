@@ -31,7 +31,7 @@ class ServersController < ServerCommonController
     if @wizard.save
       log_activity :edit
       if schedule_edit
-        flash[:info] = 'Server scheduled for updating'
+        flash[:info] = 'Server scheduled for update'
         redirect_to server_path(@server)
         return
       else
