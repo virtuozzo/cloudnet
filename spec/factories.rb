@@ -104,6 +104,10 @@ FactoryGirl.define do
 
     after(:build) { |s| s.update location: s.template.location }
     
+    after(:build) do |server|
+      create_list(:server_ip_address, 1, server: server)
+    end
+    
     trait :payg do
       after(:build) do |s|
         s.payment_type = :payg

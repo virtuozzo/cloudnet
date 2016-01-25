@@ -7,7 +7,7 @@ describe MonitorServer do
     allow(ServerTasks).to receive(:new).and_return(tasks)
 
     MonitorServer.new.perform(server.id, server.user.id)
-    expect(tasks).to have_received(:perform).with(:refresh_server, server.user.id, server.id)
+    expect(tasks).to have_received(:perform).with(:refresh_server, server.user.id, server.id, false)
     expect(tasks).to have_received(:perform).with(:refresh_events, server.user.id, server.id)
   end
 
