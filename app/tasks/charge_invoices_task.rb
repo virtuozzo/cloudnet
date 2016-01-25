@@ -31,11 +31,15 @@ class ChargeInvoicesTask < BaseTask
       account.create_activity :charge_payment_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
       create_payment_receipt_charges(account, invoice, notes_used)
     end
-    unblock_servers
+    unblock_servers if @user.account.remaining_balance > 100_000
   end
   
   def unblock_servers
-    @user.clear_unpaid_notifications unless @user.account.remaining_balance > 100_000
+    @user.clear_unpaid_notifications
+    manager = ServerTasks.new
+    @user.servers.each do |server|
+      manager.perform(:refresh_server, @user.id, server.id)
+    end
   end
 
   def create_payment_receipt_charges(account, invoice, payment_receipts)
