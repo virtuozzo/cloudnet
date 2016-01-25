@@ -44,7 +44,7 @@
           - else
             %li.active
               %a.jg-icon.icon-list{href: "#server-apps"} Apps
-        - elsif !provisioner_templates.nil?
+        - elsif !provisioner_templates.blank?
           %li.active
             %a.jg-icon.icon-list{href: "#server-distributions"} Distributions
           %li
@@ -56,7 +56,7 @@
       = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
       = render partial: "server_wizards/steps/partials/server_apps", locals: {f: f}
     - else
-      - if provisioner_templates.nil?
+      - if provisioner_templates.blank?
         = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
       - else
         = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
