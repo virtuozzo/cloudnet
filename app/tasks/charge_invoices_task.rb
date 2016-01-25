@@ -31,7 +31,7 @@ class ChargeInvoicesTask < BaseTask
       account.create_activity :charge_payment_account, owner: @user, params: { notes: notes_used } unless notes_used.empty?
       create_payment_receipt_charges(account, invoice, notes_used)
     end
-    unblock_servers if @user.account.remaining_balance > 100_000
+    unblock_servers if @user.account.remaining_balance <= 100_000
   end
   
   def unblock_servers
