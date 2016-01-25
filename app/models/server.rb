@@ -43,6 +43,8 @@ class Server < ActiveRecord::Base
   
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
+  
+  PROVISIONER_ROLES = ['ping', 'docker', 'mongodb', 'mysql', 'redis', 'wordpress']
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)
@@ -116,7 +118,7 @@ class Server < ActiveRecord::Base
   # `resources` hash, new resources for server
   def edit(resources)
     resources.stringify_keys!
-    editable_properties = %w(name cpus memory disk_size template_id)
+    editable_properties = %w(name cpus memory disk_size template_id provisioner_role)
     updates = {}
     editable_properties.each do |field|
       updates[field] = resources[field] if resources.key? field
