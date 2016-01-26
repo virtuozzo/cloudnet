@@ -15,6 +15,10 @@ class Location < ActiveRecord::Base
   validates :price_memory, :price_disk, :price_cpu, numericality: true
   validates :max_index_cpu, :max_index_iops, :max_index_bandwidth, numericality: true
   validate :verify_valid_country_code
+  
+  def provisioner_templates
+    templates.where(os_distro: 'docker')
+  end
 
   def country_name
     return unless country

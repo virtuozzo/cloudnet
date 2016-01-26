@@ -20,6 +20,7 @@ class ServersController < ServerCommonController
         memory: @server.memory,
         cpus: @server.cpus,
         disk_size: @server.disk_size,
+        provisioner_role: @server.provisioner_role,
         current_step: 1
       }
     end

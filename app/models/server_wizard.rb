@@ -10,7 +10,7 @@ class ServerWizard
 
   ATTRIBUTES = [:location_id, :template_id, :memory, :cpus, :disk_size, :name,
                 :os_type, :card_id, :user, :ip_addresses, :payment_type, :build_errors,
-                :submission_path, :existing_server_id]
+                :submission_path, :existing_server_id, :provisioner_role]
   attr_accessor(*ATTRIBUTES)
 
   attr_reader :hostname
@@ -29,6 +29,7 @@ class ServerWizard
   validates_with HostnameValidator, if: :step2?
 
   validate :validate_wallet_credit, if: :step3?
+  validate :validate_provisioner_template, if: :step2?
 
   validates :payment_type, inclusion: { in: %w(prepaid payg) }
 
@@ -140,7 +141,8 @@ class ServerWizard
       template:               template,
       location:               location,
       bandwidth:              bandwidth,
-      payment_type:           'prepaid'
+      payment_type:           'prepaid',
+      provisioner_role:       provisioner_role
     )
   end
 
@@ -438,5 +440,11 @@ class ServerWizard
   
   def validate_wallet_credit
     errors.add(:base, 'You do not have enough credit to run this server until next invoice date. Please top up your Wallet.') unless enough_wallet_credit?
+  end
+  
+  def validate_provisioner_template
+    if !provisioner_role.blank? && template_id.to_s != location.provisioner_templates.first.id.to_s
+      errors.add(:base, 'Invalid template for provisioner')
+    end
   end
 end

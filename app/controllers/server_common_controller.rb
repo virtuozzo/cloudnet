@@ -44,7 +44,7 @@ class ServerCommonController < ApplicationController
   private
 
   def step2
-    @templates = Location.find(@wizard_object.location_id).templates.where(hidden: false).group_by { |t| "#{t.os_type}-#{t.os_distro}" }
+    @templates = Location.find(@wizard_object.location_id).templates.where(hidden: false).where.not(os_distro: 'docker').group_by { |t| "#{t.os_type}-#{t.os_distro}" }
     Analytics.track(current_user, event_details_step2, anonymous_id, request)
   end
 
@@ -115,6 +115,6 @@ class ServerCommonController < ApplicationController
   end
 
   def wizard_params
-    params.require(:server_wizard).permit(:location_id, :os_distro_id, :template_id, :memory, :cpus, :disk_size, :bandwidth, :hostname, :name, :card_id, :ip_addresses)
+    params.require(:server_wizard).permit(:location_id, :os_distro_id, :template_id, :memory, :cpus, :disk_size, :bandwidth, :hostname, :name, :card_id, :ip_addresses, :provisioner_role)
   end
 end

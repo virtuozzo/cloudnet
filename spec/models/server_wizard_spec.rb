@@ -156,6 +156,7 @@ describe ServerWizard do
     before(:each) do
       server_wizard.current_step = 2
       @template = FactoryGirl.create(:template, min_memory: 128 * 2, min_disk: 6 * 2)
+      @provisioner_template = FactoryGirl.create(:template, min_memory: 128 * 2, min_disk: 6 * 2, os_distro: 'docker', location: server_wizard.location)
       allow(server_wizard).to receive_messages(minimum_resources: { memory: 128, cpus: 1, disk_size: 6 }, template: @template)
       server_wizard.memory = @template.min_memory
       server_wizard.disk_size = @template.min_disk
@@ -173,6 +174,14 @@ describe ServerWizard do
       expect(server_wizard).to be_valid
       server_wizard.disk_size = @template.min_disk - 1
       expect(server_wizard).not_to be_valid
+    end
+    
+    it 'should detect invalid template for provisioner' do
+      server_wizard.provisioner_role = 'redis'
+      server_wizard.template_id = @template.id
+      expect(server_wizard).not_to be_valid
+      server_wizard.template_id = @provisioner_template.id
+      expect(server_wizard).to be_valid
     end
   end
 
