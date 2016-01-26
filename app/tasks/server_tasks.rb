@@ -19,10 +19,10 @@ class ServerTasks < BaseTasks
         new_state = :building
       elsif info['booted'] == false
         new_state = :off
-        onapp_template = active_template(info["template_id"], server.location_id)
+        onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       else
         new_state = docker_provision || :on
-        onapp_template = active_template(info["template_id"], server.location_id)
+        onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       end
     end
     new_state = :blocked if server_blocked?(server)
@@ -177,8 +177,12 @@ class ServerTasks < BaseTasks
   end
   
   private
-    def active_template(template_id, location_id)
-      Template.where(identifier: template_id, location_id: location_id).first
+    def active_template(template_id, location_id, provisioner_role)
+      if provisioner_role.blank?
+        Template.where(identifier: template_id, location_id: location_id).first
+      else
+        Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
+      end
     end
     
     def server_blocked?(server)
