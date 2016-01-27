@@ -80,7 +80,7 @@ class ServerWizard
   end
 
   def location
-    @location = Location.where(hidden: false).find_by_id(location_id) if location_id
+    @location = Location.find_by_id(location_id) if location_id
   end
 
   def template
