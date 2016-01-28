@@ -39,7 +39,13 @@ ActiveAdmin.register Server do
 
     actions
   end
-
+  
+  csv do
+    column :id
+    column('Location') { |server| server.location }
+    @resource.content_columns.each { |c| column c.name.to_sym }
+  end
+    
   collection_action :zombies, method: :get do
     onapp_servers   = AllServers.new.process
     deleted_servers = Server.only_deleted
@@ -73,8 +79,11 @@ ActiveAdmin.register Server do
   end
   
   controller do
+
+    
     def scoped_collection
-      super.includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
+      super.with_deleted
+        .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
     end
   end
   
