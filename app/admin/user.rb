@@ -14,7 +14,38 @@ ActiveAdmin.register User do
     end
   end
 
+  filter :id
+  filter :email
+  filter :full_name
+  filter :onapp_user
 
+  filter :notif_delivered
+  filter :last_notif_email_sent
+
+  filter :admin
+  filter :suspended
+  filter :failed_attempts
+  filter :otp_enabled
+  filter :otp_mandatory
+  filter :status
+  filter :unconfirmed_email
+  filter :servers
+  filter :keys
+  
+  filter :current_sign_in_ip
+  filter :last_sign_in_ip
+  filter :notif_before_shutdown
+  filter :notif_before_destroy
+  
+  filter :created_at
+  filter :updated_at
+  filter :locked_at
+  filter :reset_password_sent_at
+  filter :confirmation_sent_at
+  filter :confirmed_at
+  filter :current_sign_in_at
+  filter :last_sign_in_at
+  
   index do
     column :id
     column :email

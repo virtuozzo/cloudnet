@@ -21,4 +21,10 @@ ActiveAdmin.register Ticket do
 
     actions
   end
+  
+  controller do
+    def scoped_collection
+      super.includes(:user)
+    end
+  end
 end

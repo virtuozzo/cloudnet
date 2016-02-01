@@ -20,6 +20,18 @@ ActiveAdmin.register Location do
     end
   end
 
+  filter :servers
+  filter :region
+  filter :certificates
+  filter :provider
+  filter :country
+  filter :city
+  filter :hidden
+  filter :provider_link
+  filter :budget_vps
+  filter :ssd_disks
+  filter :hv_group_version
+
   index do
     column :id
     column :country
@@ -117,6 +129,10 @@ ActiveAdmin.register Location do
   
   controller do
     attr_accessor :not_connected
+    
+    def scoped_collection
+      super.includes(:certificates)
+    end
     
     def find_resource
       Location.find_by_id(params[:id])

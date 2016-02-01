@@ -17,6 +17,35 @@ ActiveAdmin.register Server do
     end
   end
 
+  filter :id
+  filter :identifier, label: 'Onapp identifier'
+  filter :name
+  filter :hostname
+  filter :unscoped_location, label: "Location"
+  filter :unscoped_user, label: "User"
+
+  filter :state
+  filter :built
+  filter :locked
+  filter :suspended
+  filter :stuck
+  
+  filter :cpus
+  filter :memory
+  filter :disk_size
+  filter :bandwidth
+  
+  filter :os
+  filter :os_distro
+  filter :forecasted_rev
+  filter :provisioner_role
+
+  filter :created_at
+  filter :updated_at
+  filter :deleted_at
+  filter :delete_ip_address
+
+
   index do
     column :id
     column :name

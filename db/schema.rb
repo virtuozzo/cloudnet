@@ -436,12 +436,12 @@ ActiveRecord::Schema.define(version: 20160121122956) do
     t.datetime "deleted_at"
     t.string   "delete_ip_address",      limit: 255
     t.boolean  "in_beta",                            default: false
+    t.integer  "ip_addresses",                       default: 1
     t.boolean  "payg",                               default: false
     t.string   "payment_type",           limit: 255, default: "prepaid"
     t.time     "state_changed_at"
     t.boolean  "stuck",                              default: false
     t.decimal  "forecasted_rev",                     default: 0.0
-    t.integer  "ip_addresses",                       default: 1
     t.string   "provisioner_role"
   end
 
