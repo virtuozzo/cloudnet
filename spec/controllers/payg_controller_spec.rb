@@ -41,8 +41,8 @@ RSpec.describe PaygController, :type => :controller do
     end
     
     it 'should process Wallet top-up using card payment' do
-      post :card_payment, { amount: '10' }
-      expect(@current_user.account.wallet_balance).to eq(1000000)
+      post :card_payment, { amount: '25' }
+      expect(@current_user.account.wallet_balance).to eq(2500000)
       expect(response).to be_success
       expect(response).to render_template('payg/_card_payment_complete')
     end
@@ -64,10 +64,10 @@ RSpec.describe PaygController, :type => :controller do
     it 'should mark invoices as paid on top-up' do
       invoice = FactoryGirl.create(:invoice, account: @current_user.account)
       FactoryGirl.create_list(:invoice_item, 2, invoice: invoice, net_cost: 500000)
-      post :card_payment, { amount: '12' }
+      post :card_payment, { amount: '25' }
       invoice.reload
       expect(invoice.state).to eq(:paid)
-      expect(@current_user.account.wallet_balance).to eq(0)
+      expect(@current_user.account.wallet_balance).to eq(1300000)
     end
     
     it 'should render on error' do
