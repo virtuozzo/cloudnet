@@ -12,19 +12,17 @@ class SendAdminFinancials
 
     signups        = scope(User, time).to_a.count
     invoice_totals = scope(Invoice, time).to_a.sum(&:total_cost)
-    credit_totals  = scope(CreditNote, time).to_a.sum(&:total_cost)
-    charges        = scope(Charge, time).where(source_type: 'BillingCard').to_a.sum(&:amount)
-    payg_cc_charges = scope(PaymentReceipt, time).where(pay_source: :billing_card).to_a.sum(&:net_cost)
-    payg_paypal_charges = scope(PaymentReceipt, time).where(pay_source: :paypal).to_a.sum(&:net_cost)
+    wallet_charges = scope(Charge, time).where('source_type = ? OR source_type = ?', 'CreditNote', 'PaymentReceipt').to_a.sum(&:amount)
+    cc_charges = scope(PaymentReceipt, time).where(pay_source: :billing_card).to_a.sum(&:net_cost)
+    paypal_charges = scope(PaymentReceipt, time).where(pay_source: :paypal).to_a.sum(&:net_cost)
 
     data = {
       date: date_str,
       signups: signups,
       invoices: invoice_totals,
-      credits: credit_totals,
-      charges: charges,
-      payg_cc_charges: payg_cc_charges,
-      payg_paypal_charges: payg_paypal_charges
+      wallet_charges: wallet_charges,
+      cc_charges: cc_charges,
+      paypal_charges: paypal_charges
     }
 
     AdminMailer.financials(data).deliver_now
