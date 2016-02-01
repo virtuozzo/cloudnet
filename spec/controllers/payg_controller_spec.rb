@@ -48,6 +48,7 @@ RSpec.describe PaygController, :type => :controller do
     end
     
     it 'should not process if billing card not present' do
+      @billing_card2 = FactoryGirl.create(:billing_card, account: @current_user.account)
       @billing_card.destroy
       post :card_payment, { amount: '10' }
       expect(@current_user.account.wallet_balance).to eq(0)

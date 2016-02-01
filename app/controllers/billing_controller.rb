@@ -31,9 +31,9 @@ class BillingController < ApplicationController
   def remove_card
     card = current_user.account.billing_cards.find params[:card_id]
     card.set_new_primary if card.primary
-    BillingCard.find(card).destroy
+    card_deleted = BillingCard.find(card.id).destroy ? true : false
     respond_to do |format|
-      format.json { render layout: false, text: true }
+      format.json { render layout: false, text: card_deleted }
     end
   end
 
