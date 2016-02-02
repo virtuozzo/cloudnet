@@ -51,19 +51,22 @@ $ ->
     $(card_table).html(generate_card_html())
     $(card_table).find('i').tooltip()
     $('.remove-billing-card').bind('click', ->
-      card_row = $(this).parents('tr')
-      card_id = card_row.attr('data-id')
-      last4 = $.trim card_row.find('.card-last4').text()
-      if confirm("Are you sure you want to delete card '#{last4}'?")
-        $.post(
-          '/billing/remove_card',
-          {card_id: card_id},
-          (result) ->
-            if result
-              card_row.html('<td><strong>Card removed</strong></td><td></td><td></td>')
-            else
-              alert 'There was a problem removing your card'
-        )
+      if account_cards.length <= 1
+        alert 'You need to have atleast one primary card in your account'
+      else
+        card_row = $(this).parents('tr')
+        card_id = card_row.attr('data-id')
+        last4 = $.trim card_row.find('.card-last4').text()
+        if confirm("Are you sure you want to delete card '#{last4}'?")
+          $.post(
+            '/billing/remove_card',
+            {card_id: card_id},
+            (result) ->
+              if result
+                card_row.html('<td><strong>Card removed</strong></td><td></td><td></td>')
+              else
+                alert 'There was a problem removing your card'
+          )
     )
 
   $(card_form).on 'add_card', (e) ->

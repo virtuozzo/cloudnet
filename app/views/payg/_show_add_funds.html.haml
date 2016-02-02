@@ -3,7 +3,7 @@
     %p 
       Your current balance is
       %strong{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }= remaining_balance(current_user)
-    %p Please select the amount you wish to top up (minimum is $5 USD)
+    %p Please select the amount you wish to top up (minimum is $25 USD)
   .form-group.pure-u-1
     = select_tag :payg_amount, payg_options(current_user.account)
 

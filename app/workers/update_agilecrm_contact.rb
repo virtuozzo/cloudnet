@@ -3,6 +3,7 @@ class UpdateAgilecrmContact
 
   def perform(user_id, old_email = nil, tags = [])
     user = User.find user_id
+    return if user.suspended
     first_name = user.full_name.split(' ').first
     last_name = user.full_name.split(' ').last
     email_verified = !user.confirmed_at.nil? ? 'on' : 'off'

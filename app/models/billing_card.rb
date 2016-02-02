@@ -7,6 +7,8 @@ class BillingCard < ActiveRecord::Base
             :cardholder, :last4, :account, :address1, presence: true
 
   validate :verify_valid_country_code
+  
+  before_destroy :verify_card_deletable
 
   validates_format_of :expiry_month, with: /\A(0[1-9]|1[0-2])\z/
   validates_format_of :expiry_year, with: /\A(1[4-9]|2[0-9])\z/
@@ -58,5 +60,9 @@ class BillingCard < ActiveRecord::Base
 
   def verify_valid_country_code
     errors.add(:country, 'Invalid Country Selected') unless country && IsoCountryCodes.all.detect { |c| c.alpha2.downcase == country.downcase }
+  end
+  
+  def verify_card_deletable
+    account.billing_cards.count > 1
   end
 end
