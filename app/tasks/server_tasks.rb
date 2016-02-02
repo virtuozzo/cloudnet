@@ -9,6 +9,10 @@ class ServerTasks < BaseTasks
 
   private
 
+  def show(server, squall)
+    squall.show(server.identifier)
+  end
+  
   def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
     docker_provision = args[0] == true ? :provision : nil
@@ -162,6 +166,7 @@ class ServerTasks < BaseTasks
 
   def allowable_methods
     [
+      :show,
       :refresh_server,
       :refresh_events,
       :refresh_cpu_usages,
