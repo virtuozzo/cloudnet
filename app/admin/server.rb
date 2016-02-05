@@ -108,12 +108,9 @@ ActiveAdmin.register Server do
   end
   
   controller do
-
-    
     def scoped_collection
       super.with_deleted
         .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
     end
   end
-  
 end
