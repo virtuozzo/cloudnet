@@ -93,6 +93,9 @@ table {
   &.pending, &.building, &.starting_up, &.shutting_down, &.rebooting, &.running, &.backup-loading {
     background: #ffbc6d;
   }
+  &.provision {
+      background: #4775d2;
+    }
   &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary {
     background: #6ebd8d;
   }

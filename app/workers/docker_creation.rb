@@ -8,7 +8,7 @@ class DockerCreation
     return unless server_id && Server.find(server_id)
     @server = Server.find(server_id)
 
-    if server_booted? && server_has_ip?
+    if server_booted? && server_has_ip? && no_pending_events?
       DockerProvision.perform_async(server_id, role)
     else
       DockerCreation.perform_in(POLL_INTERVAL, server_id, role)
@@ -22,6 +22,10 @@ class DockerCreation
   
   def server_has_ip?
     server.server_ip_addresses.first.try(:address)
+  end
+  
+  def no_pending_events?
+    server.server_events.where.not(status: :complete).size == 0
   end
   
 end
