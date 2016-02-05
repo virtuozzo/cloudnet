@@ -10,6 +10,7 @@ module NegativeBalanceProtection
       def perform
         return nil unless destroy_confirmed_by_admin?
         user.servers.each { |server| destroy(server) }
+        create_activity
       end
       
       def destroy_confirmed_by_admin?
@@ -22,6 +23,13 @@ module NegativeBalanceProtection
         server.destroy_with_ip("not paid invoices")
       rescue => e
         log_error(e, server)
+      end
+      
+      def create_activity
+        user.create_activity(
+          :destroy_all_servers, 
+          owner: user
+        )
       end
       
       def log_error(e, server)

@@ -15,7 +15,10 @@ class CreateServerTask < BaseTask
       errors.concat @wizard.build_errors
       false
     elsif @server
-      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id)
+      prole = @server.provisioner_role
+      docker_provision = !prole.nil?
+      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id, docker_provision)
+      DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, prole) if prole
       true
     else
       false
