@@ -92,10 +92,38 @@ ActiveAdmin.register User do
         user.delete('password')
         user.delete('password_confirmation')
       end
+      shutdown_destroy_notifications_activity(user)
       update!
     end
+    
+    def shutdown_destroy_notifications_activity(user)
+      create_activity(user, :notif_before_shutdown_changed) if shutdown_changed?(user)
+      create_activity(user, :notif_before_destroy_changed) if destroy_changed?(user)
+    end
+    
+    def create_activity(user, activity)
+      param = activity.to_s
+      param.slice! '_changed'
+      resource.create_activity(
+        activity, 
+        owner: resource, 
+        params: { 
+          admin: current_user.id, 
+          from: resource.send(param),
+          to: user[param].to_i
+        }
+      )
+    end
+    
+    def shutdown_changed?(user)
+      resource.notif_before_shutdown != user['notif_before_shutdown'].to_i
+    end
+    
+    def destroy_changed?(user)
+      resource.notif_before_destroy != user['notif_before_destroy'].to_i
+    end
   end
-
+  
   collection_action :notify_users, method: :get do
     @page_title = 'Notify Users'
   end
