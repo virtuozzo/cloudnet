@@ -15,9 +15,8 @@ class DockerCreation
     end
   end
   
-  # FIXME: RefreshAllServers may set server to :on independently
   def server_booted?
-    server.state.in?([:provision, :on])
+    server.state.in?([:provision])
   end
   
   def server_has_ip?

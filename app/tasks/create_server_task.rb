@@ -1,6 +1,6 @@
 # Creates a server for a *prepaid* account. This was written before the create_payg_server_task
 class CreateServerTask < BaseTask
-  attr_reader :server
+  attr_reader :server, :user
 
   def initialize(wizard, user)
     super
@@ -14,14 +14,20 @@ class CreateServerTask < BaseTask
     if @wizard.build_errors.length > 0
       errors.concat @wizard.build_errors
       false
-    elsif @server
-      prole = @server.provisioner_role
+    elsif server
+      prole = server.provisioner_role
       docker_provision = !prole.nil?
-      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, @user.id, docker_provision)
-      DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, prole) if prole
+      
+      set_server_in_provision if docker_provision
+      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, user.id, docker_provision)
+      DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, prole) if prole
       true
     else
       false
     end
+  end
+  
+  def set_server_in_provision
+    server.update_attribute(:in_provision, true)
   end
 end

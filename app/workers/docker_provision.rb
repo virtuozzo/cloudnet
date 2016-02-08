@@ -48,13 +48,19 @@ class DockerProvision
     Rails.logger.warn "Provisioner of #{role} for server #{server_id} failed"
     ErrorLogging.new.track_exception(e, extra: prov_error_params)
   ensure
-    user_id = Server.find(server_id).user.id
+    server = Server.find(server_id)
+    unset_server_from_provision(server)
+    user_id = server.user.id
     ServerTasks.new.perform(:refresh_server, user_id, server_id)
   end
   
   def job_status(job_id)
     resp = provision_tasks.status(job_id)
     resp.status == 200 ? JSON.parse(resp.body).symbolize_keys : {status: "Error"}
+  end
+  
+  def unset_server_from_provision(server)
+    server.update_attribute(:in_provision, false)
   end
   
   def prov_error_params

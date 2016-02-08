@@ -13,7 +13,8 @@ describe CreateServerTask do
 
     allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345' })
     allow(MonitorServer).to receive(:perform_async).and_return(true)
-    allow_any_instance_of(ServerWizard).to receive_messages(save_server_details: double(id: 123, destroy: true, provisioner_role: 'ping'))
+    server_double = double('Server', id: 123, destroy: true, provisioner_role: 'ping', update_attribute: true)
+    allow_any_instance_of(ServerWizard).to receive_messages(save_server_details: server_double)
   end
 
   describe 'Using Wallet funds' do
