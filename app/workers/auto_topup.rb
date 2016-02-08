@@ -9,24 +9,14 @@ class AutoTopup
   sidekiq_options unique: true
 
   def perform
-    puts "Starting Auto Topup..."
-    puts DateTime.now
     Account.where(auto_topup: true).find_each do |account|
       user = account.user
-      puts "================================================="
-      puts "Account ID: #{account.id}"
-      puts "User: #{user.email}"
-      puts "Servers: #{user.servers.count}"
-      puts "Cards: #{account.billing_cards.processable.count}"
-      puts "Wallet balance: #{account.wallet_balance}"
       next unless user.servers.count > 0 && 
                   account.billing_cards.processable.count > 0 && 
                   account.wallet_balance < 200_000
       begin
-        puts "Topping up..."
         task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
         if task.process
-          puts "Done!"
           unpaid_invoices = account.invoices.not_paid
           ChargeInvoicesTask.new(user, unpaid_invoices).process unless unpaid_invoices.empty?
         end
