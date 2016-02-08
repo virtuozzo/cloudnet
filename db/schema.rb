@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208171026) do
+ActiveRecord::Schema.define(version: 20160208191211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.string   "address3"
     t.string   "address4"
     t.string   "company_name"
+    t.boolean  "auto_topup",                        default: true
   end
 
   add_index "accounts", ["coupon_id"], name: "index_accounts_on_coupon_id", using: :btree
@@ -228,7 +229,7 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.text     "billing_address"
     t.integer  "coupon_id"
     t.string   "invoice_type",        limit: 255
-    t.boolean  "transactions_capped"
+    t.boolean  "transactions_capped",             default: true
   end
 
   add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
@@ -268,11 +269,11 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.boolean  "budget_vps",                      default: false
     t.integer  "inclusive_bandwidth",             default: 100
     t.boolean  "ssd_disks",                       default: false
-    t.datetime "deleted_at"
     t.integer  "max_index_cpu",                   default: 0
     t.integer  "max_index_iops",                  default: 0
     t.integer  "max_index_bandwidth",             default: 0
     t.float    "max_index_uptime",                default: 0.0
+    t.datetime "deleted_at"
     t.integer  "region_id"
     t.text     "summary"
     t.integer  "pingdom_id"
@@ -436,12 +437,12 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.datetime "deleted_at"
     t.string   "delete_ip_address",      limit: 255
     t.boolean  "in_beta",                            default: false
-    t.integer  "ip_addresses",                       default: 1
     t.boolean  "payg",                               default: false
     t.string   "payment_type",           limit: 255, default: "prepaid"
     t.time     "state_changed_at"
     t.boolean  "stuck",                              default: false
     t.decimal  "forecasted_rev",                     default: 0.0
+    t.integer  "ip_addresses",                       default: 1
     t.string   "provisioner_role"
     t.boolean  "in_provision",                       default: false
   end
@@ -466,7 +467,7 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255
     t.string   "identifier",      limit: 255
-    t.integer  "hourly_cost",                 default: 1
+    t.integer  "hourly_cost",     limit: 8,   default: 1
     t.string   "name",            limit: 255
     t.integer  "location_id"
     t.datetime "created_at"
@@ -556,8 +557,8 @@ ActiveRecord::Schema.define(version: 20160208171026) do
     t.integer  "storage_max",                          default: 120
     t.integer  "bandwidth_max",                        default: 1024
     t.datetime "deleted_at"
-    t.boolean  "suspended",                            default: false
     t.integer  "account_id"
+    t.boolean  "suspended",                            default: false
     t.string   "otp_auth_secret",          limit: 255
     t.string   "otp_recovery_secret",      limit: 255
     t.boolean  "otp_enabled",                          default: false,     null: false

@@ -1,6 +1,12 @@
 .jg-widget-content
   .jg-widget-header.pure-g.clearfix
     %h2.pure-u-1-2.jg-icon.icon-tickets Wallet Details
+    %ul.pure-u-1-2.jg-widget-controls.auto-topup-setting
+      %li.auto-topup Auto Top-up:
+      %li#auto-topup-btn
+        = form_tag toggle_auto_topup_billing_index_path do
+          = check_box_tag :auto_topup, '1', current_user.account.auto_topup, {class: 'tgl tgl-light'}
+          %label.tgl-btn{for: "auto_topup"}
   .jg-widget-body.pure-u-1
     .jg-widget-form.pure-g-r.clearfix
       .form-group.jg-inline.pure-g-r.clearfix.pure-g.pure-u-1
@@ -9,6 +15,8 @@
           %p{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }
             Wallet Balance:
             %strong= remaining_balance(current_user)
+          %p.auto-topup-info
+            ="If you have Auto Top-up enabled, we will automatically top-up your account with $#{Payg::VALID_TOP_UP_AMOUNTS.min} when your Wallet balance goes below $2, provided you have active servers and atleast one billing card added to your account."
 
           - if defined?(wizard)
             %p

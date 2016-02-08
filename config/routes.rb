@@ -71,6 +71,7 @@ CloudNet::Application.routes.draw do
       post :add_card_token
       post :update_billing
       post :make_primary
+      post :toggle_auto_topup
       post :set_coupon_code
       get :payg
     end

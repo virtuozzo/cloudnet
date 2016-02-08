@@ -112,6 +112,12 @@ class BillingController < ApplicationController
     redirect_to billing_index_path, notice: 'Primary Card preference has been saved successfully'
   end
 
+  def toggle_auto_topup
+    current_user.account.toggle!(:auto_topup)
+    Analytics.track(current_user, event: "Switched #{current_user.account.auto_topup ? 'on' : 'off'} Auto Top-up")
+    redirect_to billing_index_path, notice: "Auto Top-up has been #{current_user.account.auto_topup ? 'enabled' : 'disabled'}"
+  end
+
   def set_coupon_code
     coupon_code = params[:coupon_code]
     task = SetCouponCodeTask.new(current_user, coupon_code)

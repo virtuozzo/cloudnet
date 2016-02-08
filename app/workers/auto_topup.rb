@@ -9,7 +9,9 @@ class AutoTopup
   sidekiq_options unique: true
 
   def perform
-    Account.find_each do |account|
+    puts "Starting Auto Topup..."
+    puts DateTime.now
+    Account.where(auto_topup: true).find_each do |account|
       user = account.user
       puts "================================================="
       puts "Account ID: #{account.id}"
