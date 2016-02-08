@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160121122956) do
+ActiveRecord::Schema.define(version: 20160208171026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -436,13 +436,14 @@ ActiveRecord::Schema.define(version: 20160121122956) do
     t.datetime "deleted_at"
     t.string   "delete_ip_address",      limit: 255
     t.boolean  "in_beta",                            default: false
+    t.integer  "ip_addresses",                       default: 1
     t.boolean  "payg",                               default: false
     t.string   "payment_type",           limit: 255, default: "prepaid"
     t.time     "state_changed_at"
     t.boolean  "stuck",                              default: false
     t.decimal  "forecasted_rev",                     default: 0.0
-    t.integer  "ip_addresses",                       default: 1
     t.string   "provisioner_role"
+    t.boolean  "in_provision",                       default: false
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree

@@ -10,6 +10,10 @@ class DockerProvisionerTasks
     connection.get "/job/#{job_id}"
   end
 
+  def prov_server
+    ENV['DOCKER_PROVISIONER']
+  end
+  
   private
   
     def provisioner_data(role)
@@ -34,10 +38,6 @@ class DockerProvisionerTasks
     end
   
     def docker_url
-      "http://#{prov_ip_address}/"
-    end
-  
-    def prov_ip_address
-      ENV['DOCKER_PROVISIONER']
+      "http://#{prov_server}/"
     end
 end

@@ -14,6 +14,7 @@ module NegativeBalanceProtection
       def perform
         send_email_to_admin
         set_email_sent_status
+        create_activity
       end
       
       def send_email_to_admin
@@ -22,6 +23,13 @@ module NegativeBalanceProtection
       
       def set_email_sent_status
         user.update_attribute(:admin_destroy_request, REQUEST_SENT_NOT_CONFIRMED)
+      end
+      
+      def create_activity
+        user.create_activity(
+          :request_for_server_destroy, 
+          owner: user
+        )
       end
     end
   end

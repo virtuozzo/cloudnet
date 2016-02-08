@@ -3,9 +3,9 @@ class RefreshAllServers
   sidekiq_options unique: true
 
   def perform
-    Server.select('id, user_id').each do |server|
+    manager = ServerTasks.new
+    Server.where(in_provision: false).select('id, user_id').each do |server|
       begin
-        manager = ServerTasks.new
         manager.perform(:refresh_server, server.user_id, server.id)
         manager.perform(:refresh_events, server.user_id, server.id)
       rescue Exception => e
