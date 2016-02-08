@@ -21,8 +21,11 @@ class DockerProvision
       status = wait_for_server_provisioned(job_id)
       finalize_build(status[:status])
     else 
-      handle_task_build_error(resp)
+      raise(ProvisionerError, resp.status)
     end
+    
+  rescue => e
+    ErrorLogging.new.track_exception(e, extra: prov_error_params)
   end
   
   def send_data_to_provisioner
@@ -52,9 +55,6 @@ class DockerProvision
   def job_status(job_id)
     resp = provision_tasks.status(job_id)
     resp.status == 200 ? JSON.parse(resp.body).symbolize_keys : {status: "Error"}
-  end
-  
-  def handle_task_build_error(resp)
   end
   
   def prov_error_params
