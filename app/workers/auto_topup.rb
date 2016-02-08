@@ -3,6 +3,7 @@
 #       * Have atleast one active servers
 #       * Have atleast one processable billing card
 #       * Have a Wallet balance of less than $2
+#       * Does not have a 100% discounted active coupon code
 
 class AutoTopup
   include Sidekiq::Worker
@@ -14,6 +15,7 @@ class AutoTopup
       next unless user.servers.count > 0 && 
                   account.billing_cards.processable.count > 0 && 
                   account.wallet_balance < 200_000
+      next if account.coupon && account.coupon.percentage == 100
       begin
         task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
         if task.process
