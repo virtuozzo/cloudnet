@@ -184,7 +184,7 @@ class ServerTasks < BaseTasks
   private
     def active_template(template_id, location_id, provisioner_role)
       if provisioner_role.blank?
-        Template.where(identifier: template_id, location_id: location_id).first
+        Template.where(identifier: template_id, location_id: location_id).where.not(os_distro: 'docker').first
       else
         Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
       end
