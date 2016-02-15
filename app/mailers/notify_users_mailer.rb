@@ -21,4 +21,11 @@ class NotifyUsersMailer < ActionMailer::Base
     recipients = [@user.email, "support@cloud.net"]
     mail(to: recipients.join(","), subject: 'Your server is still building')
   end
+  
+  def notify_auto_topup(user, success)
+    @user = user
+    @success = success
+    subject = @success ? 'Your Wallet has been topped up!' : 'Wallet top-up has failed'
+    mail(to: @user[:email], subject: subject)
+  end
 end

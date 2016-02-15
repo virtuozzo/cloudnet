@@ -18,9 +18,13 @@ class AutoTopup
       next if account.coupon && account.coupon.percentage == 100
       begin
         task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
+        user_info = { email: user.email, full_name: user.full_name }
         if task.process
+          NotifyUsersMailer.delay.notify_auto_topup(user_info, true)
           unpaid_invoices = account.invoices.not_paid
           ChargeInvoicesTask.new(user, unpaid_invoices).process unless unpaid_invoices.empty?
+        else
+          NotifyUsersMailer.delay.notify_auto_topup(user_info, false)
         end
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'AutoTopup' })
