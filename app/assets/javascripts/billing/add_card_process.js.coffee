@@ -139,6 +139,9 @@ $ ->
         else
           showSuccessMessage("Card has been added successfully")
         addCard(response)
+        $('#payg-add-card').modal('hide')
+        reloadAddfunds()
+        $('#jg-payg-widget').trigger('payg-topup-complete')
         resetCardFields()
         enableAddCardButton()
         $(card_form).trigger($.Event("add_card", {}))
@@ -147,7 +150,7 @@ $ ->
         enableAddCardButton()
 
   bindAddCardEvents = ->
-    $("#cc_card_submit").on 'click', (e) ->
+    $(document).on "click", "#cc_card_submit", (e) ->
       e.preventDefault()
       disableAddCardButton()
       hideMessages()
@@ -159,5 +162,36 @@ $ ->
         return
     
       validateCard()
+  
+  $(document).on "click", "#add-card-button", (e) ->
+    e.preventDefault()
+    $('#payg-add-funds').modal('hide')
+    $('#payg-add-card').modal('show')
+
+  $(document).on "click", "#add-funds-button", (e) ->
+    e.preventDefault()
+    reloadAddfunds()
+
+  reloadAddfunds = ->
+    $("#payg-add-funds").modal("show")
+    
+    $('#payg-add-funds').on 'show.bs.modal', (e) -> 
+      $("#payg-add-funds .modal-body").html """
+        <div class="jg-widget-form pure-g-r clearfix">
+          <div>
+            <p>
+              Please wait, loading Wallet information...
+            </p>
+          </div>
+        </div>
+      """
+      
+    $.ajax 
+      type: "GET",
+      url: "/payg/show_add_funds",
+      dataType: "html",
+      success: (response) ->
+        $("#payg-add-funds .modal-body").html(response)
+        $("#payg_amount").select2()
 
   bindAddCardEvents()

@@ -1,0 +1,12 @@
+#server-distributions
+  .jg-widget-form.pure-g-r.clearfix
+    .form-group.jg-inline.pure-u-1.pure-g
+      - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
+        .pure-u-1.pure-u-md-1-2
+          = label_tag :os_type, 'OS Type', {class: 'jg-mandatory'}
+          = f.hidden_field :os_type, value: (@server.template.os_type if @server)
+      - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
+        .pure-u-1.pure-u-md-1-2
+          = label_tag :template, 'Template', {class: 'jg-mandatory'}
+          = hidden_field_tag :template
+          = f.hidden_field :template_id, value: (@server.template_id if @server)

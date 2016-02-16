@@ -49,7 +49,9 @@ $ ->
   $disk             = $('#server_wizard_disk_size')
   $memory           = $('#server_wizard_memory')
   $cpus             = $('#server_wizard_cpus')
+  $ips              = $('#server_wizard_ip_addresses')
   $resourcesSummary = $('#resources-selection').find('.step-value')
+  $provisionerRole  = $('#server_wizard_provisioner_role')
 
   createMonthlyTooltip = =>
     $costs.tooltip
@@ -94,6 +96,7 @@ $ ->
     hourly_price += $memory.val() * selected_location.prices.price_memory
     hourly_price += $cpus.val() * selected_location.prices.price_cpu
     hourly_price += $disk.val() * selected_location.prices.price_disk
+    hourly_price += ($ips.val() - 1) * selected_location.prices.price_ip_address
 
     if @selectedTemplate?
       hourly_price += @selectedTemplate.hourly_cost
@@ -105,6 +108,8 @@ $ ->
       old_hourly_price += @server.memory * selected_location.prices.price_memory
       old_hourly_price += @server.cpus * selected_location.prices.price_cpu
       old_hourly_price += @server.disk_size * selected_location.prices.price_disk
+      old_hourly_price += (@server.ip_addresses - 1) * selected_location.prices.price_ip_address
+      old_hourly_price += @selectedTemplate.hourly_cost if @selectedTemplate?
       today_price = (hourly_price - old_hourly_price) * hours_remaining
     else
       today_price = hourly_price * hours_remaining
@@ -141,6 +146,8 @@ $ ->
     $resourcesSummary.find('h4 b.template-name').text("#{template.name}")
 
   setTemplatePricing = (template) ->
+    if server && server.provisioner_role
+      template = provisionerTemplates['linux-docker'][0]
     @selectedTemplate = template
     $("#template-hourly-price").html formatCurrency(template.hourly_cost)
     $("#template-monthly-price").html formatCurrency(template.hourly_cost * max_hours)
@@ -313,6 +320,14 @@ $ ->
     # Ensure there is no template selected yet
     $templateId.val(-1)
 
+  # Set template to Docker provisioner template
+  $provisionerRole
+  .on 'change', (e) ->
+    template = provisionerTemplates['linux-docker'][0]
+    templateChosen(template)
+    $template.val template.id
+  .select2 'enable', true
+
   # Initialise the templates dropdown
   if server
     # Preselect the server's distro and template if editing an existing server
@@ -389,3 +404,34 @@ $ ->
 
   # Until the Federation supports disk resizing hide and fade the slider
   $('#disk_size-slider').attr('disabled', 'disabled') if server && server.template.os_distro.match(/bsd/)
+
+  enableWizardTemplateTabs = ->
+    $('#jg-tabs li a').on 'click', (e) ->
+      e.preventDefault()
+
+      allDivs = _.map $('#jg-tabs li a'), (el) -> $(el).attr('href')
+      $('#jg-tabs li').removeClass 'active'
+      _.each allDivs, (el) -> $(el).hide()
+
+      activeTab = $(this).attr('href')
+      $(this).parent().addClass 'active'
+      $(activeTab).show()
+      
+      if !server
+        $provisionerRole.select2('val', null)
+        $distro.select2('val', null)
+        $template.select2('val', null)
+
+    if $('#server_wizard_provisioner_role').val() != ''
+      $('#jg-tabs li:nth-child(2) a').click()
+    else
+      $('#jg-tabs li:first a').click()
+    
+    if server
+      if server.provisioner_role
+        $("#server-distributions").hide()
+        $('#server_wizard_provisioner_role').val(server.provisioner_role).trigger("change")
+      else
+        $("#server-apps").hide()
+
+  enableWizardTemplateTabs()

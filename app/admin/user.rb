@@ -14,7 +14,38 @@ ActiveAdmin.register User do
     end
   end
 
+  filter :id
+  filter :email
+  filter :full_name
+  filter :onapp_user
 
+  filter :notif_delivered
+  filter :last_notif_email_sent
+
+  filter :admin
+  filter :suspended
+  filter :failed_attempts
+  filter :otp_enabled
+  filter :otp_mandatory
+  filter :status
+  filter :unconfirmed_email
+  filter :servers
+  filter :keys
+  
+  filter :current_sign_in_ip
+  filter :last_sign_in_ip
+  filter :notif_before_shutdown
+  filter :notif_before_destroy
+  
+  filter :created_at
+  filter :updated_at
+  filter :locked_at
+  filter :reset_password_sent_at
+  filter :confirmation_sent_at
+  filter :confirmed_at
+  filter :current_sign_in_at
+  filter :last_sign_in_at
+  
   index do
     column :id
     column :email
@@ -61,10 +92,38 @@ ActiveAdmin.register User do
         user.delete('password')
         user.delete('password_confirmation')
       end
+      shutdown_destroy_notifications_activity(user)
       update!
     end
+    
+    def shutdown_destroy_notifications_activity(user)
+      create_activity(user, :notif_before_shutdown_changed) if shutdown_changed?(user)
+      create_activity(user, :notif_before_destroy_changed) if destroy_changed?(user)
+    end
+    
+    def create_activity(user, activity)
+      param = activity.to_s
+      param.slice! '_changed'
+      resource.create_activity(
+        activity, 
+        owner: resource, 
+        params: { 
+          admin: current_user.id, 
+          from: resource.send(param),
+          to: user[param].to_i
+        }
+      )
+    end
+    
+    def shutdown_changed?(user)
+      resource.notif_before_shutdown != user['notif_before_shutdown'].to_i
+    end
+    
+    def destroy_changed?(user)
+      resource.notif_before_destroy != user['notif_before_destroy'].to_i
+    end
   end
-
+  
   collection_action :notify_users, method: :get do
     @page_title = 'Notify Users'
   end

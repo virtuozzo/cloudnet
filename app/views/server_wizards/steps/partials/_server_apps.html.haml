@@ -1,0 +1,8 @@
+#server-apps
+  .jg-widget-form.pure-g-r.clearfix
+    .form-group.jg-inline.pure-u-1.pure-g
+      - haml_tag_if !@wizard_object.errors[:provisioner_role].empty?, :div, class: 'field_with_errors' do
+        .pure-u-1.pure-u-md-1-2
+          = label_tag :provisioner_role, 'Apps', {class: 'jg-mandatory'}
+          - provisioner_role = @server ? @server.provisioner_role : nil
+          = f.select :provisioner_role, provisioner_role_options(provisioner_role), {include_blank: true}, placeholder: "Select an app"

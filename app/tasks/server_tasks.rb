@@ -9,9 +9,13 @@ class ServerTasks < BaseTasks
 
   private
 
-  def refresh_server(server, squall)
+  def show(server, squall)
+    squall.show(server.identifier)
+  end
+  
+  def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
-
+    docker_provision = args[0] == true ? :provision : nil
     # Don't update our state if our server is locked
     new_state = server.state
     if info['locked'] == false
@@ -19,10 +23,10 @@ class ServerTasks < BaseTasks
         new_state = :building
       elsif info['booted'] == false
         new_state = :off
-        onapp_template = active_template(info["template_id"], server.location_id)
+        onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       else
-        new_state = :on
-        onapp_template = active_template(info["template_id"], server.location_id)
+        new_state = docker_provision || :on
+        onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       end
     end
     new_state = :blocked if server_blocked?(server)
@@ -162,6 +166,7 @@ class ServerTasks < BaseTasks
 
   def allowable_methods
     [
+      :show,
       :refresh_server,
       :refresh_events,
       :refresh_cpu_usages,
@@ -177,8 +182,12 @@ class ServerTasks < BaseTasks
   end
   
   private
-    def active_template(template_id, location_id)
-      Template.where(identifier: template_id, location_id: location_id).first
+    def active_template(template_id, location_id, provisioner_role)
+      if provisioner_role.blank?
+        Template.where(identifier: template_id, location_id: location_id).where.not(os_distro: 'docker').first
+      else
+        Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
+      end
     end
     
     def server_blocked?(server)

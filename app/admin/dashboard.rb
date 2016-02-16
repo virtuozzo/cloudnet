@@ -26,8 +26,13 @@ ActiveAdmin.register_page 'Dashboard' do
           
           table do
             tr do
-              td 'Total Servers Running/Present'
+              td 'Total Servers'
               td Server.count
+            end
+            
+            tr do
+              td 'Total Servers Running'
+              td Server.where(state: 'on').count
             end
 
             tr do

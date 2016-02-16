@@ -14,13 +14,14 @@ ActiveAdmin.register User, as: "UsersServersDestroy" do
 
   index :title => 'Confirmation of Server Destroy' do
     panel "Users with negative balance" do 
-      "The following users will have all their servers destroyed because of negative balance on thair accouts. Please confirm that action. That will be performed during the night. Until then you can cancel that process here."
+      "The following users will have all their servers destroyed because of negative balance on their accouts. Please confirm that action. That will be performed during the night. Until then you can cancel that process here."
     end
     selectable_column
     column :id
     column :full_name
     column :email
     column "Notifications Sent", :notif_delivered
+    column "Last Notification", :last_notif_email_sent
     column "Servers #" do |user|
       user.servers.count
     end

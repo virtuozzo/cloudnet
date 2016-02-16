@@ -1,0 +1,22 @@
+.jg-widget-form.pure-g-r.clearfix
+  %div
+    %p 
+      Your current balance is
+      %strong{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }= remaining_balance(current_user)
+    %p Please select the amount you wish to top up (minimum is $25 USD)
+  .form-group.pure-u-1
+    = select_tag :payg_amount, payg_options(current_user.account)
+
+.modal-footer
+  - if current_user.account.primary_billing_card.present?
+    %a.btn.jg-submit-button#payg-top-up-card 
+      Pay with Primary Card (&#9679;&#9679;&#9679; 
+      = "#{current_user.account.primary_billing_card.last4})"
+  - else
+    %a.btn.jg-submit-button#add-card-button Add new Card to pay
+  or
+  = link_to payg_paypal_request_path, id: "payg_paypal_button" do
+    = image_tag 'https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif'
+
+:javascript
+  var pp_flow = new PAYPAL.apps.DGFlow( {trigger : 'payg_paypal_button', stage: 'sandbox'} );

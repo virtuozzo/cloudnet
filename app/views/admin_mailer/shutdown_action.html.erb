@@ -8,13 +8,14 @@
 </p>
 
 <p>
-  There were <%= (@user.notif_delivered + 1) %> warnings delivered to that user.
+  There were <%= (@user.notif_delivered) %> warnings delivered to that user.
   Link to the user's profile: <%= admin_user_url(@user) %>
-
+  <br>
   After <%= @user.notif_before_destroy %> notifications the servers will be automatically destroyed.
 </p>
 
 <p>
   Thank you
+  <br>
   Negative Balance Checker
 </p>

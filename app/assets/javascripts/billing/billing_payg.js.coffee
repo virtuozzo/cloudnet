@@ -6,5 +6,8 @@ $ ->
       dataType: "html",
       success: (response) ->
         $("#jg-payg-widget").html(response)
+  
+  $('#auto_topup').on 'change', (e) ->
+    $(this).closest("form").submit()
 
   return

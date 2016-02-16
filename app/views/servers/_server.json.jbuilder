@@ -12,7 +12,8 @@ json.extract!(
   :disk_size,
   :bandwidth,
   :ip_addresses,
-  :primary_ip_address
+  :primary_ip_address,
+  :provisioner_role
 )
 
 json.hourly_cost server.hourly_cost / Invoice::MILLICENTS_IN_DOLLAR

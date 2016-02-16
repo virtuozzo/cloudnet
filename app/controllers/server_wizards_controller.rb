@@ -9,6 +9,7 @@ class ServerWizardsController < ServerCommonController
     @wizard_object = @wizard.object
     @wizard_object.user = current_user
     @wizard_object.current_step = 2 if location_id_in_params?
+    @wizard_object.ip_addresses = 1
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
     set_event_name
@@ -19,6 +20,15 @@ class ServerWizardsController < ServerCommonController
 
     return unless meets_minimum_server_requirements?
     create_task = CreateServerTask.new(@wizard_object, current_user)
+    @wizard_object.ip_addresses = 1
+    
+    unless @wizard_object.provisioner_role.blank?
+      provisioner_template = @wizard_object.location.provisioner_templates.first
+      @wizard_object.os_type = provisioner_template.os_type
+      @wizard_object.template_id = provisioner_template.id
+    else
+      @wizard_object.provisioner_role = nil
+    end
 
     if @wizard.save && create_task.process
       create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
