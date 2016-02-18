@@ -1,3 +1,5 @@
+- provisioner_templates = @wizard_object.location.provisioner_templates.group_by { |t| "#{t.os_type}-#{t.os_distro}" }
+- hideTemplates = @server.try(:os) == "windows" || @server.try(:provisioner_role)
 %script
   - t = render partial: 'locations/templates.json', formats: [:json], locals: { templates: @templates }
   = raw "var templates = #{t}"
@@ -10,6 +12,8 @@
   = raw "var activePack = #{activePack}"
   - r = @wizard_object.remaining_resources.to_json
   = raw "var defaults = #{r}"
+  - p = render partial: 'locations/templates.json', formats: [:json], locals: { templates: provisioner_templates }
+  = raw "var provisionerTemplates = #{p}"
 
 =# render partial: "shared/order_progress" if params[:id]
 %ul.jg-step-box.pure-g-r
@@ -29,23 +33,35 @@
           = f.text_field :hostname, class: 'form-control', value: (@server.hostname if @server)
 
 =#FIXME: Not allowing to rebuild Windows platform until onapp core dev team fix the bug
-.jg-widget-content{:class => ("hidden" if @server.try(:os) == "windows")}
+.jg-widget-content{:class => ("hidden" if hideTemplates)}
   .jg-widget-header.pure-g.clearfix
-    %h2.jg-icon.icon-cloud.pure-u Select Template
+    %h2.jg-icon.icon-pin-2.pure-u-1.pure-u-md-1-3 Select Template
+    #viewTabs.pure-u.pure-u-1.pure-u-md-1-3.distro_types
+      %ul.nav.nav-tabs#jg-tabs
+        - if @server
+          - if @server.provisioner_role.blank?
+            %li.active
+              %a.jg-icon.icon-list{href: "#server-distributions"} Distributions
+          - else
+            %li.active
+              %a.jg-icon.icon-list{href: "#server-apps"} Apps
+        - elsif !provisioner_templates.blank?
+          %li.active
+            %a.jg-icon.icon-list{href: "#server-distributions"} Distributions
+          %li
+            %a.jg-icon.icon-list{href: "#server-apps"} Apps
+    .pure-u.pure-u-1.pure-u-md-1-3
+  .jg-widget-body
     - if @server
       %em.pure-u-1.alert.alert-warning.edit-server-warning Changing OS Type or Template will destroy all data
-  .jg-widget-body
-    .jg-widget-form.pure-g-r.clearfix
-      .form-group.jg-inline.pure-u-1.pure-g
-        - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
-          .pure-u-1.pure-u-md-1-2
-            = label_tag :os_type, 'OS Type', {class: 'jg-mandatory'}
-            = f.hidden_field :os_type, value: (@server.template.os_type if @server)
-        - haml_tag_if !@wizard_object.errors[:template].empty?, :div, class: 'field_with_errors' do
-          .pure-u-1.pure-u-md-1-2
-            = label_tag :template, 'Template', {class: 'jg-mandatory'}
-            = hidden_field_tag :template
-            = f.hidden_field :template_id, value: (@server.template_id if @server)
+      = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
+      = render partial: "server_wizards/steps/partials/server_apps", locals: {f: f}
+    - else
+      - if provisioner_templates.blank?
+        = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
+      - else
+        = render partial: "server_wizards/steps/partials/server_distributions", locals: {f: f}
+        = render partial: "server_wizards/steps/partials/server_apps", locals: {f: f}
     .jg-widget-footer.actions.clearfix
       .templates-total
         %span.pure-u
@@ -106,9 +122,9 @@
 
       %ul.jg-widget-controls
         - if @server
-          %li= f.button @wizard_object.last_step? ? false : "Update Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? "Update Server" : "Update Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
         - else
-          %li= f.button @wizard_object.last_step? ? false : "Create Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+          %li= f.button @wizard_object.last_step? ? "Create Server" : "Create Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
           %li= f.button 'Back', name: "back_button", class: 'btn jg-back-button cancel'
 
 / %ul.jg-step-box.pure-g-r

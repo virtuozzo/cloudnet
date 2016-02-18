@@ -26,8 +26,13 @@ ActiveAdmin.register_page 'Dashboard' do
           
           table do
             tr do
-              td 'Total Servers Running/Present'
+              td 'Total Servers'
               td Server.count
+            end
+            
+            tr do
+              td 'Total Servers Running'
+              td Server.where(state: 'on').count
             end
 
             tr do
@@ -91,11 +96,6 @@ ActiveAdmin.register_page 'Dashboard' do
             tr do
               td 'Disc Space [GB]'
               td  number_with_delimiter(resources[:disc])
-            end
-            
-            tr do 
-              td 'Unbilled Revenue [USD]'
-              td 'calculating ...', id: 'unbilled_revenue'
             end
             
             tr do 

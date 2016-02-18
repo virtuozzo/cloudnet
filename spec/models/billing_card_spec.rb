@@ -212,5 +212,13 @@ describe BillingCard do
       expect(card1.primary).to be false
       expect(card2.primary).to be true
     end
+    
+    it 'should not let delete the only card' do
+      card1 = FactoryGirl.create(:billing_card, account: user.account)
+      expect(card1.destroy).to be false
+      
+      card2 = FactoryGirl.create(:billing_card, account: user.account)
+      expect(card1.destroy).to be card1
+    end
   end
 end

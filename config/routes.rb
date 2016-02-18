@@ -71,6 +71,7 @@ CloudNet::Application.routes.draw do
       post :add_card_token
       post :update_billing
       post :make_primary
+      post :toggle_auto_topup
       post :set_coupon_code
       get :payg
     end
@@ -85,6 +86,7 @@ CloudNet::Application.routes.draw do
   get 'payg/paypal_request', to: 'payg#paypal_request'
   get 'payg/paypal_success', to: 'payg#paypal_success'
   get 'payg/paypal_failure', to: 'payg#paypal_failure'
+  get 'payg/show_add_funds', to: 'payg#show_add_funds'
 
   resources :tickets, only: [:index, :show, :new, :create] do
     resources :ticket_replies, only: [:create]

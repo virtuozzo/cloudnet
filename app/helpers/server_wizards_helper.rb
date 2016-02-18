@@ -22,4 +22,8 @@ module ServerWizardsHelper
     @server or
     (!@wizard_object.location.budget_vps and !@wizard_object.package_matched and @wizard_object.params_values?)
   end
+  
+  def provisioner_role_options(selected)
+    options_for_select(Server::PROVISIONER_ROLES.map {|role| [role.camelize, role]}, selected)
+  end
 end

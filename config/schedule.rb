@@ -79,6 +79,11 @@ every 1.day, at: '3:30am' do
   runner 'UpdateHypervisorGroupVersion.perform_in(2.minutes)'
 end
 
+# Auto top-up
+every 1.day, at: '4:00 am' do
+  runner 'AutoTopup.perform_in(2.minutes)'
+end
+
 # Email monthly financial reports
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'

@@ -12,6 +12,8 @@ class Server < ActiveRecord::Base
   MAX_IPS = 4
 
   belongs_to :user
+  belongs_to :unscoped_user, -> { unscope(where: :deleted_at) }, foreign_key: :user_id, class_name: "User"
+  belongs_to :unscoped_location, -> { unscope(where: :deleted_at) }, foreign_key: :location_id, class_name: "Location"
   belongs_to :template
   belongs_to :location
   has_many :server_events, dependent: :destroy
@@ -19,13 +21,14 @@ class Server < ActiveRecord::Base
   has_many :server_backups, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
   has_many :server_ip_addresses, dependent: :destroy
+  has_many :unscoped_server_ip_addresses, -> { unscope(where: :deleted_at) }, foreign_key: :server_id, class_name: "ServerIpAddress"
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
   validate :template_should_match_location, on: :create
   validates_with HostnameValidator
 
-  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked], default: :building
+  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked, :provision], default: :building
   enum_field :payment_type, allowed_values: [:prepaid, :payg], default: :prepaid
 
   scope :prepaid, -> { where(payment_type: :prepaid) }
@@ -38,9 +41,10 @@ class Server < ActiveRecord::Base
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
   
-  IP_ADDRESSES_COUNT_CACHE = "ip_addresses_count_cache"
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
+  
+  PROVISIONER_ROLES = ['ping', 'docker', 'mongodb', 'mysql', 'redis', 'wordpress']
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)
@@ -148,11 +152,14 @@ class Server < ActiveRecord::Base
     end
   end
   
-  # Check temp cache of IP count is withing permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
+  # Check temp cache of IP count is within permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
   def can_add_ips?
     return false if state != :on && state != :off
-    ips_count = Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, id]) || server_ip_addresses.count
-    supports_multiple_ips? && (ips_count < MAX_IPS)
+    supports_multiple_ips? && (ips_chargeable? || ip_addresses < MAX_IPS)
+  end
+  
+  def ips_chargeable?
+    location.price_ip_address.to_f > 0
   end
   
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+

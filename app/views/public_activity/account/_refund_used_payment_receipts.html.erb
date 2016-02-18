@@ -1,0 +1,9 @@
+<%
+  notes = activity.parameters[:notes]
+  details = notes.map do |k, v|
+    note = PaymentReceipt.with_deleted.find(k)
+    "#{Invoice.pretty_total(v)} back into ##{note.receipt_number}"
+  end.join(', ')
+%>
+
+Refunded Payment Receipts: <%= details %>

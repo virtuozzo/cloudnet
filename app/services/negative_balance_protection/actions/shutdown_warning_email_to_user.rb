@@ -1,6 +1,6 @@
 module NegativeBalanceProtection
   module Actions
-    class DestroyWarningEmailToUser
+    class ShutdownWarningEmailToUser
       attr_reader :user
       
       def initialize(user)
@@ -8,7 +8,16 @@ module NegativeBalanceProtection
       end
       
       def perform
-        NegativeBalanceMailer.destroy_warning_email_to_user(user).deliver_now
+        NegativeBalanceMailer.shutdown_warning_email_to_user(user).deliver_now
+        create_activity
+      end
+      
+      def create_activity
+        user.create_activity(
+          :shutdown_warning, 
+          owner: user,
+          params: { number: user.notif_delivered + 1 }
+        )
       end
     end
   end

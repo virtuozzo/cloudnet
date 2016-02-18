@@ -31,9 +31,9 @@ class BillingController < ApplicationController
   def remove_card
     card = current_user.account.billing_cards.find params[:card_id]
     card.set_new_primary if card.primary
-    BillingCard.find(card).destroy
+    card_deleted = BillingCard.find(card.id).destroy ? true : false
     respond_to do |format|
-      format.json { render layout: false, text: true }
+      format.json { render layout: false, text: card_deleted }
     end
   end
 
@@ -110,6 +110,12 @@ class BillingController < ApplicationController
     card.update(primary: true)
     Analytics.track(current_user, event: 'Changed primary billing card')
     redirect_to billing_index_path, notice: 'Primary Card preference has been saved successfully'
+  end
+
+  def toggle_auto_topup
+    current_user.account.toggle!(:auto_topup)
+    Analytics.track(current_user, event: "Switched #{current_user.account.auto_topup ? 'on' : 'off'} Auto Top-up")
+    redirect_to billing_index_path, notice: "Auto Top-up has been #{current_user.account.auto_topup ? 'enabled' : 'disabled'}"
   end
 
   def set_coupon_code

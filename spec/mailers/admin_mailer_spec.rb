@@ -34,7 +34,7 @@ RSpec.describe AdminMailer, :type => :mailer do
         expect(response).to match("Admin SHUTDOWN notification!")
         expect(response).to match("The automatic shutdown was performed on all servers of #{CGI.escapeHTML(user.full_name)}.")
         expect(response).to include("negative balance on this account by #{balance}")
-        expect(response).to match("There were 12 warnings delivered to that user.")
+        expect(response).to match("There were 11 warnings delivered to that user.")
         expect(response).to match("profile: #{admin_user_url(user) }")
         expect(response).to match("After #{user.notif_before_destroy} notifications")
       end

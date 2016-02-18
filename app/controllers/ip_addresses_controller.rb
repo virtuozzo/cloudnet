@@ -7,6 +7,7 @@ class IpAddressesController < ApplicationController
     respond_to do |format|
       format.html { 
         check_multiple_ip_support
+        calculate_costs(@server.ip_addresses + 1)
         @ip_address = @server.server_ip_addresses.new 
         @ip_addresses_count = @server.server_ip_addresses.count
       }
@@ -15,18 +16,17 @@ class IpAddressesController < ApplicationController
   end
   
   def create
-    if @server.can_add_ips?
+    if @server.can_add_ips? && charge(@server.ip_addresses + 1)
       AssignIpAddress.perform_async(current_user.id, @server.id)
       Analytics.track(current_user, event: 'Added a new IP address')
-      # Write to cache so we have a temporary count of IP addresses on server until the real IPs are added to db
-      Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], (Rails.cache.read([Server::IP_ADDRESSES_COUNT_CACHE, @server.id]) || @server.server_ip_addresses.count) + 1)
+      @server.increment! :ip_addresses
       Rails.cache.write([Server::IP_ADDRESS_ADDED_CACHE, @server.id], true)
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
-      return
     else
-      redirect_to server_ip_addresses_path(@server), alert: 'You cannot add anymore IP addresses to this server.'
+      alert = @charge_error || 'You cannot add anymore IP addresses to this server.'
+      redirect_to server_ip_addresses_path(@server), alert: alert
     end
-  rescue Exception => e
+  rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Create' })
     flash.now[:alert] = 'Could not create IP address. Please try again later'
     redirect_to server_ip_addresses_path(@server)
@@ -34,20 +34,60 @@ class IpAddressesController < ApplicationController
   
   def destroy
     raise "Cannot remove Primary IP address" if @ip_address.primary?
+    charge(@server.ip_addresses - 1)
+    @server.decrement! :ip_addresses
     IpAddressTasks.new.perform(:remove_ip, current_user.id, @server.id, @ip_address.identifier)
     @ip_address.destroy!
     Analytics.track(current_user, event: 'Removed IP address')
-    # Update cache for IP address count
-    Rails.cache.write([Server::IP_ADDRESSES_COUNT_CACHE, @server.id], @server.server_ip_addresses.count)
     Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'
-  rescue Exception => e
+  rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Destroy' })
     flash.now[:alert] = 'Could not remove IP address. Please try again later'
     redirect_to server_ip_addresses_path(@server)
   end
   
   private
+  
+  def charge(ip_addresses)
+    return true unless @server.ips_chargeable?
+    old_server_specs = Server.new @server.as_json
+    server_hash = @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
+    @edit_wizard = ServerWizard.new server_hash
+    @edit_wizard.existing_server_id = @server.id
+    @edit_wizard.card = current_user.account.billing_cards.first
+    @edit_wizard.user = current_user
+    @edit_wizard.ip_addresses = ip_addresses
+    if @edit_wizard.enough_wallet_credit?
+      @edit_wizard.edit_server(old_server_specs)
+    else
+      @charge_error = 'You do not have enough credits to add more IP addresses. Please top up your Wallet and try again.'
+      return false
+    end
+  end
+  
+  def calculate_costs(ip_addresses)
+    @new_server = ServerWizard.new @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
+    @new_server.ip_addresses = ip_addresses
+    
+    @current_server = ServerWizard.new @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
+    @current_server.ip_addresses = @server.ip_addresses
+
+    coupon_percentage = current_user.account.coupon.present? ? current_user.account.coupon.percentage_decimal : 0
+    credit = @server.generate_credit_item(CreditNote.hours_till_next_invoice(current_user.account))[:net_cost] * (1 - coupon_percentage)    
+    monthly = @new_server.monthly_cost
+    current_monthly = @current_server.monthly_cost
+    today = @new_server.cost_for_hours Invoice.hours_till_next_invoice(current_user.account)
+    billable_today = today - credit
+    billable_monthly = monthly - current_monthly
+    @costs = {
+      monthly:                  billable_monthly,
+      monthly_with_vat:         Invoice.with_tax(billable_monthly),
+      today:                    billable_today,
+      today_with_vat:           Invoice.with_tax(billable_today)
+    }
+    @coupon_multiplier = (1 - coupon_percentage)
+  end
 
   def set_server
     @server = current_user.servers.find(params[:server_id])

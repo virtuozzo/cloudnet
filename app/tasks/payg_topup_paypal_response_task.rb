@@ -20,6 +20,7 @@ class PaygTopupPaypalResponseTask < BaseTask
 
     response = request.checkout!(@token, @payer_id, payment)  # DoExpressCheckoutPayment
     create_payment_receipt(details.amount, response.token, response_to_hash(response))
+    return true
   end
 
   attr_reader :payment_receipt

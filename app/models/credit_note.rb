@@ -95,6 +95,10 @@ class CreditNote < ActiveRecord::Base
     credit_note.credit_note_items = [credit_item]
     credit_note.save!
     account.create_activity(:create_manual_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost, issued_by: user_that_issued_note.id })
+    
+    # Charge unpaid invoices
+    unpaid_invoices = account.invoices.not_paid
+    ChargeInvoicesTask.new(account.user, unpaid_invoices).process unless unpaid_invoices.empty?
   end
   
   def self.trial_issue(account, card)
