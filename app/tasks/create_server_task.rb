@@ -28,6 +28,6 @@ class CreateServerTask < BaseTask
   end
   
   def set_server_in_provision
-    server.update_attribute(:in_provision, true)
+    server.update_attribute(:no_refresh, true)
   end
 end

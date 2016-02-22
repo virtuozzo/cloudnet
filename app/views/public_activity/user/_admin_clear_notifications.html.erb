@@ -1,0 +1,2 @@
+<% admin = User.with_deleted.find(activity.parameters[:admin]) %>
+Cleared negative balance notif_delivered from <%= activity.parameters[:from] %> by admin action. Current balance: <%= activity.parameters[:balance] %>

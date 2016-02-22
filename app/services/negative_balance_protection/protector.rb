@@ -62,7 +62,12 @@ module NegativeBalanceProtection
     end
     
     def clear_notifications
-      user.clear_unpaid_notifications
+      user.clear_unpaid_notifications(clear_notif_reason)
+    end
+
+    def clear_notif_reason
+      return "there are no servers" if user.servers.empty?
+      return "balance is correct"
     end
   end
 end
