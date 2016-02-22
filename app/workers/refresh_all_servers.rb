@@ -4,7 +4,7 @@ class RefreshAllServers
 
   def perform
     manager = ServerTasks.new
-    Server.where(in_provision: false).select('id, user_id').each do |server|
+    Server.where(no_refresh: false).select('id, user_id').each do |server|
       begin
         manager.perform(:refresh_server, server.user_id, server.id)
         manager.perform(:refresh_events, server.user_id, server.id)
