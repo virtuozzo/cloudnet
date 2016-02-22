@@ -1,0 +1,3 @@
+%p{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }
+  Wallet Balance:
+  %strong= remaining_balance(current_user)

@@ -17,18 +17,26 @@ class AutoTopup
                   account.wallet_balance < 200_000
       next if account.coupon && account.coupon.percentage == 100
       begin
-        task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
+        current_balance = account.remaining_balance
+        topup = perform_topup(account)
+        account.reload
+        account.create_activity :auto_topup, owner: user, params: { current_balance: current_balance, topup_amount: Payg::VALID_TOP_UP_AMOUNTS.min * Invoice::MILLICENTS_IN_DOLLAR, new_balance: account.wallet_balance, success: topup }
         user_info = { email: user.email, full_name: user.full_name }
-        if task.process
-          NotifyUsersMailer.delay.notify_auto_topup(user_info, true)
-          unpaid_invoices = account.invoices.not_paid
-          ChargeInvoicesTask.new(user, unpaid_invoices).process unless unpaid_invoices.empty?
-        else
-          NotifyUsersMailer.delay.notify_auto_topup(user_info, false)
-        end
+        NotifyUsersMailer.delay.notify_auto_topup(user_info, topup)
+        charge_unpaid_invoices(account) if topup
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'AutoTopup' })
       end
     end
+  end
+  
+  def perform_topup(account)
+    task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
+    task.process
+  end
+  
+  def charge_unpaid_invoices(account)
+    unpaid_invoices = account.invoices.not_paid
+    ChargeInvoicesTask.new(account.user, unpaid_invoices).process unless unpaid_invoices.empty?
   end
 end

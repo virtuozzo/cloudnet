@@ -53,6 +53,12 @@ module ApplicationHelper
   def remaining_balance_in_credit?(user)
     user.account.remaining_balance <= 0
   end
+  
+  def topup_balance(balance)
+    current_balance = pretty_total balance
+    current_balance.gsub!('-', '')
+    balance <= 0 ? "#{current_balance}" : "-#{current_balance}"
+  end
 
   def tag_string(tag)
     tag.to_s.gsub(/_/, ' ').capitalize

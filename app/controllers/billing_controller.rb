@@ -8,6 +8,7 @@ class BillingController < ApplicationController
     @billing = Kaminari.paginate_array(invoice_credits_receipts).page(params[:page]).per(10)
     @cards   = @account.billing_cards.processable
     @payg    = payg_details
+    @topups  = Kaminari.paginate_array(PublicActivity::Activity.where(owner_id: current_user.id, owner_type: 'User', key: 'account.auto_topup').order('created_at DESC')).page(params[:topup_pg]).per(10)
 
     respond_to do |format|
       format.html
@@ -15,7 +16,7 @@ class BillingController < ApplicationController
   end
 
   def payg
-    render partial: 'payg_details', locals: { payg: payg_details }
+    render partial: 'wallet_details'
   end
 
   def invoice_pdf

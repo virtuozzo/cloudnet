@@ -1,0 +1,5 @@
+<% if activity.parameters[:success] %>
+Auto topped up with <%= Invoice.pretty_total activity.parameters[:topup_amount] %>. Wallet balance was <%= topup_balance activity.parameters[:current_balance] %>
+<% else %>
+Auto top-up failed for <%= Invoice.pretty_total activity.parameters[:topup_amount] %>
+<% end %>
