@@ -52,13 +52,13 @@ class DockerProvision
   end
   
   def unset_server_from_provision
-    server.update_attribute(:in_provision, false)
+    server.update_attribute(:no_refresh, false)
   end
   
   def prov_error_params
     { source: 'DockerProvision', server_id: server_id,
       role: role, job_id: job_id,
-      provisioner_addr: provision_tasks.prov_server
+      provisioner: provision_tasks.prov_server
     }
   end
   

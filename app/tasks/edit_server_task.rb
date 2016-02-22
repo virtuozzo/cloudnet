@@ -11,14 +11,14 @@ class EditServerTask
   end
   
   def edit_server
-    set_server_state(:building)
+    edit_state_on
     tasks_order.each do |task|
       log_task_process(task)
       verifier = CoreTransactionVerifier.new(@user.id, @server.id)
       verifier.perform_transaction {send(task)}
     end
   ensure
-    ServerTasks.new.perform(:refresh_server, @user.id, @server.id)
+    edit_state_off
   end
 
   def tasks_order
@@ -50,10 +50,16 @@ class EditServerTask
       @squall_vm.build(@server.identifier, template_options)
     end
   
-    def set_server_state(state)
-      @server.update_attribute(:state, state)
+    def edit_state_on
+      @server.no_auto_refresh!
+      @server.update_attribute(:state, :building)
     end
-  
+
+    def edit_state_off
+      @server.auto_refresh_on!
+      ServerTasks.new.perform(:refresh_server, @user.id, @server.id)
+    end
+    
     def increasing_disk_size?
       disk_size_changed? && @old_disk_size < @server.disk_size
     end
