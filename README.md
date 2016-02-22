@@ -22,8 +22,6 @@ NB. You will need about 4GB to run all containers on a single machine.
 First make sure you have the repo with:
 `git clone https://github.com/OnApp/cloudnet`
 
-For VMWare you will need the `vmware-lab` branch, so `git checkout vmware-lab` inside the repo.
-
 Then build the image with: `docker build -t cloudnet .`
 
 **Running the Docker containers**    
