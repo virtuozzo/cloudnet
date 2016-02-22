@@ -11,7 +11,7 @@ class NegativeBalanceChecker
     if user.account.remaining_balance > 100_000
       user.act_for_negative_balance
     else
-      user.clear_unpaid_notifications
+      user.clear_unpaid_notifications('balance is correct')
     end
   end
 end

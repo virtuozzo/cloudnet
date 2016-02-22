@@ -59,12 +59,24 @@ class User < ActiveRecord::Base
     Protector.fire_counter_actions(self, strategy)
   end
   
-  def clear_unpaid_notifications
+  def clear_unpaid_notifications(reason = nil)
+    clear_notifications_activity(reason) if reason
     update(
       notif_delivered: 0,
       last_notif_email_sent: nil,
       admin_destroy_request: RequestForServerDestroyEmailToAdmin::REQUEST_NOT_SENT
       )
+  end
+  
+  def clear_notifications_activity(reason)
+    create_activity(
+      :clear_notifications, 
+      owner: self,
+      params: { reason: reason, 
+                balance: Invoice.pretty_total(account.remaining_balance * -1),
+                from: notif_delivered
+              }
+    )
   end
   
   def refresh_my_servers

@@ -1,5 +1,5 @@
 class CoreTransactionVerifier
-  MAXIMUM_WAITING_TIME = 900 #seconds
+  MAXIMUM_WAITING_TIME = 1200 #seconds
   
   def initialize(user_id, server_id)
     @user = User.find(user_id)
