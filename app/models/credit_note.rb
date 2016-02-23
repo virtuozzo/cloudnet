@@ -81,6 +81,13 @@ class CreditNote < ActiveRecord::Base
     end
     false
   end
+  
+  def trial_credit?
+    if credit_note_items.count == 1
+      return true if credit_note_items.first.description == 'Trial Credit'
+    end
+    false
+  end
 
   # There are times when a client needs to be manually given a credit note. Such as when they are
   # mistakenly overcharged by cloud.net
