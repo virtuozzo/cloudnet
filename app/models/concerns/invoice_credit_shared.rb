@@ -68,7 +68,7 @@ module InvoiceCreditShared
 
   # Get the coupon associated with the current account
   def coupon
-    if self.class == CreditNote && manually_added?
+    if self.class == CreditNote && (manually_added? || trial_credit?)
       # Coupon does not apply to manually issued credit notes. Basically this removes it from the
       # credit note PDF.
       nil
