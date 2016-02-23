@@ -27,7 +27,7 @@
                   %a{"href" => "/servers/{{ server.id }}/console", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Server Console
                 - if @server.supports_multiple_ips?
                   %li
-                    %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "rel" => "nofollow"} Rebuild Network
+                    %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Rebuild Network
                 %li
                   %a{"data-target" => "#destroy-server", "data-toggle" => "modal", "rel" => "nofollow"} Destroy Server
           %li

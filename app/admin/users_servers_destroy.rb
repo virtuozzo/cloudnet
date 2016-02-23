@@ -18,7 +18,9 @@ ActiveAdmin.register User, as: "UsersServersDestroy" do
     end
     selectable_column
     column :id
-    column :full_name
+    column :full_name do |u|
+      link_to u.full_name, admin_user_path(u)
+    end
     column :email
     column "Notifications Sent", :notif_delivered
     column "Last Notification", :last_notif_email_sent
@@ -35,23 +37,49 @@ ActiveAdmin.register User, as: "UsersServersDestroy" do
   end
   
   batch_action :unschedule_destroy, priority: 2 do |ids|
-    ids.each {|id| User.find(id).unconfirm_automatic_destroy}
+    ids.each do |id|
+      user = User.find(id)
+      create_activity(user, :admin_unschedule_destroy)
+      user.unconfirm_automatic_destroy
+    end
     redirect_to admin_users_servers_destroys_path
   end
   
   batch_action :schedule_destroy, priority: 1 do |ids|
-    ids.each {|id| User.find(id).confirm_automatic_destroy}
+    ids.each do |id|
+      user = User.find(id)
+      create_activity(user, :admin_schedule_destroy)
+      user.confirm_automatic_destroy
+    end
     redirect_to admin_users_servers_destroys_path
   end
     
   batch_action :clear_notifications do |ids|
-    ids.each {|id| User.find(id).clear_unpaid_notifications}
+    ids.each do |id|
+      user = User.find(id)
+      create_activity(user, :admin_clear_notifications)
+      user.clear_unpaid_notifications
+    end
     redirect_to admin_users_servers_destroys_path
   end
-  
+
   controller do
     def scoped_collection
       super.servers_to_be_destroyed
     end
+    
+    def create_activity(user, activity)
+      user.create_activity(
+        activity, 
+        owner: user, 
+        params: { 
+          admin: current_user.id, 
+          balance: Invoice.pretty_total(user.account.remaining_balance * -1),
+          from: user.notif_delivered
+        }
+      )
+    end
   end
+  
+
 end

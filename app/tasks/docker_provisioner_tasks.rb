@@ -30,14 +30,10 @@ class DockerProvisionerTasks
     end
   
     def connection
-      @connection ||= Faraday.new(:url => docker_url) do |builder|
+      @connection ||= Faraday.new(:url => prov_server) do |builder|
         builder.request  :json
         builder.use Faraday::Response::Logger, Rails.logger
         builder.adapter Faraday.default_adapter
       end
-    end
-  
-    def docker_url
-      "http://#{prov_server}/"
     end
 end
