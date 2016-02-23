@@ -24,6 +24,8 @@ class PaymentReceipt < ActiveRecord::Base
   def receipt_number
     "PR#{sequential_id.to_s.rjust(7, '0')}"
   end
+  
+  alias_method :number, :receipt_number
 
   def remaining_cost
     read_attribute(:remaining_cost) || net_cost
