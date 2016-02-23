@@ -15,6 +15,8 @@ class SendAdminFinancials
     wallet_charges = scope(Charge, time).where('source_type = ? OR source_type = ?', 'CreditNote', 'PaymentReceipt').to_a.sum(&:amount)
     cc_charges = scope(PaymentReceipt, time).where(pay_source: :billing_card).to_a.sum(&:net_cost)
     paypal_charges = scope(PaymentReceipt, time).where(pay_source: :paypal).to_a.sum(&:net_cost)
+    manual_credits = scope(CreditNote, time).to_a.sum(&:manual_credits_total_cost)
+    trial_credits  = scope(CreditNote, time).to_a.sum(&:trial_credits_total_cost)
 
     data = {
       date: date_str,
@@ -22,7 +24,9 @@ class SendAdminFinancials
       invoices: invoice_totals,
       wallet_charges: wallet_charges,
       cc_charges: cc_charges,
-      paypal_charges: paypal_charges
+      paypal_charges: paypal_charges,
+      manual_credits: manual_credits,
+      trial_credits: trial_credits
     }
 
     AdminMailer.financials(data).deliver_now

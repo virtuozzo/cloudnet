@@ -5,6 +5,9 @@ class CreditNoteItem < ActiveRecord::Base
   belongs_to :credit_note
 
   validates :credit_note, presence: true
+  
+  scope :trial_credits, -> { where('description = ?', 'Trial Credit') }
+  scope :manual_credits, -> { where('source_type = ?', 'User') }
 
   def net_cost
     (read_attribute(:net_cost) || 0).round(-3)

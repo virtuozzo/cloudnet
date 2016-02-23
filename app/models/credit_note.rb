@@ -66,9 +66,13 @@ class CreditNote < ActiveRecord::Base
     errors.add(:remaining_cost, 'Can not be negative') if remaining_cost < 0
   end
 
-  def cost_from_items(type)
+  def cost_from_items(type, scopes = nil)
     if items?
-      credit_note_items.inject(0) { |total, item| total + item.send(type) }
+      if scopes
+        credit_note_items.send(scopes).inject(0) { |total, item| total + item.send(type) }
+      else
+        credit_note_items.inject(0) { |total, item| total + item.send(type) }
+      end
     else
       0
     end
