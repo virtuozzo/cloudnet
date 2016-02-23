@@ -39,6 +39,14 @@ module InvoiceCreditShared
   def total_cost
     cost_from_items(:total_cost) * (1 - coupon_percentage)
   end
+  
+  def trial_credits_total_cost
+    cost_from_items(:total_cost, :trial_credits) * (1 - coupon_percentage)
+  end
+  
+  def manual_credits_total_cost
+    cost_from_items(:total_cost, :manual_credits) * (1 - coupon_percentage)
+  end
 
   def pre_coupon_total_cost_cents
     Invoice.milli_to_cents(pre_coupon_total_cost)

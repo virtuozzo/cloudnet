@@ -9,7 +9,7 @@
     - if @topups.size == 0
       %tr
         %td.no-data.pure-u-1{colspan: 4}
-          %p= "No auto top-ups are performed yet."
+          %p= "No auto top-ups have been performed yet."
     - @topups.each do |topup|
       %tr
         %td.pure-u-1-4= topup.created_at.to_formatted_s(:long_ordinal)

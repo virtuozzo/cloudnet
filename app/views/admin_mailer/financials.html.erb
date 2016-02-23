@@ -8,6 +8,8 @@
   <li>Payment Receipts via Billing Card: <%= Invoice.pretty_total(@data[:cc_charges]) %></li>
   <li>Payment Receipts via Paypal: <%= Invoice.pretty_total(@data[:paypal_charges]) %></li>
   <li>Wallet Charges: <%= Invoice.pretty_total(@data[:wallet_charges]) %></li>
+  <li>Manual Credit Notes: <%= Invoice.pretty_total(@data[:manual_credits]) %></li>
+  <li>Trial Credit Notes: <%= Invoice.pretty_total(@data[:trial_credits]) %></li>
 </ul>
 
 <p>Thanks,</p>
