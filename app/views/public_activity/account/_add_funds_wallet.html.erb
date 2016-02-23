@@ -1,0 +1,2 @@
+<% card = BillingCard.with_deleted.find(activity.parameters[:card]) %>
+Added funds to Wallet. <%= Invoice.pretty_total(activity.parameters[:amount] * Invoice::CENTS_IN_DOLLAR) %> from Card ID: <%= card.id %> (Last 4: <%= card.last4 %>)
