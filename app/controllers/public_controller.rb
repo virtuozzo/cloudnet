@@ -4,6 +4,7 @@ class PublicController < ApplicationController
   
   def main
     @regions = Region.active_regions
+    @cheapest = Location.cheapest
     analytics_info unless monitoring_service?
   end
   
