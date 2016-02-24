@@ -30,4 +30,5 @@
     .pure-g
       .jg-main-message.jg-bring-to-front.pure-u-1-1
         .jg-ad-message
-          = "Deploy now - servers starting at #{Invoice.pretty_total @cheapest.hourly_price}/h or #{Invoice.pretty_total @cheapest.monthly_price}/mo" if @cheapest
+          - cache cache_key_for_cheapest_location do
+            = "Deploy now - servers starting at #{Invoice.pretty_total @cheapest.hourly_price}/h or #{Invoice.pretty_total @cheapest.monthly_price}/mo" if @cheapest
