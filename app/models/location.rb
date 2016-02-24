@@ -31,8 +31,16 @@ class Location < ActiveRecord::Base
     "#{country_name} (#{country}), #{city}, #{provider}"
   end
 
-  def hourly_price(memory, cpu, disk)
+  def hourly_price(memory = 512, cpu = 1, disk = 20)
     (memory * price_memory) + (cpu * price_cpu) + (disk * price_disk)
+  end
+  
+  def monthly_price
+    hourly_price * Account::HOURS_MAX
+  end
+  
+  def self.cheapest
+    where(hidden: false).min_by(&:hourly_price)
   end
   
   def frontend_uptimes
