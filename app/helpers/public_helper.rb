@@ -48,4 +48,10 @@ module PublicHelper
       content_tag(:span, value, class: classes)
     end
   end
+  
+  def cache_key_for_cheapest_location
+    count          = Location.count
+    max_updated_at = Location.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "locations/all-#{count}-#{max_updated_at}"
+  end
 end
