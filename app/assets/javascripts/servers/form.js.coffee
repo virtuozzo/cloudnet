@@ -662,12 +662,18 @@ $ ->
 
             newContent = generatePopupContent(photo, data)
             photo.marker.bindPopup(newContent)
+            
+            unless $.isEmptyObject(selected_location)
+              popUp(selected_location.id)
 
         else fetchPhotoByCity(city, id, layer).then (photo) ->
           marker = photo.marker
           data   = marker.feature.properties
           newContent = generatePopupContent(photo, data)
           photo.marker.bindPopup(newContent)
+          
+          unless $.isEmptyObject(selected_location)
+            popUp(selected_location.id)
         
         layer.options.riseOnHover = true
         layer.options.title       = 
@@ -695,6 +701,19 @@ $ ->
 
     clusters.addLayer(geoJsonLayer)
     map.addLayer(clusters)
+    
+    popUp = (loc) ->
+      geoJsonLayer.eachLayer (marker) ->
+        if marker?.feature?.properties.id is loc
+          id = marker._leaflet_id
+          map.panTo(marker.getLatLng())
+          marker.bounce({duration: 400, height: 10})
+          map._layers[id].openPopup()
+          resetMarkers(markers)
+          toggleMarkerPin marker.options.icon.options, marker
+    
+    $locationField.on 'change', (e) ->
+      popUp($(this).select2('data').id)
     
     #map.featureLayer.setGeoJSON(geojson)
     return
