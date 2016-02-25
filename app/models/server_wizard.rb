@@ -15,10 +15,10 @@ class ServerWizard
 
   attr_reader :hostname
 
-  validates :location_id, presence: true, if: :step1?
-  validate :is_valid_location, if: :step1?
+  validates :location_id, presence: true , if: :step2?
+  validate :is_valid_location, if: :step2?
   # validate :no_two_vms_in_same_location, if: :step1?
-  validate :reset_template_for_location_if_invalid, if: :step1?
+  validate :reset_template_for_location_if_invalid, if: :step2?
 
   validates :template_id, :memory, :cpus, :disk_size, :name, presence: true, if: :step2?
   validate :is_valid_template, if: :step2?
@@ -293,6 +293,7 @@ class ServerWizard
   end
 
   def packages
+    return nil unless location
     packages = location.packages
     packages.select { |package| @user ? has_enough_remaining_resources?(package) : true }
   end
@@ -427,6 +428,7 @@ class ServerWizard
   end
 
   def within_package_if_budget_vps_package
+    return false unless location
     return true unless location.budget_vps?
 
     matches = false

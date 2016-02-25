@@ -1,7 +1,11 @@
 - breadcrumb :new_server
 - title "Create Server"
+
 %section.container
-  = render 'form'
+  - if @wizard_object.step3?
+    = render 'form'
+  - else
+    = render partial: 'servers/form'
 
 :javascript
   ga('send', 'event', 'Page', 'View', "#{@event_name}");

@@ -17,7 +17,7 @@ class Location < ActiveRecord::Base
   validate :verify_valid_country_code
   
   def provisioner_templates
-    templates.where(os_distro: 'docker')
+    templates.where(os_distro: 'docker', hidden: false)
   end
 
   def country_name

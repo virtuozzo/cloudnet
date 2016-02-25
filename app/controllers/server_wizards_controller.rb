@@ -8,8 +8,9 @@ class ServerWizardsController < ServerCommonController
     @wizard = ModelWizard.new(ServerWizard, session, params, :server_wizard).start
     @wizard_object = @wizard.object
     @wizard_object.user = current_user
-    @wizard_object.current_step = 2 if location_id_in_params?
+    @wizard_object.current_step = 2 #if location_id_in_params?
     @wizard_object.ip_addresses = 1
+    @packages = @wizard_object.packages
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
     set_event_name
@@ -35,15 +36,12 @@ class ServerWizardsController < ServerCommonController
       track_analytics_for_server(create_task.server)
       redirect_to server_path(create_task.server), notice: 'Server successfully created and will be booted shortly'
     else
+      @packages = @wizard_object.packages
       @wizard_object.errors.add(:base, create_task.errors.join(', ')) if create_task.errors?
       force_authentication! if step3_non_logged?
       send("step#{@wizard_object.current_step}".to_sym)
       set_event_name
-      if @wizard_object.step1?
-        redirect_to search_path(search_params)
-      else
-        render :new
-      end
+      render :new
     end
   end
 

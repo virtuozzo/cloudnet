@@ -1,0 +1,32 @@
+.jg-widget-form.pure-g-r.clearfix.jg-sliders
+  .form-group.pure-u-1
+    = render partial: 'servers/resize_warning'
+    %ul.pure-g.package-boxes.clearfix
+      - (@packages || dummy_packages).each do |package|
+        - data = {"package-values" => "{\"memory\": #{package.memory}, \"cpus\": #{package.cpus}, \"disk_size\": #{package.disk_size}}"}
+        - activate_pack = @server && @server.try(:matches_package?, package)
+        - active_class = 'active' if activate_pack
+        %li.pure-u-1.pure-u-md-1-3{data: data, class: active_class}
+          .package-box.pure-u-1
+            %dl.pure-g
+              %dt.pure-u-1-2 Memory
+              %dd.pure-u-1-2= "#{package.memory} MB"
+            %dl.pure-g
+              %dt.pure-u-1-2 CPUs
+              %dd.pure-u-1-2= "#{package.cpus} Core(s)"
+            %dl.pure-g
+              %dt.pure-u-1-2 Disk Size
+              %dd.pure-u-1-2= "#{package.disk_size} GB"
+            %dl.pure-g
+              %dt.pure-u-1-2 Bandwidth
+              %dd.pure-u-1-2= gb_to_tb(package.bandwidth)  
+            %ul.pure-g.annual-box-pricing.pure-u-1-1
+              %li.pure-u-1-2
+                %span.annual-type Hourly
+                %span.annual-price.price= package.hourly_cost
+              %li.pure-u-1-2
+                %span.annual-type Monthly
+                %span.annual-price.price-2= package.monthly_cost
+            %dl.pure-g
+              .pure-u-1-1
+                %span.without-template= "(Hourly & Monthly prices above do not include the template cost)"

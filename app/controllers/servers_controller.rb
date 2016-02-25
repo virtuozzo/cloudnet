@@ -29,6 +29,7 @@ class ServersController < ServerCommonController
     @wizard_object.submission_path = edit_server_path @server
     @wizard_object.existing_server_id = @server.id
     @wizard_object.ip_addresses = @server.ip_addresses
+    @packages = @wizard_object.packages
     if @wizard.save
       log_activity :edit
       if schedule_edit

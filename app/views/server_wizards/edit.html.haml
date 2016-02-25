@@ -1,4 +1,7 @@
 - breadcrumb :edit_server, params[:id]
 - title "Edit Server"
 
-= render 'server_wizards/form'
+- if @wizard_object.step3?
+  = render 'server_wizards/form'
+- else
+  = render 'servers/form'
