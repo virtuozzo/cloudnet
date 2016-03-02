@@ -35,6 +35,7 @@ class ChargeInvoicesTask < BaseTask
   end
   
   def unblock_servers
+    return if @user.notif_delivered == 0
     @user.clear_unpaid_notifications("balance is correct")
     manager = ServerTasks.new
     @user.servers.each do |server|
