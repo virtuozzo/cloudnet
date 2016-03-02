@@ -29,7 +29,7 @@ class ServerTasks < BaseTasks
         onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       end
     end
-    new_state = :blocked if server_blocked?(server)
+    new_state = :blocked if server.user.servers_blocked?
     old_state = server.state
 
     if old_state != new_state
@@ -188,10 +188,5 @@ class ServerTasks < BaseTasks
       else
         Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
       end
-    end
-    
-    def server_blocked?(server)
-      user = server.user
-      user.notif_delivered > user.notif_before_shutdown
     end
 end

@@ -1,5 +1,6 @@
 class CoreTransactionVerifier
   MAXIMUM_WAITING_TIME = 1200 #seconds
+  attr_reader :squall_vm, :server
   
   def initialize(user_id, server_id)
     @user = User.find(user_id)
@@ -25,7 +26,7 @@ class CoreTransactionVerifier
     end
   
     def new_transaction_completed?
-      completed_transactions.last['id'] != initial_completed_transaction_id
+      last_completed_transaction_id != initial_completed_transaction_id
     end
   
     def no_pending_transactions?
@@ -46,9 +47,14 @@ class CoreTransactionVerifier
     end
   
     def initial_completed_transaction_id
-      @initial_completed_id ||= completed_transactions.last['id']
+      @initial_completed_id ||= last_completed_transaction_id
     end
   
+    def last_completed_transaction_id
+      completed = completed_transactions
+      completed.present? ? completed.last['id'] : -1
+    end
+    
     def onapp_server_id
       @onapp_server_id ||= @squall_vm.show(@server.identifier)["id"]
     end
