@@ -178,7 +178,7 @@ module Billing
     end
 
     def charging_paperwork
-      @invoice.invoice_items.first.source = self
+      @invoice.invoice_items.first.source = @newly_built_server || @old_server_specs || self
       @invoice.save
       remaining = Invoice.milli_to_cents(@remaining_cost)
       if remaining > 0 && remaining < Invoice::MIN_CHARGE_AMOUNT

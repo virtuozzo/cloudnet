@@ -216,6 +216,7 @@ class ServersController < ServerCommonController
     @edit_wizard.card = current_user.account.billing_cards.first
     @edit_wizard.user = current_user
     @edit_wizard.ip_addresses = @server.ip_addresses
+    @edit_wizard.hostname = @server.hostname
     # Send the old server so that a credit note can be issued for it
     @edit_wizard.edit_server(old_server_specs)
   end
