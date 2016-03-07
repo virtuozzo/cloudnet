@@ -23,6 +23,7 @@ module NegativeBalanceProtection
       increment_notifications if increment_user_notifications?
       clear_notifications if clear_notifications?
       refresh_servers if servers_for_refresh?
+      charge_unpaid_invoices if servers_have_been_destroyed?
     end
   
     def action(task)
@@ -68,6 +69,15 @@ module NegativeBalanceProtection
     def clear_notif_reason
       return "there are no servers" if user.servers.empty?
       return "balance is correct"
+    end
+    
+    def servers_have_been_destroyed?
+      actions.present? && actions.include?(:destroy_all_servers_confirmed)
+    end
+    
+    def charge_unpaid_invoices
+      unpaid_invoices = user.account.invoices.not_paid
+      ChargeInvoicesTask.new(user, unpaid_invoices).process unless unpaid_invoices.empty?
     end
   end
 end
