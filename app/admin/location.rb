@@ -72,7 +72,7 @@ ActiveAdmin.register Location do
       input :price_memory
       input :price_disk
       input :price_cpu
-      input :price_bw
+      input :price_bw, label: "Price bandwidth / MB"
       input :price_ip_address
     end
     

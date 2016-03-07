@@ -10,7 +10,7 @@ module Billing
       disk = disk_invoice_item(hours)
       ip   = ip_invoice_item(hours)
       template = template_invoice_item(hours)
-      bwf   = bandwidth_free_invoice_item(hours)
+      bwf   = bandwidth_free_invoice_item(hours) unless no_bandwidth
       bwp   = bandwidth_paid_invoice_item unless no_bandwidth
 
       net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost]
@@ -88,29 +88,40 @@ module Billing
       }
     end
 
+    # Free monthly bandwidth is splited per usage hour
     def bandwidth_free_invoice_item(hours = Account::HOURS_MAX)
       bnd_prepaid = (bandwidth.to_f * 1024 * hours / Account::HOURS_MAX).round #MB
       {
         name: 'Prepaid Bandwidth',
         unit_cost: location.price_bw,
         units: bnd_prepaid,
-        description: "#{bnd_prepaid} MB for #{hours} hours",
+        hours: hours,
+        description: "#{bnd_prepaid}MB for next #{hours} hours",
         net_cost: 0.0
       }
     end
     
     # Additional bandwidth is post-paid
+    # TODO: bandwidth price is taken from location, which can be changed. Should store in Server
     def bandwidth_paid_invoice_item
-      billable_units = BillingBandwidth.new(self).billable_transfer
+      bandwidth_usage = BillingBandwidth.new(self).bandwidth_usage
       {
         name: 'Additional Bandwidth',
         unit_cost: location.price_bw,
-        units: billable_units,
-        description: "#{billable_units} GB for the month",
-        net_cost: location.price_bw * billable_units * 672
+        units: bandwidth_usage[:billable],
+        hours: bandwidth_usage[:hours],
+        description: billable_bandwidth_description(bandwidth_usage),
+        net_cost: location.price_bw * bandwidth_usage[:billable] # price in milicents / MB
       }
     end 
 
+    def billable_bandwidth_description(bandwidth_usage)
+      billable_MB = bandwidth_usage[:billable]
+      free_MB = bandwidth_usage[:free]
+      hours_used = bandwidth_usage[:hours]
+      "#{billable_MB}MB over free #{free_MB}MB for past #{hours_used} hours"
+    end
+    
     def ip_invoice_item(hours)
       additional_ips = ip_addresses.to_i - 1
       {
@@ -237,11 +248,14 @@ module Billing
     end
 
     def last_generated_invoice_item
-      return if id.nil?
-      @last_generated_invoice_item ||= InvoiceItem.where(
-        source_type: self.class.to_s,
-        source_id: id
-      ).order(updated_at: :desc).first
+      return [] if id.nil? && @existing_server_id.nil?
+      @last_generated_invoice_item ||= begin
+        source_type = is_a?(ServerWizard) ? 'Server' : self.class.to_s
+        InvoiceItem.where(
+          source_type: source_type,
+          source_id: id || @existing_server_id
+        ).order(updated_at: :desc).first
+      end
     end
     
     def determine_vat_coupon_status(credit_note, invoice_item)
