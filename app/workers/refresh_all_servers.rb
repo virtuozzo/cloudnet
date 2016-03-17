@@ -1,6 +1,6 @@
 class RefreshAllServers
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform
     manager = ServerTasks.new
