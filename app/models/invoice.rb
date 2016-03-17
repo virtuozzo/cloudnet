@@ -24,10 +24,10 @@ class Invoice < ActiveRecord::Base
   USD_GBP_RATE         = 0.588402
   MIN_CHARGE_AMOUNT    = 100
 
-  def self.generate_prepaid_invoice(invoiceables, account, hours = nil)
+  def self.generate_prepaid_invoice(invoiceables, account, hours = nil, reason = false)
     invoice = Invoice.new(account: account)
     hours ||= invoice.hours_till_next_invoice
-    items = invoiceables.map { |i| InvoiceItem.new i.generate_invoice_item(hours).merge(invoice: invoice) }
+    items = invoiceables.map { |i| InvoiceItem.new i.generate_invoice_item(hours, reason).merge(invoice: invoice) }
     invoice.invoice_items = items
     invoice
   end
@@ -59,6 +59,11 @@ class Invoice < ActiveRecord::Base
     invoice
   end
 
+  def increase_free_billing_bandwidth(old_bw)
+    return unless old_bw
+    invoice_items.each { |i| i.increase_free_billing_bandwidth(old_bw) }
+  end
+  
   def items?
     invoice_items.length > 0
   end

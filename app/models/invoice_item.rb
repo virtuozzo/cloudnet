@@ -46,6 +46,14 @@ class InvoiceItem < ActiveRecord::Base
     return ServerHourlyTransaction.with_deleted.without_duplicates.where(id: metadata[:transactions])
   end
 
+  def increase_free_billing_bandwidth(old_bw)
+    return unless source_type == "Server" # because of old bug, it can be 'ServerWizard'
+    billing_manager = Billing::BillingBandwidth.new(source)
+    free_bandwidth = (old_bw * 1024 * billing_manager.hours_used_coefficient).round
+    bandwith_accrued = source.free_billing_bandwidth
+    source.update_attribute(:free_billing_bandwidth, free_bandwidth + bandwith_accrued)
+  end
+  
   def billable_transactions
     if not invoice.payg?
       raise 'You can only call this method for PAYG invoices'

@@ -154,10 +154,14 @@ class ServersController < ServerCommonController
   end
 
   def calculate_credit
+    @server.refresh_usage
     credit = @server.generate_credit_item(CreditNote.hours_till_next_invoice(current_user.account))
+    paid_bandwidth = Billing::BillingBandwidth.new(@server).bandwidth_usage
+    badwidth_price = @server.location.price_bw
+    bandwidth_cost = paid_bandwidth[:billable] * badwidth_price
     net_cost = credit[:net_cost]
     net_cost = 0 if @server.in_beta?
-    render json: { credit: net_cost }
+    render json: { credit: net_cost, bandwidth: bandwidth_cost }
   end
   
   def rebuild_network
@@ -217,6 +221,8 @@ class ServersController < ServerCommonController
     @edit_wizard.user = current_user
     @edit_wizard.ip_addresses = @server.ip_addresses
     @edit_wizard.hostname = @server.hostname
+    # Update bandwidth
+    @server.update_attribute(:bandwidth, @edit_wizard.bandwidth)
     # Send the old server so that a credit note can be issued for it
     @edit_wizard.edit_server(old_server_specs)
   end

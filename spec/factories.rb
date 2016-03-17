@@ -145,8 +145,15 @@ FactoryGirl.define do
     usage_type :cpu
     usages '[{"cpu_time":1,"created_at":"2014-05-05T12:01:08Z"},{"cpu_time":0,"created_at":"2014-05-05T13:01:16Z"},{"cpu_time":0,"created_at":"2014-05-05T14:01:03Z"}]'
     association :server, factory: :server
+    
+    factory :network_server_usage do
+      usage_type :network
+      usages '[{"created_at":"2016-02-16T13:01:49Z","data_received":1058,"data_sent":364},{"created_at":"2016-02-17T00:59:46Z","data_received":1511,"data_sent":1664},{"created_at":"2016-02-17T01:00:54Z","data_received":11432,"data_sent":6348},{"created_at":"2016-02-19T16:01:46Z","data_received":163491,"data_sent":253359},{"created_at":"2016-03-01T17:01:49Z","data_received":853430,"data_sent":634344}]'
+    end
   end
 
+  
+  
   factory :server_event do
     action 'create_virtual_server'
     status 'completed'

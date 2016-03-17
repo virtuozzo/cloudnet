@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217131111) do
+ActiveRecord::Schema.define(version: 20160311122743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(version: 20160217131111) do
     t.decimal  "forecasted_rev",                     default: 0.0
     t.string   "provisioner_role"
     t.boolean  "no_refresh",                         default: false
+    t.integer  "free_billing_bandwidth",             default: 0
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree

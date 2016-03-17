@@ -103,6 +103,7 @@ $ ->
 
     monthly_price = hourly_price * max_hours
 
+    
     if @server
       old_hourly_price = 0
       old_hourly_price += @server.memory * selected_location.prices.price_memory
