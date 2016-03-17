@@ -1,0 +1,67 @@
+cloudnet-web:
+  image: jwilder/nginx-proxy
+  restart: always
+  volumes:
+    - ./certs:/etc/nginx/certs:ro
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  links:
+    - cloudnet-app
+  ports:
+    - "80:80"
+    - "443:443"
+
+cloudnet-cron:
+  image: onapp/cloudnet
+  env_file: .env.docker
+  restart: always
+  links:
+    - cloudnet-redis
+    - cloudnet-db
+    - cloudnet-memcached
+  volumes:
+    - ./log:/app/log
+  command: foreman run cron
+
+cloudnet-app:
+  image: onapp/cloudnet
+  env_file: .env.docker
+  ports:
+    - "9292"
+  links:
+    - cloudnet-redis
+    - cloudnet-db
+    - cloudnet-memcached
+  volumes:
+    - ./log:/app/log
+  command: foreman run web
+
+cloudnet-worker:
+  image: onapp/cloudnet
+  env_file: .env.docker
+  restart: always
+  links:
+    - cloudnet-redis
+    - cloudnet-db
+    - cloudnet-memcached
+  volumes:
+    - ./log:/app/log
+  command: foreman run sidekiq --logfile /app/log/sidekiq.log
+
+cloudnet-redis:
+  image: redis
+
+cloudnet-memcached:
+  image: memcached
+
+cloudnet-dbdata:
+  image: postgres
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
+cloudnet-db:
+  image: postgres
+  ports:
+    - "5432"
+  volumes_from:
+    - cloudnet-dbdata
