@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
   end
 
   def track_analytics
-    Analytics.service.alias(previous_id: anonymous_id, user_id: id)
+    Analytics.service.alias(previous_id: anonymous_id, user_id: id) unless anonymous_id.nil?
     Analytics.service.flush
     
     Analytics.service.identify(

@@ -1,0 +1,37 @@
+cloudnet-web:
+  image: cloudnet
+  env_file: .env.docker
+  restart: always
+  ports:
+   - "443:3443"
+  volumes:
+   - .:/mnt/certs
+  links:
+   - cloudnet-redis
+   - cloudnet-db
+  command: foreman run web
+
+cloudnet-worker:
+  image: cloudnet
+  env_file: .env.docker
+  restart: always
+  links:
+   - cloudnet-redis
+   - cloudnet-db
+  command: foreman run sidekiq --logfile /dev/stdout
+
+cloudnet-redis:
+  image: redis
+
+cloudnet-dbdata:
+  image: postgres
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
+cloudnet-db:
+  image: postgres
+  ports:
+   - "5432:5432"
+  volumes_from:
+    - cloudnet-dbdata

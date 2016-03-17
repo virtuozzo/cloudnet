@@ -1,14 +1,14 @@
-# Rename this file to .env
+# Rename this file to .env.docker
 
 # Postgres credentials
-DB_USER=
-DB_PORT=
 DB_NAME=cloudnet
+DB_USER=postgres
 DB_PASSWD=
-DB_HOST=
+DB_HOST=cloudnet-db
+DB_PORT=5432
 
 MEMCACHE_URI=localhost:11211
-REDIS_URI=redis://localhost:6379
+REDIS_URI=redis://cloudnet-redis:6379
 
 # Onapp API
 ONAPP_API_ALLOW_INSECURE=false
@@ -78,6 +78,7 @@ FIVEHUNDREDPX_KEY=
 
 # Used to display the map of providers, seen when creating a server
 MAPBOX_TOKEN=
+MAPBOX_PUBLIC_TOKEN=
 
 # Session keys. Generate with `rake secret`
 DEVISE_SECRET_KEY=
@@ -88,6 +89,20 @@ GA_UA_NUMBER=
 
 #HubSpot CRM
 HUBSPOT_ID=
+
+# PayPal Config
+PAYPAL_USER=
+PAYPAL_PASS=
+PAYPAL_SIGNATURE=
+
+# New Relic
+NEW_RELIC_KEY=
+
+# AgileCRM for Sales tracking
+AGILECRM_API_KEY=
+AGILECRM_JS_API_KEY=
+AGILECRM_DOMAIN=
+AGILECRM_EMAIL=
 
 # Capistrano deployment config. (Not needed if using Docker installation method)
 GIT_ORIGIN=git@github.com:OnApp/cloudnet.git

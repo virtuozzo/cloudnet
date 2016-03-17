@@ -10,89 +10,53 @@ You will find this repository useful if you have your own installation of OnApp 
 
 ##Installation
 
-The recommended installation method is with [Docker](http://www.docker.com). Although traditional
-methods should also work, see `Dockerfile` and this README as a guide.
-
 **Dependencies**    
-Cloud.net has various dependencies;
-  * [OnApp](http://onapp.com/platform/pricing-packages/): cloud provision
-  * [Postgres](https://wiki.postgresql.org/wiki/Detailed_installation_guides): main database
-  * [Redis](http://redis.io/): message queuing
-  * [Memcache](http://memcached.org/): caching
-  * [Zendesk API](https://developer.zendesk.com/rest_api/docs/core/introduction#content): customer support
-  * [Maxmind API](http://dev.maxmind.com/): credit card fraud detection
-  * [Segment API](https://segment.com/): custom analytics
-  * [Sentry](https://getsentry.com/welcome/): exception logging
-  * [Stripe API](https://stripe.com): payment gateway
-  * [500PX API](http://developers.500px.com/): photo library
-  * [Mapbox API](https://www.mapbox.com/developers/api/): displaying maps
-  * An SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
-
-You will need to either install or register API keys for all these dependencies.
+Before installing you will need the following:
+  * [OnApp](http://onapp.com/platform/pricing-packages/)
+  * [Docker Compose](https://docs.docker.com/compose/install/)
+  * Optional: an SMTP mail server, eg [Sendgrid](https://sendgrid.com/), [Mandrill](https://www.mandrill.com/), etc.
+  
+NB. You will need about 4GB to run all containers on a single machine.
 
 **Building/retrieving the Cloud.net Docker image**    
-You can either pull the latest image from the Docker registry with `docker pull Onapp/cloudnet`
+First make sure you have the repo with:
+`git clone https://github.com/OnApp/cloudnet`
 
-Or build the image yourself. First make sure you have the repo with
-`git clone https://github.com/OnApp/cloudnet` then run `docker build -t cloudnet .`
-
-**Initial config**    
-Firstly you will need to populate the `dotenv.sample` file and rename it to `.env`
-
-Generate symmetric encryption key. First you will need to temporarily add `RAILS_ENV=test` to your `.env` file.
-Then run`docker run --env-file=.env --rm cloudnet rails generate symmetric_encryption:new_keys production`.
-That KEY will need to be added to the `SYMMETRIC_ENCRYPTION_KEY` setting in `.env`. Make sure to remove the
-`RAILS_ENV=test` line.
-
-Then create the OnApp user role that grants restricted permissions to Cloud.net users and make a note
-of the created ID;
-`docker run --env-file=.env --rm cloudnet rake create_onapp_role`.
-That ID will need to be added to the `ONAPP_ROLE` setting in `.env`.
-
-Then create the database and structure with 
-
-`docker run --env-file=.env --rm cloudnet rake db:create` 
-
-`docker run --env-file=.env --rm cloudnet rake db:schema:load`.
-
-And finally seed the database with `docker run --env-file=.env --rm cloudnet rake db:seed`. This will
-add the available providers from your OnApp installation and an initial admin user with
-email: 'admin@cloud.net' and password: 'adminpassword'.
-
-You will then need to change the admin password and fill out the extra details for the providers
-that your installation is offering. For instance each provider needs a price per disk/cpu/memory.
-You can edit these details through the admin interface at `/admin/locations`.
+Then build the image with: `docker build -t cloudnet .`
 
 **Running the Docker containers**    
-You will need at least 2 containers:
+First you will need to populate your environment file with connection details to your OnApp
+control panel. The only required values that *must* be added are marked with '[REQUIRED]' at the top of the environment file.
+Ensure it is named `.env.docker` and placed in the root of the cloned cloud.net repo folder.
 
-Note that the web server is set to use HTTPS, so you will need to provide SSL certificates using
-the `-v` (mount argument) as shown in the `docker run` comman below. The certificates must be named;
-`server.key` and `server.crt`.
+Inside the cloud.net repo run `docker-compose up`
 
-  * Web container:
-```
-docker run \
-  --env-file=.env \
-  -p 443:3443 \
-  -v /local/path/to/ssl-keys:/mnt/certs \
-  --restart=always \
-  --name cloudnet-web \
-  --detach \
-  cloudnet foreman run web
-```
+If the above command doesn't exit, then cloud.net should be up and running. The `docker-compose up` command
+is now a live log of all cloud.net's various logs.
 
-NB. This web process will only accept HTTPS traffic
+Then create the database and structure with:
 
-  * Worker container:
-```
-docker run \
-  --env-file=.env \
-  --restart=always \
-  --name cloudnet-worker \
-  --detach \
-  cloudnet foreman run sidekiq --logfile /dev/stdout
-```
+`docker-compose run cloudnet-web bundle exec rake db:create RAILS_ENV=production`
+
+`docker-compose run cloudnet-web bundle exec rake db:schema:load RAILS_ENV=production`
+
+`docker-compose run cloudnet-web bundle exec rake db:seed RAILS_ENV=production`
+
+**Accessing cloud.net**    
+By default cloud.net will be accessible via: https://localhost
+
+Note that the web server is set to use HTTPS and that default self-signed certificates have been provided for localhost domains.
+If you need to access cloud.net from another domain, you can recreate the certificates using this guide: https://gist.github.com/tadast/9932075
+Ensure the certificates are named `server.key` and `server.crt`, and are placed in the root of the cloud.net repo.
+
+To login, goto: https://localhost/users/sign_in    
+email: 'admin@cloud.net'    
+pass: 'adminpassword'    
+
+**Misc**    
+To run arbitrary commands, eg; rails console:
+
+`docker exec -it cloudnet_cloudnet-web_1 rails console`
 
 ##TODO
 Document scaling with Docker using a [Swarm](http://docs.docker.com/swarm/) and a load balancer.
