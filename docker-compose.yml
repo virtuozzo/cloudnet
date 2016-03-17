@@ -25,6 +25,7 @@ cloudnet-cron:
 cloudnet-app:
   image: onapp/cloudnet
   env_file: .env.docker
+  restart: always
   ports:
     - "9292"
   links:
@@ -49,9 +50,11 @@ cloudnet-worker:
 
 cloudnet-redis:
   image: redis
+  restart: always
 
 cloudnet-memcached:
   image: memcached
+  restart: always
 
 cloudnet-dbdata:
   image: postgres
@@ -65,3 +68,4 @@ cloudnet-db:
     - "5432"
   volumes_from:
     - cloudnet-dbdata
+  restart: always
