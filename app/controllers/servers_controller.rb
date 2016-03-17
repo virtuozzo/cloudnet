@@ -154,10 +154,14 @@ class ServersController < ServerCommonController
   end
 
   def calculate_credit
+    @server.refresh_usage
     credit = @server.generate_credit_item(CreditNote.hours_till_next_invoice(current_user.account))
+    paid_bandwidth = Billing::BillingBandwidth.new(@server).bandwidth_usage
+    badwidth_price = @server.location.price_bw
+    bandwidth_cost = paid_bandwidth[:billable] * badwidth_price
     net_cost = credit[:net_cost]
     net_cost = 0 if @server.in_beta?
-    render json: { credit: net_cost }
+    render json: { credit: net_cost, bandwidth: bandwidth_cost }
   end
   
   def rebuild_network

@@ -16,8 +16,8 @@ class ServerUsage < ActiveRecord::Base
   private
 
   def self.get_usages(server, type)
+    return [] unless server.server_usages
     stats = server.server_usages.where(usage_type: type).limit(1).first
-
     if stats.present?
       return JSON.parse stats.usages
     else

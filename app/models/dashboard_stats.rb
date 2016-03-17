@@ -36,7 +36,7 @@ class DashboardStats
       costs[:memory][:monthly]    += server.ram_invoice_item(hours)[:net_cost]
       costs[:cpus][:monthly]      += server.cpu_invoice_item(hours)[:net_cost]
       costs[:disk_size][:monthly] += server.disk_invoice_item(hours)[:net_cost]
-      costs[:bandwidth][:monthly] += server.bandwidth_invoice_item[:net_cost]
+      #costs[:bandwidth][:monthly] += server.bandwidth_free_invoice_item[:net_cost]
     end
 
     costs

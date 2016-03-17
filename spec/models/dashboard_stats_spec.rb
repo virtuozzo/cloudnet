@@ -83,6 +83,6 @@ describe DashboardStats do
     expect(stats[:memory][:monthly]).to eq([s1, s2, s3].sum { |s| s.ram_invoice_item(hours)[:net_cost] })
     expect(stats[:cpus][:monthly]).to eq([s1, s2, s3].sum { |s| s.cpu_invoice_item(hours)[:net_cost] })
     expect(stats[:disk_size][:monthly]).to eq([s1, s2, s3].sum { |s| s.disk_invoice_item(hours)[:net_cost] })
-    expect(stats[:bandwidth][:monthly]).to eq([s1, s2, s3].sum { |s| s.bandwidth_invoice_item[:net_cost] })
+    expect(stats[:bandwidth][:monthly]).to eq([s1, s2, s3].sum { |s| s.bandwidth_free_invoice_item(hours)[:net_cost] })
   end
 end

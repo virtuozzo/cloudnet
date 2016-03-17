@@ -6,7 +6,8 @@ describe ConvertPaygToPrepaid do
     account = FactoryGirl.create(:account, invoice_day: 1)
     payg_server = FactoryGirl.create(:server, :payg, user: user, created_at: Time.zone.now.change(day: 12))
     allow_any_instance_of(ChargeInvoicesTask).to receive(:unblock_servers)
-    
+    allow(RefreshServerUsages).to receive(:new).and_return(double('RefreshServerUsages', refresh_server_usages: true))
+
     Timecop.freeze Time.zone.now.change(day: 15) do
       ConvertPaygToPrepaid.run
     end

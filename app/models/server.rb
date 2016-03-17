@@ -53,6 +53,10 @@ class Server < ActiveRecord::Base
     {cpu: sums[0], mem: sums[1], disc: sums[2]}
   end
 
+  def self.clear_free_bandwidth(servers)
+    servers.each { |s| s.update_attribute(:free_billing_bandwidth, 0)}
+  end
+
   def name_with_ip
     "#{name} (IP: #{primary_ip_address})"
   end
@@ -178,6 +182,10 @@ class Server < ActiveRecord::Base
   
   def auto_refresh_on!
     update_attribute(:no_refresh, false)
+  end
+  
+  def refresh_usage
+    RefreshServerUsages.new.refresh_server_usages(self)
   end
 
   private

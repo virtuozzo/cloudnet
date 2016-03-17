@@ -4,20 +4,20 @@ module Billing
   module ServerInvoiceable
     extend ActiveSupport::Concern
 
-    def generate_invoice_item(hours, no_bandwidth=false)
+    def generate_invoice_item(hours, reason = false)
       ram  = ram_invoice_item(hours)
       cpu  = cpu_invoice_item(hours)
       disk = disk_invoice_item(hours)
       ip   = ip_invoice_item(hours)
       template = template_invoice_item(hours)
-      bwf   = bandwidth_free_invoice_item(hours) unless no_bandwidth
-      bwp   = bandwidth_paid_invoice_item unless no_bandwidth
+      bwf   = bandwidth_free_invoice_item(hours)
+      bwp   = bandwidth_paid_invoice_item(reason) if reason
 
       net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost]
-      net_cost += no_bandwidth ? 0 : bwp[:net_cost]
+      net_cost += reason ? bwp[:net_cost] : 0
 
       description = "Server: #{name} (Hostname: #{hostname})"
-      metadata = no_bandwidth ? [ram, cpu, disk, ip, template] : [ram, cpu, disk, bwf, bwp, ip, template]
+      metadata = reason ? [ram, cpu, disk, bwf, bwp, ip, template] : [ram, cpu, disk, bwf, ip, template]
       { description: description, net_cost: net_cost, metadata: metadata, source: self }
     end
 
@@ -33,7 +33,7 @@ module Billing
     end
 
     def generate_credit_item(hours)
-      generate_invoice_item(hours, true)
+      generate_invoice_item(hours)
     end
 
     def hourly_cost
@@ -51,7 +51,7 @@ module Billing
     end
 
     def cost_for_hours(hours)
-      item = generate_invoice_item(hours, true)
+      item = generate_invoice_item(hours)
       item[:net_cost]
     end
 
@@ -102,9 +102,9 @@ module Billing
     end
     
     # Additional bandwidth is post-paid
-    # TODO: bandwidth price is taken from location, which can be changed. Should store in Server
-    def bandwidth_paid_invoice_item
-      bandwidth_usage = BillingBandwidth.new(self).bandwidth_usage
+    # TODO: bandwidth price is taken from location, which can be changed after server creation
+    def bandwidth_paid_invoice_item(reason)
+      bandwidth_usage = BillingBandwidth.new(self, reason).bandwidth_usage
       {
         name: 'Additional Bandwidth',
         unit_cost: location.price_bw,
@@ -190,6 +190,7 @@ module Billing
 
     def charging_paperwork
       @invoice.invoice_items.first.source = @newly_built_server || @old_server_specs || self
+      @invoice.increase_free_billing_bandwidth(@old_server_specs.try(:bandwidth))
       @invoice.save
       remaining = Invoice.milli_to_cents(@remaining_cost)
       if remaining > 0 && remaining < Invoice::MIN_CHARGE_AMOUNT
@@ -257,7 +258,7 @@ module Billing
         ).order(updated_at: :desc).first
       end
     end
-    
+
     def determine_vat_coupon_status(credit_note, invoice_item)
       return unless invoice_item.present?
       invoice = invoice_item.invoice
