@@ -85,11 +85,11 @@ To run arbitrary commands, eg; rails console:
 
 `$ docker-compose run --rm cloudnet-app rails console production`
 
-##INSTALL
+##Quick install
 For a more easier step-by-step guide to installing and updating Cloud.net on a server with zero downtime see the [install guide](INSTALL.md)
 
 ##TODO
 Document scaling with Docker using a [Swarm](http://docs.docker.com/swarm/) and a load balancer.
 
-#CONTRIBUTING
+##CONTRIBUTING
 Pull Requests welcome
