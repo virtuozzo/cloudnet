@@ -129,5 +129,6 @@ class CreditNote < ActiveRecord::Base
     credit_note.credit_note_items = [credit_item]
     credit_note.save!
     account.create_activity(:create_trial_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost })
+    Analytics.track(account.user, event: 'Issued trial credit', properties: { credit_note: credit_note.id, amount: Invoice.pretty_total(credit_note.total_cost) })
   end
 end
