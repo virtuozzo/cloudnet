@@ -90,6 +90,9 @@ class ServerWizardsController < ServerCommonController
     elsif !@wizard_object.has_minimum_resources?
       redirect_to servers_path, alert: 'You do not have enough resources to create a new server'
       false
+    elsif !current_user.confirmed?
+      redirect_to servers_path, alert: 'Please confirm your email address before creating a server'
+      false
     else
       true
     end
