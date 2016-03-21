@@ -250,12 +250,6 @@ describe Account do
       account = user.account
       expect { account.calculate_risky_card(:rejected) }.to change { account.risky_cards_remaining }.by(-1)
     end
-
-    it 'should reset the risky cards allowed if I send a rejected report and then an accepted' do
-      account = user.account
-      expect { account.calculate_risky_card(:rejected) }.to change { account.risky_cards_remaining }.by(-1)
-      expect { account.calculate_risky_card(:accepted) }.to change { account.risky_cards_remaining }.to(Account::RISKY_CARDS_ALLOWED)
-    end
   end
 
   describe 'Billing country and Billing address' do
@@ -306,6 +300,23 @@ describe Account do
         user.account.coupon_activated_at = Time.now - Account::COUPON_LIMIT_MONTHS + 1.second
         expect(user.account.can_set_coupon_code?).to be false
       end
+    end
+  end
+  
+  describe 'Fraud validator' do
+    it 'should return minfraud as a reason for fraud validation' do
+      card = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0)
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(1)
+    end
+    
+    it 'should return IP history as a reason for fraud validation' do
+      RiskyIpAddress.create(ip_address: '0.0.0.0', account: user.account)
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(2)
+    end
+    
+    it 'should return risky card attempts as a reason for fraud validation' do
+      user.account.risky_cards_remaining = -1
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(3)
     end
   end
 end

@@ -10,7 +10,7 @@ class ServerWizard
 
   ATTRIBUTES = [:location_id, :template_id, :memory, :cpus, :disk_size, :name,
                 :os_type, :card_id, :user, :ip_addresses, :payment_type, :build_errors,
-                :submission_path, :existing_server_id, :provisioner_role]
+                :submission_path, :existing_server_id, :provisioner_role, :validation_reason]
   attr_accessor(*ATTRIBUTES)
 
   attr_reader :hostname
@@ -142,7 +142,8 @@ class ServerWizard
       location:               location,
       bandwidth:              bandwidth,
       payment_type:           'prepaid',
-      provisioner_role:       provisioner_role
+      provisioner_role:       provisioner_role,
+      validation_reason:      validation_reason
     )
   end
 

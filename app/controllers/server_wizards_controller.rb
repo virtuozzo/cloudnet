@@ -22,6 +22,7 @@ class ServerWizardsController < ServerCommonController
     return unless meets_minimum_server_requirements?
     create_task = CreateServerTask.new(@wizard_object, current_user)
     @wizard_object.ip_addresses = 1
+    @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip)
     
     unless @wizard_object.provisioner_role.blank?
       provisioner_template = @wizard_object.location.provisioner_templates.first
@@ -32,9 +33,19 @@ class ServerWizardsController < ServerCommonController
     end
 
     if @wizard.save && create_task.process
-      create_task.server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
-      track_analytics_for_server(create_task.server)
-      redirect_to server_path(create_task.server), notice: 'Server successfully created and will be booted shortly'
+      new_server = create_task.server
+      new_server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
+      track_analytics_for_server(new_server)
+      if new_server.validation_reason > 0
+        NotifyUsersMailer.delay.notify_server_validation(current_user, new_server)
+        SupportTasks.new.perform(:notify_server_validation, current_user, new_server) rescue nil
+        new_server.create_activity :validation, owner: current_user, params: { reason: new_server.validation_reason }
+        RiskyIpAddress.create(ip_address: ip, account: current_user.account)
+        notice = 'Server successfully created but has been placed under validation. A support ticket has been created for you. A support team agent will review and reply to you shortly.'
+      else
+        notice = 'Server successfully created and will be booted shortly'
+      end
+      redirect_to server_path(new_server), notice: notice
     else
       @packages = @wizard_object.packages
       @wizard_object.errors.add(:base, create_task.errors.join(', ')) if create_task.errors?

@@ -52,6 +52,12 @@ ActiveAdmin.register User do
     column :current_sign_in_ip
     column :sign_in_count
     column :full_name
+    column :minfraud_score do |user|
+      user.account.primary_billing_card.fraud_score.round(2) rescue nil
+    end
+    column :risky_cards do |user|
+      user.account.risky_card_attempts rescue nil
+    end
     column :admin
     column :suspended
 

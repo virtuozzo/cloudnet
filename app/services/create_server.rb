@@ -19,7 +19,7 @@ class CreateServer
       primary_disk_size: @data.disk_size.to_i - template.required_swap,
       template_id: template.identifier,
       required_virtual_machine_build: 1,
-      required_virtual_machine_startup: 1,
+      required_virtual_machine_startup: startup_required,
       required_ip_address_assignment: 1
     }
 
@@ -39,5 +39,9 @@ class CreateServer
     end
 
     ''
+  end
+  
+  def startup_required
+    @data.validation_reason > 0 ? 0 : 1
   end
 end

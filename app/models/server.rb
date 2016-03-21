@@ -37,6 +37,7 @@ class Server < ActiveRecord::Base
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :deleted_this_month, -> { where('deleted_at > ? AND deleted_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :deleted_last_month, -> { where('deleted_at > ? AND deleted_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
+  scope :servers_under_validation, -> { where('validation_reason > 0') }
 
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'

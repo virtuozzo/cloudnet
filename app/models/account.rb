@@ -2,6 +2,7 @@ class Account < ActiveRecord::Base
   include PublicActivity::Common
   include Account::Couponable
   include Account::Wallet
+  include Account::FraudValidator
 
   acts_as_paranoid
 
@@ -11,6 +12,7 @@ class Account < ActiveRecord::Base
   has_many :payment_receipts, dependent: :destroy
   has_many :billing_cards, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
+  has_many :risky_ip_addresses
 
   before_create :set_invoice_start_day
   before_create :create_payment_gateway_user
@@ -83,12 +85,11 @@ class Account < ActiveRecord::Base
   end
 
   def calculate_risky_card(result)
-    case result
-    when :rejected
-      update!(risky_cards_remaining: risky_cards_remaining - 1)
-    else
-      update!(risky_cards_remaining: RISKY_CARDS_ALLOWED)
-    end
+    update!(risky_cards_remaining: risky_cards_remaining - 1) if result == :rejected
+  end
+  
+  def risky_card_attempts
+    RISKY_CARDS_ALLOWED - risky_cards_remaining
   end
 
   def vat_exempt?

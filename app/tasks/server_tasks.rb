@@ -29,7 +29,7 @@ class ServerTasks < BaseTasks
         onapp_template = active_template(info["template_id"], server.location_id, server.provisioner_role)
       end
     end
-    new_state = :blocked if server.user.servers_blocked?
+    new_state = :blocked if server.user.servers_blocked? || server.validation_reason > 0
     old_state = server.state
 
     if old_state != new_state
