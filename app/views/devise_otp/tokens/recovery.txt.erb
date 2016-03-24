@@ -1,7 +1,7 @@
 Thank you for enabling two-factor authentication for your
-Cloud.net Account
+<%= ENV['BRAND_NAME'] %> Account
 
-Your Cloud.net Recovery Tokens are below
+Your <%= ENV['BRAND_NAME'] %> Recovery Tokens are below
 Generated on: <%= Time.now.to_s %>
 
 1. <%= @tokens[0] %>      6. <%= @tokens[5] %>
@@ -11,5 +11,5 @@ Generated on: <%= Time.now.to_s %>
 5. <%= @tokens[4] %>      10. <%= @tokens[9] %>
 
 Each token can only be used once. Please contact 
-support@cloud.net if you have any issues using your
+<%= ENV['MAILER_SUPPORT_MAIN'] %> if you have any issues using your
 recovery tokens.

@@ -4,7 +4,7 @@
 Owned by <%= link_to @server.user.full_name, admin_user_url(@server.user) %>
 <ul>
   <li>
-    Server on Cloud.net admin: <%= link_to @server.hostname, admin_server_url(@server) %>
+    Server on <%= ENV['BRAND_NAME'] %> admin: <%= link_to @server.hostname, admin_server_url(@server) %>
   </li>
   <li>
     Server on OnApp: <a href="<%= @link_to_onapp_server %>"><%= @link_to_onapp_server %></a>

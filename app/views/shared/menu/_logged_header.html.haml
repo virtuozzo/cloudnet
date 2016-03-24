@@ -2,7 +2,7 @@
   %div#menu
     %nav.collapse.navbar-collapse{role: "navigation"}
       .navbar-header
-        = link_to 'Cloud.net', root_path, { class: "navbar-brand jg-header", id: 'logo'}
+        = link_to ENV['BRAND_NAME'], root_path, { class: "navbar-brand jg-header", id: 'logo'}
       = render partial: 'shared/nav'
 
 %header#jg-header-main.jg-header.navbar-fixed-top

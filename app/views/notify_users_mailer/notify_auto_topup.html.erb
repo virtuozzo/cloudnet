@@ -2,16 +2,16 @@
 
 <% if @success %>
 
-<p>We just wanted to let you know that your account has been automaticaly topped-up by $<%= Payg::VALID_TOP_UP_AMOUNTS.min %> USD because your Wallet balance went below $2. There isn't anything else you need to do now. You will find the Payment Receipt for this charge on the Billing page on the Cloud.net dashboard. Any future invoices will be paid automatically from your available Wallet balance.</p>
+<p>We just wanted to let you know that your account has been automaticaly topped-up by $<%= Payg::VALID_TOP_UP_AMOUNTS.min %> USD because your Wallet balance went below $2. There isn't anything else you need to do now. You will find the Payment Receipt for this charge on the Billing page on the <%= ENV['BRAND_NAME'] %> dashboard. Any future invoices will be paid automatically from your available Wallet balance.</p>
 
 <p>If you would like to disable Auto Top-up, you may do so from your account dashboard.</p>
 
 <% else %>
 
-<p>We were unable to top-up your Wallet with $<%= Payg::VALID_TOP_UP_AMOUNTS.min %> USD because an attempt to charge your Primary credit card has failed. Please verify your credit card information we have on file. For any assistance, please email <a href="mailto:support@cloud.net">support@cloud.net</a>.</p>
+<p>We were unable to top-up your Wallet with $<%= Payg::VALID_TOP_UP_AMOUNTS.min %> USD because an attempt to charge your Primary credit card has failed. Please verify your credit card information we have on file. For any assistance, please email <a href="mailto:<%= ENV['MAILER_SUPPORT_MAIN'] %>"><%= ENV['MAILER_SUPPORT_MAIN'] %></a>.</p>
 
 <% end %>
 
 <p>Thanks,</p>
 
-<p>Cloud.net Team</p>
+<p><%= ENV['BRAND_NAME'] %> Team</p>

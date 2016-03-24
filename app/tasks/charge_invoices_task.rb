@@ -99,7 +99,7 @@ class ChargeInvoicesTask < BaseTask
   end
 
   def card_description(invoices)
-    "Cloud.net Invoice(s) #{invoices.map(&:invoice_number).join(', ')}"
+    "#{ENV['BRAND_NAME']} Invoice(s) #{invoices.map(&:invoice_number).join(', ')}"
   end
 
   def mark_invoices_as_paid(invoices)

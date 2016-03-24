@@ -18,6 +18,10 @@ REDIS_URI=redis://cloudnet-redis:6379
 
 ## REQUIRED
 
+# Host settings
+HOST_DOMAIN=cloud.net
+BRAND_NAME=Cloud.net
+
 # Generate with `rails generate symmetric_encryption:new_keys production`
 SYMMETRIC_ENCRYPTION_KEY=
 
@@ -68,10 +72,13 @@ MAILER_ADMIN_RECIPIENTS="sample@email.com, joebloggs@website.com"
 # Financial report recipients
 MAILER_ENQUIRY_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_FINANCE_RECIPIENTS="sample@email.com, joebloggs@website.com"
+MAILER_SUPPORT_MAIN="support@website.com"
 MAILER_SUPPORT_RECIPIENTS="sample@email.com, joebloggs@website.com"
+MAILER_SUPPORT_ESCALATE="ticket-escalate@website.com"
 MAILER_ADMIN_DEFAULT_FROM='Cloud.net Admin <admin@website.com>'
 MAILER_NOTIFICATIONS_DEFAULT_FROM='Cloud.net Notifications <notifications@website.com>'
 MAILER_DEFAULT_WELCOME='Cloud.net <welcome@website.com>'
+MAILER_BILLING='billing@website.com'
 
 # Appears at the top of PDFs for invoices, credit notes, etc
 PDF_HEADER="Company name\nAddress line 1\nVAT number\netc"

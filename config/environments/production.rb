@@ -67,7 +67,7 @@ CloudNet::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Mailer options for Devise
-  config.action_mailer.default_url_options = { host: 'cloud.net' }
+  config.action_mailer.default_url_options = { host: ENV['HOST_DOMAIN'], :protocol => 'https' }
   config.action_mailer.delivery_method     = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
@@ -79,7 +79,7 @@ CloudNet::Application.configure do
     user_name: ENV['SMTP_USER'],
     password: ENV['SMTP_PASSWORD'],
     authentication: ENV['SMTP_AUTH_METHOD'],
-    domain: 'cloud.net'
+    domain: ENV['HOST_DOMAIN']
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

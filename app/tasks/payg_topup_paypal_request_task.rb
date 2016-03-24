@@ -22,7 +22,7 @@ class PaygTopupPaypalRequestTask < BaseTask
         currency_code: :USD,
         amount: @usd_amount,
         items: [{
-          name: 'Cloud.net Wallet',
+          name: "#{ENV['BRAND_NAME']} Wallet",
           description: "Cloud Top Up for #{@user.full_name}",
           amount: @usd_amount,
           category: :Digital

@@ -32,7 +32,7 @@ class UserTasks < BaseTasks
     begin
       cut_name = full_name.gsub(' ', '-').downcase.tr('^a-z\-', '')[0..USERNAME_SIZE]
       username = "#{cut_name}_#{id}_#{SecureRandom.hex(3)}"
-      email    = "#{username}@cloud.net"
+      email    = "#{username}@#{ENV['HOST_DOMAIN']}"
       password = generate_password(PASSWORD_SIZE)
     end while User.where(onapp_user: username).exists?
 

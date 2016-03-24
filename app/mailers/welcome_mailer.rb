@@ -4,6 +4,6 @@ class WelcomeMailer < ActionMailer::Base
   def welcome_email(user, token)
     @user = user
     @token = token
-    mail(to: @user.email, subject: 'Welcome to Cloud.net! Please confirm your account...')
+    mail(to: @user.email, subject: "Welcome to #{ENV['BRAND_NAME']}! Please confirm your account...")
   end
 end

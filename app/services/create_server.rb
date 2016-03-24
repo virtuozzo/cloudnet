@@ -26,7 +26,7 @@ class CreateServer
     params.merge!(swap_disk_size: template.required_swap) unless location.provider.scan(/vmware|vcenter/i).length > 0
     params.merge!(rate_limit: location.network_limit) if location.network_limit.present? && location.network_limit > 0
     params.merge!(licensing_type: 'mak') if template.os_type.include?('windows') || template.os_distro.include?('windows')
-    params.merge!(note: 'Created with Cloud.net')
+    params.merge!(note: "Created with #{ENV['BRAND_NAME']}")
 
     squall.create params
   end

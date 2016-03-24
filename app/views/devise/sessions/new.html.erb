@@ -20,7 +20,7 @@
       <div id="jg-registration-widget" class="pure-g sessions">  
         <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
           <header class="session-logo pure-u-1">
-            <%= link_to 'Cloud.net', root_path, { class: "pure-u-1", id: 'logoLarge'} %>
+            <%= link_to ENV['BRAND_NAME'], root_path, { class: "pure-u-1", id: 'logoLarge'} %>
           </header>
 
           <dl>
