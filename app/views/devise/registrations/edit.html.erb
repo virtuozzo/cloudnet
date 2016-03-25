@@ -11,8 +11,11 @@
     <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "form-devise", :role => "form" }) do |f| %>
       <div class="jg-widget-form pure-g-r clearfix">
 
-        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% if devise_mapping.confirmable? && (resource.pending_reconfirmation? || !resource.confirmed?) %>
+          <div class='alert alert-info'>
+            Currently waiting confirmation for: <%= resource.unconfirmed_email || resource.email %>.
+            <%= link_to('Click here', user_confirmation_path(user: {email: resource.unconfirmed_email || resource.email}), method: :post) %> to resend confirmation email.
+          </div>
         <% end %>
 
         <div class="pure-g">
