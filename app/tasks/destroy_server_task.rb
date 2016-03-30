@@ -1,4 +1,7 @@
 class DestroyServerTask < BaseTask
+  
+  # NegativeBalanceProtection::Actions::DestroyAllServersConfirmed
+  # may need update if you change the way servers are being destroyed
   def initialize(server, user, user_ip)
     super
     @server = server

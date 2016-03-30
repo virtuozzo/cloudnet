@@ -136,14 +136,15 @@ describe CreateServerTask do
 
   describe 'Destroying Server' do
     it "should generate a credit note for time remaining until the server's next invoice" do
-      Timecop.freeze '16 Feb 2015' do
+      
+      Timecop.freeze Time.utc(2015,2,16) do
         FactoryGirl.create :server
         invoice = FactoryGirl.create(:invoice)
         invoice.invoice_items << FactoryGirl.create(:invoice_item, invoice: invoice)
       end
       expect(Server.count).to eq 1
-
-      Timecop.freeze '23 Feb 2015' do
+      
+      Timecop.freeze Time.utc(2015,2,23) do
         server = Server.first
         server.create_credit_note_for_time_remaining
       end
@@ -151,6 +152,7 @@ describe CreateServerTask do
 
       cn = CreditNote.first
       hours = cn.credit_note_items.first.metadata.first[:hours]
+      
       expect(hours).to eq 504
     end
   end

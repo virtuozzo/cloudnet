@@ -41,14 +41,13 @@ module NegativeBalanceProtection
         ErrorLogging.new.track_exception(
           e,
           extra: {
-            user: user,
-            server: server,
+            user_id: user.id,
+            server_id: server.id,
             source: 'ShutdownAllServers',
             faraday: e.response
           }
         )
       end
-      
     end
   end
 end
