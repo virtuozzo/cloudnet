@@ -162,6 +162,14 @@ class Account < ActiveRecord::Base
   def self.in_eu?(code)
     %w(AT BE BG HR CY CZ DK EE FI FR DE EL HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE).include?(code)
   end
+  
+  def valid_top_up_amounts(ip = nil)
+    if !fraud_safe?(ip)
+      Payg::VALID_TOP_UP_AMOUNTS.first(1)
+    else
+      Payg::VALID_TOP_UP_AMOUNTS
+    end
+  end
 
   private
 

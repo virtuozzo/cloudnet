@@ -1,7 +1,7 @@
 module PaygHelper
   def payg_options(account)
     @account = account
-    @amounts = Payg::VALID_TOP_UP_AMOUNTS.dup
+    @amounts = account.valid_top_up_amounts(request.remote_ip)
     options = @amounts.map { |amount| ["$#{amount} USD", amount] }
     options_for_select options, @amounts.first
   end

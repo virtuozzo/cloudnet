@@ -7,7 +7,11 @@ class Account < ActiveRecord::Base
     VALID_FRAUD_SCORE = 40
     VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts"]
     
-    def fraud_validation_reason(ip)
+    def fraud_safe?(ip = nil)
+      fraud_validation_reason(ip) == 0
+    end
+    
+    def fraud_validation_reason(ip = nil)
       return case
         when !minfraud_safe? ; 1
         when !safe_ip?(ip) ; 2
@@ -29,8 +33,11 @@ class Account < ActiveRecord::Base
     end
     
     # Check list of IPs that has a history for fraud
-    def safe_ip?(ip)
-      RiskyIpAddress.count(ip_address: ip) == 0
+    def safe_ip?(ip = nil)
+      ips = []
+      ips << ip unless ip.blank?
+      ips << primary_billing_card.ip_address unless primary_billing_card.blank?
+      RiskyIpAddress.where("ip_address IN (?)", ips).count == 0
     end
     
     # Number of bad / risky card attempts
