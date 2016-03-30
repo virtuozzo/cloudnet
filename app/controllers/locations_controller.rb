@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  skip_before_action :authenticate_user!
 
   def show
     location = Location.find(params[:id])

@@ -44,6 +44,7 @@ class ServerCommonController < ApplicationController
   private
 
   def step2
+    @regions = Region.active
     @locations = Location.all.where(hidden: false)
     @templates = Location.find(@wizard_object.location_id).templates.where(hidden: false).where.not(os_distro: 'docker').group_by { |t| "#{t.os_type}-#{t.os_distro}" } unless @wizard_object.location_id.blank?
     Analytics.track(current_user, event_details_step2, anonymous_id, request)

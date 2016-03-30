@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   private
 
   def controller_allowed?
-    controllers = %w(tickets ticket_replies public server_search server_wizards)
+    controllers = %w(tickets ticket_replies public server_search server_wizards locations)
     devise_controller? || controllers.include?(params[:controller])
   end
 

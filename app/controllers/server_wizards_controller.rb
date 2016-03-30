@@ -22,7 +22,7 @@ class ServerWizardsController < ServerCommonController
     return unless meets_minimum_server_requirements?
     create_task = CreateServerTask.new(@wizard_object, current_user)
     @wizard_object.ip_addresses = 1
-    @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip)
+    @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip) if current_user
     
     unless @wizard_object.provisioner_role.blank?
       provisioner_template = @wizard_object.location.provisioner_templates.first
@@ -110,6 +110,7 @@ class ServerWizardsController < ServerCommonController
   end
 
   def step1
+    @regions = Region.active
     @locations = Location.all.where(hidden: false)
     @cloud_locations  = @locations.where(budget_vps: false)
     @budget_locations = @locations.where(budget_vps: true)

@@ -41,7 +41,7 @@ $ ->
        <div class="no-data">
          <p>You haven't created any servers yet</p>
           <div class="jg-widget-controls">
-            <a href="/search" class="jg-button-lilac jg-new-button">New Server</a>
+            <a href="/servers/create" class="jg-button-lilac jg-new-button">New Server</a>
           </div>
        </div>
      """
@@ -203,7 +203,7 @@ $ ->
         """
           <div class="no-data">
             <p>You haven't created any servers yet</p>
-            <div class="jg-widget-controls"><a href="/search" class="jg-button-lilac jg-new-button">New Server</a></div>
+            <div class="jg-widget-controls"><a href="/servers/create" class="jg-button-lilac jg-new-button">New Server</a></div>
           </div>
 
         """

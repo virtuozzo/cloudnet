@@ -704,7 +704,7 @@ $ ->
     
     popUp = (loc) ->
       geoJsonLayer.eachLayer (marker) ->
-        if marker?.feature?.properties.id is loc
+        if parseInt(marker?.feature?.properties.id) is parseInt(loc)
           id = marker._leaflet_id
           map.panTo(marker.getLatLng())
           marker.bounce({duration: 400, height: 10})
@@ -739,21 +739,21 @@ $ ->
       return data
     return collection
 
-  cityFormat = (location) ->
-    html = """
-      <img src='/assets/images/flags/flat/16/#{location.country}.png'/>
-      <span class="jg-option-field">#{location.city}</span>
-    """
-    return html
-    
-  cities = _.select2Array locations, ['city', 'country'], key: 'id'
-  $locationField.select2
-    placeholder:        'Select a location'
-    data: ->
-      return {results: _.sortBy cities, 'city', text: 'city'}
-    formatSelection:  cityFormat
-    formatResult:     cityFormat
-  .select2 'enable', true
+  # cityFormat = (location) ->
+  #   html = """
+  #     <img src='/assets/images/flags/flat/16/#{location.country}.png'/>
+  #     <span class="jg-option-field">#{location.city}</span>
+  #   """
+  #   return html
+  #   
+  # cities = _.select2Array locations, ['city', 'country'], key: 'id'
+  # $locationField.select2
+  #   placeholder:        'Select a location'
+  #   data: ->
+  #     return {results: _.sortBy cities, 'city', text: 'city'}
+  #   formatSelection:  cityFormat
+  #   formatResult:     cityFormat
+  # .select2 'enable', true
 
   if !server
     setupMapBeta()
