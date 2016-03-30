@@ -67,7 +67,7 @@ module NegativeBalanceProtection
     end
 
     def clear_notif_reason
-      return "there are no servers" if user.servers.empty?
+      return "there are no servers" if user.reload.servers.empty?
       return "balance is correct"
     end
     
