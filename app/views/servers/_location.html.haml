@@ -10,5 +10,5 @@
         .form-group.jg-inline.pure-u-1.pure-g
           .form-group.pure-u-md-1-2
             = f.label :location_id, 'Location', {class: 'pure-u-1 jg-mandatory'}
-            = f.hidden_field :location_id
+            = f.select :location_id, option_groups_from_collection_for_select(@regions, :locations, :name, :id, :city, @wizard_object.location_id), include_blank: "Select a location"
       #jg-map

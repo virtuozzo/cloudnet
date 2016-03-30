@@ -3,7 +3,7 @@ class PublicController < ApplicationController
   before_action :clear_remembered_path
   
   def main
-    @regions = Region.active_regions
+    @regions = Region.active
     @cheapest = Location.cheapest
     analytics_info unless monitoring_service?
   end
