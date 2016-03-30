@@ -46,7 +46,7 @@ describe User do
                 admin_destroy_request: request)
 
     expect(user.notif_delivered).to eq 2
-    expect(user.last_notif_email_sent).to eq Date.today
+    expect(user.last_notif_email_sent.to_date).to eq Date.today
     user.clear_unpaid_notifications
     expect(user.notif_delivered).to eq 0
     expect(user.last_notif_email_sent).to be_nil
