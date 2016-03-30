@@ -16,8 +16,8 @@ class DestroyServerTask < BaseTask
     begin
       tasker.perform(:destroy, @user.id, @server.id)
       @server.create_credit_note_for_time_remaining
-      @server.destroy_with_ip(@ip)
       create_destroy_invoice
+      @server.destroy_with_ip(@ip)
       charge_unpaid_invoices(account)
       UpdateAgilecrmContact.perform_async(@user.id, nil, ['server-deleted'])
     rescue Faraday::Error::ClientError => e

@@ -30,8 +30,8 @@ module NegativeBalanceProtection
       
       def destroy_local_server(server)
         server.create_credit_note_for_time_remaining
-        server.destroy_with_ip("balance checker: not paid invoices")
         create_bandwidth_invoice(server)
+        server.destroy_with_ip("balance checker: not paid invoices")
       end
       
       def create_bandwidth_invoice(server)
