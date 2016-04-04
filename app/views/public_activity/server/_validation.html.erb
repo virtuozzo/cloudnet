@@ -1,1 +1,1 @@
-<%= link_to activity.owner.full_name, admin_user_path(activity.owner) %> created server (ID: <%= activity.trackable_id %>) but was placed under validation for <i><%= Account::FraudValidator::VALIDATION_REASONS[activity.parameters[:reason].to_i] %></i>
+<%= link_to activity.owner.full_name, admin_user_path(activity.owner) %>'s server (ID: <%= activity.trackable_id %>) was placed under validation for <i><%= Account::FraudValidator::VALIDATION_REASONS[activity.parameters[:reason].to_i] %></i>

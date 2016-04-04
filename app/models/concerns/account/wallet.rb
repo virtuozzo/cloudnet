@@ -11,6 +11,16 @@ class Account < ActiveRecord::Base
       transactions.to_a.sum(&:cost)
     end
 
+    # Sum of Invoice balances
+    def remaining_invoice_balance
+      invoices.to_a.sum(&:remaining_cost)
+    end
+
+    # Sum of Credit notes
+    def remaining_credit_balance
+      credit_notes.to_a.sum(&:remaining_cost)
+    end
+
     # Sum of Payment receipts
     def payment_receipts_balance
       payment_receipts.to_a.sum(&:remaining_cost)
@@ -19,6 +29,11 @@ class Account < ActiveRecord::Base
     # Sum of Payment receipts and Credit notes
     def wallet_balance
       payment_receipts_balance + remaining_credit_balance
+    end
+
+    # Actual balance after unpaid invoices
+    def remaining_balance
+      remaining_invoice_balance - wallet_balance
     end
     
     # Return number of days worth available on Wallet

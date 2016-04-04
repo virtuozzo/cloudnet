@@ -1,0 +1,1 @@
+Chargeback received for <%= Invoice.pretty_total(activity.parameters[:amount] * Invoice::CENTS_IN_DOLLAR) %> <%= activity.parameters[:currency] %> for reason <i><%= activity.parameters[:reason] %></i> with status <i><%= activity.parameters[:status] %></i>

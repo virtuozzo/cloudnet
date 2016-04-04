@@ -45,7 +45,7 @@ gem 'country_select', github: 'stefanpenner/country_select'
 gem 'carmen-rails', '~> 1.0.1'
 
 # Billing Integration Dependencies
-gem 'stripe', git: 'https://github.com/stripe/stripe-ruby', ref: '9cf5089d'
+gem 'stripe'
 gem 'maxmind', '~> 0.4.5'
 gem 'prawn', '~> 1.3.0'
 gem 'prawn-table'

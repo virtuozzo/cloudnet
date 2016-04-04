@@ -143,18 +143,6 @@ class Account < ActiveRecord::Base
     nil
   end
 
-  def remaining_invoice_balance
-    invoices.to_a.sum(&:remaining_cost)
-  end
-
-  def remaining_credit_balance
-    credit_notes.to_a.sum(&:remaining_cost)
-  end
-
-  def remaining_balance
-    remaining_invoice_balance - wallet_balance
-  end
-
   def self.in_gb?(code)
     code == 'GB'
   end

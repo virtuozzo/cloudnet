@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
     extend ActiveSupport::Concern
     
     VALID_FRAUD_SCORE = 40
-    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts"]
+    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts", "Chargeback"]
     
     def fraud_safe?(ip = nil)
       fraud_validation_reason(ip) == 0
@@ -16,6 +16,7 @@ class Account < ActiveRecord::Base
         when !minfraud_safe? ; 1
         when !safe_ip?(ip) ; 2
         when !permissible_card_attempts? ; 3
+        when received_chargeback? ; 4
         else ; 0
         end
     end
@@ -43,6 +44,10 @@ class Account < ActiveRecord::Base
     # Number of bad / risky card attempts
     def permissible_card_attempts?
       risky_card_attempts <= 3
+    end
+    
+    def received_chargeback?
+      false
     end
   end
 end

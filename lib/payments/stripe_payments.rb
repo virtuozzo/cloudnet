@@ -62,4 +62,8 @@ class StripePayments < Payments::Methods
       captured: charge.captured
     }
   end
+  
+  def list_disputes(created_after)
+    Stripe::Dispute.all(created: {gt: created_after})
+  end
 end
