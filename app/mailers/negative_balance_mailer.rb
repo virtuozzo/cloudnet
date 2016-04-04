@@ -8,7 +8,7 @@ class NegativeBalanceMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: user.email,
-      subject: 'Cloud.net: negative balance - shutdown warning'
+      subject: "#{ENV['BRAND_NAME']}: negative balance - shutdown warning"
     )
   end
   
@@ -19,7 +19,7 @@ class NegativeBalanceMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: user.email,
-      subject: 'Cloud.net: negative balance - all your servers shut down'
+      subject: "#{ENV['BRAND_NAME']}: negative balance - all your servers shut down"
     )
   end
   
@@ -30,7 +30,7 @@ class NegativeBalanceMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: user.email,
-      subject: 'Cloud.net: negative balance - DESTROY warning!'
+      subject: "#{ENV['BRAND_NAME']}: negative balance - DESTROY warning!"
     )
   end
   
@@ -41,7 +41,7 @@ class NegativeBalanceMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: user.email,
-      subject: 'Cloud.net: negative balance - servers destroyed'
+      subject: "#{ENV['BRAND_NAME']}: negative balance - servers destroyed"
     )
   end
 end

@@ -4,17 +4,21 @@ module Billing
   module ServerInvoiceable
     extend ActiveSupport::Concern
 
-    def generate_invoice_item(hours)
+    def generate_invoice_item(hours, reason = false)
       ram  = ram_invoice_item(hours)
       cpu  = cpu_invoice_item(hours)
       disk = disk_invoice_item(hours)
       ip   = ip_invoice_item(hours)
-      bw   = bandwidth_invoice_item
       template = template_invoice_item(hours)
+      bwf   = bandwidth_free_invoice_item(hours)
+      bwp   = bandwidth_paid_invoice_item(reason) if reason
 
-      net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + bw[:net_cost] + ip[:net_cost] + template[:net_cost]
+      net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost]
+      net_cost += reason ? bwp[:net_cost] : 0
+
       description = "Server: #{name} (Hostname: #{hostname})"
-      { description: description, net_cost: net_cost, metadata: [ram, cpu, disk, bw, ip, template], source: self }
+      metadata = reason ? [ram, cpu, disk, bwf, bwp, ip, template] : [ram, cpu, disk, bwf, ip, template]
+      { description: description, net_cost: net_cost, metadata: metadata, source: self }
     end
 
     def generate_payg_invoice_item(transactions)
@@ -84,16 +88,40 @@ module Billing
       }
     end
 
-    def bandwidth_invoice_item
+    # Free monthly bandwidth is splited per usage hour
+    def bandwidth_free_invoice_item(hours = Account::HOURS_MAX)
+      bnd_prepaid = (bandwidth.to_f * 1024 * hours / Account::HOURS_MAX).round #MB
       {
         name: 'Prepaid Bandwidth',
         unit_cost: location.price_bw,
-        units: bandwidth,
-        description: "#{bandwidth} GB for the month",
+        units: bnd_prepaid,
+        hours: hours,
+        description: "#{bnd_prepaid}MB for next #{hours} hours",
         net_cost: 0.0
       }
     end
+    
+    # Additional bandwidth is post-paid
+    # TODO: bandwidth price is taken from location, which can be changed after server creation
+    def bandwidth_paid_invoice_item(reason)
+      bandwidth_usage = BillingBandwidth.new(self, reason).bandwidth_usage
+      {
+        name: 'Additional Bandwidth',
+        unit_cost: location.price_bw,
+        units: bandwidth_usage[:billable],
+        hours: bandwidth_usage[:hours],
+        description: billable_bandwidth_description(bandwidth_usage),
+        net_cost: location.price_bw * bandwidth_usage[:billable] # price in milicents / MB
+      }
+    end 
 
+    def billable_bandwidth_description(bandwidth_usage)
+      billable_MB = bandwidth_usage[:billable]
+      free_MB = bandwidth_usage[:free]
+      hours_used = bandwidth_usage[:hours]
+      "#{billable_MB}MB over free #{free_MB}MB for past #{hours_used} hours"
+    end
+    
     def ip_invoice_item(hours)
       additional_ips = ip_addresses.to_i - 1
       {
@@ -161,7 +189,8 @@ module Billing
     end
 
     def charging_paperwork
-      @invoice.invoice_items.first.source = self
+      @invoice.invoice_items.first.source = @newly_built_server || @old_server_specs || self
+      @invoice.increase_free_billing_bandwidth(@old_server_specs.try(:bandwidth))
       @invoice.save
       remaining = Invoice.milli_to_cents(@remaining_cost)
       if remaining > 0 && remaining < Invoice::MIN_CHARGE_AMOUNT
@@ -200,18 +229,13 @@ module Billing
     end
 
     def create_credit_note_for_time_remaining
-      existing_invoice_item = InvoiceItem.where(
-        source_type: self.class.to_s,
-        source_id: id
-      ).order(updated_at: :desc).first
-
-      if existing_invoice_item.present?
-        credit_note = CreditNote.generate_credit_note([self], user.account, existing_invoice_item.invoice)
+      if last_generated_invoice_item.present?
+        credit_note = CreditNote.generate_credit_note([self], user.account, last_generated_invoice_item.invoice)
       else
         credit_note = CreditNote.generate_credit_note([self], user.account)
       end
 
-      determine_vat_coupon_status(credit_note, existing_invoice_item)
+      determine_vat_coupon_status(credit_note, last_generated_invoice_item)
       credit_note.save
       user.account.create_activity(
         :create_credit,
@@ -222,6 +246,17 @@ module Billing
         }
       )
       credit_note
+    end
+
+    def last_generated_invoice_item
+      return [] if id.nil? && @existing_server_id.nil?
+      @last_generated_invoice_item ||= begin
+        source_type = is_a?(ServerWizard) ? 'Server' : self.class.to_s
+        InvoiceItem.where(
+          source_type: source_type,
+          source_id: id || @existing_server_id
+        ).order(updated_at: :desc).first
+      end
     end
 
     def determine_vat_coupon_status(credit_note, invoice_item)

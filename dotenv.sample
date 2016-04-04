@@ -1,14 +1,33 @@
-# Rename this file to .env
+## Rename this file to .env.docker
+
+## PRE-CONFIGURED
+
+# nginx vhosts
+VIRTUAL_HOST=cloudnet-app
+CERT_NAME=server
 
 # Postgres credentials
-DB_USER=
-DB_PORT=
 DB_NAME=cloudnet
+DB_USER=postgres
 DB_PASSWD=
-DB_HOST=
+DB_HOST=cloudnet-db
+DB_PORT=5432
 
-MEMCACHE_URI=localhost:11211
-REDIS_URI=redis://localhost:6379
+MEMCACHE_URI=cloudnet-memcached:11211
+REDIS_URI=redis://cloudnet-redis:6379
+
+## REQUIRED
+
+# Host settings
+HOST_DOMAIN=cloud.net
+BRAND_NAME=Cloud.net
+
+# Generate with `rails generate symmetric_encryption:new_keys production`
+SYMMETRIC_ENCRYPTION_KEY=
+
+# Session keys. Generate with `rake secret`
+DEVISE_SECRET_KEY=
+COOKIES_SECRET_BASE=
 
 # Onapp API
 ONAPP_API_ALLOW_INSECURE=false
@@ -17,41 +36,29 @@ ONAPP_USER=
 ONAPP_PASS=
 ONAPP_ROLE=
 
+# Payments
+STRIPE_API_KEY=
+STRIPE_PUBLISH_KEY=
+
+# Credit card fraud detection
+MAXMIND_USER=
+MAXMIND_KEY=
+
+# PayPal Config
+PAYPAL_USER=
+PAYPAL_PASS=
+PAYPAL_SIGNATURE=
+
 # Zendesk
 ZENDESK_USER=
 ZENDESK_TOKEN=
 ZENDESK_TRIGGER_USER=
 ZENDESK_TRIGGER_PASS=
 
-# Credit card fraud detection
-MAXMIND_USER=
-MAXMIND_KEY=
-
-# Segment.io custom analytics
-ANALYTICS_KEY=
-
-#Pingdom
+# Pingdom
 PINGDOM_KEY=
 PINGDOM_USER=
 PINGDOM_PASS=
-
-# Logging
-SENTRY_DSN_URI=http://localhost
-
-# Payments
-STRIPE_API_KEY=
-STRIPE_PUBLISH_KEY=
-
-# Mailtrap: captures mail, so real users don't get spammed.
-# Only needed in non-production environments
-MAILTRAP_USER=
-MAILTRAP_PASS=
-
-# Generate with `rails generate symmetric_encryption:new_keys production`
-SYMMETRIC_ENCRYPTION_KEY=
-
-# Use 'true' if you're hosting on Docker or a PaaS like Heroku
-SERVE_STATIC_ASSETS=
 
 # Email provider. Eg; Sendgrid, Mandrill, etc
 SMTP_DOMAIN=
@@ -65,23 +72,37 @@ MAILER_ADMIN_RECIPIENTS="sample@email.com, joebloggs@website.com"
 # Financial report recipients
 MAILER_ENQUIRY_RECIPIENTS="sample@email.com, joebloggs@website.com"
 MAILER_FINANCE_RECIPIENTS="sample@email.com, joebloggs@website.com"
+MAILER_SUPPORT_MAIN="support@website.com"
 MAILER_SUPPORT_RECIPIENTS="sample@email.com, joebloggs@website.com"
+MAILER_SUPPORT_ESCALATE="ticket-escalate@website.com"
 MAILER_ADMIN_DEFAULT_FROM='Cloud.net Admin <admin@website.com>'
 MAILER_NOTIFICATIONS_DEFAULT_FROM='Cloud.net Notifications <notifications@website.com>'
 MAILER_DEFAULT_WELCOME='Cloud.net <welcome@website.com>'
+MAILER_BILLING='billing@website.com'
 
 # Appears at the top of PDFs for invoices, credit notes, etc
 PDF_HEADER="Company name\nAddress line 1\nVAT number\netc"
 
+# Used to display the map of providers, seen when creating a server
+MAPBOX_TOKEN=
+MAPBOX_PUBLIC_TOKEN=
+
 # Used to display images for provider locations
 FIVEHUNDREDPX_KEY=
 
-# Used to display the map of providers, seen when creating a server
-MAPBOX_TOKEN=
+# Segment.io custom analytics
+ANALYTICS_KEY=
 
-# Session keys. Generate with `rake secret`
-DEVISE_SECRET_KEY=
-COOKIES_SECRET_BASE=
+# AgileCRM for Sales tracking
+AGILECRM_API_KEY=
+AGILECRM_JS_API_KEY=
+AGILECRM_DOMAIN=
+AGILECRM_EMAIL=
+
+## OPTIONAL
+
+# Use 'true' if you're hosting on Docker or a PaaS like Heroku
+SERVE_STATIC_FILES=
 
 # Google Analytics code
 GA_UA_NUMBER=
@@ -89,9 +110,15 @@ GA_UA_NUMBER=
 #HubSpot CRM
 HUBSPOT_ID=
 
+# New Relic
+NEW_RELIC_KEY=
+
+# Logging
+SENTRY_DSN_URI=http://localhost
+
 # Capistrano deployment config. (Not needed if using Docker installation method)
-GIT_ORIGIN=git@github.com:OnApp/cloudnet.git
-PROD_SERVER1_IP=1.2.3.4
-PROD_SERVER2_IP=1.2.3.4
-STAGING_SERVER1_IP=1.2.3.4
-STAGING_SERVER2_IP=1.2.3.4
+#GIT_ORIGIN=git@github.com:OnApp/cloudnet.git
+#PROD_SERVER1_IP=1.2.3.4
+#PROD_SERVER2_IP=1.2.3.4
+#STAGING_SERVER1_IP=1.2.3.4
+#STAGING_SERVER2_IP=1.2.3.4

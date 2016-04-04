@@ -36,6 +36,14 @@ CloudNet::Application.routes.draw do
   get 'servers/create/prepaid_server_cost', to: 'server_wizards#prepaid_server_cost'
   get 'servers/create/payg_server_cost', to: 'server_wizards#payg_server_cost'
   get 'servers/(:id)/create/payg', to: 'server_wizards#payg'
+  
+  resources :locations, only: [:show] do
+    member do
+      get :templates
+      get :packages
+      get :provisioner_templates
+    end
+  end
 
   resources :dashboard, only: [:index] do
     collection do

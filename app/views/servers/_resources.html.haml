@@ -1,0 +1,24 @@
+- is_budget_vps = @server && @wizard_object.location && @wizard_object.location.budget_vps
+.jg-widget-content.resource-tabs{data: {params: "{#{@wizard_object.string_wizard_params}}"}}
+  .jg-widget-header.pure-g.jg-form-withTabs.clearfix
+    %h2.jg-icon.icon-cloud.pure-u= @server ? "Select Resources" : "Select Package"
+    - if is_budget_vps
+      %em.pure-u-1.alert.alert-warning.edit-server-warning Editing VPS server resources is not currently supported at this location
+  .jg-widget-body
+    - if @server
+      %span{:class => ("hidden" if is_budget_vps)}
+        %ul#resourceTabs.nav.nav-tabs
+          %li{:class => (activate_slider_tab ? nil : 'active')}
+            %a{href: '#packages', data: {'toggle' => 'tab'}} Packages
+          - unless @wizard_object.location && @wizard_object.location.budget_vps
+            %li{:class => ("active" if activate_slider_tab)}
+              %a{href: '#chooseyourown', data: {'toggle' => 'tab'}}
+                = @server ? "Update resources" : "Choose your own"
+        .tab-content
+          #packages.tab-pane.fade.in{:class => ('active' unless activate_slider_tab)}
+            #location-packages= render partial: "servers/packages", locals: {f: f}
+          #chooseyourown.tab-pane.fade.in{:class => ('active' if activate_slider_tab)}
+            = render partial: "servers/sliders", locals: {f: f}
+    - else
+      #location-packages= render partial: "servers/packages", locals: {f: f}
+      #location-sliders{class: 'hidden'}= render partial: "servers/sliders", locals: {f: f}

@@ -8,6 +8,11 @@ module PublicHelper
     select_tag(:region, options_for_select(region_options(regions)), class: "pure-input-1")
   end
   
+  def location_select(regions = [])
+    label_tag(:id, "Location") +
+    select_tag(:id, option_groups_from_collection_for_select(regions, :locations, :name, :id, :city), include_blank: "Global", class: "pure-input-1")
+  end
+  
   def cpu_select
     label_tag(:cpu, "CPU") +
     select_tag(:cpu, options_for_select(cpu_options), class: "pure-input-1")

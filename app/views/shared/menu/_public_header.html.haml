@@ -10,7 +10,7 @@
           %li
       .container
         .navbar-header
-          = link_to 'Cloud.net', root_path, {class: 'navbar-brand', id: 'logo'}
+          = link_to ENV['BRAND_NAME'], root_path, {class: 'navbar-brand', id: 'logo'}
         %ul.nav.navbar-nav.list-unstyled
           %li
             =link_to t('menu.market'), search_path

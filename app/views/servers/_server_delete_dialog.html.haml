@@ -19,9 +19,14 @@
             = text_field_tag :destroy_server_input, nil, placeholder: 'Type words in here', class: 'form-control focus', required: true, data: {expected: "#{expected_text}"}
           %p
             We will credit your account with
-            %strong#server-delete-credit (calculating...) 
+            %strong#server-delete-credit (calculating...)
+            for unused server time.
+          %p
+            We will charge your account
+            %strong#server-delete-bw (calculating...) 
+            for additional bandwidth.
+          %p
             (plus any EU VAT you may have paid if applicable. This amount does not include any coupons you may have used to pay for this server)
-      
         .modal-footer
           = form_tag server_path(server.id), method: :delete, role: 'form', class: 'jg-delete-server-form' do
             %button.btn.jg-back-button{"data-dismiss" => "modal"} Cancel
@@ -29,13 +34,13 @@
 
 :coffee
   millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}
-
+  
   formatCurrency = (data) ->
     value = data / millicents_dollar
     money = accounting.formatMoney(value, "$", 2, ",")
     return money
-
-  $ ->  
+  
+  $ ->
     # Destroy Servers Calculation
     $("#destroy-server").on 'show.bs.modal', (e) -> 
       $.ajax 
@@ -44,3 +49,4 @@
         dataType: "JSON",
         success: (response) ->
           $("#server-delete-credit").html(formatCurrency(response.credit))
+          $("#server-delete-bw").html(formatCurrency(response.bandwidth))

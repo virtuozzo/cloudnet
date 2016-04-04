@@ -1,0 +1,11 @@
+<p>Hello <%= @user.full_name %>!</p>
+
+<p>You are getting this message because a server that you created has been placed under validation. There are multiple reasons why this could happen - it could be because you have entered invalid credit card information, or because there has been too many attempts to add a credit card to your account, to name a few. Please be assured that we have been notified on this. Our support team will review your account and reply to you shortly.</p>
+
+<p>Server: <%= link_to @server.name, server_url(@server) %></p>
+
+<p>Hang on there! Once your account has been reviewed, your server will be booted and ready to go in no time!</p>
+    
+<p>Thanks,</p>
+
+<p><%= ENV['BRAND_NAME'] %> Team</p>

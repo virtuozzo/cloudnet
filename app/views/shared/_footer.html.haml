@@ -21,7 +21,7 @@
       .pure-u-1-2
         .pull-right
           =image_tag 'cloudnet-small-grey.png'
-          %p Copyright ©2015 Cloud.net Ltd.
+          %p= "Copyright ©#{Time.now.year} #{ENV['BRAND_NAME']} Ltd."
           %p
             %span.tos= link_to('Terms of Service',
             'http://feedback.cloud.net/knowledge-base/article/terms-of-service',

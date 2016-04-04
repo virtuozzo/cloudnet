@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217131111) do
+ActiveRecord::Schema.define(version: 20160321185611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20160217131111) do
     t.string   "address1",        limit: 255
     t.string   "address2",        limit: 255
     t.boolean  "primary",                     default: false
+    t.boolean  "fraud_safe",                  default: false
   end
 
   create_table "certificates", force: :cascade do |t|
@@ -319,6 +320,16 @@ ActiveRecord::Schema.define(version: 20160217131111) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "risky_ip_addresses", force: :cascade do |t|
+    t.string   "ip_address"
+    t.integer  "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "risky_ip_addresses", ["account_id"], name: "index_risky_ip_addresses_on_account_id", using: :btree
+
   create_table "server_backups", force: :cascade do |t|
     t.boolean  "built",                       default: false
     t.datetime "built_at"
@@ -445,6 +456,8 @@ ActiveRecord::Schema.define(version: 20160217131111) do
     t.decimal  "forecasted_rev",                     default: 0.0
     t.string   "provisioner_role"
     t.boolean  "no_refresh",                         default: false
+    t.integer  "free_billing_bandwidth",             default: 0
+    t.integer  "validation_reason",                  default: 0
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree

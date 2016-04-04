@@ -3,13 +3,13 @@
 </p>
 
 <p>
-  Your Cloud.net account balance is currently negative by <%= @pretty_negative_balance %>.
+  Your <%= ENV['BRAND_NAME'] %> account balance is currently negative by <%= @pretty_negative_balance %>.
 </p>
 
 <p>
   This is your <%= (@user.notif_delivered + 1).ordinalize %> warning.
   <br>
-  Please login to the control panel at <a href="https://www.cloud.net">https://www.cloud.net</a> and add new funds to your account.
+  Please login to the control panel at <a href="https://<%= ENV['HOST_DOMAIN'] %>"><%= ENV['BRAND_NAME'] %></a> and add new funds to your account.
   <br>
   Please note that we will DESTROY all your servers automatically after <%= @user.notif_before_destroy %> warnings of a negative balance.
   <br>
@@ -19,5 +19,5 @@
 <p>
   Thank you
   <br>
-  Cloud.net Team
+  <%= ENV['BRAND_NAME'] %> Team
 </p>

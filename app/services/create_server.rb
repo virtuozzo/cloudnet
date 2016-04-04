@@ -19,14 +19,14 @@ class CreateServer
       primary_disk_size: @data.disk_size.to_i - template.required_swap,
       template_id: template.identifier,
       required_virtual_machine_build: 1,
-      required_virtual_machine_startup: 1,
+      required_virtual_machine_startup: startup_required,
       required_ip_address_assignment: 1
     }
 
     params.merge!(swap_disk_size: template.required_swap) unless location.provider.scan(/vmware|vcenter/i).length > 0
     params.merge!(rate_limit: location.network_limit) if location.network_limit.present? && location.network_limit > 0
     params.merge!(licensing_type: 'mak') if template.os_type.include?('windows') || template.os_distro.include?('windows')
-    params.merge!(note: 'Created with Cloud.net')
+    params.merge!(note: "Created with #{ENV['BRAND_NAME']}")
 
     squall.create params
   end
@@ -39,5 +39,9 @@ class CreateServer
     end
 
     ''
+  end
+  
+  def startup_required
+    @data.validation_reason > 0 ? 0 : 1
   end
 end

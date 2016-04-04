@@ -35,6 +35,7 @@ class ChargeInvoicesTask < BaseTask
   end
   
   def unblock_servers
+    return if @user.notif_delivered == 0
     @user.clear_unpaid_notifications("balance is correct")
     manager = ServerTasks.new
     @user.servers.each do |server|
@@ -98,7 +99,7 @@ class ChargeInvoicesTask < BaseTask
   end
 
   def card_description(invoices)
-    "Cloud.net Invoice(s) #{invoices.map(&:invoice_number).join(', ')}"
+    "#{ENV['BRAND_NAME']} Invoice(s) #{invoices.map(&:invoice_number).join(', ')}"
   end
 
   def mark_invoices_as_paid(invoices)

@@ -7,7 +7,7 @@
     	<%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post, :class => "pure-u-1 form-devise", :role => "form" }) do |f| %>
 
     		<header class="session-logo">
-    	   <%= link_to 'Cloud.net', root_path, { class: "pure-u-1-1", id: 'logoLarge'} %>
+    	   <%= link_to ENV['BRAND_NAME'], root_path, { class: "pure-u-1-1", id: 'logoLarge'} %>
     		</header>
     	  <dl>
     			<dt class="jg-icon icon-email pure-u-1-8"></dt>

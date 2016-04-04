@@ -1,4 +1,7 @@
 class DestroyServerTask < BaseTask
+  
+  # NegativeBalanceProtection::Actions::DestroyAllServersConfirmed
+  # may need update if you change the way servers are being destroyed
   def initialize(server, user, user_ip)
     super
     @server = server
@@ -13,7 +16,9 @@ class DestroyServerTask < BaseTask
     begin
       tasker.perform(:destroy, @user.id, @server.id)
       @server.create_credit_note_for_time_remaining
+      create_destroy_invoice
       @server.destroy_with_ip(@ip)
+      charge_unpaid_invoices(account)
       UpdateAgilecrmContact.perform_async(@user.id, nil, ['server-deleted'])
     rescue Faraday::Error::ClientError => e
       ErrorLogging.new.track_exception(e, extra: { current_user: @user, source: 'DestroyServerTask', faraday: e.response })
@@ -26,5 +31,15 @@ class DestroyServerTask < BaseTask
     end
 
     true
+  end
+  
+  def create_destroy_invoice
+    invoice = Invoice.generate_prepaid_invoice([@server], @user.account, 0, :destroy)
+    invoice.save if invoice.pre_coupon_net_cost > 0
+  end
+  
+  def charge_unpaid_invoices(account)
+    unpaid = account.invoices.not_paid
+    ChargeInvoicesTask.new(@user, unpaid).process unless unpaid.empty?
   end
 end

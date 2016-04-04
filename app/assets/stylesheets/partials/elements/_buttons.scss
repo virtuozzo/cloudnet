@@ -96,10 +96,10 @@ table {
   &.provision {
       background: #4775d2;
     }
-  &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary {
+  &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary, &.success {
     background: #6ebd8d;
   }
-  &.hold, &.error, &.off, &.unpaid {
+  &.hold, &.error, &.off, &.unpaid, &.failed {
     background: #e66464;
   }
 

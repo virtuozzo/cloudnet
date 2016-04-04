@@ -1,0 +1,36 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.jg-icon.icon-cloud.pure-u Server Details
+  .jg-widget-body
+    .jg-widget-form.pure-u-1.clearfix
+      .form-group.jg-inline.pure-u-1.pure-g
+        .form-group.pure-u-md-1-2
+          = f.label :name, {class: 'pure-u-1 jg-mandatory'}
+          = f.text_field :name, class: 'form-control', value: (@server.name if @server)
+        .form-group.pure-u-md-1-2{:class => ("hidden" if @server)}
+          = f.label :hostname, {class: 'pure-u-1 jg-mandatory'}
+          = f.text_field :hostname, class: 'form-control', value: (@server.hostname if @server)
+          
+    .jg-widget-footer.actions.clearfix
+      .resources-total.pure-g.no-costs
+        .resources-cost.clearfix
+          %span.pure-u
+            Total Cost:
+          %span.total-cost.pure-u
+            %b#hourly-price $0.000000
+            per hour,
+            %b#monthly-price $0.00
+            per month.
+            - if current_user
+              Today you will be charged
+              %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_date.to_formatted_s(:long)} at 1:00am GMT)"} $0.00
+              - if @server && !@server.new_record?
+                (includes reimbursement for old server)
+          %span.pure-u
+            (Coupon Discounts & EU VAT are added on the final step if applicable)
+
+      %ul.jg-widget-controls
+        - if @server
+          %li= f.button @wizard_object.last_step? ? "Update Server" : "Update Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+        - else
+          %li= f.button @wizard_object.last_step? ? "Create Server" : "Create Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}

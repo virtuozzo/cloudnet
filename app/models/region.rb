@@ -1,6 +1,9 @@
 class Region < ActiveRecord::Base
   has_many :locations, dependent: :nullify
 
+  scope :active, -> {
+    where(id: Region.used_regions_ids).order(:id)
+  }
   scope :active_regions, -> {
     where(id: Region.used_regions_ids).order(:id).map{|reg| [reg.name, reg.id]}
   }

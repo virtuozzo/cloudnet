@@ -1,5 +1,5 @@
 -title = yield(:title).empty? ? 'Cloud Marketplace' : yield(:title)
-%title= "Cloud.net | #{title}"
+%title= "#{ENV['BRAND_NAME']} | #{title}"
 %link{rel: "icon", href: "favicon.ico", type: "image/x-icon"}
 %link{rel: "shortcut icon", href: "favicon.ico", type: "image/x-icon"}
 %link{href: "https://fonts.googleapis.com/css?family=Oxygen:400,300,700", rel: 'stylesheet', type: 'text/css'}

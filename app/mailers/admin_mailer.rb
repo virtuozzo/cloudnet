@@ -8,7 +8,7 @@ class AdminMailer < ActionMailer::Base
   def financials(data, mailto = ADMIN_RECIPIENTS)
     @data = data
     @date = data[:date]
-    mail(to: mailto, subject: "Cloud.net Admin Report - #{@date}")
+    mail(to: mailto, subject: "#{ENV['BRAND_NAME']} Admin Report - #{@date}")
   end
 
   def monthly_csv(start_date, end_date, mailto = FINANCE_RECIPIENTS)
@@ -24,14 +24,14 @@ class AdminMailer < ActionMailer::Base
     filename = "cloudnet_monthly_charge_report_#{@date_name}.csv"
     attachments[filename] = reporter.charge_report
 
-    mail(to: mailto, subject: "Cloud.net Monthly CSV Reports - #{@date_name}")
+    mail(to: mailto, subject: "#{ENV['BRAND_NAME']} Monthly CSV Reports - #{@date_name}")
   end
 
   def notify_stuck_server_state(server)
     @server = server
     @stuck_duration = "#{((Time.zone.now - @server.last_state_change) / 60).floor} minutes"
     @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
-    mail(to: SUPPORT_RECIPIENTS, subject: 'Cloud.net Server stuck in intermediate state')
+    mail(to: SUPPORT_RECIPIENTS, subject: "#{ENV['BRAND_NAME']} Server stuck in intermediate state")
   end
   
   def shutdown_action(user)
@@ -39,7 +39,7 @@ class AdminMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: ADMIN_RECIPIENTS,
-      subject: "Cloud.net: Automatic shutdown - #{user.full_name}"
+      subject: "#{ENV['BRAND_NAME']}: Automatic shutdown - #{user.full_name}"
     )
   end
   
@@ -48,7 +48,7 @@ class AdminMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: ENV['MAILER_ADMIN_RECIPIENTS'],
-      subject: "Cloud.net: DESTROY warning! - #{user.full_name}"
+      subject: "#{ENV['BRAND_NAME']}: DESTROY warning! - #{user.full_name}"
     )
   end
   
@@ -57,7 +57,7 @@ class AdminMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: ENV['MAILER_ADMIN_RECIPIENTS'],
-      subject: "Cloud.net: DESTROY request! - #{user.full_name}"
+      subject: "#{ENV['BRAND_NAME']}: DESTROY request! - #{user.full_name}"
     )
   end
   
@@ -66,7 +66,7 @@ class AdminMailer < ActionMailer::Base
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
     mail(
       to: ADMIN_RECIPIENTS,
-      subject: "Cloud.net: Automatic destroy - #{user.full_name}"
+      subject: "#{ENV['BRAND_NAME']}: Automatic destroy - #{user.full_name}"
     )
   end
 end

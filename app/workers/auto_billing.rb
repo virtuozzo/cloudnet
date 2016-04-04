@@ -1,6 +1,6 @@
 class AutoBilling
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform(date = Date.today)
     Account.invoice_day(date).find_each do |account|

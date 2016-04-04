@@ -53,6 +53,12 @@ module ApplicationHelper
   def remaining_balance_in_credit?(user)
     user.account.remaining_balance <= 0
   end
+  
+  def topup_balance(balance)
+    current_balance = pretty_total balance
+    current_balance.gsub!('-', '')
+    balance <= 0 ? "#{current_balance}" : "-#{current_balance}"
+  end
 
   def tag_string(tag)
     tag.to_s.gsub(/_/, ' ').capitalize
@@ -102,4 +108,15 @@ module ApplicationHelper
   def body_class
     controller_name + ' ' + controller_name + '-' + action_name
   end
+  
+  def provisioner_role_options(selected)
+    options_for_select(Server::PROVISIONER_ROLES.map {|role| [role.camelize, role]}, selected)
+  end
+  
+  # sliders when
+  # no vps AND no package choosen AND values in url params
+  def activate_slider_tab
+    @wizard_object.location && (!@wizard_object.location.budget_vps and !@wizard_object.package_matched and @wizard_object.params_values?)
+  end
+  
 end

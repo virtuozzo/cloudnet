@@ -37,6 +37,7 @@ class Server < ActiveRecord::Base
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :deleted_this_month, -> { where('deleted_at > ? AND deleted_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :deleted_last_month, -> { where('deleted_at > ? AND deleted_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
+  scope :servers_under_validation, -> { where('validation_reason > 0') }
 
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
@@ -51,6 +52,10 @@ class Server < ActiveRecord::Base
       .inject([0,0,0]) {|sum, o| [sum,o].transpose.map {|x| x.reduce(:+)}}
 
     {cpu: sums[0], mem: sums[1], disc: sums[2]}
+  end
+
+  def self.clear_free_bandwidth(servers)
+    servers.each { |s| s.update_attribute(:free_billing_bandwidth, 0)}
   end
 
   def name_with_ip
@@ -178,6 +183,10 @@ class Server < ActiveRecord::Base
   
   def auto_refresh_on!
     update_attribute(:no_refresh, false)
+  end
+  
+  def refresh_usage
+    RefreshServerUsages.new.refresh_server_usages(self)
   end
 
   private

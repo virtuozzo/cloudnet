@@ -1,0 +1,27 @@
+%table.table.table-hover.jg-tables.pure-u-1
+  %thead
+    %tr
+      %th.pure-u-1-4 Date
+      %th.pure-u-1-4 Balance
+      %th.pure-u-1-4 Top-up
+      %th.pure-u-1-4 Status
+  %tbody
+    - if @topups.size == 0
+      %tr
+        %td.no-data.pure-u-1{colspan: 4}
+          %p= "No auto top-ups have been performed yet."
+    - @topups.each do |topup|
+      %tr
+        %td.pure-u-1-4= topup.created_at.to_formatted_s(:long_ordinal)
+        %td.pure-u-1-4{ :class => (topup[:parameters][:current_balance] <= 0 ? 'in_credit_colour' : 'in_debt_colour') }= topup_balance topup[:parameters][:current_balance]
+        %td.pure-u-1-4= Invoice.pretty_total topup[:parameters][:topup_amount]
+        %td.pure-u-1-4
+          - tag = topup[:parameters][:success] ? 'success' : 'failed'
+          .tags{class: tag}= tag_string(tag)
+          
+- if @topups.size > 0
+  .jg-widget-footer.jg-pagination
+    .jg-pagination-controls
+      = link_to_previous_page @topups, '', class: 'jg-previous icon-arrow-left', param_name: 'topup_pg'
+      %span= "Page #{@topups.current_page} of #{@topups.total_pages}"
+      = link_to_next_page @topups, '', class: 'jg-previous icon-arrow-right', param_name: 'topup_pg'

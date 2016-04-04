@@ -32,7 +32,7 @@ class LocationTasks < BaseTasks
   def update_templates(location)
     squall = Squall::Template.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
     store = squall.template_store.select { |t| t['hypervisor_group_id'] == location.hv_group_id }
-    fail Exception, 'Could not find valid templates for this hypervisor group' if store.size < 0
+    fail Exception, 'Could not find valid templates for this hypervisor group' if store.size == 0
 
     templates = store.first['relations']
     templates.each do |template|

@@ -1,5 +1,5 @@
 <p>Hi <%= @resource.full_name %>!</p>
 
-<p>You can confirm your Cloud.net account email through the link below:</p>
+<p>You can confirm your <%= ENV['BRAND_NAME'] %> account email through the link below:</p>
 
 <p><%= link_to 'Confirm my account', confirmation_url(@resource, :confirmation_token => @token) %></p>

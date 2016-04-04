@@ -1,0 +1,52 @@
+%script
+  - l = render file: 'locations/index.json', formats: [:json]
+  = raw "var locations = #{l}"
+  - t = @templates ? (render partial: 'locations/templates.json', formats: [:json], locals: { templates: @templates }) : []
+  = raw "var templatesJson = #{t}"
+  - if @server
+    - server_json = render partial: 'servers/server.json', formats: [:json], locals: { server: @server }
+  - else
+    - server_json = false
+  = raw "var server = #{server_json}"
+  - activePack = @wizard_object.package_matched || 'null' rescue 'null'
+  = raw "var activePack = #{activePack}"
+  - r = @wizard_object.remaining_resources.to_json
+  = raw "var defaults = #{r}"
+  - if @wizard_object.location
+    - @provisioner_templates = @wizard_object.location.provisioner_templates.group_by { |t| "#{t.os_type}-#{t.os_distro}" }
+    - p = render partial: 'locations/templates.json', formats: [:json], locals: { templates: @provisioner_templates }
+    = raw "var provisionerTemplates = #{p}"
+  - else
+    - @provisioner_templates = nil
+  
+  - r = @wizard_object.location ? (render partial: 'locations/location.json', formats: [:json], locals: { location: @wizard_object.location }) : []
+  = raw "var selectedLocation = #{r}"
+  = raw "var hours_remaining = #{Invoice.hours_till_next_invoice(current_user.try(:account))}"
+  = raw "var max_hours = #{Account::HOURS_MAX}"
+  = raw "var millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR}"
+
+= form_for @wizard_object, url: @wizard_object.submission_path do |f|
+  - if @wizard_object.errors.any?
+    %div.alert.alert-danger
+      %a.close{href: "#", data: {dismiss: "alert"}} &times;
+      %strong Error: 
+      = @wizard_object.errors.full_messages.join(', ')
+  = f.hidden_field :current_step, value: @wizard_object.current_step
+  = render partial: 'servers/location', locals: {f: f}
+  = render partial: 'servers/resources', locals: {f: f}
+  = render partial: 'servers/template', locals: {f: f}
+  = render partial: 'servers/details', locals: {f: f}
+
+= hidden_field_tag :hourly
+= hidden_field_tag :monthly
+
+:javascript
+  var mapbox_key = "#{KEYS[:mapbox][:token]}";
+  var mapboxPublicToken = "#{KEYS[:mapbox][:public_token]}";
+  var five_hundred_px_key = "#{KEYS[:five_hundred_px][:api_key]}";
+
+  var inactive_pin = "#{asset_path('pins/inactive-pin.png')}";
+  var active_pin = "#{asset_path('pins/active-pin.png')}";
+  var millicents_dollar = #{Invoice::MILLICENTS_IN_DOLLAR};
+
+= javascript_include_tag "servers/form"

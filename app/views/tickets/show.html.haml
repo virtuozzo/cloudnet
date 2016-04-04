@@ -49,7 +49,7 @@
         %li
           = "This ticket has been closed and no further replies can be added."
           = "Not satisifed?"
-          %span= link_to "Email Management", "mailto:ticket-escalate@cloud.net?subject=Ticket%20ID%20#{@ticket.reference}"
+          %span= link_to "Email Management", "mailto:#{ENV['MAILER_SUPPORT_ESCALATE']}?subject=Ticket%20ID%20#{@ticket.reference}"
 
   .jg-widget-footer.actions.clearfix
     %ul.jg-widget-controls

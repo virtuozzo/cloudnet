@@ -11,6 +11,8 @@ $ ->
 
   validClass    = 'valid'
   invalidClass  = 'invalid'
+  
+  topupPage = (location.search.split('topup_pg=')[1]||'').split('&')[0]
 
   simplyToggleClass = ($el, clazzName) ->
       flagButton = $el.hasClass(clazzName)
@@ -38,6 +40,10 @@ $ ->
     toggleBillingInfo $(@)
   
   toggleBillingInfo $('#jg-add-card') unless account_cards.length
+  
+  if topupPage
+    toggleBillingInfo $('#jg-auto-topup')
+    $('html,body').animate({ scrollTop: $('#jg-auto-topup').offset().top }, 1000)
 
   reactivateTooltip = ($el) ->
     $el.tooltip

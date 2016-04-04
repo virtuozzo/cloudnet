@@ -28,8 +28,8 @@ describe DestroyAllServersConfirmed do
   
   it "should handle errors" do
     task = instance_double('ServerTasks')
-    expect(scope).to receive(:log_error)
     expect(ServerTasks).to receive(:new).and_return(task)
+    expect(scope).to receive(:log_error)
     expect(task).to receive(:perform).with(:destroy, user.id, server1.id).
                     and_raise(Faraday::ClientError.new('Test'))
     expect(server1).not_to receive(:destroy_with_ip)

@@ -6,7 +6,7 @@
     %header.jg-widget-header.pure-g.clearfix
       %h2.pure-u-1-2.jg-icon.icon-cloud Servers
       %ul.pure-u-1-2.jg-widget-controls
-        %li= link_to 'New Server', search_path, {class: 'jg-button-lilac jg-new-button'}
+        %li= link_to 'New Server', servers_create_path, {class: 'jg-button-lilac jg-new-button'}
     .jg-widget-body
       %table.table.table-hover.jg-tables
         %thead
@@ -48,7 +48,7 @@
           %tr{data: {"ng-if" => "servers && servers.length === 0"}}
             %td.no-data{colspan: "7"}
               %p= "You don't have any servers. Why not create one?"
-              .jg-widget-controls= link_to 'New Server', search_path, {class: 'jg-button-lilac jg-new-button'}
+              .jg-widget-controls= link_to 'New Server', servers_create_path, {class: 'jg-button-lilac jg-new-button'}
 
     .jg-widget-footer.jg-pagination
       .jg-pagination-controls{"ng-show" => "servers"}

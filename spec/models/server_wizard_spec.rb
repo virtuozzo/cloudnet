@@ -18,7 +18,7 @@ describe ServerWizard do
   end
 
   it "isn't valid without a location" do
-    server_wizard.current_step = 1
+    server_wizard.current_step = 2
     server_wizard.location_id = nil
     expect(server_wizard).not_to be_valid
   end
