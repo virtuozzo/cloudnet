@@ -689,7 +689,7 @@ $ ->
           icon    =   marker.options.icon.options
           data    =   marker?.feature?.properties
           map.panTo(marker.getLatLng())
-          marker.bounce({duration: 400, height: 10})
+          # marker.bounce({duration: 400, height: 10})
           resetMarkers(markers)
           return if data is null or undefined
           toggleMarkerPin icon, marker
@@ -706,9 +706,10 @@ $ ->
       geoJsonLayer.eachLayer (marker) ->
         if parseInt(marker?.feature?.properties.id) is parseInt(loc)
           id = marker._leaflet_id
-          map.panTo(marker.getLatLng())
-          marker.bounce({duration: 400, height: 10})
-          map._layers[id].openPopup()
+          clusters.zoomToShowLayer(marker, (e) -> 
+              map._layers[id].openPopup()
+            )
+          # marker.bounce({duration: 400, height: 10})
           resetMarkers(markers)
           toggleMarkerPin marker.options.icon.options, marker
     
