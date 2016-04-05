@@ -12,5 +12,9 @@ class Region < ActiveRecord::Base
   }
 
   validates :name, presence: true, uniqueness: true
+  
+  def active_locations
+    locations.where(hidden: false)
+  end
 
 end
