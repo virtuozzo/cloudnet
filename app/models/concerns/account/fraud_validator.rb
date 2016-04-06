@@ -30,7 +30,7 @@ class Account < ActiveRecord::Base
     
     # Check list of IPs that has a history for fraud
     def safe_ip?(ip)
-      RiskyIpAddress.count(ip_address: ip) == 0
+      RiskyIpAddress.where(ip_address: ip).count == 0
     end
     
     # Number of bad / risky card attempts
