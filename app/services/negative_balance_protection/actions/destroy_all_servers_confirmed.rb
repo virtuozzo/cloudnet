@@ -1,17 +1,18 @@
 module NegativeBalanceProtection
   module Actions
     class DestroyAllServersConfirmed
-      attr_reader :user, :manager
+      attr_reader :user, :manager, :destroy_performed
       
       def initialize(user)
         @user = user
         @manager = ServerTasks.new
+        @destroy_performed = false
       end
       
       def perform
         return nil unless destroy_confirmed_by_admin?
         user.servers.each { |server| destroy(server) }
-        create_activity
+        create_activity if destroy_performed
       end
       
       def destroy_confirmed_by_admin?
@@ -32,6 +33,7 @@ module NegativeBalanceProtection
         server.create_credit_note_for_time_remaining
         create_bandwidth_invoice(server)
         server.destroy_with_ip("balance checker: not paid invoices")
+        @destroy_performed = true
       end
       
       def create_bandwidth_invoice(server)
@@ -39,7 +41,39 @@ module NegativeBalanceProtection
         invoicer.create_destroy_invoice
         invoicer.charge_unpaid_invoices(user.account)
       end
+
+      def admin_destroy(server)
+        unsuspend_server(server)
+        onapp_admin_destroy(server)
+        destroy_local_server(server)
+      rescue Faraday::ClientError => e
+        log_error(e, server)
+      end
       
+      def onapp_admin_destroy(server)
+        admin_squall.delete(server.identifier)
+      end
+
+      def unsuspend_server(server)
+        admin_squall.suspend(server.identifier)
+      end
+
+      def server_suspended?(e, server)
+        unauthorized?(e) && onapp_suspended?(server)
+      end
+
+      def unauthorized?(e)
+        e.response[:status] == 401 if e.response
+      end
+
+      def onapp_suspended?(server)
+        admin_squall.show(server.identifier)["suspended"]
+      end
+
+      def admin_squall
+        @admin_squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
+      end
+
       def create_activity
         user.create_activity(
           :destroy_all_servers, 
@@ -57,37 +91,6 @@ module NegativeBalanceProtection
             faraday: e.response
           }
         )
-      end
-      
-      def admin_destroy(server)
-        unsuspend_server(server)
-        onapp_admin_destroy(server)
-        destroy_local_server(server)
-        @shutdown_performed = true
-      end
-      
-      def onapp_admin_destroy(server)
-        admin_squall.delete(server.identifier)
-      end
-      
-      def unsuspend_server(server)
-        admin_squall.suspend(server.identifier)
-      end
-      
-      def server_suspended?(e, server)
-        unauthorized?(e) && onapp_suspended?(server)
-      end
-      
-      def unauthorized?(e)
-        e.response[:status] == 401 if e.response
-      end
-      
-      def onapp_suspended?(server)
-        admin_squall.show(server.identifier)["suspended"]
-      end
-        
-      def admin_squall
-        @admin_squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
       end
     end
   end

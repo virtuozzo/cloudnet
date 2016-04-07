@@ -1,7 +1,8 @@
 # Check if a user has negative balance and warn that the servers will be destroyed soon
 class NegativeBalanceChecker
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
+  sidekiq_options :retry => 2
 
   def perform
     User.where(suspended: false).each { |user| check_user(user) }
@@ -13,5 +14,17 @@ class NegativeBalanceChecker
     else
       user.clear_unpaid_notifications('balance is correct')
     end
+  rescue => e
+    log_error(e, user)
+  end
+  
+  def log_error(e, user)
+    ErrorLogging.new.track_exception(
+      e,
+      extra: {
+        user: user.id,
+        source: 'NegativeBalanceChecker',
+      }
+    )
   end
 end
