@@ -133,8 +133,8 @@ describe ServersController do
             @new_server = FactoryGirl.create(
               :server,
               user: @current_user,
-              cpus: 4,
-              memory: 4096,
+              cpus: 3,
+              memory: 1512,
               disk_size: 10
             )
             
