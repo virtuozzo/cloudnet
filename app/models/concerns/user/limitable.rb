@@ -9,12 +9,12 @@ class User < ActiveRecord::Base
     end
 
     def set_limitable_attributes
-      multiplier = 10
-      self.vm_max         = 6 * multiplier
+      multiplier = 1
+      self.vm_max         = 2 * multiplier
       self.memory_max     = 1536 * multiplier
       self.cpu_max        = 3 * multiplier
-      self.storage_max    = 30 * multiplier
-      self.bandwidth_max  = 50 * multiplier
+      self.storage_max    = 50 * multiplier
+      self.bandwidth_max  = 250 * multiplier
     end
   end
 end
