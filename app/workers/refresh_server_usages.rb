@@ -3,7 +3,7 @@ class RefreshServerUsages
   sidekiq_options unique: :until_executed
 
   def perform
-    Server.select('id, user_id').each do |server|
+    Server.all.each do |server|
       begin
         refresh_server_usages(server)
         server.inform_if_bandwidth_exceeded
