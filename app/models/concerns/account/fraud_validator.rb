@@ -23,22 +23,24 @@ class Account < ActiveRecord::Base
 
     # Checks against minfraud data we have on db
     def minfraud_safe?
-      return true if primary_billing_card.blank? || primary_billing_card.fraud_safe?
-      # fraud_body = JSON.parse primary_billing_card.fraud_body
-      (primary_billing_card.fraud_verified? && 
-        primary_billing_card.fraud_score <= VALID_FRAUD_SCORE
-        # !fraud_body["anonymous_proxy"] &&
-        # fraud_body["country_match"] &&
-        # fraud_body["proxy_score"] < 2.0
-        ) rescue false
+      return true if billing_cards.blank?
+      return true if maxmind_exempt?
+      return true if billing_cards.select {|card| !card.fraud_safe?}.blank?
+      billing_cards.each do |card|
+        next if card.fraud_safe?
+        is_valid_card = (card.fraud_verified? && card.fraud_score <= VALID_FRAUD_SCORE) rescue false
+        return false unless is_valid_card
+      end
+      return true
     end
     
     # Check list of IPs that has a history for fraud
     def safe_ip?(ip = nil)
       ips = []
       ips << ip unless ip.blank?
-      ips << primary_billing_card.ip_address unless primary_billing_card.blank?
-      RiskyIpAddress.where("ip_address IN (?)", ips).count == 0
+      billing_cards.map(&:ip_address).each {|i| ips << i} unless billing_cards.blank?
+      ips.push user.current_sign_in_ip, user.last_sign_in_ip
+      RiskyIpAddress.where("ip_address IN (?)", ips.flatten.uniq).count == 0
     end
     
     # Number of bad / risky card attempts

@@ -309,14 +309,43 @@ describe Account do
       expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(1)
     end
     
+    it 'should fraud validate all billing cards in account' do
+      card_1 = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 10.0)
+      card_2 = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0)
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(1)
+    end
+    
+    it 'should approve if all cards are marked as fraud safe' do
+      card_1 = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0, fraud_safe: true)
+      card_2 = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0, fraud_safe: true)
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(0)
+    end
+    
     it 'should return IP history as a reason for fraud validation' do
       RiskyIpAddress.create(ip_address: '0.0.0.0', account: user.account)
       expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(2)
     end
     
+    it 'should check IP history from billing cards for fraud validation' do
+      RiskyIpAddress.create(ip_address: '0.0.0.0', account: user.account)
+      card = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 10.0, ip_address: '0.0.0.0')
+      expect(user.account.fraud_validation_reason('123.456.789.1')).to eq(2)
+    end
+    
+    it 'should check login from risky IPs for fraud validation' do
+      RiskyIpAddress.create(ip_address: '123.456.888.99', account: user.account)
+      user.current_sign_in_ip, user.last_sign_in_ip = '123.456.888.99', '123.456.888.98'
+      expect(user.account.fraud_validation_reason('123.456.888.99')).to eq(2)
+    end
+    
     it 'should return risky card attempts as a reason for fraud validation' do
       user.account.risky_cards_remaining = -1
       expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(3)
+    end
+    
+    it 'should allow only minimum wallet recharge for suspected fraud accounts' do
+      card = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0)
+      expect(user.account.valid_top_up_amounts).to eq([Payg::VALID_TOP_UP_AMOUNTS.min])
     end
   end
 end

@@ -46,29 +46,39 @@ ActiveAdmin.register Server, as: "ServerValidation" do
   
   batch_action :approve, priority: 1 do |ids|
     ids.each do |id|
-      # Reset validation reason, which means server is approved
-      server = Server.find(id)
-      server.update!(validation_reason: 0)
-      create_activity(server, :approved)
+      begin
+        # Reset validation reason, which means server is approved
+        server = Server.find(id)
+        server.update!(validation_reason: 0)
+        create_activity(server, :approved)
       
-      # Boot the server
-      ServerTasks.new.perform(:startup, server.user_id, server.id)
-      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, server.user_id)
-      create_activity(server, :startup)
-      
-      # Reset fraud check parameters so future servers are not put in validation
-      server.user.account.primary_billing_card.update!(fraud_safe: true)
-      server.user.account.risky_ip_addresses.map {|ip| ip.destroy }
-      server.user.account.update!(risky_cards_remaining: Account::RISKY_CARDS_ALLOWED)
+        # Boot the server
+        ServerTasks.new.perform(:startup, server.user_id, server.id)
+        MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, server.user_id)
+        create_activity(server, :startup)
+      rescue Exception => e
+        ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })
+        flash[:error] = "Could not start all servers"
+      ensure
+        # Reset fraud check parameters so future servers are not put in validation
+        server.user.account.billing_cards.map {|card| card.update!(fraud_safe: true)}
+        server.user.account.risky_ip_addresses.map {|ip| ip.destroy }
+        server.user.account.update!(risky_cards_remaining: Account::RISKY_CARDS_ALLOWED)
+      end
     end
     redirect_to admin_server_validations_path
   end
   
   batch_action :destroy, priority: 2 do |ids|
     ids.each do |id|
-      server = Server.find(id)      
-      destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
-      create_activity(server, :destroy) if destroy.process && destroy.success?
+      begin
+        server = Server.find(id)
+        destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
+        create_activity(server, :destroy) if destroy.process && destroy.success?
+      rescue Exception => e
+        ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#destroy' })
+        flash[:error] = "Could not destroy all servers"
+      end
     end
     redirect_to admin_server_validations_path
   end
