@@ -69,4 +69,14 @@ class AdminMailer < ActionMailer::Base
       subject: "#{ENV['BRAND_NAME']}: Automatic destroy - #{user.full_name}"
     )
   end
+  
+  def notify_bandwidth_exceeded(server, bandwidth_over)
+    @server = server
+    @bandwidth_over = bandwidth_over
+    @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
+    mail(
+      to: ADMIN_RECIPIENTS, 
+      subject: "#{ENV['BRAND_NAME']}: User #{server.user.full_name} is exceeding free bandwidth allocation"
+    )
+  end
 end

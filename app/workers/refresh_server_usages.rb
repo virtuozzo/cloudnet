@@ -6,11 +6,11 @@ class RefreshServerUsages
     Server.select('id, user_id').each do |server|
       begin
         refresh_server_usages(server)
+        server.inform_if_bandwidth_exceeded
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { source: 'RefreshServerUsages', server_id: server.id })
       end
     end
-    # TODO: Verify and report usage exceeding limit
   end
   
   def refresh_server_usages(server)
@@ -21,4 +21,5 @@ class RefreshServerUsages
   def manager
     @manager ||= ServerTasks.new
   end
+
 end

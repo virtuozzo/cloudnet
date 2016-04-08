@@ -15,6 +15,7 @@ class AutomatedBillingTask < BaseTask
     invoice = Invoice.generate_prepaid_invoice(@servers, @account, @hours, :due_date)
     invoice.save!
     clear_free_bandwidth_accrued
+    clear_bandwidth_notifications
 
     account.create_activity :automated_billing, owner: @user, params: { invoice: invoice.id, amount: invoice.total_cost }
 
@@ -31,6 +32,10 @@ class AutomatedBillingTask < BaseTask
   
   def clear_free_bandwidth_accrued
     Server.clear_free_bandwidth(@servers)
+  end
+  
+  def clear_bandwidth_notifications
+    Server.clear_bandwidth_notifications(@servers)
   end
   
   def send_auto_email(user, invoice)
