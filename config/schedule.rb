@@ -85,6 +85,11 @@ every 1.day, at: '4:00 am' do
   runner 'AutoTopup.perform_in(2.minutes)'
 end
 
+# Dispute manager
+every 1.day, at: '4:30 am' do
+  runner 'DisputeManager.perform_in(2.minutes)'
+end
+
 # Email monthly financial reports
 every '0 1 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :monthly_csv)'
