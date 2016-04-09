@@ -66,4 +66,8 @@ class StripePayments < Payments::Methods
   def list_disputes(created_after)
     Stripe::Dispute.all(created: {gt: created_after})
   end
+  
+  def get_dispute(dispute_id)
+    Stripe::Dispute.retrieve(dispute_id)
+  end
 end

@@ -40,7 +40,7 @@ class ServerWizardsController < ServerCommonController
         NotifyUsersMailer.delay.notify_server_validation(current_user, new_server)
         SupportTasks.new.perform(:notify_server_validation, current_user, new_server) rescue nil
         new_server.create_activity :validation, owner: current_user, params: { reason: new_server.validation_reason }
-        RiskyIpAddress.create(ip_address: ip, account: current_user.account)
+        account.risky_ip_addresses.find_or_create_by(ip_address: ip)
         notice = 'Server successfully created but has been placed under validation. A support ticket has been created for you. A support team agent will review and reply to you shortly.'
       else
         notice = 'Server successfully created and will be booted shortly'
