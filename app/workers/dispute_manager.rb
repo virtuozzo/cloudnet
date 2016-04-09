@@ -26,6 +26,10 @@ class DisputeManager
         
         account.user.servers.map { |server| block_server(server) }
         
+        # Notify user and support
+        NotifyUsersMailer.notify_server_validation(account.user, account.user.servers).deliver_now
+        SupportTasks.new.perform(:notify_server_validation, account.user, account.user.servers) rescue nil
+        
         # Log the IP address used to add the credit cards in the account to risky ip addresses list for future use
         account.billing_cards.map(&:ip_address).uniq.each do |ip|
           account.risky_ip_addresses.find_or_create_by(ip_address: ip)
@@ -53,9 +57,5 @@ class DisputeManager
     server.create_activity :shutdown, owner: server.user
     server.update!(validation_reason: 4)
     server.create_activity :validation, owner: server.user, params: { reason: server.validation_reason }
-    
-    # Notify user and support
-    NotifyUsersMailer.notify_server_validation(server.user, server).deliver_now
-    SupportTasks.new.perform(:notify_server_validation, server.user, server) rescue nil
   end
 end

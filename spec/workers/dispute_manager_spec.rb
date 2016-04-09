@@ -37,23 +37,28 @@ describe DisputeManager, :vcr do
       allow(@helpdesk).to receive(:new_ticket).and_return(true)
       
       @user = FactoryGirl.create :user
-      @server = FactoryGirl.create(:server, user: @user)
+      @server1 = FactoryGirl.create(:server, user: @user)
+      @server2 = FactoryGirl.create(:server, user: @user)
       FactoryGirl.create(:billing_card, account: @user.account)
-      FactoryGirl.create(:payment_receipt, account: @user.account, pay_source: :billing_card, reference: 'ch_17xw1i4uZwGGrGulM87WR8DP')
+      FactoryGirl.create(:payment_receipt, account: @user.account, pay_source: :billing_card, reference: 'ch_17yRts4uZwGGrGulyMVldCQQ')
+      FactoryGirl.create(:payment_receipt, account: @user.account, pay_source: :billing_card, reference: 'ch_17yRHr4uZwGGrGultW549N8F')
       
       mailer_queue.clear
     end
    
     it 'should get list of disputes from Stripe and shutdown servers' do      
       VCR.use_cassette "DisputeManager/stripe_calls" do
-        Timecop.freeze Time.now.change(day: 9, month: 4, hour: 10) do
+        Timecop.freeze Time.now.change(day: 10, month: 4, hour: 10) do
           dispute_manager.perform
         end
-        expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server.id)
-        @server.reload
-        expect(@server.validation_reason).to eq(4)
-        expect(mailer_queue.count).to eq 1
-        expect(@helpdesk).to have_received(:new_ticket)
+        expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server1.id)
+        expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server2.id)
+        @server1.reload
+        @server2.reload
+        expect(@server1.validation_reason).to eq(4)
+        expect(@server2.validation_reason).to eq(4)
+        expect(mailer_queue.count).to eq 2
+        expect(@helpdesk).to have_received(:new_ticket).at_least(2).times
         expect(RiskyIpAddress.count).to eq 1
       end
     end

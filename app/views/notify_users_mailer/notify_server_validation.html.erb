@@ -1,10 +1,14 @@
 <p>Hello <%= @user.full_name %>!</p>
 
-<p>You are getting this message because a server on your account has been placed under validation. There are multiple reasons why this could happen - it could be because you have entered invalid credit card information, or because there has been too many attempts to add a credit card to your account, to name a few. Please be assured that we have been notified on this. Our support team will review your account and reply to you shortly.</p>
+<p>You are getting this message because one or more of your servers has been placed under validation. This could be because there is a problem with your payment method. Please be assured that we have been notified on this. Our support team will review your account and reply to you shortly.</p>
 
-<p>Server: <%= link_to @server.name, server_url(@server) %></p>
+<p>The following servers has been shutdown and placed under validation:</p>
 
-<p>Hang on there! Once your account has been reviewed, your server will be booted and ready to go in no time!</p>
+<% @servers.each do |server| %>
+  <p>Server: <%= link_to server.name, server_url(server) %></p>
+<% end %>
+
+<p>Hang on there! Once your account has been reviewed, your servers will be booted and ready to go in no time!</p>
     
 <p>Thanks,</p>
 

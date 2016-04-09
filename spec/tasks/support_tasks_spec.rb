@@ -8,7 +8,7 @@ describe SupportTasks do
     allow(Helpdesk).to receive(:new).and_return(helpdesk)
     allow(helpdesk).to receive(:new_ticket).and_return(true)
     
-    SupportTasks.new.perform(:notify_server_validation, user, server)
+    SupportTasks.new.perform(:notify_server_validation, user, [server])
     
     expect(Ticket.count).to eq(1)
     expect(helpdesk).to have_received(:new_ticket)

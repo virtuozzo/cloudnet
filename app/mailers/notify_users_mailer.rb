@@ -22,10 +22,10 @@ class NotifyUsersMailer < ActionMailer::Base
     mail(to: recipients.join(","), subject: "#{ENV['BRAND_NAME']}: Your server is still building")
   end
   
-  def notify_server_validation(user, server)
+  def notify_server_validation(user, servers)
     @user = user
-    @server = server
-    mail(to: @user.email, subject: "#{ENV['BRAND_NAME']}: Your server has been placed under validation")
+    @servers = servers
+    mail(to: @user.email, subject: "#{ENV['BRAND_NAME']}: Your server(s) has been placed under validation")
   end
   
   def notify_auto_topup(user, success)

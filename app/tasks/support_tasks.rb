@@ -1,16 +1,17 @@
 class SupportTasks < BaseTasks
   
-  def perform(action, user, server = nil)
+  def perform(action, user, servers = nil)
     @user = user
-    run_task(action, server)
+    run_task(action, servers)
   end
   
   private
   
-  def notify_server_validation(server)
-    subject = "Server is under validation - #{server.hostname}"
-    body = "Please validate my server."
-    create_ticket(subject, body, "billing", server.id)
+  def notify_server_validation(servers)
+    subject = "Server(s) under validation"
+    body = "Please validate my servers."
+    server_id = servers.size > 1 ? nil : servers.first.id
+    create_ticket(subject, body, "billing", server_id)
   end
   
   def create_ticket(subject, body, department, server_id = nil)
