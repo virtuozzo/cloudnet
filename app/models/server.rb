@@ -58,6 +58,16 @@ class Server < ActiveRecord::Base
     servers.each { |s| s.update_attribute(:free_billing_bandwidth, 0)}
   end
 
+  def self.clear_bandwidth_notifications(servers)
+    servers.each { |s| s.update(
+      exceed_bw_user_notif: 0, 
+      exceed_bw_value: 0,
+      exceed_bw_user_last_sent: nil,
+      exceed_bw_admin_notif: 0
+      ) 
+    }
+  end
+  
   def name_with_ip
     "#{name} (IP: #{primary_ip_address})"
   end
@@ -184,11 +194,15 @@ class Server < ActiveRecord::Base
   def auto_refresh_on!
     update_attribute(:no_refresh, false)
   end
-  
+
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
   end
-
+  
+  def inform_if_bandwidth_exceeded
+    BandwidthChecker.new(self).check_bandwidth
+  end
+  
   private
 
   def template_should_match_location

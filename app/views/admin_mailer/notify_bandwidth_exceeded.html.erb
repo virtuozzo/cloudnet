@@ -1,0 +1,18 @@
+<p>Server traffic warning.</p>
+
+<p>The server of the <%= link_to @server.user.full_name, admin_user_url(@server.user) %> is exceeding free bandwidth. Please have a look for a possible fraud.</p>
+<p>Current bandwidth overusage: <%= @bandwidth_over %> MB</p>
+<p>Free bandwidth for that server per hour: <%= (@server.bandwidth * 1024 / Account::HOURS_MAX).round %> MB</p>
+<p>Free bandwidth for that server per month: <%= @server.bandwidth %> GB</p>
+<ul>
+  <li>
+    Server on <%= ENV['BRAND_NAME'] %> admin: <%= link_to @server.hostname, admin_server_url(@server) %>
+  </li>
+  <li>
+    Server on OnApp: <a href="<%= @link_to_onapp_server %>"><%= @link_to_onapp_server %></a>
+  </li>
+</ul>
+
+<p>Thanks,</p>
+
+<p><%= ENV['BRAND_NAME'] %> Team</p>

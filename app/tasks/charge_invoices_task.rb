@@ -35,12 +35,8 @@ class ChargeInvoicesTask < BaseTask
   end
   
   def unblock_servers
-    return if @user.notif_delivered == 0
     @user.clear_unpaid_notifications("balance is correct")
-    manager = ServerTasks.new
-    @user.servers.each do |server|
-      manager.perform(:refresh_server, @user.id, server.id)
-    end
+    @user.refresh_my_servers
   end
 
   def create_payment_receipt_charges(account, invoice, payment_receipts)

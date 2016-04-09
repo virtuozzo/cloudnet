@@ -60,6 +60,7 @@ class User < ActiveRecord::Base
   end
   
   def clear_unpaid_notifications(reason = nil)
+    return if notif_delivered == 0
     clear_notifications_activity(reason) if reason
     update(
       notif_delivered: 0,

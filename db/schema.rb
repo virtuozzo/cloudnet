@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321185611) do
+ActiveRecord::Schema.define(version: 20160330124601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -424,40 +424,44 @@ ActiveRecord::Schema.define(version: 20160321185611) do
   end
 
   create_table "servers", force: :cascade do |t|
-    t.string   "identifier",             limit: 255
-    t.string   "name",                   limit: 255
-    t.string   "hostname",               limit: 255
-    t.string   "state",                  limit: 255
+    t.string   "identifier",               limit: 255
+    t.string   "name",                     limit: 255
+    t.string   "hostname",                 limit: 255
+    t.string   "state",                    limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "built",                              default: false
-    t.boolean  "locked",                             default: true
-    t.boolean  "suspended",                          default: true
+    t.boolean  "built",                                default: false
+    t.boolean  "locked",                               default: true
+    t.boolean  "suspended",                            default: true
     t.integer  "cpus"
     t.integer  "hypervisor_id"
-    t.string   "root_password",          limit: 255
+    t.string   "root_password",            limit: 255
     t.integer  "memory"
-    t.string   "os",                     limit: 255
-    t.string   "os_distro",              limit: 255
-    t.string   "remote_access_password", limit: 255
+    t.string   "os",                       limit: 255
+    t.string   "os_distro",                limit: 255
+    t.string   "remote_access_password",   limit: 255
     t.integer  "disk_size"
     t.integer  "user_id"
-    t.decimal  "bandwidth",                          default: 0.0
+    t.decimal  "bandwidth",                            default: 0.0
     t.integer  "location_id"
     t.integer  "template_id"
     t.datetime "deleted_at"
-    t.string   "delete_ip_address",      limit: 255
-    t.boolean  "in_beta",                            default: false
-    t.integer  "ip_addresses",                       default: 1
-    t.boolean  "payg",                               default: false
-    t.string   "payment_type",           limit: 255, default: "prepaid"
+    t.string   "delete_ip_address",        limit: 255
+    t.boolean  "in_beta",                              default: false
+    t.integer  "ip_addresses",                         default: 1
+    t.boolean  "payg",                                 default: false
+    t.string   "payment_type",             limit: 255, default: "prepaid"
     t.time     "state_changed_at"
-    t.boolean  "stuck",                              default: false
-    t.decimal  "forecasted_rev",                     default: 0.0
+    t.boolean  "stuck",                                default: false
+    t.decimal  "forecasted_rev",                       default: 0.0
     t.string   "provisioner_role"
-    t.boolean  "no_refresh",                         default: false
-    t.integer  "free_billing_bandwidth",             default: 0
-    t.integer  "validation_reason",                  default: 0
+    t.boolean  "no_refresh",                           default: false
+    t.integer  "free_billing_bandwidth",               default: 0
+    t.integer  "validation_reason",                    default: 0
+    t.integer  "exceed_bw_user_notif",                 default: 0
+    t.integer  "exceed_bw_value",                      default: 0
+    t.datetime "exceed_bw_user_last_sent"
+    t.integer  "exceed_bw_admin_notif",                default: 0
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree

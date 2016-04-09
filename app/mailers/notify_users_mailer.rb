@@ -34,4 +34,13 @@ class NotifyUsersMailer < ActionMailer::Base
     subject = @success ? 'Your Wallet has been topped up!' : 'Wallet top-up has failed'
     mail(to: @user[:email], subject: subject)
   end
+  
+  def notify_bandwidth_exceeded(server, bandwidth_over)
+    @server = server
+    @bandwidth_over = bandwidth_over
+    mail(
+      to: @server.user.email, 
+      subject: "#{ENV['BRAND_NAME']}: Your server #{server.name} exceeded free bandwidth allocation"
+      )
+  end
 end

@@ -1,6 +1,6 @@
 class DockerProvision
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
   sidekiq_options :retry => 5
   attr_reader :server_id, :server, :role, :job_id
   
