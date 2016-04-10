@@ -30,8 +30,11 @@ class DisputeManager
         NotifyUsersMailer.notify_server_validation(account.user, account.user.servers).deliver_now
         SupportTasks.new.perform(:notify_server_validation, account.user, account.user.servers) rescue nil
         
-        # Log the IP address used to add the credit cards in the account to risky ip addresses list for future use
-        account.billing_cards.map(&:ip_address).uniq.each do |ip|
+        # Log the IP addresses associated with the account to risky ip addresses list for future use
+        ips = []
+        account.billing_cards.map(&:ip_address).each {|i| ips << i} unless account.billing_cards.blank?
+        ips.push account.user.current_sign_in_ip, account.user.last_sign_in_ip
+        ips.flatten.uniq.each do |ip|
           account.risky_ip_addresses.find_or_create_by(ip_address: ip)
         end
         

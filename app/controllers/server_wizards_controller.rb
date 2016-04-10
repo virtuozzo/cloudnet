@@ -40,7 +40,7 @@ class ServerWizardsController < ServerCommonController
         NotifyUsersMailer.delay.notify_server_validation(current_user, [new_server])
         SupportTasks.new.perform(:notify_server_validation, current_user, [new_server]) rescue nil
         new_server.create_activity :validation, owner: current_user, params: { reason: new_server.validation_reason }
-        current_user.account.risky_ip_addresses.find_or_create_by(ip_address: ip)
+        log_risky_ip_addresses
         notice = 'Server successfully created but has been placed under validation. A support ticket has been created for you. A support team agent will review and reply to you shortly.'
       else
         notice = 'Server successfully created and will be booted shortly'
@@ -61,6 +61,16 @@ class ServerWizardsController < ServerCommonController
   end
 
   private
+  
+  def log_risky_ip_addresses
+    ips = []
+    ips << request.remote_ip
+    current_user.account.billing_cards.map(&:ip_address).each {|i| ips << i} unless current_user.account.billing_cards.blank?
+    ips.push current_user.current_sign_in_ip, current_user.last_sign_in_ip
+    ips.flatten.uniq.each do |ip_address|
+      current_user.account.risky_ip_addresses.find_or_create_by(ip_address: ip_address)
+    end
+  end
 
   def location_id_in_params?
     @location_id_param ||= begin
