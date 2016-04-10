@@ -7,7 +7,7 @@ class DisputeManager
   sidekiq_options unique: :until_executed
 
   def perform
-    disputes = Payments.new.list_disputes (Time.now - 1.day).beginning_of_day.to_i
+    disputes = Payments.new.list_disputes (Time.zone.now - 1.day).beginning_of_day.to_i
     return if disputes.blank?
     disputes = disputes["data"].map { |d| d.to_json }
     disputes = disputes.map { |d| JSON.parse d }
