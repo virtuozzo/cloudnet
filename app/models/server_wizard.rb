@@ -368,6 +368,7 @@ class ServerWizard
 
   def is_valid_location
     errors.add(:location, 'does not exist') if location.nil?
+    errors.add(:location, 'is unavailable') if !location.nil? && existing_server_id.nil? && location.hidden?
   end
 
   def is_valid_template
@@ -430,14 +431,14 @@ class ServerWizard
 
   def within_package_if_budget_vps_package
     return false unless location
-    return true unless location.budget_vps?
+    return true if !location.budget_vps? && !existing_server_id.nil?
 
     matches = false
     packages.each do |package|
       matches = true if matches_package?(package)
     end
 
-    errors.add(:base, "This location requires a package to be chosen (or the template you've chosen is incompatible with this package)") unless matches
+    errors.add(:base, "Please select a package (or the template you've chosen is incompatible with this package)") unless matches
     matches
   end
   

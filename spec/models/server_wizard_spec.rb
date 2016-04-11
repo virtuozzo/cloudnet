@@ -120,29 +120,31 @@ describe ServerWizard do
     before(:each) { server_wizard.current_step = 2 }
 
     it 'should detect over provisioning of memory' do
-      allow(server_wizard.user).to receive_messages(memory_max: 128)
+      allow(server_wizard.user).to receive_messages(memory_max: 512)
       expect(server_wizard.user.servers.count).to eq(0)
-      server_wizard.memory = 128
+      server_wizard.memory = 512
+      server_wizard.cpus = 1
       expect(server_wizard).to be_valid
 
-      server_wizard.memory = 129
+      server_wizard.memory = 1024
       expect(server_wizard).not_to be_valid
     end
 
     it 'should detect over provisioning of disk' do
-      allow(server_wizard.user).to receive_messages(storage_max: 128)
+      allow(server_wizard.user).to receive_messages(storage_max: 10)
       expect(server_wizard.user.servers.count).to eq(0)
 
-      server_wizard.disk_size = 128
+      server_wizard.disk_size = 10
       expect(server_wizard).to be_valid
-      server_wizard.disk_size = 129
+      server_wizard.disk_size = 50
       expect(server_wizard).not_to be_valid
     end
 
     describe 'under provisioning' do
-      before(:each) { allow(server_wizard).to receive_messages(minimum_resources: { memory: 128, cpus: 1, disk_size: 6 }) }
+      before(:each) { allow(server_wizard).to receive_messages(minimum_resources: { memory: 512, cpus: 1, disk_size: 10 }) }
 
       it 'should detect under provisioning of cpus' do
+        server_wizard.memory = 512
         server_wizard.cpus = 1
         expect(server_wizard).to be_valid
         server_wizard.cpus = 0
@@ -155,11 +157,12 @@ describe ServerWizard do
   describe 'template limits' do
     before(:each) do
       server_wizard.current_step = 2
-      @template = FactoryGirl.create(:template, min_memory: 128 * 2, min_disk: 6 * 2)
-      @provisioner_template = FactoryGirl.create(:template, min_memory: 128 * 2, min_disk: 6 * 2, os_distro: 'docker', location: server_wizard.location)
-      allow(server_wizard).to receive_messages(minimum_resources: { memory: 128, cpus: 1, disk_size: 6 }, template: @template)
+      @template = FactoryGirl.create(:template, min_memory: 256 * 2, min_disk: 5 * 2)
+      @provisioner_template = FactoryGirl.create(:template, min_memory: 256 * 2, min_disk: 5 * 2, os_distro: 'docker', location: server_wizard.location)
+      allow(server_wizard).to receive_messages(minimum_resources: { memory: 256, cpus: 1, disk_size: 5 }, template: @template)
+      server_wizard.cpus = 3
       server_wizard.memory = @template.min_memory
-      server_wizard.disk_size = @template.min_disk
+      server_wizard.disk_size = 50
     end
 
     it 'should detect under provisioning of memory' do
@@ -170,7 +173,7 @@ describe ServerWizard do
     end
 
     it 'should detect under provisioning of disk' do
-      server_wizard.disk_size = @template.min_disk
+      server_wizard.disk_size = 50
       expect(server_wizard).to be_valid
       server_wizard.disk_size = @template.min_disk - 1
       expect(server_wizard).not_to be_valid
