@@ -7,6 +7,12 @@ class StripePayments < Payments::Methods
     customer = Stripe::Customer.create(description: "User ID: #{user.id}", email: user.email)
     customer.id
   end
+  
+  def get_cards(user)
+    customer = Stripe::Customer.retrieve(user.account.gateway_id)
+    cards = customer["cards"]["data"].map { |d| d.to_json }
+    cards.map { |d| JSON.parse d }
+  end
 
   def add_card(cust_token, card_token)
     customer = Stripe::Customer.retrieve(cust_token)
@@ -64,7 +70,9 @@ class StripePayments < Payments::Methods
   end
   
   def list_disputes(created_after)
-    Stripe::Dispute.all(created: {gt: created_after})
+    disputes = Stripe::Dispute.all(created: {gt: created_after})
+    disputes_json = disputes["data"].map { |d| d.to_json }
+    disputes_json.map { |d| JSON.parse d }
   end
   
   def get_dispute(dispute_id)

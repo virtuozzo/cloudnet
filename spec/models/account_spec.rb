@@ -304,6 +304,10 @@ describe Account do
   end
   
   describe 'Fraud validator' do
+    before :each do
+      allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
+    end
+    
     it 'should return minfraud as a reason for fraud validation' do
       card = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0)
       expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(1)
@@ -324,6 +328,11 @@ describe Account do
     it 'should return IP history as a reason for fraud validation' do
       RiskyIpAddress.create(ip_address: '0.0.0.0', account: user.account)
       expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(2)
+    end
+    
+    it 'should return Card history as a reason for fraud validation' do
+      RiskyCard.create(fingerprint: 'abcd12345', account: user.account)
+      expect(user.account.fraud_validation_reason).to eq(5)
     end
     
     it 'should check IP history from billing cards for fraud validation' do

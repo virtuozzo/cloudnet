@@ -25,9 +25,10 @@ describe ServerWizardsController do
 
     context 'submitting a create' do
       before :each do
-        allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345' })
+        allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345', 'identifier' => 'abc123' })
         allow(MonitorServer).to receive(:perform_async).and_return(true)
-        allow_any_instance_of(ServerWizard).to receive(:save_server_details).and_return(@server)
+        # allow_any_instance_of(ServerWizard).to receive(:save_server_details).and_return(@server)
+        allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
       end
 
       it 'should create server using Wallet funds' do
@@ -45,7 +46,28 @@ describe ServerWizardsController do
         post :create, params
 
         expect(flash[:notice]).to eq('Server successfully created and will be booted shortly')
-        expect(response).to redirect_to(server_path(@server.id))
+        expect(response).to redirect_to(server_path(Server.last.id))
+      end
+      
+      it 'should create server and put in validation' do
+        FactoryGirl.create(:billing_card, account: @current_user.account, fraud_score: 10.0, fraud_verified: true)
+        RiskyCard.create(fingerprint: 'abcd12345', account: @current_user.account)
+        
+        session[:server_wizard_params] = {
+          cpus: @wizard.cpus,
+          memory: @wizard.memory,
+          disk_size: @wizard.disk_size,
+          location_id: @wizard.location.id
+        }
+        params = { server_wizard: { current_step: 2, name: @wizard.name, hostname: @wizard.hostname, template_id: @wizard.template_id, memory: @wizard.memory, cpus: @wizard.cpus, disk_size: @wizard.disk_size }, template: @wizard.template_id}
+        post :create, params
+
+        new_server = Server.last
+        expect(new_server.validation_reason).to eq(5)
+        expect(flash[:notice]).to eq('Server successfully created but has been placed under validation. A support ticket has been created for you. A support team agent will review and reply to you shortly.')
+        expect(RiskyIpAddress.count).to eq(2)
+        expect(RiskyCard.count).to eq(1)
+        expect(response).to redirect_to(server_path(new_server.id))
       end
 
       it 'should handle errors if creating server fails' do

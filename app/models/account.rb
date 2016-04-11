@@ -13,6 +13,7 @@ class Account < ActiveRecord::Base
   has_many :billing_cards, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
   has_many :risky_ip_addresses
+  has_many :risky_cards
 
   before_create :set_invoice_start_day
   before_create :create_payment_gateway_user

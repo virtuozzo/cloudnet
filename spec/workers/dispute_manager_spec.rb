@@ -36,6 +36,8 @@ describe DisputeManager, :vcr do
       allow(Helpdesk).to receive(:new).and_return(@helpdesk)
       allow(@helpdesk).to receive(:new_ticket).and_return(true)
       
+      allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
+      
       @user = FactoryGirl.create :user
       @server1 = FactoryGirl.create(:server, user: @user)
       @server2 = FactoryGirl.create(:server, user: @user)
@@ -60,6 +62,7 @@ describe DisputeManager, :vcr do
         expect(mailer_queue.count).to eq 2
         expect(@helpdesk).to have_received(:new_ticket).at_least(2).times
         expect(RiskyIpAddress.count).to eq 1
+        expect(RiskyCard.count).to eq 1
       end
     end
   end

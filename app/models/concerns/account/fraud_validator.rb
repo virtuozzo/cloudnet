@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
     extend ActiveSupport::Concern
     
     VALID_FRAUD_SCORE = 40
-    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts", "Chargeback"]
+    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts", "Chargeback", "Card history"]
     
     def fraud_safe?(ip = nil)
       fraud_validation_reason(ip) == 0
@@ -17,6 +17,7 @@ class Account < ActiveRecord::Base
         when !safe_ip?(ip) ; 2
         when !permissible_card_attempts? ; 3
         when received_chargeback? ; 4
+        when !safe_card? ; 5
         else ; 0
         end
     end
@@ -50,6 +51,29 @@ class Account < ActiveRecord::Base
     
     def received_chargeback?
       false
+    end
+    
+    def safe_card?
+      RiskyCard.where("fingerprint IN (?)", card_fingerprints).count == 0
+    end
+    
+    def log_risky_ip_addresses(request_ip = nil)
+      ips = []
+      ips << request_ip unless request_ip.blank?
+      billing_cards.map(&:ip_address).each {|i| ips << i} unless billing_cards.blank?
+      ips.push user.current_sign_in_ip, user.last_sign_in_ip
+      ips.flatten.uniq.each do |ip_address|
+        risky_ip_addresses.find_or_create_by(ip_address: ip_address)
+      end
+    end
+    
+    def card_fingerprints
+      cards = Payments.new.get_cards(user)
+      cards.map {|c| c["fingerprint"]}.uniq
+    end
+    
+    def log_risky_cards
+      card_fingerprints.map { |fingerprint| risky_cards.find_or_create_by(fingerprint: fingerprint) }
     end
   end
 end
