@@ -688,8 +688,9 @@ $ ->
           marker  =   e.target
           icon    =   marker.options.icon.options
           data    =   marker?.feature?.properties
-          map.panTo(marker.getLatLng())
+          # map.panTo(marker.getLatLng())
           # marker.bounce({duration: 400, height: 10})
+          clusters.zoomToShowLayer(marker, (e) -> )
           resetMarkers(markers)
           return if data is null or undefined
           toggleMarkerPin icon, marker
@@ -715,6 +716,10 @@ $ ->
     
     $locationField.on 'change', (e) ->
       popUp($(this).select2('data').id)
+    
+    # Disable scroll zoom handlers.
+    map.touchZoom.disable()
+    map.scrollWheelZoom.disable()
     
     #map.featureLayer.setGeoJSON(geojson)
     return
