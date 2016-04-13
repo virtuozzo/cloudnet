@@ -63,6 +63,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         # Reset fraud check parameters so future servers are not put in validation
         server.user.account.billing_cards.map {|card| card.update!(fraud_safe: true)}
         server.user.account.risky_ip_addresses.map {|ip| ip.destroy }
+        server.user.account.risky_cards.map {|card| card.destroy }
         server.user.account.update!(risky_cards_remaining: Account::RISKY_CARDS_ALLOWED)
       end
     end
