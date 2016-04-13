@@ -18,6 +18,7 @@ class DisputeManager
         next if payment_receipt.blank?
         
         account = payment_receipt.account
+        next if account.blank?
         account.user.create_activity(:chargeback, owner: account.user, params: { amount: dispute['amount'], currency: dispute['currency'], reason: dispute['reason'], status: dispute['status'], payment_receipt_id: payment_receipt.id })
         
         account.user.servers.map { |server| block_server(server) }
