@@ -57,7 +57,12 @@ module NegativeBalanceProtection
       end
 
       def no_servers_or_positive_balance?
-        user.servers.empty? or user.account.remaining_balance < 100
+        user.servers.empty? || positive_balance?
+      end
+      
+      def positive_balance?
+        account = Account.unscoped.where(user_id: user.id).first
+        account.remaining_balance < 100
       end
       
       def no_actions

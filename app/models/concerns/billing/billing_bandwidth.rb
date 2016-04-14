@@ -79,7 +79,7 @@ module Billing
     end
     
     def account
-      @account = server.user.account
+      @account = Account.unscoped.where(user_id: server.user_id).first
     end
     
     def time_for_check

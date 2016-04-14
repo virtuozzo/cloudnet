@@ -40,7 +40,7 @@ end
 # end
 
 # Create invoices (does not create charges)
-# MUST be scheduled after 1am due to AutoBilling class, servers handling
+# MUST be scheduled after 1am due to AutoBilling class servers handling
 every 1.day, at: '1:00 am' do
   runner 'AutoBilling.perform_in(2.minutes)'
 end

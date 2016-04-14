@@ -4,7 +4,7 @@ FactoryGirl.define do
     password 'sekret123'
     full_name { Faker::Name.name }
     association :account, factory: :account
-
+    
     factory :active_user do
       status :active
     end

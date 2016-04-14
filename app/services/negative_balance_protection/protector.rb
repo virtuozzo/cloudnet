@@ -23,7 +23,7 @@ module NegativeBalanceProtection
       increment_notifications if increment_user_notifications?
       clear_notifications if clear_notifications?
       refresh_servers if servers_for_refresh?
-      charge_unpaid_invoices if servers_have_been_destroyed?
+      charge_unpaid_invoices if user.account.present? && servers_have_been_destroyed?
     end
   
     def action(task)
