@@ -61,7 +61,7 @@ module NegativeBalanceProtection
       end
       
       def positive_balance?
-        account = Account.unscoped.where(user_id: user.id).first
+        account = Account.unscoped.where(deleted_at: nil, user_id: user.id).first
         account.remaining_balance < 100
       end
       

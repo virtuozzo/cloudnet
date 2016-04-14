@@ -4,7 +4,7 @@ include NegativeBalanceProtection::Actions
 
 describe NegativeBalanceChecker do
   let(:scope) {NegativeBalanceChecker.new}
-  
+
   context "enqueing jobs" do
     before(:each) do
       Sidekiq::Testing.fake!
@@ -19,6 +19,7 @@ describe NegativeBalanceChecker do
   context "perform jobs" do
     let!(:user1) { FactoryGirl.create(:user) }
     let!(:user2) { FactoryGirl.create(:user) }
+    let!(:suspended_user) { FactoryGirl.create(:user, suspended: true) }
     let(:invoice) {FactoryGirl.create :invoice}
     let!(:server1) {FactoryGirl.create :server, user: user1}
     let(:mailer_q) {ActionMailer::Base.deliveries}
@@ -31,10 +32,11 @@ describe NegativeBalanceChecker do
       user1.account = invoice.account
       user1.save
     end
-    
-    it "performs actions on all users" do
+
+    it "performs actions on all but suspended users" do
       expect(scope).to receive(:check_user).with(user1)
       expect(scope).to receive(:check_user).with(user2)
+      expect(scope).not_to receive(:check_user).with(suspended_user)
       scope.perform
     end
     

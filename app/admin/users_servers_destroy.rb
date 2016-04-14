@@ -28,7 +28,7 @@ ActiveAdmin.register User, as: "UsersServersDestroy" do
       user.servers.count
     end
     column "Negative Balance" do |user|
-      account = Account.unscoped.where(user_id: user.id).first
+      account = Account.unscoped.where(deleted_at: nil, user_id: user.id).first
       Invoice.pretty_total account.remaining_balance * -1
     end
     
@@ -70,7 +70,7 @@ ActiveAdmin.register User, as: "UsersServersDestroy" do
     end
     
     def create_activity(user, activity)
-      account = Account.unscoped.where(user_id: user.id).first
+      account = Account.unscoped.where(deleted_at: nil, user_id: user.id).first
       user.create_activity(
         activity, 
         owner: user, 
