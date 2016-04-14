@@ -6,35 +6,31 @@ describe BaseStrategy do
   let!(:server) {FactoryGirl.create(:server, user: user)}
   let(:strategy) {BaseStrategy}
   
+  before(:each) do
+    allow_any_instance_of(Account).
+        to receive(:remaining_balance).and_return(200_000)
+  end
+  
   it "should initialize correctly" do
     expect(strategy.new(user)).to be
   end
   
   it "should set no actions array" do
-    account = instance_double(Account)
-    allow(user).to receive(:account).and_return(account)
-    allow(account).to receive(:remaining_balance).and_return(100_000)
     expect(strategy.new(user).no_actions).to eq []
     expect(strategy.new(user).action_list).to eq []
   end
   
   it "should check for no servers" do
     user1 = FactoryGirl.create(:user)
-    account = instance_double(Account)
-    allow(user1).to receive(:account).and_return(account)
-    allow(account).to receive(:remaining_balance).and_return(100_000)
     expect(strategy.new(user1).no_servers_or_positive_balance?).to be_truthy
     FactoryGirl.create(:server, user: user1)
     expect(strategy.new(user1).no_servers_or_positive_balance?).to be_falsy
   end
   
   it "should check for positive balance" do
-    account = instance_double(Account)
-    allow(user).to receive(:account).and_return(account)
-    allow(account).to receive(:remaining_balance).and_return(10)
-    expect(strategy.new(user).no_servers_or_positive_balance?).to be_truthy
-    allow(account).to receive(:remaining_balance).and_return(100_000)
     expect(strategy.new(user).no_servers_or_positive_balance?).to be_falsy
+    allow_any_instance_of(Account).to receive(:remaining_balance).and_return(20)
+    expect(strategy.new(user).no_servers_or_positive_balance?).to be_truthy
   end
   
   it "should return actions for no servers" do

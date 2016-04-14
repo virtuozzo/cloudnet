@@ -60,6 +60,7 @@ ActiveAdmin.register User do
     end
     column :admin
     column :suspended
+    column "Balance Notifications", :notif_delivered
 
     actions
   end
