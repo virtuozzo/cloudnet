@@ -10,8 +10,14 @@ class PaygTopupPaypalRequestTask < BaseTask
     @request = request
   end
 
-  def process
+  def process    
     begin
+      
+      unless @account.valid_top_up_amounts.include?(@usd_amount.to_i)
+        errors << 'Invalid top up amount'
+        return false
+      end
+      
       request = Paypal::Express::Request.new(
         username: PAYMENTS[:paypal][:api_user],
         password: PAYMENTS[:paypal][:api_pass],
