@@ -28,6 +28,7 @@ class ServerWizard
   validates :name, length: { minimum: 2, maximum: 48 }, if: :step2?
   validates_with HostnameValidator, if: :step2?
 
+  validate :has_confirmed_email?, if: :step3?
   validate :validate_wallet_credit, if: :step3?
   validate :validate_provisioner_template, if: :step2?
 
@@ -450,5 +451,9 @@ class ServerWizard
     if !provisioner_role.blank? && template_id.to_s != location.provisioner_templates.first.id.to_s
       errors.add(:base, 'Invalid template for provisioner')
     end
+  end
+  
+  def has_confirmed_email?
+    errors.add(:base, 'Please confirm your email address before creating a server') if user && !user.confirmed?
   end
 end

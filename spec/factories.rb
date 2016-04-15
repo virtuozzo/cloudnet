@@ -7,6 +7,7 @@ FactoryGirl.define do
     
     factory :active_user do
       status :active
+      confirmed_at Time.now
     end
 
     factory :admin do
@@ -15,6 +16,7 @@ FactoryGirl.define do
 
     factory :user_onapp do
       status :active
+      confirmed_at Time.now
       onapp_user 'user_onapp_test'
       onapp_password 'abcdef123456'
       
