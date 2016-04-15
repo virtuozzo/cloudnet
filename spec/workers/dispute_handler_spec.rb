@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe DisputeManager, :vcr do
+describe DisputeHandler, :vcr do
   
-  let(:dispute_manager) { DisputeManager.new }
+  let(:dispute_handler) { DisputeHandler.new }
 
   context "enqueing jobs" do
     before(:each) do
@@ -10,8 +10,8 @@ describe DisputeManager, :vcr do
     end
     it "should enqueue job for checking for disputes at Stripe" do
       expect {
-        DisputeManager.perform_async(5)
-      }.to change(DisputeManager.jobs, :size).by(1)
+        DisputeHandler.perform_async(5)
+      }.to change(DisputeHandler.jobs, :size).by(1)
     end
   end
   
@@ -49,9 +49,9 @@ describe DisputeManager, :vcr do
     end
    
     it 'should get list of disputes from Stripe and shutdown servers' do      
-      VCR.use_cassette "DisputeManager/stripe_calls" do
+      VCR.use_cassette "DisputeHandler/stripe_calls" do
         Timecop.freeze Time.zone.now.change(day: 10, month: 4, hour: 10) do
-          dispute_manager.perform
+          dispute_handler.perform
         end
         expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server1.id)
         expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server2.id)

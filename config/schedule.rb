@@ -87,7 +87,7 @@ end
 
 # Dispute manager
 every 1.day, at: '4:30 am' do
-  runner 'DisputeManager.perform_in(2.minutes)'
+  runner 'DisputeHandler.perform_in(2.minutes)'
 end
 
 # Email monthly financial reports
