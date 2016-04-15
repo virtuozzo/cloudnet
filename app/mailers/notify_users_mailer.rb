@@ -37,7 +37,8 @@ class NotifyUsersMailer < ActionMailer::Base
   
   def notify_bandwidth_exceeded(server, bandwidth_over)
     @server = server
-    @bandwidth_over = bandwidth_over
+    # changing MB to Bytes
+    @bandwidth_over = bandwidth_over * 1024 * 1024
     mail(
       to: @server.user.email, 
       subject: "#{ENV['BRAND_NAME']}: Your server #{server.name} exceeded free bandwidth allocation"
