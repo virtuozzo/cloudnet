@@ -3,7 +3,7 @@
 <p>You are getting this message because, as of today, a server that you created is generating more traffic than included in a free allocated bandwidth. We do not mind if you keep that usage, but be prepared to be charged at the end of billing period</p>
 <p>Server: <%= link_to @server.name, server_url(@server) %></p>
 <p>We charge <%= @server.location.price_bw %> cents per GB over free usage</p>
-<p>Current bandwidth overusage: <%= @bandwidth_over %> MB</p>
+<p>Current bandwidth overusage: <%= number_to_human_size(@bandwidth_over) %></p>
 <p>Free bandwidth for that server per hour: <%= (@server.bandwidth * 1024 / Account::HOURS_MAX).round %> MB</p>
 <p>Free bandwidth for that server per month: <%= @server.bandwidth %> GB</p>
 
