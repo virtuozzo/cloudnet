@@ -4,7 +4,7 @@ describe Billing::BillingBandwidth do
 
   let(:server) { FactoryGirl.create(:server, bandwidth: 100, free_billing_bandwidth: 100) }
   subject { Billing::BillingBandwidth.new(server) }
-  before(:each) { server.user.account.invoice_day = 17 }
+  before(:each) { Account.where(user_id: server.user_id).first.update(invoice_day: 17) }
   
   describe 'With no last invoice item' do
     let(:zero_resp) {{:billable=>0, :free=>0, :hours=>0}}
