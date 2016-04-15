@@ -66,12 +66,11 @@ CloudNet::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Mailer options for Devise
-  config.action_mailer.default_url_options = { host: 'staging.cloud.net' }
+  config.action_mailer.default_url_options = { host: 'staging.cloud.net', :protocol => 'https' }
   config.action_mailer.delivery_method     = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default charset: 'utf-8'
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: ENV['SMTP_DOMAIN'],
     port: ENV['SMTP_PORT'],
