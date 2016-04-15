@@ -34,7 +34,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       Account::FraudValidator::VALIDATION_REASONS[server.validation_reason]
     end
     column :minfraud_score do |server|
-      server.user.account.primary_billing_card.fraud_score.round(2)
+      server.user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max
     end
     column "Request IP", :request_ip do |server|
       server.activities.where(key: 'server.create').first.parameters[:ip] rescue nil

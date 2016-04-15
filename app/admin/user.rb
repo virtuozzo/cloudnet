@@ -53,7 +53,7 @@ ActiveAdmin.register User do
     column :sign_in_count
     column :full_name
     column :minfraud_score do |user|
-      user.account.primary_billing_card.fraud_score.round(2) rescue nil
+      user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max rescue nil
     end
     column :risky_cards do |user|
       user.account.risky_card_attempts rescue nil
@@ -62,6 +62,68 @@ ActiveAdmin.register User do
     column :suspended
 
     actions
+  end
+  
+  show do
+    default_main_content
+    
+    panel "Fraud Details" do
+      fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
+      attributes_table_for user do
+        row :minfraud_score do |user|
+          user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max rescue nil
+        end
+        row :risky_cards do |user|
+          user.account.risky_card_attempts rescue nil
+        end
+        row :stripe_account do |user|
+          test_env = Rails.env.production? ? "" : "test/"
+          link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}"
+        end
+        row :primary_card_country_match do |user|
+          fraud_body['country_match'] unless fraud_body.nil?
+        end
+        row :primary_card_proxy_score do |user|
+          fraud_body['proxy_score'] unless fraud_body.nil?
+        end
+        row :primary_card_anon_proxy do |user|
+          fraud_body['anonymous_proxy'] unless fraud_body.nil?
+        end
+        
+        row :possible_duplicate_accounts do
+          begin
+            duplicate_users = []
+            matching_cards = []
+            associated_ips = user.account.billing_cards.map {|card| card.ip_address}
+            user.account.billing_cards.each do |card|
+              BillingCard.with_deleted.where('account_id != ? AND (bin = ? AND last4 = ?)', user.account.id, card.bin, card.last4).map {|c| matching_cards.push c}
+            end
+            associated_ips.push [user.current_sign_in_ip, user.last_sign_in_ip]
+            duplicate_users = User.with_deleted.where('id != ? AND (current_sign_in_ip IN (?) OR last_sign_in_ip IN (?))', user.account.id, associated_ips.uniq.flatten, associated_ips.uniq.flatten)
+            billing_cards = BillingCard.with_deleted.where('account_id != ? AND ip_address IN (?)', user.account.id, associated_ips.uniq.flatten)
+            billing_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
+            matching_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
+            raw duplicate_users.uniq.flatten.map {|user| link_to user.full_name, admin_user_path(user) }.join(', ')
+          rescue
+            nil
+          end
+        end
+        
+        # fraud validator methods
+        row :minfraud_safe do |user|
+          user.account.minfraud_safe? rescue nil
+        end
+        row :ip_history do |user|
+          user.account.safe_ip? rescue nil
+        end
+        row :permissible_card_attempts do |user|
+          user.account.permissible_card_attempts? rescue nil
+        end
+        row :card_history do |user|
+          user.account.safe_card? rescue nil
+        end
+      end
+    end
   end
 
   form do |f|
