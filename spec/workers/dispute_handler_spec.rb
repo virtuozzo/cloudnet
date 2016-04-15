@@ -10,7 +10,7 @@ describe DisputeHandler, :vcr do
     end
     it "should enqueue job for checking for disputes at Stripe" do
       expect {
-        DisputeHandler.perform_async(5)
+        DisputeHandler.perform_async
       }.to change(DisputeHandler.jobs, :size).by(1)
     end
   end

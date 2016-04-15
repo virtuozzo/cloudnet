@@ -69,10 +69,9 @@ class StripePayments < Payments::Methods
     }
   end
   
-  def list_disputes(created_after, created_before = Time.zone.now.to_i)
-    disputes = Stripe::Dispute.all(created: {gte: created_after, lte: created_before})
-    disputes_json = disputes["data"].map { |d| d.to_json }
-    disputes_json.map { |d| JSON.parse d }
+  def list_disputes(created_after:, created_before: Time.zone.now.end_of_day.to_i, starting_after: nil, limit: 100, include_total: false)
+    include_total = include_total ? ['total_count'] : nil
+    Stripe::Dispute.all(created: {gte: created_after, lte: created_before}, include: include_total, limit: limit, starting_after: starting_after)
   end
   
   def get_dispute(dispute_id)

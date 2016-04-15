@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.stripe.com/v1/disputes?created%5Bgte%5D=1460156400&created%5Blte%5D=1460278800
+    uri: https://api.stripe.com/v1/disputes?created%5Bgte%5D=1460156400&created%5Blte%5D=1460329199&limit=100
     body:
       encoding: US-ASCII
       string: ''

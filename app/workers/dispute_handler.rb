@@ -7,7 +7,18 @@ class DisputeHandler
   sidekiq_options unique: :until_executed
 
   def perform
-    disputes = Payments.new.list_disputes (Time.zone.now - 1.day).beginning_of_day.to_i
+    disputes = []
+    created_after = (Time.zone.now - 1.day).beginning_of_day.to_i
+    starting_after = nil
+    has_more = true
+    
+    while has_more
+      disputes_raw = Payments.new.list_disputes created_after: created_after, starting_after: starting_after
+      has_more = disputes_raw['has_more']
+      disputes_raw['data'].map { |d| disputes.push(JSON.parse(d.to_json)) }
+      starting_after = disputes.last['id']
+    end
+       
     disputes.each do |dispute|
       begin
         # Process this dispute if it hasn't been already parsed before
