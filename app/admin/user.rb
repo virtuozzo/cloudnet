@@ -53,7 +53,7 @@ ActiveAdmin.register User do
     column :sign_in_count
     column :full_name
     column :minfraud_score do |user|
-      user.account.primary_billing_card.fraud_score.round(2) rescue nil
+      user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max rescue nil
     end
     column :risky_cards do |user|
       user.account.risky_card_attempts rescue nil
