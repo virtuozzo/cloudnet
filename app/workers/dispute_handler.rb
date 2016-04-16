@@ -16,7 +16,7 @@ class DisputeHandler
       disputes_raw = Payments.new.list_disputes created_after: created_after, starting_after: starting_after
       has_more = disputes_raw['has_more']
       disputes_raw['data'].map { |d| disputes.push(JSON.parse(d.to_json)) }
-      starting_after = disputes.last['id']
+      starting_after = disputes.last['id'] unless disputes.empty?
     end
        
     disputes.each do |dispute|
