@@ -87,6 +87,8 @@ class Server < ActiveRecord::Base
     interfaces = server_task.perform(:get_network_interfaces, user.id, id)
     primary = interfaces.find { |interface| interface['network_interface']['primary'] == true }
     primary['network_interface']
+  rescue
+    nil
   end
 
   def destroy_with_ip(ip)

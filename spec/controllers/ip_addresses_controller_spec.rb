@@ -30,6 +30,7 @@ RSpec.describe IpAddressesController, :type => :controller do
     describe '#create' do
       it 'should add a new IP address' do
         allow(AssignIpAddress).to receive(:perform_async).and_return(true)
+        allow_any_instance_of(Server).to receive(:primary_network_interface).and_return(['abc'])
         post :create, { server_id: @server.id }
         expect(AssignIpAddress).to have_received(:perform_async)
         expect(response).to redirect_to(server_ip_addresses_path(@server))
@@ -41,7 +42,7 @@ RSpec.describe IpAddressesController, :type => :controller do
       it 'should not allow more than MAX_IPS limit' do
         @server.update_attribute :ip_addresses, Server::MAX_IPS
         post :create, { server_id: @server.id }
-        expect(flash[:alert]).to eq('You cannot add anymore IP addresses to this server.')
+        expect(flash[:alert]).to eq('Unable to add IP addresses to this server.')
       end
     end
     

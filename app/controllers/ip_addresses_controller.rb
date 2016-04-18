@@ -16,14 +16,14 @@ class IpAddressesController < ApplicationController
   end
   
   def create
-    if @server.can_add_ips? && charge(@server.ip_addresses + 1)
+    if @server.can_add_ips? && !@server.primary_network_interface.blank? && charge(@server.ip_addresses + 1)
       AssignIpAddress.perform_async(current_user.id, @server.id)
       Analytics.track(current_user, event: 'Added a new IP address')
       @server.increment! :ip_addresses
       Rails.cache.write([Server::IP_ADDRESS_ADDED_CACHE, @server.id], true)
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
     else
-      alert = @charge_error || 'You cannot add anymore IP addresses to this server.'
+      alert = @charge_error || 'Unable to add IP addresses to this server.'
       redirect_to server_ip_addresses_path(@server), alert: alert
     end
   rescue StandardError => e
