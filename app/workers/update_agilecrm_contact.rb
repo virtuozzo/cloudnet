@@ -20,7 +20,7 @@ class UpdateAgilecrmContact
       tags: tags
     }
     email = old_email || user.email
-    contact = AgileCRMWrapper::Contact.search_by_email(email)
+    contact = AgileCRMWrapper::Contact.search_by_email(CGI.escape(email))
     if contact.nil?
       AgileCRMWrapper::Contact.create(params)
     else
