@@ -114,13 +114,14 @@ describe Server do
   end
   
   it 'should return and cache provisioner roles' do
+    Rails.cache.clear
     provisioner_tasks = double(DockerProvisionerTasks)
     allow(DockerProvisionerTasks).to receive(:new).and_return(provisioner_tasks)
     allow(provisioner_tasks).to receive(:roles).and_return(
       OpenStruct.new({body: '["docker", "mysql", "mongodb"]'})
     )
     roles = Server.provisioner_roles
-    expect(roles.size).to be 3
+    expect(roles.size).to eq 3
     expect(Rails.cache.read("provisioner_roles")).to eq(roles)
   end
 end
