@@ -9,9 +9,17 @@ class DockerProvisionerTasks
   def status(job_id)
     connection.get "/job/#{job_id}"
   end
+  
+  def roles
+    connection.get "/roles"
+  end
 
   def prov_server
-    ENV['DOCKER_PROVISIONER']
+    { 
+      url: ENV['DOCKER_PROVISIONER'], 
+      user: ENV['DOCKER_PROVISIONER_USER'],
+      pass: ENV['DOCKER_PROVISIONER_PASS']
+    }
   end
   
   private
@@ -30,10 +38,11 @@ class DockerProvisionerTasks
     end
   
     def connection
-      @connection ||= Faraday.new(:url => prov_server) do |builder|
+      @connection ||= Faraday.new(:url => prov_server[:url]) do |builder|
         builder.request  :json
         builder.use Faraday::Response::Logger, Rails.logger
         builder.adapter Faraday.default_adapter
+        builder.basic_auth prov_server[:user], prov_server[:pass]
       end
     end
 end

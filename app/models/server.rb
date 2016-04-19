@@ -45,7 +45,15 @@ class Server < ActiveRecord::Base
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
   
-  PROVISIONER_ROLES = ['ping', 'docker', 'mongodb', 'mysql', 'redis', 'wordpress']
+  def self.provisioner_roles
+    Rails.cache.fetch("provisioner_roles", expires_in: 12.hours) do
+      provisioner_roles = DockerProvisionerTasks.new.roles
+      JSON.parse(provisioner_roles.body)
+    end
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { source: 'Server#provisioner_roles' })
+    return []
+  end
 
   def self.purchased_resources
     sums = pluck(:cpus, :memory, :disk_size)

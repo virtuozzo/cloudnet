@@ -110,7 +110,7 @@ module ApplicationHelper
   end
   
   def provisioner_role_options(selected)
-    options_for_select(Server::PROVISIONER_ROLES.map {|role| [role.camelize, role]}, selected)
+    options_for_select(Server.provisioner_roles.map {|role| [role.humanize, role]}, selected)
   end
   
   # sliders when

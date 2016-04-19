@@ -58,7 +58,7 @@ class DockerProvision
   def prov_error_params
     { source: 'DockerProvision', server_id: server_id,
       role: role, job_id: job_id,
-      provisioner: provision_tasks.prov_server
+      provisioner: provision_tasks.prov_server[:url]
     }
   end
   
