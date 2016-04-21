@@ -13,8 +13,4 @@ describe UptimeUpdateServers do
       }.to change(UptimeUpdateServers.jobs, :size).by(1)
     end
   end
-  
-  context "perform jobs" do
-    
-  end
 end

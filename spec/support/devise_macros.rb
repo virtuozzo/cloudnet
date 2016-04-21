@@ -4,7 +4,7 @@ module ControllerHelpers
   def sign_in_onapp_user
     @request.env["devise.mapping"] = Devise.mappings[:user]
     user = FactoryGirl.create(:user_onapp)
-    user.confirm!
+    user.confirm
     sign_in user
     @current_user = user
   end
@@ -13,7 +13,7 @@ end
 module AuthHelpers
   def authenticate_user
     @user = FactoryGirl.create(:user_onapp)
-    @user.confirm!
+    @user.confirm
 
     visit new_user_session_path
     fill_in 'Email Address', with: @user.email

@@ -1,6 +1,6 @@
 class UpdateIndices
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
   
   def perform
     IndicesTasks.new.perform(:update_all_locations)

@@ -271,4 +271,7 @@ FactoryGirl.define do
     key 'ssh-rsa abc1234== joe@joeys-macbook-pro'
     association :user, factory: :user_onapp
   end
+  
+  factory :user_server_count do
+  end
 end

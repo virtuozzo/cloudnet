@@ -1,6 +1,6 @@
 class ServerUsageHourly
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
   
   def perform
     Account.all.find_each do |account|

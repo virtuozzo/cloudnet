@@ -1,6 +1,6 @@
 class UpdateHypervisorGroupVersion
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
   
   # Get HV zones from Onapp, match with existing location and update hv_group_version which is basically version of Onapp
   # NOTE: This requires the permission 'See list of all compute zones' for the ONAPP_CP user role at Onapp
