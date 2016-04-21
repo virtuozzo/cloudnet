@@ -25,7 +25,7 @@ gem 'postgresql_lo_streamer'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
-gem 'devise', git: 'https://github.com/plataformatec/devise.git'
+gem 'devise', '~> 3.1' #git: 'https://github.com/plataformatec/devise.git'
 gem 'devise-otp'
 
 gem 'angularjs-rails', '~> 1.3.15'
@@ -80,9 +80,13 @@ gem 'capistrano3-puma', '~> 1.0.0'
 gem 'capistrano-sidekiq', '~> 0.5.2'
 gem 'capistrano-upload-config'
 gem 'capistrano-rails-console'
+gem 'capistrano-rake', require: false
 
 # Fixtures
 gem 'yaml_db'
+
+# data migrations
+gem 'nondestructive_migrations', '>= 1.1'
 
 group :development, :test do
   gem 'guard'
