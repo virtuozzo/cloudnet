@@ -44,11 +44,13 @@ RSpec.describe Uptime, :type => :model do
   end
   
   context "restrict number of records" do
-    let(:max_number) {Uptime::MAX_DATA_PER_LOCATION}
     let!(:other_uptime) {FactoryGirl.create(:uptime)}
     
     before(:each) do
-      (max_number+3).times do |t|
+      stub_const("Uptime::MAX_DATA_PER_LOCATION", 5)
+      @max_number = Uptime::MAX_DATA_PER_LOCATION
+      
+      (@max_number+3).times do |t|
         current = uptime.dup
         current.starttime = uptime.starttime - t.days
         current.save_or_update
@@ -56,7 +58,7 @@ RSpec.describe Uptime, :type => :model do
     end
     
     it "should store MAX_DATA_PER_LOCATION records" do
-      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq @max_number
     end
     
     it "should store most recent data points" do
@@ -78,7 +80,7 @@ RSpec.describe Uptime, :type => :model do
         current.starttime = uptime.starttime + (t+1).day
         current.save!
       end
-      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number + 3
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq @max_number + 3
       
       other_old_uptime = other_uptime.dup
       other_old_uptime.starttime = other_uptime.starttime - 360.days
@@ -87,7 +89,7 @@ RSpec.describe Uptime, :type => :model do
       
       new_uptime.starttime = uptime.starttime + 4.days
       new_uptime.save_or_update
-      expect(Uptime.where(location_id: uptime.location_id).count).to eq max_number
+      expect(Uptime.where(location_id: uptime.location_id).count).to eq @max_number
       expect(Uptime.where(location_id: other_uptime.location_id).count).to eq 2
     end
   end
