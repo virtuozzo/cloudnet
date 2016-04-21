@@ -29,6 +29,9 @@ describe ServerWizardsController do
         allow(MonitorServer).to receive(:perform_async).and_return(true)
         # allow_any_instance_of(ServerWizard).to receive(:save_server_details).and_return(@server)
         allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
+        helpdesk = double('Helpdesk', new_ticket: true)
+        allow(Helpdesk).to receive(:new).and_return(helpdesk)
+        allow(helpdesk).to receive(:new_ticket).and_return(true)
       end
 
       it 'should create server using Wallet funds' do
