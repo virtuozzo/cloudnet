@@ -60,7 +60,7 @@ class Account < ActiveRecord::Base
     def log_risky_ip_addresses(request_ip = nil)
       ips = []
       ips << request_ip unless request_ip.blank?
-      billing_cards.map(&:ip_address).each {|i| ips << i} unless billing_cards.blank?
+      billing_cards.with_deleted.map(&:ip_address).each {|i| ips << i} unless billing_cards.with_deleted.blank?
       ips.push user.current_sign_in_ip, user.last_sign_in_ip
       ips.flatten.uniq.each do |ip_address|
         risky_ip_addresses.find_or_create_by(ip_address: ip_address)

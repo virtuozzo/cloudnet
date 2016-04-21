@@ -17,8 +17,10 @@ class DisputeHandlerTask < BaseTask
     @account.user.servers.map { |server| block_server(server) }
     
     # Notify user and support
-    NotifyUsersMailer.notify_server_validation(@account.user, @account.user.servers).deliver_now
-    SupportTasks.new.perform(:notify_server_validation, @account.user, @account.user.servers) rescue nil
+    unless @account.user.servers.blank?
+      NotifyUsersMailer.notify_server_validation(@account.user, @account.user.servers).deliver_now
+      SupportTasks.new.perform(:notify_server_validation, @account.user, @account.user.servers) rescue nil
+    end
     
     # Log the IP addresses associated with the account to risky ip addresses list for future use
     @account.log_risky_ip_addresses
