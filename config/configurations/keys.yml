@@ -13,6 +13,9 @@ defaults: &defaults
     api_key: <%= ENV["PINGDOM_KEY"] %>
     user: <%= ENV["PINGDOM_USER"] %>
     pass: <%= ENV["PINGDOM_PASS"] %>
+  sift_science:
+    js_key: <%= ENV["SIFT_SCIENCE_JS_SNIPPET_KEY"] %>
+    api_key: <%= ENV["SIFT_SCIENCE_API_KEY"] %>
 
 development:
   <<: *defaults
