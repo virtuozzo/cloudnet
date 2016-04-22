@@ -8,6 +8,6 @@ describe BaseTasks do
   end
 
   it 'should raise errors for invalid calls or calls not allowed to access' do
-    expect { base.run_task(:invalid) }.to raise_error
+    expect { base.run_task(:invalid) }.to raise_error(NoMethodError)
   end
 end

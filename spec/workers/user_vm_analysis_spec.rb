@@ -24,13 +24,13 @@ describe UserVmAnalysis do
       2.times { FactoryGirl.create(:user) }
       
       # counted as recent
-      Timecop.freeze(Time.now.midnight - 1.day) do
+      Timecop.freeze(Time.zone.now.midnight - 1.day) do
         @updated = FactoryGirl.create(:server)
         @updated.destroy
       end
       
       # not counted as recent
-      Timecop.freeze(Time.now.midnight - count_days.days - 1.second) do
+      Timecop.freeze(Time.zone.now.midnight - count_days.days - 1.second) do
         @not_updated = FactoryGirl.create(:server)
         @not_updated.destroy
       end

@@ -106,7 +106,7 @@ end
 
 group :test do
   gem 'minitest' # Apparently AR *has* to have this, see: https://github.com/rspec/rspec-rails/issues/758
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.4.2'
   gem 'factory_girl_rails'
   gem 'selenium-webdriver'
   gem 'capybara'

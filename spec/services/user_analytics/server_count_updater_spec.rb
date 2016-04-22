@@ -31,11 +31,11 @@ describe UserAnalytics::ServerCountUpdater do
     end
   
     it 'creates proper range of update days' do
-      now = (@test_date + 6.days).to_date
-      Timecop.freeze(now)
+      now = @test_date + 6.days
+      Timecop.freeze(now.midnight)
       offset = (UserServerCount::DO_NOT_COUNT_VM_LASTING_LESS_DAYS + 1).days
       start = @test_date.to_date - offset
-      expect(subject.update_range).to eq start..now
+      expect(subject.update_range).to eq start..now.to_date
     end
   
     it "counts user's records" do
@@ -132,7 +132,7 @@ describe UserAnalytics::ServerCountUpdater do
     it 'doesnt allow for same record inserted twice' do
       3.times { FactoryGirl.create(:user) }
       expect {subject.bulk_zero_insert(User.ids)}.not_to raise_error
-      expect {subject.bulk_zero_insert(User.ids)}.to raise_error
+      expect {subject.bulk_zero_insert(User.ids)}.to raise_error(ActiveRecord::RecordNotUnique)
     end
     
     context 'removal old data' do
@@ -170,7 +170,7 @@ describe UserAnalytics::ServerCountUpdater do
       
       it 'updates and removes data' do
         ids = [user1.id, user2.id]
-        Timecop.freeze(Date.today + 1.day)
+        Timecop.freeze(Time.now.midnight + 1.day)
         expect {subject.bulk_zero_update(ids)}.to change {UserServerCount.count}.by(-15)
         expect(last_server_count_date(user1)).to eq Date.today
         expect(last_server_count_date(user2)).to eq Date.today
