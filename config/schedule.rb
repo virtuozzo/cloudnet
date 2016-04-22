@@ -80,6 +80,11 @@ every 1.day, at: '3:30am' do
   runner 'UpdateHypervisorGroupVersion.perform_in(2.minutes)'
 end
 
+# Update user's server count history and trending
+every 1.day, at: '3:30am' do
+  runner 'UserVmAnalysis.perform_in(5.minutes)'
+end
+
 # Auto top-up
 every 1.day, at: '4:00 am' do
   runner 'AutoTopup.perform_in(2.minutes)'
