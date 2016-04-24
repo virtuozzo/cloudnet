@@ -1,5 +1,6 @@
 class Invoice < ActiveRecord::Base
   include InvoiceCreditShared
+  include SiftProperties
 
   acts_as_paranoid
   acts_as_sequenced start_at: 1
@@ -46,7 +47,7 @@ class Invoice < ActiveRecord::Base
     invoice.invoice_items = items
     invoice
   end
-  
+
   # Generate PAYG invoice from last invoiced date until today, to the hour
   def self.generate_final_payg_invoice(invoiceables, account)
     invoice = Invoice.new(account: account, invoice_type: :payg)
@@ -65,7 +66,7 @@ class Invoice < ActiveRecord::Base
     return unless old_bw
     invoice_items.each { |i| i.increase_free_billing_bandwidth(old_bw) }
   end
-  
+
   def items?
     invoice_items.length > 0
   end

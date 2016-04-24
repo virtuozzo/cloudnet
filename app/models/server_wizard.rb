@@ -10,7 +10,8 @@ class ServerWizard
 
   ATTRIBUTES = [:location_id, :template_id, :memory, :cpus, :disk_size, :name,
                 :os_type, :card_id, :user, :ip_addresses, :payment_type, :build_errors,
-                :submission_path, :existing_server_id, :provisioner_role, :validation_reason]
+                :submission_path, :existing_server_id, :provisioner_role, :validation_reason,
+                :invoice]
   attr_accessor(*ATTRIBUTES)
 
   attr_reader :hostname
@@ -165,10 +166,10 @@ class ServerWizard
       # new.
       @credit_note_for_time_remaining = @old_server_specs.create_credit_note_for_time_remaining
     end
-    
+
     # Generate invoice, use credit notes if any, finally charge payment receipts
     charge_wallet
-    
+
     if type == :create
       # Build the server through the Onapp API
       request_server_build
@@ -189,19 +190,19 @@ class ServerWizard
         PaymentReceipt.refund_used_notes(@payment_receipts_used)
         user.account.create_activity :refund_used_payment_receipts, owner: user, params: { notes: @payment_receipts_used }
       end
-    
+
       # Refund any credit notes used
       if @notes_used.present?
         CreditNote.refund_used_notes(@notes_used)
         user.account.create_activity :refund_used_notes, owner: user, params: { notes: @notes_used }
       end
-    
+
       # Clean up the lingering invoice and server
       if @invoice
         @invoice.save
         @invoice.really_destroy!
       end
-      
+
       # Delete any credit notes given for server edit
       if @credit_note_for_time_remaining
         @credit_note_for_time_remaining.destroy
@@ -236,7 +237,7 @@ class ServerWizard
 
   def request_server_edit
     return unless server_changed?
-    
+
     ServerEdit.perform_async(user.id, existing_server_id,
               disk_resize, template_reload, cpu_mem_changes)
   end
@@ -245,29 +246,29 @@ class ServerWizard
   def disk_resize
     disk_size == @old_server_specs.disk_size ? false : @old_server_specs.disk_size
   end
-  
+
   def template_reload
     template_id == @old_server_specs.template_id ? false : template_id
   end
-  
+
   def cpu_mem_changes
     changed = @old_server_specs.cpus != cpus ||
               @old_server_specs.memory != memory ||
               @old_server_specs.name != name
     changed ? old_server_cpu_mem : false
   end
-  
+
   def old_server_cpu_mem
-    { "cpus" => @old_server_specs.cpus, 
+    { "cpus" => @old_server_specs.cpus,
       "memory" => @old_server_specs.memory,
       "name" => @old_server_specs.name
     }
   end
-  
+
   def server_changed?
     cpu_mem_changes || template_reload || disk_resize
   end
-  
+
   def persisted?
     false
   end
@@ -442,17 +443,17 @@ class ServerWizard
     errors.add(:base, "Please select a package (or the template you've chosen is incompatible with this package)") unless matches
     matches
   end
-  
+
   def validate_wallet_credit
     errors.add(:base, 'You do not have enough credit to run this server until next invoice date. Please top up your Wallet.') unless enough_wallet_credit?
   end
-  
+
   def validate_provisioner_template
     if !provisioner_role.blank? && template_id.to_s != location.provisioner_templates.first.id.to_s
       errors.add(:base, 'Invalid template for provisioner')
     end
   end
-  
+
   def has_confirmed_email?
     errors.add(:base, 'Please confirm your email address before creating a server') if user && !user.confirmed?
   end
