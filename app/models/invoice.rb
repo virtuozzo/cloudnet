@@ -21,6 +21,8 @@ class Invoice < ActiveRecord::Base
   TAX_RATE             = 0.2  # Define as a decimal always!
   CENTS_IN_DOLLAR      = 1000.0
   MILLICENTS_IN_DOLLAR = CENTS_IN_DOLLAR * 100.0
+  MICROS_IN_DOLLAR     = MILLICENTS_IN_DOLLAR * 10.0
+  MICROS_IN_MILLICENT  = 10.0
   USD_GBP_RATE         = 0.588402
   MIN_CHARGE_AMOUNT    = 100
 

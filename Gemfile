@@ -45,12 +45,13 @@ gem 'country_select', github: 'stefanpenner/country_select'
 gem 'carmen-rails', '~> 1.0.1'
 
 # Billing Integration Dependencies
-gem 'stripe'
+gem 'stripe', '1.39.0'
 gem 'maxmind', '~> 0.4.5'
 gem 'prawn', '~> 1.3.0'
 gem 'prawn-table'
 gem 'sequenced', '~> 1.6.0'
 gem 'paypal-express', '~> 0.6.0'
+gem 'sift', '1.1.7.3'
 
 # Zendesk Integration Dependencies
 gem 'zendesk_api', '~> 1.5.0'

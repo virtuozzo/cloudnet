@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   include NegativeBalanceProtection
   include NegativeBalanceProtection::ActionStrategies
   include NegativeBalanceProtection::Actions
-  
+  include SiftProperties
+
   acts_as_paranoid
 
   devise :otp_authenticatable, :database_authenticatable, :registerable, :confirmable, :lockable,
@@ -32,17 +33,20 @@ class User < ActiveRecord::Base
   # TODO: Make sure our worker is triggered. This should probably be in the controller
   # since it's triggering a worker we can only guarantee it in the model for each user
   after_create :create_onapp_user
-  
+
   # Create contact at AgileCRM
   after_create :update_agilecrm_contact
 
   # Analytics tracking
   after_create :track_analytics
 
+  # Create account at Sift Science
+  after_create :create_sift_account
+
   scope :created_this_month, -> { where('created_at > ? AND created_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :servers_to_be_destroyed, -> { where("notif_delivered - notif_before_destroy >= 0")}
-  
+
   def to_s
     "#{full_name}"
   end
@@ -59,7 +63,7 @@ class User < ActiveRecord::Base
     strategy = UserConstraintsAdminConfirm
     Protector.fire_counter_actions(self, strategy)
   end
-  
+
   def clear_unpaid_notifications(reason = nil)
     return if notif_delivered == 0
     clear_notifications_activity(reason) if reason
@@ -69,50 +73,56 @@ class User < ActiveRecord::Base
       admin_destroy_request: RequestForServerDestroyEmailToAdmin::REQUEST_NOT_SENT
       )
   end
-  
+
   def clear_notifications_activity(reason)
     create_activity(
-      :clear_notifications, 
+      :clear_notifications,
       owner: self,
-      params: { reason: reason, 
+      params: { reason: reason,
                 balance: Invoice.pretty_total(account.remaining_balance * -1),
                 from: notif_delivered
               }
     )
   end
-  
+
   def refresh_my_servers
     servers.each do |server|
       ServerTasks.new.perform(:refresh_server, id, server.id) rescue nil
     end
   end
-    
+
   def server_destroy_scheduled?
     admin_destroy_request == RequestForServerDestroyEmailToAdmin::REQUEST_SENT_CONFIRMED
   end
-  
+
   def confirm_automatic_destroy
-    update_attribute(:admin_destroy_request, 
+    update_attribute(:admin_destroy_request,
                     RequestForServerDestroyEmailToAdmin::REQUEST_SENT_CONFIRMED)
   end
-  
+
   def unconfirm_automatic_destroy
-    update_attribute(:admin_destroy_request, 
+    update_attribute(:admin_destroy_request,
                     RequestForServerDestroyEmailToAdmin::REQUEST_SENT_NOT_CONFIRMED)
   end
-  
+
   def servers_blocked?
     notif_delivered > notif_before_shutdown
   end
-  
+
   def trial_credit_eligible?
     account.billing_cards.with_deleted.count == 0
   end
-  
+
   def after_database_authentication
     update_agilecrm_contact
+    update_sift_account
+    create_sift_login_event
   end
-  
+
+  def update_sift_account
+    CreateSiftEvent.perform_async("$update_account", sift_user_properties)
+  end
+
   protected
 
   def send_on_create_confirmation_instructions
@@ -125,6 +135,20 @@ class User < ActiveRecord::Base
 
   private
 
+  def create_sift_account
+    CreateSiftEvent.perform_async("$create_account", sift_user_properties)
+    create_sift_login_event
+  end
+
+  def create_sift_login_event
+    properties = {
+      "$user_id": id,
+      "$session_id": anonymous_id,
+      "$login_status": "$success"
+    }
+    CreateSiftEvent.perform_async("$login", properties)
+  end
+
   def create_account
     self.account ||= Account.create!(user: self)
   end
@@ -132,7 +156,7 @@ class User < ActiveRecord::Base
   def create_onapp_user
     CreateOnappUser.perform_async(id)
   end
-  
+
   def update_agilecrm_contact
     UpdateAgilecrmContact.perform_async(id)
   end
@@ -140,7 +164,7 @@ class User < ActiveRecord::Base
   def track_analytics
     Analytics.service.alias(previous_id: anonymous_id, user_id: id) unless anonymous_id.nil?
     Analytics.service.flush
-    
+
     Analytics.service.identify(
       user_id: id,
       traits: {
@@ -155,7 +179,7 @@ class User < ActiveRecord::Base
   def anonymous_id
     Thread.current[:session_id]
   end
-  
+
   # def whitelisted_email
   #   if Rails.env.production? && EmailWhitelist.find_by_email(self.email).nil?
   #     errors.add(:email, "currently hasn't received an invite. Please use the exact email you used to signup to the Cloud.net Beta")

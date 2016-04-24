@@ -1,5 +1,5 @@
 # Overriding Devise's Confirmation controller so that we can update AgileCRM contact object with new verified email address
-class ConfirmationsController < Devise::ConfirmationsController  
+class ConfirmationsController < Devise::ConfirmationsController
 
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
@@ -9,13 +9,14 @@ class ConfirmationsController < Devise::ConfirmationsController
 
     if resource.errors.empty?
       UpdateAgilecrmContact.perform_async(resource.id, old_email)
+      resource.update_sift_account
       set_flash_message(:notice, :confirmed) if is_flashing_format?
       respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
-  
+
   private
 
   def current_email
@@ -28,5 +29,5 @@ class ConfirmationsController < Devise::ConfirmationsController
   rescue
     nil
   end
-  
+
 end
