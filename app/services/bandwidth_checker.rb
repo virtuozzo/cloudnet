@@ -5,7 +5,7 @@ class BandwidthChecker
   NOTIFICATION_USER_AFTER_EXCEEDED_GB = 10
   
   # admin notifications (verify potential fraud)
-  MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD = 2
+  MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD = 4
   NOTIFICATION_ADMIN_AFTER_EXCEEDED_GB = 50
   
   attr_reader :server
