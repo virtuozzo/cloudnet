@@ -45,7 +45,7 @@ class ServerWizard
   end
 
   def total_steps
-    enough_wallet_credit? ? [current_step, 2].max : 3
+    (enough_wallet_credit? && user.confirmed?) ? [current_step, 2].max : 3
   end
 
   def current_step_name
