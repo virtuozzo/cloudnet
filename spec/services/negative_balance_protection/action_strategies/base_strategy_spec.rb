@@ -127,8 +127,10 @@ describe BaseStrategy do
   
   context "#destroy_less_emails_sent_than_defined_in_user_profile?" do
     it "should be true when delivered less notifications than in profile" do
-      user1 = FactoryGirl.create(:user, notif_delivered: 12)
-      user2 = FactoryGirl.create(:user, notif_before_destroy: 66, notif_delivered: 50)
+      before_destroy = User::Limitable::NOTIF_BEFORE_DESTROY_DEFAULT
+      user1 = FactoryGirl.create(:user, notif_delivered: before_destroy - 1)
+      user2 = FactoryGirl.create(:user, notif_delivered: 50)
+      user2.update_attribute(:notif_before_destroy, 66)
       expect(strategy.new(user).destroy_less_emails_sent_than_defined_in_user_profile?).to be_truthy
       expect(strategy.new(user1).destroy_less_emails_sent_than_defined_in_user_profile?).to be_truthy
       expect(strategy.new(user2).destroy_less_emails_sent_than_defined_in_user_profile?).to be_truthy
@@ -137,7 +139,8 @@ describe BaseStrategy do
     it "should be false when delivered more notifications than in profile" do
       user1 = FactoryGirl.create(:user, notif_delivered: user.notif_before_destroy)
       user2 = FactoryGirl.create(:user, notif_delivered: 30)
-      user3 = FactoryGirl.create(:user, notif_before_destroy: 60, notif_delivered: 60)
+      user3 = FactoryGirl.create(:user, notif_delivered: 60)
+      user3.update_attribute(:notif_before_destroy, 60)
       expect(strategy.new(user1).destroy_less_emails_sent_than_defined_in_user_profile?).to be_falsy
       expect(strategy.new(user2).destroy_less_emails_sent_than_defined_in_user_profile?).to be_falsy
       expect(strategy.new(user3).destroy_less_emails_sent_than_defined_in_user_profile?).to be_falsy
@@ -146,8 +149,10 @@ describe BaseStrategy do
   
   context "#emails_sent_as_in_profile_for_destroy_or_more?" do
     it "it should be false when delivered less notifications than in profile" do
-      user1 = FactoryGirl.create(:user, notif_delivered: 12)
-      user2 = FactoryGirl.create(:user, notif_before_destroy: 66, notif_delivered: 50)
+      before_destroy = User::Limitable::NOTIF_BEFORE_DESTROY_DEFAULT
+      user1 = FactoryGirl.create(:user, notif_delivered: before_destroy - 1)
+      user2 = FactoryGirl.create(:user, notif_delivered: 50)
+      user2.update_attribute(:notif_before_destroy, 66)
       expect(strategy.new(user).emails_sent_as_in_profile_for_destroy_or_more?).to be_falsy
       expect(strategy.new(user1).emails_sent_as_in_profile_for_destroy_or_more?).to be_falsy
       expect(strategy.new(user2).emails_sent_as_in_profile_for_destroy_or_more?).to be_falsy
@@ -155,14 +160,16 @@ describe BaseStrategy do
     
     it "it should be true when delivered more notifications than in profile" do
       user1 = FactoryGirl.create(:user, notif_delivered: user.notif_before_destroy + 1)
-      user2 = FactoryGirl.create(:user, notif_before_destroy: 60, notif_delivered: 65)
+      user2 = FactoryGirl.create(:user, notif_delivered: 65)
+      user2.update_attribute(:notif_before_destroy, 60)
       expect(strategy.new(user1).emails_sent_as_in_profile_for_destroy_or_more?).to be_truthy
       expect(strategy.new(user2).emails_sent_as_in_profile_for_destroy_or_more?).to be_truthy
     end
     
     it "it should be true when delivered notifications as in profile" do
       user1 = FactoryGirl.create(:user, notif_delivered: user.notif_before_destroy)
-      user2 = FactoryGirl.create(:user, notif_before_destroy: 60, notif_delivered: 60)
+      user2 = FactoryGirl.create(:user, notif_delivered: 60)
+      user2.update_attribute(:notif_before_destroy, 60)
       expect(strategy.new(user1).emails_sent_as_in_profile_for_destroy_or_more?).to be_truthy
       expect(strategy.new(user2).emails_sent_as_in_profile_for_destroy_or_more?).to be_truthy
     end
