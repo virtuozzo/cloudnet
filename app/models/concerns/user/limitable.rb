@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
       self.cpu_max        = 3 * multiplier
       self.storage_max    = 50 * multiplier
       self.bandwidth_max  = 250 * multiplier
+      self.notif_before_destroy = 7
     end
   end
 end
