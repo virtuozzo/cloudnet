@@ -1,7 +1,7 @@
 module UserAnalytics
   class ServerCountUpdater
     MAX_DATAPOINTS_STORED_PER_USER = 700
-    MAX_DATAPOINTS_FOR_EXISTING_USER = 30 # used only for initialization process for existing users
+    MAX_DATAPOINTS_FOR_EXISTING_USER = 60 # used only for initialization process for existing users
     
     attr_reader :user
     

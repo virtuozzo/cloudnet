@@ -23,7 +23,10 @@ module NegativeBalanceProtection
         manager.perform(:destroy, user.id, server.id)
         destroy_local_server(server)
       rescue Faraday::ClientError => e
-        admin_destroy(server) if server_suspended?(e, server)
+        case
+        when server_deleted_at_onapp?(e, server) then destroy_local_server(server)
+        when server_suspended?(e, server) then admin_destroy(server)
+        end
         log_error(e, server)
       rescue => e
         log_error(e, server)
@@ -62,14 +65,30 @@ module NegativeBalanceProtection
         unauthorized?(e) && onapp_suspended?(server)
       end
 
+      def server_deleted_at_onapp?(e, server)
+        return true if not_found?(e)
+        onapp_vm(server) if unauthorized?(e)
+        false
+      rescue Faraday::ResourceNotFound
+        true
+      end
+      
+      def not_found?(e)
+        e.response && e.response[:status] == 404
+      end
+      
       def unauthorized?(e)
-        e.response[:status] == 401 if e.response
+        e.response && e.response[:status] == 401 
       end
 
       def onapp_suspended?(server)
-        admin_squall.show(server.identifier)["suspended"]
+        onapp_vm(server)["suspended"]
       end
-
+      
+      def onapp_vm(server)
+        admin_squall.show(server.identifier)
+      end
+      
       def admin_squall
         @admin_squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: ONAPP_CP[:user], pass: ONAPP_CP[:pass])
       end
