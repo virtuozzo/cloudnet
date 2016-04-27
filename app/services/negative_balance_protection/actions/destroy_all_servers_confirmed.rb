@@ -1,22 +1,30 @@
 module NegativeBalanceProtection
   module Actions
     class DestroyAllServersConfirmed
-      attr_reader :user, :manager, :destroy_performed
+      attr_reader :user, :manager, :destroy_performed, :user_suspended
       
       def initialize(user)
         @user = user
+        @user_suspended = user.suspended
         @manager = ServerTasks.new
         @destroy_performed = false
       end
       
       def perform
         return nil unless destroy_confirmed_by_admin?
-        user.servers.each { |server| destroy(server) }
+        destroy_all_servers
         create_activity if destroy_performed
       end
-      
+
       def destroy_confirmed_by_admin?
         user.server_destroy_scheduled?
+      end
+      
+      
+      def destroy_all_servers
+        user.update_attribute(:suspended, false) if user_suspended
+        user.servers.each { |server| destroy(server) }
+        user.update_attribute(:suspended, true) if user_suspended
       end
       
       def destroy(server)
