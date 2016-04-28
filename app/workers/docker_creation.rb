@@ -16,7 +16,7 @@ class DockerCreation
   end
   
   def server_booted?
-    server.state.in?([:provision])
+    server.state.in?([:provisioning])
   end
   
   def server_has_ip?

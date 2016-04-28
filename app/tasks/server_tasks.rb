@@ -15,7 +15,7 @@ class ServerTasks < BaseTasks
   
   def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
-    docker_provision = args[0] == true ? :provision : nil
+    docker_provision = args[0] == true ? :provisioning : nil
     # Don't update our state if our server is locked
     new_state = server.state
     if info['locked'] == false
