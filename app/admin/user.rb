@@ -84,13 +84,13 @@ ActiveAdmin.register User do
           end
         end
         row :primary_card_country_match do |user|
-          fraud_body['country_match'] unless fraud_body.nil?
+          boolean_to_words fraud_body['country_match'] unless fraud_body.nil?
         end
         row :primary_card_proxy_score do |user|
           fraud_body['proxy_score'] unless fraud_body.nil?
         end
         row :primary_card_anon_proxy do |user|
-          fraud_body['anonymous_proxy'] unless fraud_body.nil?
+          boolean_to_words fraud_body['anonymous_proxy'] unless fraud_body.nil?
         end
         
         row :possible_duplicate_accounts do
@@ -103,11 +103,11 @@ ActiveAdmin.register User do
                 BillingCard.with_deleted.where('account_id != ? AND (bin = ? AND last4 = ?)', user.account.id, card.bin, card.last4).map {|c| matching_cards.push c}
               end
               associated_ips.push [user.current_sign_in_ip, user.last_sign_in_ip]
-              duplicate_users = User.with_deleted.where('id != ? AND (current_sign_in_ip IN (?) OR last_sign_in_ip IN (?))', user.id, associated_ips.uniq.flatten, associated_ips.uniq.flatten)
-              billing_cards = BillingCard.with_deleted.where('account_id != ? AND ip_address IN (?)', user.account.id, associated_ips.uniq.flatten)
+              duplicate_users = User.with_deleted.where('id != ? AND (current_sign_in_ip IN (?) OR last_sign_in_ip IN (?))', user.id, associated_ips.flatten.uniq, associated_ips.flatten.uniq)
+              billing_cards = BillingCard.with_deleted.where('account_id != ? AND ip_address IN (?)', user.account.id, associated_ips.flatten.uniq)
               billing_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
               matching_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
-              raw duplicate_users.uniq.flatten.map {|user| link_to user.full_name, admin_user_path(user) }.join(', ')
+              raw duplicate_users.flatten.uniq.map {|user| link_to user.full_name, admin_user_path(user) }.join(', ')
             end
           rescue StandardError => e
             ErrorLogging.new.track_exception(e, extra: { user: user, source: 'User#possible_duplicate_accounts' })
@@ -116,17 +116,55 @@ ActiveAdmin.register User do
         
         # fraud validator methods
         row :minfraud_safe do |user|
-          user.account.minfraud_safe? unless user.account.nil?
+          status_tag(user.account.minfraud_safe?, class: 'important', label: boolean_to_results(user.account.minfraud_safe?)) unless user.account.nil?
         end
         row :ip_history do |user|
-          user.account.safe_ip? unless user.account.nil?
+          status_tag(user.account.safe_ip?, class: 'important', label: boolean_to_results(user.account.safe_ip?)) unless user.account.nil?
         end
         row :permissible_card_attempts do |user|
-          user.account.permissible_card_attempts? unless user.account.nil?
+          status_tag(user.account.permissible_card_attempts?, class: 'important', label: boolean_to_results(user.account.permissible_card_attempts?)) unless user.account.nil?
         end
         row :card_history do |user|
-          user.account.safe_card? unless user.account.nil?
+          status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
+      end
+    end
+  end
+  
+  sidebar "Legend", only: :show do
+    attributes_table_for user do
+      row :minfraud_score do 
+        text_node "Minfraud score of customer's credit card. Higher the score, higher the possibility of fraud. If multiple cards in account, highest score is shown.".html_safe 
+      end
+      row :risky_cards do 
+        text_node "Number of bad card attempts (rejected because of wrong info or high Minfraud scores)".html_safe 
+      end
+      row :stripe_account do 
+        text_node "Quick link to account at Stripe".html_safe 
+      end
+      row :primary_card_country_match do
+        text_node "It indicates whether the country of user's IP address matched the billing address country of the primary credit card. A mismatch indicates a higher risk of fraud.".html_safe
+      end
+      row :primary_card_proxy_score do
+        text_node "A score from 0.00-4.00 indicating the likelihood that the user’s IP address is high risk. Higher the score, higher the possibility of fraud. 0.5: 15%, 1.0: 30%, 2.0: 60%, 3.0+ 90% possible fraud.".html_safe
+      end
+      row :primary_card_anon_proxy do
+        text_node "It indicates whether an anonymous proxy was used while adding a credit card. An anonymous proxy indicates a high risk of fraud.".html_safe
+      end
+      row :possible_duplicate_accounts do
+        text_node "List of possible duplicate accounts inferred from IPs used to access the dashboard.".html_safe
+      end
+      row :minfraud_safe do
+        text_node "Fail indicates that at least one credit card added to account has a risk score greater than 40.".html_safe
+      end
+      row :ip_history do
+        text_node "Fail indicates an IP associated with this account was used for fraudulent activity in the past.".html_safe
+      end
+      row :permissible_card_attempts do
+        text_node "Fail indicates number of attempts to add credit cards is above permissible limits (currently 3). ".html_safe
+      end
+      row :card_history do
+        text_node "Fail indicates credit cards in account has been used for fraudulent activity in the past.".html_safe
       end
     end
   end

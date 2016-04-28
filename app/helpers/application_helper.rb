@@ -119,4 +119,12 @@ module ApplicationHelper
     @wizard_object.location && (!@wizard_object.location.budget_vps and !@wizard_object.package_matched and @wizard_object.params_values?)
   end
   
+  def boolean_to_words(value)
+    value ? "Yes" : "No"
+  end
+  
+  def boolean_to_results(value)
+    value ? "Pass" : "Fail"
+  end
+  
 end
