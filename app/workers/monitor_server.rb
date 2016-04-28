@@ -22,7 +22,7 @@ class MonitorServer
     server.state != :on && 
     server.state != :off && 
     server.state != :blocked &&
-    server.state != :provision
+    server.state != :provisioning
   end
   
   def has_no_ip_address?

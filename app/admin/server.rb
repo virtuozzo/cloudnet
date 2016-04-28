@@ -70,6 +70,7 @@ ActiveAdmin.register Server do
   end
   
   csv do
+    column('User Email') { |server| server.user.email }
     column :id
     column('Location') { |server| server.location }
     @resource.content_columns.each { |c| column c.name.to_sym }
