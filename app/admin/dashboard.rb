@@ -36,6 +36,11 @@ ActiveAdmin.register_page 'Dashboard' do
             end
 
             tr do
+              td 'Users with Servers Running'
+              td Server.where(state: 'on').pluck('DISTINCT user_id').count
+            end
+
+            tr do
               td 'Servers Created This Calendar Month'
               td Server.with_deleted.created_this_month.count
             end
