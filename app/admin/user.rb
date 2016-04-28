@@ -60,6 +60,9 @@ ActiveAdmin.register User do
     end
     column :admin
     column :suspended
+    column "Servers #" do |user|
+      user.servers.count
+    end
     column "Balance Notifications", :notif_delivered
 
     actions
