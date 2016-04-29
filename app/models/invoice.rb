@@ -17,6 +17,7 @@ class Invoice < ActiveRecord::Base
   scope :payg, -> { where(invoice_type: :payg) }
   scope :not_paid, -> { where.not(state: :paid) }
 
+  after_create :create_sift_event
   before_create :coupon_should_not_present_if_payg
 
   TAX_RATE             = 0.2  # Define as a decimal always!
@@ -103,5 +104,9 @@ class Invoice < ActiveRecord::Base
     else
       0
     end
+  end
+  
+  def create_sift_event
+    CreateSiftEvent.perform_async("$create_order", sift_invoice_properties)
   end
 end

@@ -21,7 +21,6 @@ class CreateServerTask < BaseTask
       set_server_in_provision if docker_provision
       MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, user.id, docker_provision)
       DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, prole) if prole
-      CreateSiftEvent.perform_async("$create_order", @wizard.invoice.sift_invoice_properties)
       true
     else
       false
