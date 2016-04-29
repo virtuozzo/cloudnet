@@ -21,6 +21,7 @@ class DockerProvision
       @job_id = resp.body
       status = wait_for_server_provisioned(job_id)[:status]
       raise(ProvisionerError, status) unless status == "Done"
+      set_provision_time
     else 
       raise(ProvisionerError, resp.status)
     end
@@ -49,6 +50,10 @@ class DockerProvision
   def job_status(job_id)
     resp = provision_tasks.status(job_id)
     resp.status == 200 ? JSON.parse(resp.body).symbolize_keys : {status: "Error"}
+  end
+  
+  def set_provision_time
+    server.update_attribute(:provisioned_at, Time.now)
   end
   
   def unset_server_from_provision
