@@ -28,7 +28,7 @@ class Server < ActiveRecord::Base
   validate :template_should_match_location, on: :create
   validates_with HostnameValidator
 
-  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked, :provision], default: :building
+  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked, :provisioning], default: :building
   enum_field :payment_type, allowed_values: [:prepaid, :payg], default: :prepaid
 
   scope :prepaid, -> { where(payment_type: :prepaid) }

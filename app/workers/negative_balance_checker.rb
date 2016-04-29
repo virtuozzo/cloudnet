@@ -5,10 +5,12 @@ class NegativeBalanceChecker
   sidekiq_options :retry => 2
 
   def perform
-    User.where(suspended: false).each { |user| check_user(user) }
+    User.find_each { |user| check_user(user) }
   end
   
   def check_user(user)
+    suspended = user.suspended
+    user.update_attribute(:suspended, false) if suspended
     if user.account.remaining_balance > 100_000
       user.act_for_negative_balance
     else
@@ -16,6 +18,8 @@ class NegativeBalanceChecker
     end
   rescue => e
     log_error(e, user)
+  ensure
+    user.update_attribute(:suspended, true) if suspended
   end
   
   def log_error(e, user)
