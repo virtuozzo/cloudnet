@@ -1,4 +1,6 @@
 class BillingCard < ActiveRecord::Base
+  include SiftProperties
+  
   belongs_to :account
   acts_as_paranoid
 

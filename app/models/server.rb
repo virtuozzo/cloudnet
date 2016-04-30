@@ -3,6 +3,7 @@
 class Server < ActiveRecord::Base
   include PublicActivity::Common
   include Billing::ServerInvoiceable
+  include SiftProperties
   acts_as_paranoid
 
   # Maximum time for server to be in states such as building, booting, etc

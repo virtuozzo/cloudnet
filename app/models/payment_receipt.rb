@@ -1,6 +1,7 @@
 class PaymentReceipt < ActiveRecord::Base
   include CreditPaymentsShared
   include Metadata
+  include SiftProperties
 
   acts_as_paranoid
   acts_as_sequenced start_at: 1

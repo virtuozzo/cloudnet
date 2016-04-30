@@ -20,6 +20,7 @@ class PaygTopupPaypalResponseTask < BaseTask
 
     response = request.checkout!(@token, @payer_id, payment)  # DoExpressCheckoutPayment
     create_payment_receipt(details.amount, response.token, response_to_hash(response))
+    create_sift_event(details, response)
     return true
   end
 
@@ -43,5 +44,20 @@ class PaygTopupPaypalResponseTask < BaseTask
       @payment_receipt.metadata = metadata
       @payment_receipt.save
     end
+  end
+  
+  def create_sift_event(details, response)
+    payment_properties = {
+      "$payment_type": "$third_party_processor",
+      "$payment_gateway": "$paypal",
+      "$paypal_payer_id": @payer_id,
+      "$paypal_payer_email": details.payer.email,
+      "$paypal_payer_status": details.payer.status,
+      "$paypal_address_status": details.address_status,
+      "$paypal_protection_eligibility": response.payment_info.first.protection_eligibility,
+      "$paypal_payment_status": response.payment_info.first.payment_status
+    }
+    properties = payment_receipt.sift_payment_receipt_properties(payment_properties)
+    CreateSiftEvent.perform_async("$transaction", properties)
   end
 end
