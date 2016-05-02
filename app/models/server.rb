@@ -223,7 +223,7 @@ class Server < ActiveRecord::Base
   
   def monitor_and_provision
     docker_provision = can_provision?
-    no_auto_refresh! if can_provision?
+    no_auto_refresh! if docker_provision
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, user_id, docker_provision)
     DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
