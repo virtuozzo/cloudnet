@@ -7,6 +7,8 @@ class DockerCreation
   def perform(server_id, role)
     return unless server_id && Server.find(server_id)
     @server = Server.find(server_id)
+    # Do not provision if server under validation
+    return unless server.can_provision?
 
     if server_booted? && server_has_ip? && no_pending_events?
       DockerProvision.perform_async(server_id, role)
