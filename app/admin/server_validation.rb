@@ -40,7 +40,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       server.activities.where(key: 'server.create').first.parameters[:ip] rescue nil
     end
     column :risky_cards do |server|
-      server.user.account.risky_card_attempts
+      server.user.account.risky_card_attempts rescue nil
     end
   end
   
@@ -61,10 +61,13 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         flash[:error] = "Could not start all servers"
       ensure
         # Reset fraud check parameters so future servers are not put in validation
-        server.user.account.billing_cards.map {|card| card.update!(fraud_safe: true)}
-        server.user.account.risky_ip_addresses.map {|ip| ip.destroy }
-        server.user.account.risky_cards.map {|card| card.destroy }
-        server.user.account.update!(risky_cards_remaining: Account::RISKY_CARDS_ALLOWED)
+        account = server.user.account
+        if account
+          account.billing_cards.map {|card| card.update!(fraud_safe: true)}
+          account.risky_ip_addresses.map {|ip| ip.destroy }
+          account.risky_cards.map {|card| card.destroy }
+          account.update!(risky_cards_remaining: Account::RISKY_CARDS_ALLOWED)
+        end
       end
     end
     redirect_to admin_server_validations_path
