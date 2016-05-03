@@ -43,7 +43,12 @@ class StripePayments < Payments::Methods
         type: charge.card.brand,
         last4: charge.card.last4,
         customer: charge.card.customer,
-        country: charge.card.country
+        country: charge.card.country,
+        cvc_check: charge.card.cvc_check,
+        address_line1_check: charge.card.address_line1_check,
+        address_zip_check: charge.card.address_zip_check,
+        funding: charge.card.funding,
+        brand: charge.card.brand
       },
       captured: charge.captured
     }
@@ -63,7 +68,12 @@ class StripePayments < Payments::Methods
         type: charge.card.brand,
         last4: charge.card.last4,
         customer: charge.card.customer,
-        country: charge.card.country
+        country: charge.card.country,
+        cvc_check: charge.card.cvc_check,
+        address_line1_check: charge.card.address_line1_check,
+        address_zip_check: charge.card.address_zip_check,
+        funding: charge.card.funding,
+        brand: charge.card.brand
       },
       captured: charge.captured
     }

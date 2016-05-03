@@ -11,7 +11,7 @@ module SiftProperties
       "$user_email": email,
       "$name": full_name
     }
-    cards = account.billing_cards.map { |card| card.sift_billing_card_properties }
+    cards = account.billing_cards.processable.map { |card| card.sift_billing_card_properties }
     cards.push "$payment_type": "$store_credit"
     properties.merge! "$payment_methods": cards
     properties.merge! "$billing_address": primary_card.sift_billing_address_properties unless primary_card.nil?
@@ -20,16 +20,12 @@ module SiftProperties
     nil
   end
   
-  # TODO: Log address line check and zip check from Stripe
   def sift_billing_card_properties
     { 
       "$payment_type": "$credit_card",
       "$payment_gateway": "$stripe",
       "$card_bin": bin,
       "$card_last4": last4
-      # "$stripe_address_line1_check" => "pass",
-      # "$stripe_address_line2_check" => "pass",
-      # "$stripe_address_zip_check"   => "pass"
     }
   rescue StandardError
     nil
@@ -132,6 +128,31 @@ module SiftProperties
       "$transaction_status": "$success",
       "$transaction_id": reference,
       "payment_receipt_number": receipt_number
+    }
+    properties.merge! "$payment_method": payment_properties if payment_properties
+    properties.merge! pr_properties
+  rescue StandardError
+    nil
+  end
+  
+  def self.stripe_success_properties(charge)
+    {
+      "$stripe_cvc_check": charge[:card][:cvc_check],
+      "$stripe_address_line1_check": charge[:card][:address_line1_check],
+      "$stripe_address_zip_check": charge[:card][:address_zip_check],
+      "$stripe_funding": charge[:card][:funding],
+      "$stripe_brand": charge[:card][:brand]
+    }
+  end
+  
+  def self.stripe_failure_properties(account, net_cost, error, payment_properties)
+    properties = account.user.sift_user_properties.except! :$name, :$payment_methods
+    pr_properties = {
+      "$amount": net_cost * Invoice::MICROS_IN_MILLICENT,
+      "$currency_code": "USD",
+      "$transaction_type": "$deposit",
+      "$transaction_status": "$failure",
+      "$transaction_id": error[:charge]
     }
     properties.merge! "$payment_method": payment_properties if payment_properties
     properties.merge! pr_properties
