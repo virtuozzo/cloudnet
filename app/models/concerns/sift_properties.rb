@@ -159,5 +159,44 @@ module SiftProperties
   rescue StandardError
     nil
   end
+  
+  def self.paypal_properties(request)
+    {
+      "$payment_type": "$third_party_processor",
+      "$payment_gateway": "$paypal",
+      "$paypal_payer_id": request.payer.identifier,
+      "$paypal_payer_email": request.payer.email,
+      "$paypal_payer_status": request.payer.status,
+      "$paypal_address_status": request.address_status
+    }
+  rescue StandardError
+    nil
+  end
+  
+  def self.paypal_success_properties(request, response)
+    paypal_props = paypal_properties(request)
+    response_properties = {
+      "$paypal_protection_eligibility": response.payment_info.first.protection_eligibility,
+      "$paypal_payment_status": response.payment_info.first.payment_status
+    } if response
+    paypal_props.merge! response_properties if response_properties
+  rescue StandardError
+    nil
+  end
+  
+  def self.paypal_failure_properties(account, request)
+    properties = account.user.sift_user_properties.except! :$name, :$payment_methods
+    pr_properties = {
+      "$amount": request.amount.total.to_f * Invoice::MILLICENTS_IN_DOLLAR * Invoice::MICROS_IN_MILLICENT,
+      "$currency_code": "USD",
+      "$transaction_type": "$deposit",
+      "$transaction_status": "$failure",
+      "$transaction_id": request.token
+    }
+    properties.merge! "$payment_method": paypal_properties(request)
+    properties.merge! pr_properties
+  rescue StandardError
+    nil
+  end
 
 end

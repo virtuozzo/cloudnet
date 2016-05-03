@@ -22,6 +22,10 @@ class PaygTopupPaypalResponseTask < BaseTask
     create_payment_receipt(details.amount, response.token, response_to_hash(response))
     create_sift_event(details, response)
     return true
+  rescue StandardError => e
+    errors << "Checkout Failure: #{e.message}"
+    create_sift_event(details)
+    return false
   end
 
   attr_reader :payment_receipt
@@ -46,18 +50,13 @@ class PaygTopupPaypalResponseTask < BaseTask
     end
   end
   
-  def create_sift_event(details, response)
-    payment_properties = {
-      "$payment_type": "$third_party_processor",
-      "$payment_gateway": "$paypal",
-      "$paypal_payer_id": @payer_id,
-      "$paypal_payer_email": details.payer.email,
-      "$paypal_payer_status": details.payer.status,
-      "$paypal_address_status": details.address_status,
-      "$paypal_protection_eligibility": response.payment_info.first.protection_eligibility,
-      "$paypal_payment_status": response.payment_info.first.payment_status
-    }
-    properties = payment_receipt.sift_payment_receipt_properties(payment_properties)
+  def create_sift_event(details, response = nil)
+    if response
+      payment_properties = SiftProperties.paypal_success_properties(details, response)
+      properties = payment_receipt.sift_payment_receipt_properties(payment_properties)
+    else
+      properties = SiftProperties.paypal_failure_properties(@account, details)
+    end
     CreateSiftEvent.perform_async("$transaction", properties)
   end
 end
