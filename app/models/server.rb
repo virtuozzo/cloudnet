@@ -29,7 +29,7 @@ class Server < ActiveRecord::Base
   validate :template_should_match_location, on: :create
   validates_with HostnameValidator
 
-  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked, :provision], default: :building
+  enum_field :state, allowed_values: [:pending, :building, :starting_up, :rebooting, :shutting_down, :on, :off ,:blocked, :provisioning], default: :building
   enum_field :payment_type, allowed_values: [:prepaid, :payg], default: :prepaid
 
   scope :prepaid, -> { where(payment_type: :prepaid) }
@@ -212,6 +212,21 @@ class Server < ActiveRecord::Base
   
   def inform_if_bandwidth_exceeded
     BandwidthChecker.new(self).check_bandwidth
+  end
+  
+  def provisioned?
+    !provisioned_at.nil?
+  end
+  
+  def can_provision?
+    !provisioner_role.nil? && validation_reason == 0 && !provisioned?
+  end
+  
+  def monitor_and_provision
+    docker_provision = can_provision?
+    no_auto_refresh! if docker_provision
+    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, user_id, docker_provision)
+    DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
   
   private

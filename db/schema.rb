@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160421140224) do
+ActiveRecord::Schema.define(version: 20160429090742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 20160421140224) do
     t.integer  "exceed_bw_value",                      default: 0
     t.datetime "exceed_bw_user_last_sent"
     t.integer  "exceed_bw_admin_notif",                default: 0
+    t.datetime "provisioned_at"
   end
 
   add_index "servers", ["deleted_at"], name: "index_servers_on_deleted_at", using: :btree

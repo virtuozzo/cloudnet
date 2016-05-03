@@ -54,7 +54,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       
         # Boot the server
         ServerTasks.new.perform(:startup, server.user_id, server.id)
-        MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, server.user_id)
+        server.monitor_and_provision
         create_activity(server, :startup)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })

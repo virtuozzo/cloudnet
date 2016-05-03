@@ -15,17 +15,21 @@ module NegativeBalanceProtection
   
     def counter_actions
       Rails.logger.info "actions: #{actions}"
-      actions.each do |task|
-        action = action(task)
-        action.perform unless action.nil?
-      end
+      perform_actions
       
       increment_notifications if increment_user_notifications?
       clear_notifications if clear_notifications?
       refresh_servers if servers_for_refresh?
       charge_unpaid_invoices if user.account.present? && servers_have_been_destroyed?
     end
-  
+    
+    def perform_actions
+      actions.each do |task|
+        action = action(task)
+        action.perform unless action.nil?
+      end
+    end
+    
     def action(task)
       ("NegativeBalanceProtection::Actions::" + 
         task.to_s.camelize).constantize.new(user) 
