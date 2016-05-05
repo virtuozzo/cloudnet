@@ -15,19 +15,10 @@ class CreateServerTask < BaseTask
       errors.concat @wizard.build_errors
       false
     elsif server
-      prole = server.provisioner_role
-      docker_provision = !prole.nil?
-      
-      set_server_in_provision if docker_provision
-      MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, user.id, docker_provision)
-      DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, prole) if prole
+      server.monitor_and_provision
       true
     else
       false
     end
-  end
-  
-  def set_server_in_provision
-    server.update_attribute(:no_refresh, true)
   end
 end

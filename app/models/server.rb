@@ -232,6 +232,21 @@ class Server < ActiveRecord::Base
     BandwidthChecker.new(self).check_bandwidth
   end
   
+  def provisioned?
+    !provisioned_at.nil?
+  end
+  
+  def can_provision?
+    !provisioner_role.nil? && validation_reason == 0 && !provisioned?
+  end
+  
+  def monitor_and_provision
+    docker_provision = can_provision?
+    no_auto_refresh! if docker_provision
+    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, user_id, docker_provision)
+    DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
+  end
+  
   private
 
   def template_should_match_location
