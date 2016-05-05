@@ -9,7 +9,9 @@ module SiftProperties
       "$user_id": id,
       "$session_id": anonymous_id,
       "$user_email": email,
-      "$name": full_name
+      "$name": full_name,
+      "account_balance_amount": (account.reload.wallet_balance * Invoice::MICROS_IN_MILLICENT).to_i,
+      "account_balance_currency_code": "USD"
     }
     cards = account.billing_cards.processable.map { |card| card.sift_billing_card_properties }
     cards.push "$payment_type": "$store_credit"
@@ -51,7 +53,7 @@ module SiftProperties
     properties = user.sift_user_properties.except! :$name, :$payment_methods
     server_properties = {
       "$order_id": id,
-      "$amount": invoice_item.invoice.total_cost * Invoice::MICROS_IN_MILLICENT,
+      "$amount": (invoice_item.invoice.total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code": "USD",
       "is_first_time_buyer": (user.servers.with_deleted.count == 1),
       "$shipping_method": "$electronic",
@@ -70,7 +72,7 @@ module SiftProperties
     invoice_item.metadata.map { |item|
       properties = {
         "$product_title": item[:name],
-        "$price": item[:unit_cost].to_f * item[:units].to_f * Invoice::MICROS_IN_MILLICENT,
+        "$price": (item[:unit_cost].to_f * item[:units].to_f * Invoice::MICROS_IN_MILLICENT).to_i,
         "$quantity": item[:hours].to_f
       }
     }
@@ -83,7 +85,7 @@ module SiftProperties
     properties = user.sift_user_properties.except! :$name, :$payment_methods
     invoice_properties = {
       "$order_id": id,
-      "$amount": total_cost * Invoice::MICROS_IN_MILLICENT,
+      "$amount": (total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code": "USD",
       "is_first_time_buyer": (user.servers.with_deleted.count == 1),
       "$shipping_method": "$electronic",
@@ -110,7 +112,7 @@ module SiftProperties
         "$item_id": item.source_id,
         "$product_title": item.description,
         "$category": item.source_type,
-        "$price": item.total_cost * Invoice::MICROS_IN_MILLICENT,
+        "$price": (item.total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
         "$quantity": 1
       }
       properties.merge!("city": server.location.city, "$brand": server.location.provider) if server
@@ -122,12 +124,12 @@ module SiftProperties
   def sift_payment_receipt_properties(payment_properties = nil)
     properties = account.user.sift_user_properties.except! :$name, :$payment_methods
     pr_properties = {
-      "$amount": net_cost * Invoice::MICROS_IN_MILLICENT,
+      "$amount": (net_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code": "USD",
       "$transaction_type": "$deposit",
       "$transaction_status": "$success",
-      "$transaction_id": reference,
-      "payment_receipt_number": receipt_number
+      "$transaction_id": number,
+      "payment_processor_reference": reference
     }
     properties.merge! "$payment_method": payment_properties if payment_properties
     properties.merge! pr_properties
@@ -148,11 +150,11 @@ module SiftProperties
   def self.stripe_failure_properties(account, net_cost, error, payment_properties)
     properties = account.user.sift_user_properties.except! :$name, :$payment_methods
     pr_properties = {
-      "$amount": net_cost * Invoice::MICROS_IN_MILLICENT,
+      "$amount": (net_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code": "USD",
       "$transaction_type": "$deposit",
       "$transaction_status": "$failure",
-      "$transaction_id": error[:charge]
+      "payment_processor_reference": error[:charge]
     }
     properties.merge! "$payment_method": payment_properties if payment_properties
     properties.merge! pr_properties
@@ -187,14 +189,49 @@ module SiftProperties
   def self.paypal_failure_properties(account, request)
     properties = account.user.sift_user_properties.except! :$name, :$payment_methods
     pr_properties = {
-      "$amount": request.amount.total.to_f * Invoice::MILLICENTS_IN_DOLLAR * Invoice::MICROS_IN_MILLICENT,
+      "$amount": (request.amount.total.to_f * Invoice::MILLICENTS_IN_DOLLAR * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code": "USD",
       "$transaction_type": "$deposit",
       "$transaction_status": "$failure",
-      "$transaction_id": request.token
+      "payment_processor_reference": request.token
     }
     properties.merge! "$payment_method": paypal_properties(request)
     properties.merge! pr_properties
+  rescue StandardError
+    nil
+  end
+  
+  def sift_charge_properties
+    properties = account.user.sift_user_properties.except! :$name, :$payment_methods
+    ch_properties = {
+      "$amount": (amount * Invoice::MICROS_IN_MILLICENT).to_i,
+      "$currency_code": "USD",
+      "$transaction_type": "$withdrawal",
+      "$transaction_status": "$success",
+      "$transaction_id": number,
+      "$order_id": invoice_id,
+      "$payment_method": {"$payment_type": "$store_credit"},
+      "charge_source": source.number
+    }
+    properties.merge! ch_properties
+  rescue StandardError
+    nil
+  end
+  
+  def sift_credit_note_properties
+    properties = account.user.sift_user_properties.except! :$name, :$payment_methods
+    transaction_type = (manually_added? || trial_credit?) ? "$deposit" : "$refund"
+    invoice_id = credit_note_items.first.source.try(:last_generated_invoice_item).try(:invoice_id)
+    cr_properties = {
+      "$amount": (total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
+      "$currency_code": "USD",
+      "$transaction_type": transaction_type,
+      "$transaction_status": "$success",
+      "$transaction_id": number,
+      "$order_id": invoice_id,
+      "$payment_method": {"$payment_type": "$store_credit"}
+    }
+    properties.merge! cr_properties
   rescue StandardError
     nil
   end

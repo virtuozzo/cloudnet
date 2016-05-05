@@ -6,6 +6,7 @@
 class CreditNote < ActiveRecord::Base
   include InvoiceCreditShared
   include CreditPaymentsShared
+  include SiftProperties
 
   acts_as_paranoid
   acts_as_sequenced start_at: 1
@@ -17,6 +18,8 @@ class CreditNote < ActiveRecord::Base
   enum_field :state, allowed_values: [:uncredited, :credited], default: :credited
 
   validate :remaining_cost_can_not_be_negative
+  
+  after_create :create_sift_event
   
   TRIAL_CREDIT = 10
 
@@ -130,5 +133,9 @@ class CreditNote < ActiveRecord::Base
     credit_note.save!
     account.create_activity(:create_trial_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost })
     Analytics.track(account.user, event: 'Issued trial credit', properties: { credit_note: credit_note.id, amount: Invoice.pretty_total(credit_note.total_cost) })
+  end
+  
+  def create_sift_event
+    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties)
   end
 end
