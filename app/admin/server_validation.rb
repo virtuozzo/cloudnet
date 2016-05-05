@@ -55,6 +55,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         # Boot the server
         ServerTasks.new.perform(:startup, server.user_id, server.id)
         server.monitor_and_provision
+        create_sift_event(server, "$approved")
         create_activity(server, :startup)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })
@@ -78,6 +79,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       begin
         server = Server.find(id)
         destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
+        create_sift_event(server, "$canceled", "$payment_risk")
         create_activity(server, :destroy) if destroy.process && destroy.success?
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#destroy' })
@@ -101,6 +103,19 @@ ActiveAdmin.register Server, as: "ServerValidation" do
           admin: current_user.id
         }
       )
+    end
+    
+    def create_sift_event(server, order_status, reason = nil, description = nil)
+      properties = {
+        "$user_id"        => server.user_id,
+        "$order_id"       => server.try(:last_generated_invoice_item).try(:invoice_id),
+        "$source"         => "$manual_review",
+        "$order_status"   => order_status,
+        "$description"    => description,
+        "$reason"         => reason,
+        "$analyst"        => current_user.email
+      }
+      CreateSiftEvent.perform_async("$order_status", properties)
     end
   end
   

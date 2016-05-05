@@ -28,6 +28,9 @@ class DisputeHandlerTask < BaseTask
     # Log the billing cards associated with the account to risky cards list for future use
     @account.log_risky_cards
     
+    # Log $order_status and $chargeback events with Sift Science
+    create_sift_events
+    
     # Retrieve and update dispute object at Stripe with payment receipt and account info
     update_dispute
     
@@ -48,5 +51,54 @@ class DisputeHandlerTask < BaseTask
     server.create_activity :shutdown, owner: server.user
     server.update!(validation_reason: 4)
     server.create_activity :validation, owner: server.user, params: { reason: server.validation_reason }
+  end
+  
+  def dispute_status
+    case @dispute["status"]
+    when "warning_needs_response", "needs_response"
+      "$received"
+    when "warning_under_review", "under_review"
+      "$disputed"
+    when "lost"
+      "$lost"
+    when "won"
+      "$won"
+    else
+      "$received"
+    end
+  end
+  
+  def dispute_reason
+    case @dispute["reason"]
+    when "duplicate"
+      "$duplicate"
+    when "fraudulent"
+      "$fraud"
+    when "product_not_received"
+      "$product_not_received"
+    else
+      "$other"
+    end
+  end
+  
+  def create_sift_events
+    invoice_id = Charge.where(source_type: 'PaymentReceipt', source_id: @payment_receipt.id).first
+    chargeback_properties = {
+      "$user_id"            => @account.user_id,
+      "$order_id"           => invoice_id,
+      "$transaction_id"     => @payment_receipt.number,
+      "$chargeback_state"   => dispute_status,
+      "$chargeback_reason"  => dispute_reason
+    }
+    order_status_properties = {
+      "$user_id"            => @account.user_id,
+      "$order_id"           => invoice_id,
+      "$source"             => "$automated",
+      "$order_status"       => "$held",
+      "$description"        => "Chargeback"
+    }
+    
+    CreateSiftEvent.perform_async("$chargeback", chargeback_properties)
+    CreateSiftEvent.perform_async("$order_status", order_status_properties) if invoice_id
   end
 end
