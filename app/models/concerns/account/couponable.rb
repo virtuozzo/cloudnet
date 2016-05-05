@@ -28,6 +28,7 @@ class Account < ActiveRecord::Base
       coupon = Coupon.find_coupon(code)
       if coupon.present?
         self.coupon = coupon
+        user.update_forecasted_revenue
         return true
       end
 

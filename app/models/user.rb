@@ -113,6 +113,14 @@ class User < ActiveRecord::Base
     update_agilecrm_contact
   end
   
+  def update_forecasted_revenue
+    servers.each {|server| server.update_attribute(:forecasted_rev, server.forecasted_revenue)}
+  end
+  
+  def forecasted_revenue
+    servers.reduce(0) {|result, server| result + server.forecasted_rev}
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions

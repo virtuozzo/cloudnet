@@ -357,4 +357,15 @@ describe Account do
       expect(user.account.valid_top_up_amounts).to eq([Payg::VALID_TOP_UP_AMOUNTS.min])
     end
   end
+  
+  describe 'update forecasted revenue after coupon change' do
+    it 'recalculates forecasted revenue after setting coupon code' do
+      coupon = FactoryGirl.create(:coupon)
+      user.servers << FactoryGirl.build(:server, memory: 512)
+      user.servers << FactoryGirl.build(:server, memory: 1024)
+      expect(user.forecasted_revenue).to eq 104899200
+      user.account.set_coupon_code(coupon.coupon_code)
+      expect(user.forecasted_revenue).to eq 83919360
+    end
+  end
 end
