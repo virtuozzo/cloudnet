@@ -9,19 +9,12 @@ class SessionsController < Devise::SessionsController
   end
 
   def destroy
-    create_sift_event
+    properties = { "$user_id" => current_user.id, "$session_id" => anonymous_id }
+    create_sift_event "$logout", properties
     super
   end
 
   private
-
-  def create_sift_event
-    properties = {
-      "$user_id": current_user.id,
-      "$session_id": anonymous_id
-    }
-    CreateSiftEvent.perform_async("$logout", properties)
-  end
 
   def analytics_info
     Analytics.track(current_user, event_details, anonymous_id, request)

@@ -50,20 +50,15 @@ module SiftProperties
   def sift_server_properties
     account = user.account
     invoice_item = last_generated_invoice_item
-    properties = user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = user.sift_user_properties.except! "$name", "$payment_methods", "$billing_address"
     server_properties = {
-      "$order_id"           => id,
-      "$amount"             => (invoice_item.invoice.total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
-      "$currency_code"      => "USD",
-      "is_first_time_buyer" => (user.servers.with_deleted.count == 1),
-      "$shipping_method"    => "$electronic",
+      "server_id"           => id,
       "primary_ip_address"  => primary_ip_address,
       "invoice_id"          => invoice_item.invoice_id,
       "invoice_number"      => invoice_item.invoice.invoice_number
     }
     properties.merge! server_properties
-    properties.merge! "coupon_code" => user.account.coupon.coupon_code if user.account.coupon
-    properties.merge! "$items" => sift_server_items_properties(invoice_item)
+    # properties.merge! "$items" => sift_server_items_properties(invoice_item)
   rescue StandardError
     nil
   end

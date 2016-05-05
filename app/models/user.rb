@@ -142,9 +142,9 @@ class User < ActiveRecord::Base
 
   def create_sift_login_event
     properties = {
-      "$user_id": id,
-      "$session_id": anonymous_id,
-      "$login_status": "$success"
+      "$user_id"      => id,
+      "$session_id"   => anonymous_id,
+      "$login_status" => "$success"
     }
     CreateSiftEvent.perform_async("$login", properties)
   end

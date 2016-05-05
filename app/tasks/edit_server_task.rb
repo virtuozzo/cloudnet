@@ -12,6 +12,7 @@ class EditServerTask
   
   def edit_server
     edit_state_on
+    create_sift_event
     tasks_order.each do |task|
       log_task_process(task)
       verifier = CoreTransactionVerifier.new(@user.id, @server.id)
@@ -120,5 +121,9 @@ class EditServerTask
     def log_task_process(task)
       return unless @logger
       @logger.info "Processing #{task} for server #{@server.id} by user #{@user.id}"
+    end
+    
+    def create_sift_event
+      CreateSiftEvent.perform_async("update_server", @server.sift_server_properties)
     end
 end
