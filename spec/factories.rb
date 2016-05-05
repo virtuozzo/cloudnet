@@ -101,6 +101,9 @@ FactoryGirl.define do
     name 'My Server'
     hostname 'server.com'
     state :building
+    memory 512
+    cpus 1
+    disk_size 20
     association :user, factory: :user_onapp
     association :template, factory: :template
 

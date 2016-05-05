@@ -25,7 +25,7 @@ describe ServerWizardsController do
 
     context 'submitting a create' do
       before :each do
-        allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345', 'identifier' => 'abc123' })
+        allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345', 'identifier' => 'abc123', 'memory' => 1024, 'cpus' => 2, 'disk_size' => 10 })
         allow(MonitorServer).to receive(:perform_async).and_return(true)
         # allow_any_instance_of(ServerWizard).to receive(:save_server_details).and_return(@server)
         allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
