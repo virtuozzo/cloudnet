@@ -207,7 +207,7 @@ class Server < ActiveRecord::Base
   end
 
   def update_forecasted_revenue
-    forecasted_rev = forecasted_revenue
+    self.forecasted_rev = forecasted_revenue
   end
   
   def forecasted_revenue
