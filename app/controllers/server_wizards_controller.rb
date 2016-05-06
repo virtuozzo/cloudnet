@@ -34,7 +34,7 @@ class ServerWizardsController < ServerCommonController
 
     if @wizard.save && create_task.process
       new_server = create_task.server
-      new_server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id }
+      new_server.create_activity :create, owner: current_user, params: { ip: ip, admin: real_admin_id, provisioned: new_server.provisioner_role}
       track_analytics_for_server(new_server)
       if new_server.validation_reason > 0
         NotifyUsersMailer.delay.notify_server_validation(current_user, [new_server])
