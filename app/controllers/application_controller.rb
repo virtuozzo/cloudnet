@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :is_admin_user?
   helper_method :logged_in_as?
+  helper_method :has_stripe?
 
 
   def is_admin_user?
@@ -37,6 +38,10 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_dashboard
     redirect_to root_path
+  end
+  
+  def has_stripe?
+    PAYMENTS[:stripe][:api_key].present?
   end
 
   protected

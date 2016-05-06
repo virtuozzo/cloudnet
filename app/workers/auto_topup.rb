@@ -10,6 +10,7 @@ class AutoTopup
   sidekiq_options unique: true
 
   def perform
+    return unless PAYMENTS[:stripe][:api_key].present?
     Account.where(auto_topup: true).find_each do |account|
       user = account.user
       next unless user.servers.count > 0 && 

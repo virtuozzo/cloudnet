@@ -7,6 +7,7 @@ class DisputeHandler
   sidekiq_options unique: :until_executed
 
   def perform
+    return unless PAYMENTS[:stripe][:api_key].present?
     disputes = []
     created_after = (Time.zone.now - 1.day).beginning_of_day.to_i
     starting_after = nil
