@@ -45,7 +45,19 @@ ActiveAdmin.register Server do
   filter :deleted_at
   filter :delete_ip_address
 
-
+  show do
+    default_main_content
+    if server.provisioner_job_id
+      panel 'Provisioner job status' do
+        attributes_table_for Server do
+          row :provisioner_job_status do
+            DockerProvisionerTasks.new.status(server.provisioner_job_id).body rescue 'no connection'
+          end
+        end
+      end
+    end
+  end
+  
   index do
     column :id
     column :name
