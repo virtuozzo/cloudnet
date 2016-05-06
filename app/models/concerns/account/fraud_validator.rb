@@ -54,6 +54,7 @@ class Account < ActiveRecord::Base
     end
     
     def safe_card?
+      return true unless PAYMENTS[:stripe][:api_key].present?
       RiskyCard.where("fingerprint IN (?)", card_fingerprints).count == 0
     end
     

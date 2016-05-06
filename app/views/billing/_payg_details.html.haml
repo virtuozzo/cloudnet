@@ -1,7 +1,7 @@
 .jg-widget-content
   .jg-widget-header.pure-g.clearfix
     %h2.pure-u-1-2.jg-icon.icon-tickets Wallet Details
-    - unless defined?(wizard)
+    - if has_stripe? && !defined?(wizard)
       %ul.pure-u-1-2.jg-widget-controls.auto-topup-setting
         %li.auto-topup Auto Top-up:
         %li#auto-topup-btn
@@ -16,7 +16,10 @@
           #jg-wallet-details= render partial: 'billing/wallet_details'
           - unless defined?(wizard)
             %p.auto-topup-info
-              ="If you have Auto Top-up enabled, we will automatically top-up your account with $#{Payg::VALID_TOP_UP_AMOUNTS.min} when your Wallet balance goes below $2, provided you have active servers and atleast one billing card added to your account."
+              - if has_stripe?
+                ="If you have Auto Top-up enabled, we will automatically top-up your account with $#{Payg::VALID_TOP_UP_AMOUNTS.min} when your Wallet balance goes below $2, provided you have active servers and atleast one billing card added to your account."
+              - else
+                Wallet balance will be used against any invoices that are generated subsequently. You may top-up your Wallet using PayPal by clicking on the "Add Funds" button below. 
 
           - if defined?(wizard)
             %p
@@ -30,8 +33,18 @@
                 (this does not include any coupon code discounts which may be applied to your account or any VAT you may need to pay)
         .pure-u-1-3
           = image_tag("/assets/paypalcards.png")
-    
+          
     - unless defined?(wizard)
+      .jg-widget-form.pure-g.jg-disabled
+        .jg-widget.pure-u-1
+          .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+            %h2.icon-wallet.jg-icon.pure-u Coupon Code
+            .jg-disclosure.icon-arrow-down
+          .pure-u-md-4-24
+          .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-auto-topup.jg-toggleable
+            = render partial: 'billing/coupon_code/coupon_code_form'
+    
+    - if has_stripe? && !defined?(wizard)
       .jg-widget-form.pure-g.jg-disabled
         .jg-widget.pure-u-1
           .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix

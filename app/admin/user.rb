@@ -78,7 +78,7 @@ ActiveAdmin.register User do
           user.account.risky_card_attempts unless user.account.nil?
         end
         row :stripe_account do |user|
-          unless user.account.nil?
+          if !user.account.nil? && !user.account.gateway_id.nil?
             test_env = Rails.env.production? ? "" : "test/"
             link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}"
           end
