@@ -146,6 +146,7 @@ class User < ActiveRecord::Base
   end
 
   def track_analytics
+    return true if KEYS[:analytics][:token].nil?
     Analytics.service.alias(previous_id: anonymous_id, user_id: id) unless anonymous_id.nil?
     Analytics.service.flush
     

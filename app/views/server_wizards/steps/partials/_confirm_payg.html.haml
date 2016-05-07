@@ -24,6 +24,5 @@
 
 :javascript
   Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");
-  maxmind_user_id = "#{KEYS[:maxmind][:user_id]}";
 = javascript_include_tag "billing/add_card_visual"
 = javascript_include_tag "billing/add_card_process"
