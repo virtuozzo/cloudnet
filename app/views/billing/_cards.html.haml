@@ -1,0 +1,27 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix#add-new-card
+    %h2.pure-u-1-2.jg-icon.icon-tickets Billing Cards
+
+  .jg-widget-body.pure-u-1
+    .jg-widget-form.pure-g.jg-disabled
+      .jg-widget.pure-u-1.pure-g
+        %table.table.table-hover.jg-tables
+          %thead
+            %tr
+              %th Card Details
+              %th Expiry
+              %th Remove
+
+          %tbody#card-table
+            - if cards.empty?
+              %tr
+                %td.no-data{colspan: "3"}
+                  %p= "You don't have any card details stored"
+
+  .jg-widget-footer.actions.clearfix
+    %ul.jg-widget-controls
+      %li
+        %a.btn.jg-submit-button#add-card-button Add Card
+
+:javascript
+  Stripe.setPublishableKey("#{PAYMENTS[:stripe][:publishable_key]}");

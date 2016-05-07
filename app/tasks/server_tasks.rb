@@ -42,7 +42,6 @@ class ServerTasks < BaseTasks
     server.detect_stuck_state
 
     disk_size = info['total_disk_size'].to_i
-    
     server.update(
       built:                  info['built'],
       suspended:              info['suspended'],

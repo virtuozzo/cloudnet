@@ -63,8 +63,15 @@ PINGDOM_KEY=
 PINGDOM_USER=
 PINGDOM_PASS=
 
+# Used to display the map of providers, seen when creating a server
+MAPBOX_TOKEN=
+MAPBOX_PUBLIC_TOKEN=
+
+# Used to display images for provider locations
+FIVEHUNDREDPX_KEY=
+
 # Email provider. Eg; Sendgrid, Mandrill, etc
-SMTP_DOMAIN=
+SMTP_DOMAIN=smtp.your-mail-server.com
 SMTP_PORT=
 SMTP_USER=
 SMTP_PASSWORD=
@@ -86,23 +93,19 @@ MAILER_BILLING='billing@website.com'
 # Appears at the top of PDFs for invoices, credit notes, etc
 PDF_HEADER="Company name\nAddress line 1\nVAT number\netc"
 
-# Used to display the map of providers, seen when creating a server
-MAPBOX_TOKEN=
-MAPBOX_PUBLIC_TOKEN=
-
-# Used to display images for provider locations
-FIVEHUNDREDPX_KEY=
-
-# Segment.io custom analytics
-ANALYTICS_KEY=
-
-# AgileCRM for Sales tracking
-AGILECRM_API_KEY=
-AGILECRM_JS_API_KEY=
-AGILECRM_DOMAIN=
-AGILECRM_EMAIL=
-
 ## OPTIONAL
+
+# Stripe - required to accept credit cards
+STRIPE_API_KEY=
+STRIPE_PUBLISH_KEY=
+
+# Credit card fraud detection
+MAXMIND_KEY=
+
+# Docker provisioner
+DOCKER_PROVISIONER=
+DOCKER_PROVISIONER_USER=
+DOCKER_PROVISIONER_PASS=
 
 # Use 'true' if you're hosting on Docker or a PaaS like Heroku
 SERVE_STATIC_FILES=
@@ -112,6 +115,15 @@ GA_UA_NUMBER=
 
 #HubSpot CRM
 HUBSPOT_ID=
+
+# Segment.io custom analytics
+ANALYTICS_KEY=
+
+# AgileCRM for Sales tracking
+AGILECRM_API_KEY=
+AGILECRM_JS_API_KEY=
+AGILECRM_DOMAIN=
+AGILECRM_EMAIL=
 
 # New Relic
 NEW_RELIC_KEY=

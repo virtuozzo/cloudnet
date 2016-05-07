@@ -17,7 +17,7 @@ describe CreateServerTask do
     allow(server_double).to receive(:monitor_and_provision).and_return(true)
     allow_any_instance_of(ServerWizard).to receive_messages(save_server_details: server_double)
   end
-
+  
   describe 'Using Wallet funds' do
     it 'should debit funds from Wallet for the full amount' do
       task = CreateServerTask.new(@wizard, @user)

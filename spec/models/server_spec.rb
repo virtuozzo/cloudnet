@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Server do
-  let(:server) { FactoryGirl.create(:server) }
-
+  let(:server) {FactoryGirl.create(:server, memory: 1024, cpus: 1, disk_size: 20)}
+  
   it 'has a valid server' do
     expect(server).to be_valid
   end
@@ -72,7 +72,7 @@ describe Server do
       @squall = double
       allow(Squall::VirtualMachine).to receive(:new).and_return(@squall)
       allow(Squall::IpAddressJoin).to receive(:new).and_return(@squall)
-      allow(@squall).to receive(:show).and_return({})
+      allow(@squall).to receive(:show).and_return({'memory' => 512, 'cpus' => 1, 'disk_size' => 20})
       allow(@squall).to receive(:list).and_return({})
       # Simulate creating the server 1 hour ago.
       # Notifications should be triggered because the server has been building for longer
@@ -104,9 +104,11 @@ describe Server do
 
       allow(@squall).to receive(:show).and_return(
         'locked' => false,
-        'booted' => true
+        'booted' => true,
+        'memory' => 512,
+        'cpus' => 1,
+        'disk_size' => 20
       )
-
       refresh_server
       server.reload
       expect(server.stuck).to be false
@@ -123,5 +125,10 @@ describe Server do
     roles = Server.provisioner_roles
     expect(roles.size).to eq 3
     expect(Rails.cache.read("provisioner_roles")).to eq(roles)
+  end
+  
+  it 'calculates forecasted revenue for server' do
+    server.user.account.coupon = FactoryGirl.create(:coupon)
+    expect(server.forecasted_revenue).to eq 55722240
   end
 end

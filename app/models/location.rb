@@ -1,6 +1,8 @@
 class Location < ActiveRecord::Base
   include CloudIndexCalculationTemplate
 
+  PRICE_FIELDS = %w(price_memory price_disk price_cpu price_ip_address)
+  before_save :update_servers_rev_forecast
   has_many :templates
   has_many :servers
   has_many :packages
@@ -52,6 +54,18 @@ class Location < ActiveRecord::Base
   end
   private
 
+  def update_servers_rev_forecast
+    update_forecasted_revenue if price_update?
+  end
+  
+  def update_forecasted_revenue
+    servers.each {|server| server.update_attribute(:forecasted_rev, server.forecasted_revenue)}
+  end
+  
+  def price_update?
+    PRICE_FIELDS.any? {|field| field.in? changed}
+  end
+  
   def downtimes
     uptimes.downtimes.map {|obj| {date: obj.starttime.to_date, downtime: obj.downtime}}
   end

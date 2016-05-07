@@ -2,6 +2,7 @@ require 'segment/analytics'
 
 class Analytics
   def self.track(user, events = {}, anonymous_id = nil, req = nil)
+    return true if KEYS[:analytics][:token].nil?
     user_traits = user ? {
       user_id: user.id,
       context: { traits: { email: user.email, name: user.full_name } }

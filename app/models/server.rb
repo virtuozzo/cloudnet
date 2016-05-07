@@ -12,6 +12,7 @@ class Server < ActiveRecord::Base
   # Maximum number of IPs that can be added to a server
   MAX_IPS = 4
 
+  before_save :update_forecasted_revenue
   belongs_to :user
   belongs_to :unscoped_user, -> { unscope(where: :deleted_at) }, foreign_key: :user_id, class_name: "User"
   belongs_to :unscoped_location, -> { unscope(where: :deleted_at) }, foreign_key: :location_id, class_name: "Location"
@@ -47,6 +48,7 @@ class Server < ActiveRecord::Base
   BACKUP_CREATED_CACHE = "backup_created_cache"
   
   def self.provisioner_roles
+    return [] unless ENV['DOCKER_PROVISIONER'].present?
     Rails.cache.fetch("provisioner_roles", expires_in: 12.hours) do
       provisioner_roles = DockerProvisionerTasks.new.roles
       JSON.parse(provisioner_roles.body)
@@ -206,6 +208,24 @@ class Server < ActiveRecord::Base
     update_attribute(:no_refresh, false)
   end
 
+  def update_forecasted_revenue
+    self.forecasted_rev = forecasted_revenue
+  end
+  
+  def forecasted_revenue
+    discount = (1 - coupon_percentage).round(3)
+    (monthly_price * discount).round
+  end
+
+  def monthly_price
+    (location.hourly_price(memory, cpus, disk_size) * Account::HOURS_MAX).round
+  end
+
+  def coupon_percentage
+    coupon = user.account.try(:coupon)
+    if coupon.present? then coupon.percentage_decimal else 0 end
+  end
+  
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
   end

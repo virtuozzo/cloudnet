@@ -221,7 +221,6 @@ class ServerWizard
       @build_errors.push('Could not create server on remote system. Please try again later')
       fail WizardError
     end
-
     @newly_built_server = save_server_details(remote, user)
   rescue Faraday::Error::ClientError, StandardError => e
     ErrorLogging.new.track_exception(

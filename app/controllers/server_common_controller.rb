@@ -105,13 +105,16 @@ class ServerCommonController < ApplicationController
   end
 
   def track_analytics_for_server(server)
+    role = server.provisioner_role
+    postfix = role ? 'Provisioned' : 'Created Server'
     Analytics.track(
       current_user,
-      event: 'New Server - Created Server',
+      event: "New Server - #{postfix}",
       properties: {
         location: @wizard_object.location.to_s,
         template: @wizard_object.template.to_s,
-        server: "#{server.memory}MB RAM, #{server.disk_size}GB Disk, #{server.cpus} Cores"
+        server: "#{server.memory}MB RAM, #{server.disk_size}GB Disk, #{server.cpus} Cores",
+        provisioned: role
       }
     )
   end

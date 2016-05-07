@@ -175,6 +175,6 @@ class Account < ActiveRecord::Base
   end
 
   def create_payment_gateway_user
-    self.gateway_id ||= Payments.new.create_customer(user)
+    self.gateway_id ||= Payments.new.create_customer(user) if PAYMENTS[:stripe][:api_key].present?
   end
 end

@@ -122,7 +122,15 @@ class User < ActiveRecord::Base
   def update_sift_account
     CreateSiftEvent.perform_async("$update_account", sift_user_properties)
   end
-
+  
+  def update_forecasted_revenue
+    servers.each {|server| server.update_attribute(:forecasted_rev, server.forecasted_revenue)}
+  end
+  
+  def forecasted_revenue
+    servers.reduce(0) {|result, server| result + server.forecasted_rev}
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions
@@ -162,6 +170,7 @@ class User < ActiveRecord::Base
   end
 
   def track_analytics
+    return true if KEYS[:analytics][:token].nil?
     Analytics.service.alias(previous_id: anonymous_id, user_id: id) unless anonymous_id.nil?
     Analytics.service.flush
 
