@@ -25,19 +25,19 @@ This is a quick step-by-step guide to install Cloud.net on a server using Docker
 
   `$ cp dotenv.sample .env.docker`
   
-  You will need to enter values for all the keys under REQUIRED. The keys under PRE-CONFIGURED can be left as such unless you have made changes to how docker has been composed. 
-    
-  ONAPP_ROLE is the OnApp user role that grants restricted permissions to Cloud.net users. Run the command in the next step to create it.
+  Values for keys under PRE-CONFIGURED can be left as such unless you have made changes to how docker has been composed. You will need to enter values for all the keys under REQUIRED except SYMMETRIC_ENCRYPTION_KEY, DEVISE_SECRET_KEY, COOKIES_SECRET_BASE and ONAPP_ROLE which are explained in the next step.
     
 5. Temporarily add `RAILS_ENV=test` at top of .env.docker and run the following commands
 
+  ONAPP_ROLE is the OnApp user role that grants restricted permissions to Cloud.net users. Run the following command to create it.
+
   `$ docker-compose run --no-deps --rm cloudnet-app rake create_onapp_role`
 
-  The ID will need to be added to the ONAPP_ROLE setting in .env.docker
+  Copy the ID that is generated to ONAPP_ROLE setting in .env.docker
 
   `$ docker-compose run --no-deps --rm cloudnet-app rails generate symmetric_encryption:new_keys production`
 
-  Copy the generated key as value for SYMMETRIC_ENCRYPTION_KEY in .env.docker
+  Copy the generated value for SYMMETRIC_ENCRYPTION_KEY in .env.docker (without the line-breaks)
 
   Likewise, run the following command to generate values for DEVISE_SECRET_KEY and COOKIES_SECRET_BASE each:
 
@@ -57,7 +57,12 @@ This is a quick step-by-step guide to install Cloud.net on a server using Docker
 
   `$ docker-compose up -d`
   
-The app should now be up and running on the HTTPS port on the servers IP address. There will be only one app container running at this point. You can add more app containers as required by running `$ docker-compose scale cloudnet-app=2` which will bring up another app container.
+The app should now be up and running on the HTTPS port on the servers IP address. By default, an admin user is created with the following login.
+
+email: 'admin@cloud.net'
+pass: 'adminpassword'
+
+There will be only one app container running at this point. You can add more app containers as required by running `$ docker-compose scale cloudnet-app=2` which will bring up another app container.
 
 To check the status of the containers, run `$ docker-compose ps`
 

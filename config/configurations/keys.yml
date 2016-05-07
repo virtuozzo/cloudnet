@@ -1,6 +1,5 @@
 defaults: &defaults
   maxmind:
-    user_id: <%= ENV["MAXMIND_USER"] %>
     license_key: <%= ENV["MAXMIND_KEY"] %>
   five_hundred_px:
     api_key: <%= ENV["FIVEHUNDREDPX_KEY"] %>

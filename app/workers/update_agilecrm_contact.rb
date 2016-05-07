@@ -2,6 +2,7 @@ class UpdateAgilecrmContact
   include Sidekiq::Worker
 
   def perform(user_id, old_email = nil, tags = [])
+    return if ENV['AGILECRM_API_KEY'].blank?
     user = User.find user_id
     return if user.suspended
     first_name = user.full_name.split(' ').first

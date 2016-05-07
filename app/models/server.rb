@@ -46,6 +46,7 @@ class Server < ActiveRecord::Base
   BACKUP_CREATED_CACHE = "backup_created_cache"
   
   def self.provisioner_roles
+    return [] unless ENV['DOCKER_PROVISIONER'].present?
     Rails.cache.fetch("provisioner_roles", expires_in: 12.hours) do
       provisioner_roles = DockerProvisionerTasks.new.roles
       JSON.parse(provisioner_roles.body)
