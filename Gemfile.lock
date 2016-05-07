@@ -690,7 +690,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   squall!
-  stripe
+  stripe (= 1.39.0)
   symmetric-encryption (~> 3.4.0)
   timecop
   tubesock
