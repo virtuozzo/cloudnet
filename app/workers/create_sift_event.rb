@@ -2,6 +2,7 @@ class CreateSiftEvent
   include Sidekiq::Worker
 
   def perform(event, properties)
+    return false if KEYS[:sift_science][:api_key].blank?
     return false if properties.nil?
     begin
       SiftTasks.new.perform(:create_event, event, properties)
