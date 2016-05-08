@@ -20,4 +20,8 @@ class SiftScience
     @client.unlabel(user_id)
   end
   
+  def score(user_id)
+    @client.score(user_id)
+  end
+  
 end

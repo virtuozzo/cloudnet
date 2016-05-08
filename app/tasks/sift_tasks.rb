@@ -18,8 +18,12 @@ class SiftTasks < BaseTasks
   def remove_label(sift_science, user_id)
     sift_science.remove_label(user_id)
   end
+  
+  def get_score(sift_science, user_id)
+    sift_science.score(user_id)
+  end
 
   def allowable_methods
-    super + [:create_event, :create_label, :remove_label]
+    super + [:create_event, :create_label, :remove_label, :get_score]
   end
 end

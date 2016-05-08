@@ -11,7 +11,10 @@ module SiftProperties
       "$user_email"                   => email,
       "$name"                         => full_name,
       "account_balance_amount"        => (account.reload.wallet_balance * Invoice::MICROS_IN_MILLICENT).to_i,
-      "account_balance_currency_code" => "USD"
+      "account_balance_currency_code" => "USD",
+      "minfraud_score"                => account.max_minfraud_score,
+      "risky_card_attempts"           => account.risky_card_attempts,
+      "is_admin"                      => admin
     }
     cards = account.billing_cards.processable.map { |card| card.sift_billing_card_properties }
     cards.push "$payment_type" => "$store_credit"

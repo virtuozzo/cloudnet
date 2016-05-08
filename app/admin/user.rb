@@ -75,7 +75,7 @@ ActiveAdmin.register User do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
         row :minfraud_score do |user|
-          user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max rescue nil
+          user.account.max_minfraud_score
         end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
@@ -130,6 +130,9 @@ ActiveAdmin.register User do
         row :card_history do |user|
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
+        row :sift_science_safe do |user|
+          status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?)) unless user.account.nil?
+        end
       end
     end
   end
@@ -168,6 +171,9 @@ ActiveAdmin.register User do
       end
       row :card_history do
         text_node "Fail indicates credit cards in account has been used for fraudulent activity in the past.".html_safe
+      end
+      row :sift_science_safe do
+        text_node "Fail indicates that account fails to pass formulas created at Sift Science console.".html_safe
       end
     end
   end

@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   include NegativeBalanceProtection::ActionStrategies
   include NegativeBalanceProtection::Actions
   include SiftProperties
+  include User::SiftUser
 
   acts_as_paranoid
 
