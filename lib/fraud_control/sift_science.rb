@@ -12,4 +12,12 @@ class SiftScience
     @client.track(event_type, properties)
   end
   
+  def create_label(user_id, properties)
+    @client.label(user_id, properties)
+  end
+  
+  def remove_label(user_id)
+    @client.unlabel(user_id)
+  end
+  
 end

@@ -1,8 +1,8 @@
 class SiftTasks < BaseTasks
 
-  def perform(action, event, properties, *args)
+  def perform(action, *args)
     sift_science = SiftScience.new
-    run_task(action, sift_science, event, properties, *args)
+    run_task(action, sift_science, *args)
   end
 
   private
@@ -10,8 +10,16 @@ class SiftTasks < BaseTasks
   def create_event(sift_science, event, properties)
     sift_science.create_event(event, properties)
   end
+  
+  def create_label(sift_science, user_id, properties)
+    sift_science.create_label(user_id, properties)
+  end
+  
+  def remove_label(sift_science, user_id)
+    sift_science.remove_label(user_id)
+  end
 
   def allowable_methods
-    super + [:create_event]
+    super + [:create_event, :create_label, :remove_label]
   end
 end

@@ -236,6 +236,15 @@ ActiveAdmin.register User do
     def destroy_changed?(user)
       resource.notif_before_destroy != user['notif_before_destroy'].to_i
     end
+  
+    def create_sift_label(user)
+      label_properties = SiftProperties.sift_label_properties true, nil, "Manually suspended", "manual_review", current_user.email
+      SiftLabel.perform_async(:create, user.id.to_s, label_properties)
+    end
+    
+    def remove_sift_label(user)
+      SiftLabel.perform_async(:remove, user.id.to_s)
+    end
   end
   
   collection_action :notify_users, method: :get do
@@ -288,6 +297,8 @@ ActiveAdmin.register User do
   member_action :suspend, method: :post do
     user = User.find(params[:id])
     user.update!(suspended: true)
+    
+    create_sift_label(user)
 
     flash[:notice] = 'User has been suspended'
     redirect_to admin_user_path(id: user.id)
@@ -296,6 +307,8 @@ ActiveAdmin.register User do
   member_action :unsuspend, method: :post do
     user = User.find(params[:id])
     user.update!(suspended: false)
+    
+    remove_sift_label(user)
 
     flash[:notice] = 'User has been unsuspended'
     redirect_to admin_user_path(id: user.id)

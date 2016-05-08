@@ -31,6 +31,9 @@ class DisputeHandlerTask < BaseTask
     # Log $order_status and $chargeback events with Sift Science
     create_sift_events
     
+    # Label the user as bad at Sift Science
+    create_sift_label
+    
     # Retrieve and update dispute object at Stripe with payment receipt and account info
     update_dispute
     
@@ -101,4 +104,10 @@ class DisputeHandlerTask < BaseTask
     CreateSiftEvent.perform_async("$chargeback", chargeback_properties)
     CreateSiftEvent.perform_async("$order_status", order_status_properties) if invoice_id
   end
+  
+  def create_sift_label
+    label_properties = SiftProperties.sift_label_properties true, ["$chargeback"], "Received chargeback", "payment_gateway"
+    SiftLabel.perform_async(:create, @account.user_id.to_s, label_properties)
+  end
+  
 end

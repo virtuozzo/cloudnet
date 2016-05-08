@@ -56,6 +56,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         ServerTasks.new.perform(:startup, server.user_id, server.id)
         server.monitor_and_provision
         create_sift_event(server, "$approved")
+        remove_sift_label(server)
         create_activity(server, :startup)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })
@@ -80,6 +81,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         server = Server.find(id)
         destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
         create_sift_event(server, "$canceled", "$payment_risk")
+        create_sift_label(server)
         create_activity(server, :destroy) if destroy.process && destroy.success?
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#destroy' })
@@ -117,7 +119,20 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       }
       CreateSiftEvent.perform_async("$order_status", properties)
     end
+    
+    def create_sift_label(server)
+      reasons = case server.validation_reason
+        when 2, 5; ["$duplicate_account"]
+        when 4; ["$chargeback"]
+      end
+      description = Account::FraudValidator::VALIDATION_REASONS[server.validation_reason]
+      label_properties = SiftProperties.sift_label_properties true, reasons, description, "manual_review", current_user.email
+      SiftLabel.perform_async(:create, server.user_id.to_s, label_properties)
+    end
+    
+    def remove_sift_label(server)
+      SiftLabel.perform_async(:remove, server.user_id.to_s)
+    end
   end
   
-
 end

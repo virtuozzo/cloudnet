@@ -230,5 +230,10 @@ module SiftProperties
   rescue StandardError
     nil
   end
+  
+  def self.sift_label_properties(is_bad, reasons, description = nil, source = nil, analyst = nil)    
+    args = method(__method__).parameters.map { |arg| arg[1] }
+    args.map {|arg| ["$#{arg.to_s}", eval(arg.to_s)] }.to_h
+  end
 
 end
