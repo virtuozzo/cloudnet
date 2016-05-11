@@ -221,7 +221,7 @@ class Server < ActiveRecord::Base
   end
 
   def coupon_percentage
-    coupon = user.account.try(:coupon)
+    coupon = user.account.coupon
     if coupon.present? then coupon.percentage_decimal else 0 end
   end
   
