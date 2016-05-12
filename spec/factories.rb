@@ -231,6 +231,7 @@ FactoryGirl.define do
     duration_months 6
     percentage 20
     active true
+    expiry_date {Time.zone.now + 3.months}
   end
 
   factory :charge do

@@ -1,6 +1,6 @@
 class Coupon < ActiveRecord::Base
   has_many :accounts
-  validates :coupon_code, :duration_months, :percentage, presence: true
+  validates :coupon_code, :duration_months, :percentage, :expiry_date, presence: true
   validates :percentage, inclusion: 1..100
 
   before_create :capitalize_coupon_code
@@ -10,6 +10,11 @@ class Coupon < ActiveRecord::Base
     coupon = where(active: true).find_by(coupon_code: code.strip.upcase)
   end
 
+
+  def not_expired?
+    Date.today <= expiry_date
+  end
+  
   def percentage_decimal
     percentage / 100.0
   end
