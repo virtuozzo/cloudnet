@@ -75,7 +75,7 @@ ActiveAdmin.register User do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
         row :minfraud_score do |user|
-          user.account.max_minfraud_score
+          user.account.max_minfraud_score unless user.account.nil?
         end
         row :sift_score do |user|
           user.sift_score
@@ -135,7 +135,7 @@ ActiveAdmin.register User do
         end
         row :sift_science_safe do |user|
           unless user.sift_user.nil?
-            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?)) unless user.account.nil?
+            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?))
           end
         end
       end
@@ -247,6 +247,15 @@ ActiveAdmin.register User do
     def destroy_changed?(user)
       resource.notif_before_destroy != user['notif_before_destroy'].to_i
     end
+    
+    def log_risky_entities(user)
+      account = user.account
+      unless account.nil?
+        account.log_risky_ip_addresses
+        account.log_risky_cards
+      end
+      create_sift_label(user)
+    end
   
     def create_sift_label(user)
       label_properties = SiftProperties.sift_label_properties true, nil, "Manually suspended", "manual_review", current_user.email
@@ -307,9 +316,8 @@ ActiveAdmin.register User do
 
   member_action :suspend, method: :post do
     user = User.find(params[:id])
+    log_risky_entities(user)
     user.update!(suspended: true)
-    
-    create_sift_label(user)
 
     flash[:notice] = 'User has been suspended'
     redirect_to admin_user_path(id: user.id)

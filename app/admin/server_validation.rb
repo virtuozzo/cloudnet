@@ -11,7 +11,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
 
   index :title => 'Server Validation List' do
     panel "Servers under validation" do 
-      "The following servers have been placed under validation due to possible fraud."
+      text_node "The following servers have been placed under validation due to possible fraud. When you approve a server, the respective account is marked as 'safe' and future servers created on the account are less likely to come under validation unless the account's fraud parameters change in the future.".html_safe
     end
     
     selectable_column

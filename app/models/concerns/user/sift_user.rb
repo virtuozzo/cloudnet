@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
     
     def sift_score
       return nil if sift_user.nil?
-      (sift_user.body['score'] * 100).round(1)
+      score = sift_user.body['score']
+      (score * 100).round(1) unless score.nil?
     end
     
     def is_labelled_bad?
