@@ -77,6 +77,9 @@ ActiveAdmin.register User do
         row :minfraud_score do |user|
           user.account.max_minfraud_score
         end
+        row :sift_score do |user|
+          user.sift_score
+        end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
         end
@@ -131,7 +134,9 @@ ActiveAdmin.register User do
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
         row :sift_science_safe do |user|
-          status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?)) unless user.account.nil?
+          unless user.sift_user.nil?
+            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?)) unless user.account.nil?
+          end
         end
       end
     end

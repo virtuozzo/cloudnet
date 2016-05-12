@@ -9,14 +9,17 @@ class User < ActiveRecord::Base
     end
     
     def sift_score
+      return nil if sift_user.nil?
       (sift_user.body['score'] * 100).round(1)
     end
     
     def is_labelled_bad?
+      return false if sift_user.nil?
       sift_user.body.has_key?('latest_label') ? sift_user.body['latest_label']['is_bad'].present? : false
     end
     
     def sift_actions
+      return [] if sift_user.nil?
       actions = []
       sift_user.body["actions"].try(:each) do |action|
         trigger = action["triggers"].first
@@ -26,7 +29,7 @@ class User < ActiveRecord::Base
     end
     
     def sift_valid?
-      return true if KEYS[:sift_science][:api_key].blank?
+      return true if sift_user.nil?
       if sift_actions.include? ENV['SIFT_USER_APPROVE_ACTION_ID']
         true
       else

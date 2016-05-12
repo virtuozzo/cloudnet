@@ -2,7 +2,6 @@ class SiftLabel
   include Sidekiq::Worker
 
   def perform(label, user_id, properties = nil)
-    return false if KEYS[:sift_science][:api_key].blank?
     begin
       if label == "create"
         return false if properties.nil?

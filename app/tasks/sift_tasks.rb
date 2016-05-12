@@ -1,6 +1,7 @@
 class SiftTasks < BaseTasks
 
   def perform(action, *args)
+    return nil if KEYS[:sift_science][:api_key].blank?
     sift_science = SiftScience.new
     run_task(action, sift_science, *args)
   end
