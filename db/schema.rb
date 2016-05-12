@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506104409) do
+ActiveRecord::Schema.define(version: 20160512152910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 20160506104409) do
     t.integer  "duration_months",             default: 3
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "expiry_date"
   end
 
   create_table "credit_note_items", force: :cascade do |t|
@@ -495,6 +496,23 @@ ActiveRecord::Schema.define(version: 20160506104409) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
+  create_table "taggings", id: false, force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.boolean  "agile_crm",     default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], name: "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", unique: true, using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "templates", force: :cascade do |t|
     t.string   "os_type",         limit: 255

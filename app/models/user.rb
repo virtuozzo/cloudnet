@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   include NegativeBalanceProtection
   include NegativeBalanceProtection::ActionStrategies
   include NegativeBalanceProtection::Actions
+  include Taggable
   
   acts_as_paranoid
 
