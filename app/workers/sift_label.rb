@@ -5,9 +5,9 @@ class SiftLabel
     begin
       if label == "create"
         return false if properties.nil?
-        SiftTasks.new.perform(:create_label, user_id, properties)
+        SiftClientTasks.new.perform(:create_label, user_id, properties)
       elsif label == "remove"
-        SiftTasks.new.perform(:remove_label, user_id)
+        SiftClientTasks.new.perform(:remove_label, user_id)
       end
     rescue Exception => e
       ErrorLogging.new.track_exception(e, extra: { source: 'SiftLabel', label: label, user_id: user_id, properties: properties })

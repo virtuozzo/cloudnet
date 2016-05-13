@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
     extend ActiveSupport::Concern
   
     def sift_user
-      @sift_user ||= SiftTasks.new.perform(:get_score, id.to_s)
+      @sift_user ||= SiftClientTasks.new.perform(:get_score, id.to_s)
     end
     
     def sift_score
@@ -31,10 +31,10 @@ class User < ActiveRecord::Base
     
     def sift_valid?
       return true if sift_user.nil?
-      if sift_actions.include? ENV['SIFT_USER_APPROVE_ACTION_ID']
+      if sift_actions.include? KEYS[:sift_science][:approve_action_id]
         true
       else
-        !sift_actions.include? ENV['SIFT_USER_VALIDATE_ACTION_ID']
+        !sift_actions.include? KEYS[:sift_science][:validate_action_id]
       end
     end
     

@@ -15,6 +15,9 @@ defaults: &defaults
   sift_science:
     js_key: <%= ENV["SIFT_SCIENCE_JS_SNIPPET_KEY"] %>
     api_key: <%= ENV["SIFT_SCIENCE_API_KEY"] %>
+    validate_action_id: <%= ENV["SIFT_USER_VALIDATE_ACTION_ID"] %>
+    approve_action_id: <%= ENV["SIFT_USER_APPROVE_ACTION_ID"] %>
+    account_id: <%= ENV["SIFT_SCIENCE_ACCOUNT_ID"] %>
 
 development:
   <<: *defaults
