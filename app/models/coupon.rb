@@ -2,6 +2,7 @@ class Coupon < ActiveRecord::Base
   has_many :accounts
   validates :coupon_code, :duration_months, :percentage, :expiry_date, presence: true
   validates :percentage, inclusion: 1..100
+  validates :coupon_code, uniqueness: { case_sensitive: false }
 
   before_create :capitalize_coupon_code
 

@@ -1,6 +1,6 @@
 class SetExpiryCouponDates < ActiveRecord::Migration
   def up
-    Coupon.update_all(expiry_date: Date.today + 25.years)
+    Coupon.update_all(expiry_date: Date.today + 5.years)
   end
 
   def down
