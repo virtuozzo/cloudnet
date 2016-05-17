@@ -57,6 +57,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         server.monitor_and_provision
         create_sift_event(server, "$approved")
         remove_sift_label(server)
+        label_devices(server, "not_bad")
         create_activity(server, :startup)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })
@@ -82,6 +83,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
         create_sift_event(server, "$canceled", "$payment_risk")
         create_sift_label(server)
+        label_devices(server, "bad")
         create_activity(server, :destroy) if destroy.process && destroy.success?
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#destroy' })
@@ -132,6 +134,10 @@ ActiveAdmin.register Server, as: "ServerValidation" do
     
     def remove_sift_label(server)
       SiftLabel.perform_async(:remove, server.user_id.to_s)
+    end
+    
+    def label_devices(server, label)
+      LabelDevices.perform_async(server.user_id, label)
     end
   end
   

@@ -78,7 +78,7 @@ ActiveAdmin.register User do
           user.account.max_minfraud_score unless user.account.nil?
         end
         row :sift_score do |user|
-          user.sift_score
+          link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank'
         end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
@@ -86,7 +86,7 @@ ActiveAdmin.register User do
         row :stripe_account do |user|
           if !user.account.nil? && !user.account.gateway_id.nil?
             test_env = Rails.env.production? ? "" : "test/"
-            link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}"
+            link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}", target: '_blank'
           end
         end
         row :primary_card_country_match do |user|
@@ -113,7 +113,7 @@ ActiveAdmin.register User do
               billing_cards = BillingCard.with_deleted.where('account_id != ? AND ip_address IN (?)', user.account.id, associated_ips.flatten.uniq)
               billing_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
               matching_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
-              raw duplicate_users.flatten.uniq.map {|user| link_to user.full_name, admin_user_path(user) }.join(', ')
+              raw duplicate_users.flatten.uniq.map {|user| link_to user.full_name, admin_user_path(user), target: '_blank' }.join(', ')
             end
           rescue StandardError => e
             ErrorLogging.new.track_exception(e, extra: { user: user, source: 'User#possible_duplicate_accounts' })
@@ -255,11 +255,17 @@ ActiveAdmin.register User do
         account.log_risky_cards
       end
       create_sift_label(user)
+      label_devices(user, "bad")
     end
   
     def create_sift_label(user)
       label_properties = SiftProperties.sift_label_properties true, nil, "Manually suspended", "manual_review", current_user.email
       SiftLabel.perform_async(:create, user.id.to_s, label_properties)
+    end
+    
+    # Label all devices associated with user as 'bad' or 'not_bad'
+    def label_devices(user, label)
+      LabelDevices.perform_async(user.id, label)
     end
     
     def remove_sift_label(user)
@@ -328,6 +334,7 @@ ActiveAdmin.register User do
     user.update!(suspended: false)
     
     remove_sift_label(user)
+    label_devices(user, "not_bad")
 
     flash[:notice] = 'User has been unsuspended'
     redirect_to admin_user_path(id: user.id)

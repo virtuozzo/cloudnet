@@ -34,6 +34,9 @@ class DisputeHandlerTask < BaseTask
     # Label the user as bad at Sift Science
     create_sift_label
     
+    # Label all devices associated with this user as 'bad'
+    label_devices
+    
     # Retrieve and update dispute object at Stripe with payment receipt and account info
     update_dispute
     
@@ -108,6 +111,10 @@ class DisputeHandlerTask < BaseTask
   def create_sift_label
     label_properties = SiftProperties.sift_label_properties true, ["$chargeback"], "Received chargeback", "payment_gateway"
     SiftLabel.perform_async(:create, @account.user_id.to_s, label_properties)
+  end
+  
+  def label_devices
+    LabelDevices.perform_async(@account.user_id, "bad")
   end
   
 end

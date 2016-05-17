@@ -111,11 +111,16 @@ module NegativeBalanceProtection
         user.account.log_risky_ip_addresses
         user.account.log_risky_cards
         create_sift_label
+        label_devices
       end
       
       def create_sift_label
         label_properties = SiftProperties.sift_label_properties true, nil, "Balance checker: Unpaid invoices", "negative_balance_checker"
         SiftLabel.perform_async(:create, user.id.to_s, label_properties)
+      end
+      
+      def label_devices
+        LabelDevices.perform_async(user.id, "bad")
       end
       
       def log_error(e, server)

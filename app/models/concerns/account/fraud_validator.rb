@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
     extend ActiveSupport::Concern
     
     VALID_FRAUD_SCORE = 40
-    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts", "Chargeback", "Card history", "Sift Science"]
+    VALIDATION_REASONS = ["None", "Minfraud", "IP history", "Risky card attempts", "Chargeback", "Card history", "Sift Formulas", "Unsafe Device"]
     
     def fraud_safe?(ip = nil)
       fraud_validation_reason(ip) == 0
@@ -19,6 +19,7 @@ class Account < ActiveRecord::Base
         when received_chargeback? ; 4
         when !safe_card? ; 5
         when !sift_safe? ; 6
+        when !safe_device? ; 7
         else ; 0
         end
     end
@@ -61,6 +62,12 @@ class Account < ActiveRecord::Base
     
     def sift_safe?
       user.sift_valid?
+    end
+    
+    def safe_device?
+      session = SiftDeviceTasks.new.perform(:get_session, Thread.current[:session_id])
+      return true if session.nil?
+      session["label"].present? ? (session["label"] != "bad") : true
     end
     
     def log_risky_ip_addresses(request_ip = nil)

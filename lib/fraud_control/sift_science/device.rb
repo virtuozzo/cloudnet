@@ -11,7 +11,7 @@ module SiftScience
       @api ||= Faraday.new(:url => "#{BASE_URI}/#{ACCOUNT_ID}/") do |conn|
         conn.request  :json
         conn.response :json
-        conn.use Faraday::Response::Logger, Rails.logger
+        # conn.use Faraday::Response::Logger, Rails.logger
         conn.adapter Faraday.default_adapter
         conn.basic_auth API_KEY, nil
       end
