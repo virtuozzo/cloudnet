@@ -70,6 +70,20 @@ class Account < ActiveRecord::Base
       session["label"].present? ? (session["label"] != "bad") : true
     end
     
+    def has_bad_device?
+      devices = SiftDeviceTasks.new.perform(:get_devices, user_id)
+      is_bad = false
+      devices["data"].each do |d|
+        device_id = d["id"]
+        device = SiftDeviceTasks.new.perform(:get_device, device_id)
+        if device["label"] == "bad"
+          is_bad = true 
+          break
+        end
+      end
+      is_bad
+    end
+    
     def log_risky_ip_addresses(request_ip = nil)
       ips = []
       ips << request_ip unless request_ip.blank?

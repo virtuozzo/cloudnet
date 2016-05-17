@@ -133,9 +133,19 @@ ActiveAdmin.register User do
         row :card_history do |user|
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
-        row :sift_science_safe do |user|
+        row :sift_score_safe do |user|
           unless user.sift_user.nil?
             status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?))
+          end
+        end
+        row :sift_device_safe do |user|
+          unless user.account.nil?
+            if params[:device_safety]
+              device_safe = !user.account.has_bad_device?
+              status_tag(device_safe, class: 'important', label: boolean_to_results(device_safe))
+            else
+              link_to "Show", admin_user_path(user.id, device_safety: true)
+            end
           end
         end
       end
@@ -177,8 +187,11 @@ ActiveAdmin.register User do
       row :card_history do
         text_node "Fail indicates credit cards in account has been used for fraudulent activity in the past.".html_safe
       end
-      row :sift_science_safe do
+      row :sift_score_safe do
         text_node "Fail indicates that account fails to pass formulas created at Sift Science console.".html_safe
+      end
+      row :sift_device_safe do
+        text_node "Fail indicates that one of the devices associated with the account has been labelled bad.".html_safe
       end
     end
   end
