@@ -219,6 +219,7 @@ ActiveAdmin.register User do
       end
       shutdown_destroy_notifications_activity(user)
       update!
+      User.find(params[:id]).update_sift_account
     end
     
     def shutdown_destroy_notifications_activity(user)

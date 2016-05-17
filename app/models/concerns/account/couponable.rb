@@ -26,12 +26,11 @@ class Account < ActiveRecord::Base
 
     def set_coupon_code(code)
       coupon = Coupon.find_coupon(code)
-      if coupon.present?
+      if coupon.present? && coupon.not_expired?
         self.coupon = coupon
         user.update_forecasted_revenue
         return true
       end
-
       false
     end
   end

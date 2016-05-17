@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
         trigger = action["triggers"].first
         actions << action["action"]["id"] if action["entity"]["id"] == id.to_s && trigger["type"] == "formula" && trigger["source"] == "score_api"
       end
-      actions
+      actions.uniq
     end
     
     def sift_valid?
