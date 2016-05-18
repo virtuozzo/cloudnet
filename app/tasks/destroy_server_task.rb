@@ -19,7 +19,6 @@ class DestroyServerTask < BaseTask
       create_destroy_invoice
       @server.destroy_with_ip(@ip)
       charge_unpaid_invoices(account)
-      UpdateAgilecrmContact.perform_async(@user.id, nil, ['server-deleted'])
     rescue Faraday::Error::ClientError => e
       ErrorLogging.new.track_exception(e, extra: { current_user: @user, source: 'DestroyServerTask', faraday: e.response })
       errors.push 'Could not schedule destroy of server. Please try again later'

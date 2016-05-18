@@ -20,10 +20,6 @@ describe DisputeHandler, :vcr do
     let(:mailer_queue) { ActionMailer::Base.deliveries }
     
     before :each do
-      agilecrm = double('UpdateAgilecrmContact', perform_async: true)
-      allow(UpdateAgilecrmContact).to receive(:perform_async).and_return(agilecrm)
-      allow(agilecrm).to receive(:perform_async).and_return(true)
-      
       user_tasks = double('UserTasks', perform: true)
       allow(UserTasks).to receive(:new).and_return(user_tasks)
       allow(user_tasks).to receive(:perform).and_return(true)

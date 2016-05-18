@@ -76,8 +76,4 @@ describe User do
     FactoryGirl.create(:billing_card, account: user.account)
     expect(user.trial_credit_eligible?).to eq(false)
   end
-  
-  it 'should push a job to the queue to create a AgileCRM contact' do
-    expect { user.save! }.to change(UpdateAgilecrmContact.jobs, :size).by(1)
-  end
 end

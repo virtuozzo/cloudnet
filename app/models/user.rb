@@ -33,9 +33,6 @@ class User < ActiveRecord::Base
   # TODO: Make sure our worker is triggered. This should probably be in the controller
   # since it's triggering a worker we can only guarantee it in the model for each user
   after_create :create_onapp_user
-  
-  # Create contact at AgileCRM
-  after_create :update_agilecrm_contact
 
   # Analytics tracking
   after_create :track_analytics
@@ -110,10 +107,6 @@ class User < ActiveRecord::Base
     account.billing_cards.with_deleted.count == 0
   end
   
-  def after_database_authentication
-    update_agilecrm_contact
-  end
-  
   def update_forecasted_revenue
     servers.each {|server| server.update_attribute(:forecasted_rev, server.forecasted_revenue)}
   end
@@ -140,10 +133,6 @@ class User < ActiveRecord::Base
 
   def create_onapp_user
     CreateOnappUser.perform_async(id)
-  end
-  
-  def update_agilecrm_contact
-    UpdateAgilecrmContact.perform_async(id)
   end
 
   def track_analytics
