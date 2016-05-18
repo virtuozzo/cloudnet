@@ -19,4 +19,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym "MySQL"
   inflect.acronym "MongoDB"
   inflect.acronym "NodeBB"
+  inflect.acronym "WordPress"
 end
