@@ -1,11 +1,13 @@
 require 'rails_helper'
+require 'models/concerns/taggable_shared'
 include NegativeBalanceProtection
 include NegativeBalanceProtection::Actions
 
 describe User do
   let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:admin) }
-
+  it_behaves_like 'taggable'
+  
   it 'has a valid factory' do
     expect(user).to be_valid
   end

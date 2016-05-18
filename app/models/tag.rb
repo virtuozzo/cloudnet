@@ -5,4 +5,9 @@ class Tag < ActiveRecord::Base
     tag.has_many :users, :source_type => 'User'
     tag.has_many :servers, :source_type => 'Server'
   end
+  
+  # make sure bindings (taggings) are properly updated
+  def delete
+    destroy
+  end
 end

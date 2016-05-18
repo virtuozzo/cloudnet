@@ -499,11 +499,10 @@ ActiveRecord::Schema.define(version: 20160513093224) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "taggings", id: false, force: :cascade do |t|
+  create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
     t.string   "taggable_type"
-    t.boolean  "agile_crm",     default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -515,6 +514,8 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "tags", ["label"], name: "index_tags_on_label", unique: true, using: :btree
 
   create_table "templates", force: :cascade do |t|
     t.string   "os_type",         limit: 255
