@@ -102,6 +102,7 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'jasmine-rails'
   gem 'jasmine-jquery-rails'
+  gem 'license_finder'
 end
 
 group :test do
