@@ -499,6 +499,24 @@ ActiveRecord::Schema.define(version: 20160513093224) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], name: "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", unique: true, using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["label"], name: "index_tags_on_label", unique: true, using: :btree
+
   create_table "templates", force: :cascade do |t|
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255

@@ -278,4 +278,8 @@ FactoryGirl.define do
   
   factory :user_server_count do
   end
+  
+  factory :tag do
+    sequence(:label) { |n| "tag label #{n}"} 
+  end
 end
