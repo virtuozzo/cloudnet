@@ -1,4 +1,4 @@
-# Overriding Devise's Confirmation controller so that we can update AgileCRM contact object with new verified email address
+# Overriding Devise's Confirmation controller so that we can update Sift Science with updated user details
 class ConfirmationsController < Devise::ConfirmationsController
 
   # GET /resource/confirmation?confirmation_token=abcdef
@@ -8,7 +8,6 @@ class ConfirmationsController < Devise::ConfirmationsController
     yield resource if block_given?
 
     if resource.errors.empty?
-      UpdateAgilecrmContact.perform_async(resource.id, old_email)
       resource.update_sift_account
       set_flash_message(:notice, :confirmed) if is_flashing_format?
       respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }

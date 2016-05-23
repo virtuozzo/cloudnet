@@ -1,7 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/taggable_shared'
 
 describe Server do
   let(:server) {FactoryGirl.create(:server, memory: 1024, cpus: 1, disk_size: 20)}
+  it_behaves_like 'taggable'
   
   it 'has a valid server' do
     expect(server).to be_valid

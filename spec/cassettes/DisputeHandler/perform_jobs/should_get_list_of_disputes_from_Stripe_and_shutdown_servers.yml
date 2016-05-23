@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/events
+    body:
+      encoding: UTF-8
+      string: '{"$user_id":1425,"$session_id":"e360451a3a7a282b46569bc308585fbb","$user_email":"elna@nadercasper.biz","$name":"Mallie
+        Carroll","account_balance_amount":0,"account_balance_currency_code":"USD","risky_card_attempts":0,"is_<%=
+        ENV[''ONAPP_USER''] %>":false,"$payment_methods":[{"$payment_type":"$store_credit"}],"email_confirmed_status":"$pending","$type":"$create_account","$api_key":"<%=
+        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:03 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '503'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "status" : 0 , "error_message" : "OK" , "time" : 1463989923 , "request" : "{\"$user_id\":1425,\"$session_id\":\"e360451a3a7a282b46569bc308585fbb\",\"$user_email\":\"elna@nadercasper.biz\",\"$name\":\"Mallie Carroll\",\"account_balance_amount\":0,\"account_balance_currency_code\":\"USD\",\"risky_card_attempts\":0,\"is_<%= ENV['ONAPP_USER'] %>\":false,\"$payment_methods\":[{\"$payment_type\":\"$store_credit\"}],\"email_confirmed_status\":\"$pending\",\"$type\":\"$create_account\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
+    http_version: 
+  recorded_at: Mon, 23 May 2016 07:52:03 GMT
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/events
+    body:
+      encoding: UTF-8
+      string: '{"$user_id":1425,"$session_id":"e360451a3a7a282b46569bc308585fbb","$login_status":"$success","$type":"$login","$api_key":"<%=
+        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:05 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '238'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "status" : 0 , "error_message" : "OK" , "time" : 1463989925 , "request" : "{\"$user_id\":1425,\"$session_id\":\"e360451a3a7a282b46569bc308585fbb\",\"$login_status\":\"$success\",\"$type\":\"$login\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
+    http_version: 
+  recorded_at: Mon, 23 May 2016 07:52:05 GMT
+recorded_with: VCR 2.9.3

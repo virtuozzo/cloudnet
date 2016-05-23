@@ -19,8 +19,9 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Tinus-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
-        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"Tinus-MacBook-Pro.local"}'
+        <%= ENV[''DB_USER''] %>s-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
+        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"<%=
+        ENV[''DB_USER''] %>s-MacBook-Pro.local"}'
   response:
     status:
       code: 200
@@ -37,7 +38,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "true"
+      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -179,8 +180,9 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Tinus-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
-        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"Tinus-MacBook-Pro.local"}'
+        <%= ENV[''DB_USER''] %>s-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
+        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"<%=
+        ENV[''DB_USER''] %>s-MacBook-Pro.local"}'
   response:
     status:
       code: 200
@@ -197,7 +199,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "true"
+      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -284,8 +286,9 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Tinus-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
-        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"Tinus-MacBook-Pro.local"}'
+        <%= ENV[''DB_USER''] %>s-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
+        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"<%=
+        ENV[''DB_USER''] %>s-MacBook-Pro.local"}'
       Content-Length:
       - '95'
   response:
@@ -304,7 +307,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "true"
+      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -395,8 +398,9 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Tinus-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
-        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"Tinus-MacBook-Pro.local"}'
+        <%= ENV[''DB_USER''] %>s-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
+        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"<%=
+        ENV[''DB_USER''] %>s-MacBook-Pro.local"}'
   response:
     status:
       code: 200
@@ -413,7 +417,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "true"
+      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -500,8 +504,9 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
-        Tinus-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
-        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"Tinus-MacBook-Pro.local"}'
+        <%= ENV[''DB_USER''] %>s-MacBook-Pro.local 15.3.0 Darwin Kernel Version 15.3.0:
+        Thu Dec 10 18:40:58 PST 2015; root:xnu-3248.30.4~1/RELEASE_X86_64 x86_64","hostname":"<%=
+        ENV[''DB_USER''] %>s-MacBook-Pro.local"}'
       Content-Length:
       - '95'
   response:
@@ -520,7 +525,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "true"
+      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -592,4 +597,222 @@ http_interactions:
         }
     http_version: 
   recorded_at: Sun, 10 Apr 2016 04:30:00 GMT
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/events
+    body:
+      encoding: UTF-8
+      string: '{"$user_id":1425,"$transaction_id":"PR0000001","$chargeback_state":"$received","$chargeback_reason":"$other","$type":"$chargeback","$api_key":"<%=
+        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:07 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '263'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "status" : 0 , "error_message" : "OK" , "time" : 1463989927 , "request" : "{\"$user_id\":1425,\"$transaction_id\":\"PR0000001\",\"$chargeback_state\":\"$received\",\"$chargeback_reason\":\"$other\",\"$type\":\"$chargeback\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/users/1425/labels
+    body:
+      encoding: UTF-8
+      string: '{"$is_bad":<%= ENV[''ONAPP_API_ALLOW_INSECURE''] %>,"$reasons":["$chargeback"],"$description":"Received
+        chargeback","$source":"payment_gateway","$type":"$label","$api_key":"<%= ENV[''SIFT_SCIENCE_API_KEY'']
+        %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:09 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '257'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "time" : 1463989929 , "status" : 0 , "request" : "{\"$is_bad\":<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>,\"$reasons\":[\"$chargeback\"],\"$description\":\"Received chargeback\",\"$source\":\"payment_gateway\",\"$type\":\"$label\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}" , "error_message" : "OK"}
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
+- request:
+    method: get
+    uri: https://<%= ENV['SIFT_SCIENCE_API_KEY'] %>:@api3.siftscience.com/v3/accounts/<%=
+      ENV['SIFT_SCIENCE_ACCOUNT_ID'] %>/users/1425/devices
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 23 May 2016 07:52:11 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '87'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: '{"schema":"device.json","data":[],"has_more":false,"total_results":0}'
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/events
+    body:
+      encoding: UTF-8
+      string: '{"$user_id":1425,"$transaction_id":"PR0000002","$chargeback_state":"$received","$chargeback_reason":"$other","$type":"$chargeback","$api_key":"<%=
+        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:12 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '263'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "status" : 0 , "error_message" : "OK" , "time" : 1463989932 , "request" : "{\"$user_id\":1425,\"$transaction_id\":\"PR0000002\",\"$chargeback_state\":\"$received\",\"$chargeback_reason\":\"$other\",\"$type\":\"$chargeback\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
+- request:
+    method: post
+    uri: https://api.siftscience.com/v203/users/1425/labels
+    body:
+      encoding: UTF-8
+      string: '{"$is_bad":<%= ENV[''ONAPP_API_ALLOW_INSECURE''] %>,"$reasons":["$chargeback"],"$description":"Received
+        chargeback","$source":"payment_gateway","$type":"$label","$api_key":"<%= ENV[''SIFT_SCIENCE_API_KEY'']
+        %>"}'
+    headers:
+      User-Agent:
+      - SiftScience/v203 sift-ruby/1.1.7.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 23 May 2016 07:52:14 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '257'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |
+        { "time" : 1463989934 , "status" : 0 , "request" : "{\"$is_bad\":<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>,\"$reasons\":[\"$chargeback\"],\"$description\":\"Received chargeback\",\"$source\":\"payment_gateway\",\"$type\":\"$label\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}" , "error_message" : "OK"}
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
+- request:
+    method: get
+    uri: https://<%= ENV['SIFT_SCIENCE_API_KEY'] %>:@api3.siftscience.com/v3/accounts/<%=
+      ENV['SIFT_SCIENCE_ACCOUNT_ID'] %>/users/1425/devices
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 23 May 2016 07:52:15 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '87'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: '{"schema":"device.json","data":[],"has_more":false,"total_results":0}'
+    http_version: 
+  recorded_at: Sun, 10 Apr 2016 09:00:00 GMT
 recorded_with: VCR 2.9.3

@@ -115,12 +115,6 @@ HUBSPOT_ID=
 # Segment.io custom analytics
 ANALYTICS_KEY=
 
-# AgileCRM for Sales tracking
-AGILECRM_API_KEY=
-AGILECRM_JS_API_KEY=
-AGILECRM_DOMAIN=
-AGILECRM_EMAIL=
-
 # New Relic
 NEW_RELIC_KEY=
 
