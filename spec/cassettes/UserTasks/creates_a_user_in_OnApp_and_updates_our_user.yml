@@ -102,7 +102,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:17:14 GMT
 - request:
     method: post
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
     body:
       encoding: UTF-8
       string: ''
@@ -451,7 +451,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:17:18 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
     body:
       encoding: US-ASCII
       string: ''
@@ -502,7 +502,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:17:21 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
     body:
       encoding: US-ASCII
       string: ''
