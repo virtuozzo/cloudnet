@@ -66,9 +66,10 @@ describe CreditNote do
   end
 
   it 'should return if there are no items associated with this invoice' do
-    expect(credit_note.items?).to be false
-    credit_note.credit_note_items << FactoryGirl.create(:credit_note_item, credit_note: credit_note)
     expect(credit_note.items?).to be true
+    expect(credit_note.credit_note_items.count).to be 2
+    credit_note.credit_note_items << FactoryGirl.create(:credit_note_item, credit_note: credit_note)
+    expect(credit_note.credit_note_items.count).to be 3
   end
 
   it 'should have VAT exempt status determined from the account' do

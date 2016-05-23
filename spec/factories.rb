@@ -36,6 +36,11 @@ FactoryGirl.define do
 
   factory :account do
     gateway_id 'cn_abc123456'
+    trait :with_user do
+      after(:create) do |account|
+        account.user = FactoryGirl.build(:user_onapp, account: account) if account.user.nil?
+      end
+    end
   end
 
   factory :region do
@@ -156,8 +161,6 @@ FactoryGirl.define do
       usages '[{"created_at":"2016-02-16T13:01:49Z","data_received":1058,"data_sent":364},{"created_at":"2016-02-17T00:59:46Z","data_received":1511,"data_sent":1664},{"created_at":"2016-02-17T01:00:54Z","data_received":11432,"data_sent":6348},{"created_at":"2016-02-19T16:01:46Z","data_received":163491,"data_sent":253359},{"created_at":"2016-03-01T17:01:49Z","data_received":853430,"data_sent":634344}]'
     end
   end
-
-  
   
   factory :server_event do
     action 'create_virtual_server'
@@ -194,7 +197,7 @@ FactoryGirl.define do
   end
 
   factory :invoice do
-    association :account, factory: :account
+    association :account, factory: [:account, :with_user]
   end
 
   factory :invoice_item do
@@ -202,7 +205,10 @@ FactoryGirl.define do
   end
 
   factory :credit_note do
-    association :account, factory: :account
+    association :account, factory: [:account, :with_user]
+    after(:build) do |credit_note|
+      credit_note.credit_note_items = FactoryGirl.build_list(:credit_note_item, 2, credit_note: credit_note) if credit_note.credit_note_items.empty?
+    end
   end
 
   factory :credit_note_item do
@@ -237,8 +243,12 @@ FactoryGirl.define do
   factory :charge do
     amount 10_000
     association :invoice, factory: :invoice
-    source_type 'Tester'
-    source_id 100
+    after(:build) do |charge|
+      unless charge.source
+        charge.source_type = 'PaymentReceipt'
+        charge.source_id = FactoryGirl.create(:payment_receipt).id
+      end
+    end
   end
 
   factory :payment_receipt do

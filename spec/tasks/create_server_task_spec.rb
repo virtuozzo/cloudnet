@@ -13,7 +13,7 @@ describe CreateServerTask do
 
     allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345' })
     allow(MonitorServer).to receive(:perform_async).and_return(true)
-    server_double = double('Server', id: 123, destroy: true, provisioner_role: 'ping', update_attribute: true)
+    server_double = double('Server', id: 123, destroy: true, provisioner_role: 'ping', update_attribute: true, validation_reason: 0, sift_server_properties: {})
     allow(server_double).to receive(:monitor_and_provision).and_return(true)
     allow_any_instance_of(ServerWizard).to receive_messages(save_server_details: server_double)
   end

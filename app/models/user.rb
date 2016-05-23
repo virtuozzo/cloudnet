@@ -39,9 +39,6 @@ class User < ActiveRecord::Base
   # Analytics tracking
   after_create :track_analytics
 
-  # Create account at Sift Science
-  after_create :create_sift_account
-
   scope :created_this_month, -> { where('created_at > ? AND created_at < ?', Time.now.beginning_of_month, Time.now.end_of_month) }
   scope :created_last_month, -> { where('created_at > ? AND created_at < ?', (Time.now - 1.month).beginning_of_month, (Time.now - 1.month).end_of_month) }
   scope :servers_to_be_destroyed, -> { where("notif_delivered - notif_before_destroy >= 0")}
@@ -128,6 +125,11 @@ class User < ActiveRecord::Base
   def forecasted_revenue
     servers.reduce(0) {|result, server| result + server.forecasted_rev}
   end
+
+  def create_sift_account
+    CreateSiftEvent.perform_async("$create_account", sift_user_properties)
+    create_sift_login_event
+  end
   
   protected
 
@@ -140,11 +142,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def create_sift_account
-    CreateSiftEvent.perform_async("$create_account", sift_user_properties)
-    create_sift_login_event
-  end
 
   def create_sift_login_event
     properties = {

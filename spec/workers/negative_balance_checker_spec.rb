@@ -20,7 +20,7 @@ describe NegativeBalanceChecker do
     let!(:user1) { FactoryGirl.create(:user) }
     let!(:user2) { FactoryGirl.create(:user) }
     let!(:suspended_user) { FactoryGirl.create(:user, suspended: true) }
-    let(:invoice) {FactoryGirl.create :invoice}
+    let!(:invoice) {FactoryGirl.create :invoice, account: user1.account}
     let!(:server1) {FactoryGirl.create :server, user: user1}
     let(:mailer_q) {ActionMailer::Base.deliveries}
     
@@ -29,8 +29,6 @@ describe NegativeBalanceChecker do
       item1 = FactoryGirl.create(:invoice_item, invoice: invoice, net_cost: 100_000)
       item2 = FactoryGirl.create(:invoice_item, invoice: invoice, net_cost: 34_000)
       invoice.invoice_items << [item1, item2]
-      user1.account = invoice.account
-      user1.save
     end
 
     it "performs actions on active and suspended users" do

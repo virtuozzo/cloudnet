@@ -102,8 +102,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:39 GMT
 - request:
     method: post
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
     body:
       encoding: UTF-8
       string: ''
@@ -130,13 +129,13 @@ http_interactions:
       Etag:
       - '"e0b7b808ac5390914fe7eacc48f53682"'
       Cache-Control:
-      - max-age=0, private, must-re<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>
+      - max-age=0, private, must-revalidate
       X-Request-Id:
       - 302683dab9cb0d0ac599996fa50495c3
       X-Runtime:
       - '3.371166'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -155,8 +154,7 @@ http_interactions:
       - application/json; charset=utf-8
     body:
       encoding: UTF-8
-      string: '{"user":{"activated_at":"2016-05-18T16:00:41+00:00","avatar":null,"billing_plan_id":1,"cdn_account_status":"ACTIVE","cdn_status":"INACTIVE","created_at":"2016-05-18T16:00:40+00:00","deleted_at":null,"email":"auto_rspec_user@onapp.com","firewall_id":null,"first_name":"","group_id":null,"id":738,"identifier":"sxw36uu0hqv5tw","image_template_group_id":null,"infoboxes":{"display_infoboxes":<%=
-        ENV[''ONAPP_API_ALLOW_INSECURE''] %>,"hidden_infoboxes":[]},"last_name":"","locale":"en","login":"auto_rspec_user","password_changed_at":"2016-05-18T16:00:40+00:00","registered_yubikey":null,"status":"active","supplied":false,"suspend_at":null,"system_theme":null,"time_zone":null,"total_amount":0.0,"updated_at":"2016-05-18T16:00:41+00:00","use_gravatar":null,"user_group_id":null,"outstanding_amount":"0.0","payment_amount":"0.0","roles":[{"role":{"created_at":"2015-03-12T13:24:37+00:00","id":2,"identifier":"user","label":"User","updated_at":"2015-11-04T12:41:26+00:00","permissions":[{"permission":{"created_at":"2015-03-12T13:24:37+00:00","id":7,"identifier":"activity_logs.read.own","updated_at":"2015-03-12T13:24:37+00:00","label":"See
+      string: '{"user":{"activated_at":"2016-05-18T16:00:41+00:00","avatar":null,"billing_plan_id":1,"cdn_account_status":"ACTIVE","cdn_status":"INACTIVE","created_at":"2016-05-18T16:00:40+00:00","deleted_at":null,"email":"auto_rspec_user@onapp.com","firewall_id":null,"first_name":"","group_id":null,"id":738,"identifier":"sxw36uu0hqv5tw","image_template_group_id":null,"infoboxes":{"display_infoboxes":true,"hidden_infoboxes":[]},"last_name":"","locale":"en","login":"auto_rspec_user","password_changed_at":"2016-05-18T16:00:40+00:00","registered_yubikey":null,"status":"active","supplied":false,"suspend_at":null,"system_theme":null,"time_zone":null,"total_amount":0.0,"updated_at":"2016-05-18T16:00:41+00:00","use_gravatar":null,"user_group_id":null,"outstanding_amount":"0.0","payment_amount":"0.0","roles":[{"role":{"created_at":"2015-03-12T13:24:37+00:00","id":2,"identifier":"user","label":"User","updated_at":"2015-11-04T12:41:26+00:00","permissions":[{"permission":{"created_at":"2015-03-12T13:24:37+00:00","id":7,"identifier":"activity_logs.read.own","updated_at":"2015-03-12T13:24:37+00:00","label":"See
         all own Activity Logs"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":32,"identifier":"backups.convert.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Convert
         own backup to template"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":34,"identifier":"backups.create.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
         backup for own VS"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":36,"identifier":"backups.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
@@ -305,7 +303,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
+      - "true"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -405,7 +403,7 @@ http_interactions:
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - "<%= ENV['ONAPP_API_ALLOW_INSECURE'] %>"
+      - "true"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -481,13 +479,13 @@ http_interactions:
       Etag:
       - '"59c6cc7843389457007af2e033769410"'
       Cache-Control:
-      - max-age=0, private, must-re<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>
+      - max-age=0, private, must-revalidate
       X-Request-Id:
       - f177cb44b5e38e3080b10ae94cf0f1d5
       X-Runtime:
       - '4.711197'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -511,8 +509,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:50 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -541,7 +538,7 @@ http_interactions:
       X-Runtime:
       - '2.826098'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -563,8 +560,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:53 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -593,7 +589,7 @@ http_interactions:
       X-Runtime:
       - '1.068812'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -615,8 +611,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:55 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -645,7 +640,7 @@ http_interactions:
       X-Runtime:
       - '1.645217'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -667,8 +662,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:56 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -697,7 +691,7 @@ http_interactions:
       X-Runtime:
       - '0.785656'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -719,8 +713,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:00:57 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -749,7 +742,7 @@ http_interactions:
       X-Runtime:
       - '2.398559'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -771,8 +764,7 @@ http_interactions:
   recorded_at: Wed, 18 May 2016 16:01:00 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:J6rRYjmt5UV%23WTKXc%5BxZ@<%= extract_domain
-      ENV['ONAPP_CP'] %>/users/738.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/738.json
     body:
       encoding: US-ASCII
       string: ''
@@ -801,7 +793,7 @@ http_interactions:
       X-Runtime:
       - '2.329455'
       X-Rack-Cache:
-      - in<%= ENV['SIFT_USER_VALIDATE_ACTION_ID'] %>, pass
+      - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
@@ -821,72 +813,3 @@ http_interactions:
       string: ''
     http_version: 
   recorded_at: Wed, 18 May 2016 16:01:02 GMT
-- request:
-    method: post
-    uri: https://api.siftscience.com/v203/events
-    body:
-      encoding: UTF-8
-      string: '{"$user_id":1198,"$session_id":"e360451a3a7a282b46569bc308585fbb","$user_email":"johnny_dibbert@mayertmraz.com","$name":"Destiney
-        Mayer","account_balance_amount":0,"account_balance_currency_code":"USD","risky_card_attempts":0,"is_<%=
-        ENV[''ONAPP_USER''] %>":false,"$payment_methods":[{"$payment_type":"$store_credit"}],"email_confirmed_status":"$pending","$type":"$create_account","$api_key":"<%=
-        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
-    headers:
-      User-Agent:
-      - SiftScience/v203 sift-ruby/1.1.7.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Mon, 23 May 2016 07:51:22 GMT
-      Server:
-      - nginx
-      Vary:
-      - Accept-Encoding
-      Content-Length:
-      - '512'
-      Connection:
-      - keep-alive
-    body:
-      encoding: UTF-8
-      string: |
-        { "status" : 0 , "error_message" : "OK" , "time" : 1463989882 , "request" : "{\"$user_id\":1198,\"$session_id\":\"e360451a3a7a282b46569bc308585fbb\",\"$user_email\":\"johnny_dibbert@mayertmraz.com\",\"$name\":\"Destiney Mayer\",\"account_balance_amount\":0,\"account_balance_currency_code\":\"USD\",\"risky_card_attempts\":0,\"is_<%= ENV['ONAPP_USER'] %>\":false,\"$payment_methods\":[{\"$payment_type\":\"$store_credit\"}],\"email_confirmed_status\":\"$pending\",\"$type\":\"$create_account\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
-    http_version: 
-  recorded_at: Mon, 23 May 2016 07:51:21 GMT
-- request:
-    method: post
-    uri: https://api.siftscience.com/v203/events
-    body:
-      encoding: UTF-8
-      string: '{"$user_id":1198,"$session_id":"e360451a3a7a282b46569bc308585fbb","$login_status":"$success","$type":"$login","$api_key":"<%=
-        ENV[''SIFT_SCIENCE_API_KEY''] %>"}'
-    headers:
-      User-Agent:
-      - SiftScience/v203 sift-ruby/1.1.7.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Mon, 23 May 2016 07:51:23 GMT
-      Server:
-      - nginx
-      Vary:
-      - Accept-Encoding
-      Content-Length:
-      - '238'
-      Connection:
-      - keep-alive
-    body:
-      encoding: UTF-8
-      string: |
-        { "status" : 0 , "error_message" : "OK" , "time" : 1463989883 , "request" : "{\"$user_id\":1198,\"$session_id\":\"e360451a3a7a282b46569bc308585fbb\",\"$login_status\":\"$success\",\"$type\":\"$login\",\"$api_key\":\"<%= ENV['SIFT_SCIENCE_API_KEY'] %>\"}"}
-    http_version: 
-  recorded_at: Mon, 23 May 2016 07:51:23 GMT
-recorded_with: VCR 2.9.3

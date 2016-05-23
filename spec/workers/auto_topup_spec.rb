@@ -18,7 +18,7 @@ describe AutoTopup do
     FactoryGirl.create :credit_note_item, credit_note: credit_note, net_cost: 100_000
     FactoryGirl.create :server, user: @user
     FactoryGirl.create :billing_card, account: @account, fraud_verified: true
-    expect(@account.wallet_balance).to eq(100_000)
+    expect(@account.reload.wallet_balance).to eq(100_000)
     
     AutoTopup.perform_async
     assert_equal 1, AutoTopup.jobs.size
@@ -32,7 +32,7 @@ describe AutoTopup do
     credit_note = FactoryGirl.create :credit_note, account: @account
     FactoryGirl.create :credit_note_item, credit_note: credit_note, net_cost: 100_000
     FactoryGirl.create :billing_card, account: @account, fraud_verified: true
-    expect(@account.wallet_balance).to eq(100_000)
+    expect(@account.reload.wallet_balance).to eq(100_000)
     
     AutoTopup.perform_async
     assert_equal 1, AutoTopup.jobs.size
@@ -58,7 +58,7 @@ describe AutoTopup do
     FactoryGirl.create :credit_note_item, credit_note: credit_note, net_cost: 500_000
     FactoryGirl.create :server, user: @user
     FactoryGirl.create :billing_card, account: @account, fraud_verified: true
-    expect(@account.wallet_balance).to eq(500_000)
+    expect(@account.reload.wallet_balance).to eq(500_000)
     
     AutoTopup.perform_async
     assert_equal 1, AutoTopup.jobs.size
@@ -74,7 +74,7 @@ describe AutoTopup do
     FactoryGirl.create :credit_note_item, credit_note: credit_note, net_cost: 100_000
     FactoryGirl.create :server, user: @user
     FactoryGirl.create :billing_card, account: @account, fraud_verified: true
-    expect(@account.wallet_balance).to eq(100_000)
+    expect(@account.reload.wallet_balance).to eq(100_000)
     
     AutoTopup.perform_async
     assert_equal 1, AutoTopup.jobs.size

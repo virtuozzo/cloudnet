@@ -51,16 +51,20 @@ module SiftProperties
   end
   
   def sift_server_properties
-    account = user.account
     invoice_item = last_generated_invoice_item
     properties = user.sift_user_properties.except! "$name", "$payment_methods", "$billing_address"
     server_properties = {
       "server_id"           => id,
-      "primary_ip_address"  => primary_ip_address,
-      "invoice_id"          => invoice_item.invoice_id,
-      "invoice_number"      => invoice_item.invoice.invoice_number
+      "primary_ip_address"  => primary_ip_address
     }
     properties.merge! server_properties
+    unless invoice_item.nil?
+      invoice_properties = {
+        "invoice_id"          => invoice_item.invoice_id,
+        "invoice_number"      => invoice_item.invoice.invoice_number
+      }
+      properties.merge! invoice_properties
+    end
     # properties.merge! "$items" => sift_server_items_properties(invoice_item)
   rescue StandardError
     nil
@@ -136,6 +140,7 @@ module SiftProperties
   end
   
   def self.stripe_success_properties(charge)
+    return {} if charge[:card].nil?
     {
       "$stripe_cvc_check"           => charge[:card][:cvc_check],
       "$stripe_address_line1_check" => charge[:card][:address_line1_check],
@@ -200,7 +205,11 @@ module SiftProperties
   end
   
   def sift_charge_properties
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    if account.nil?
+      properties = Hash.new
+    else
+      properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    end
     ch_properties = {
       "$amount"             => (amount * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code"      => "USD",
