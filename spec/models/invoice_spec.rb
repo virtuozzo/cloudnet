@@ -202,4 +202,11 @@ describe Invoice do
     expect(Invoice.in_gbp(1234)).to eq(1234 * Invoice::USD_GBP_RATE)
     expect(Invoice.in_gbp(0)).to eq(0 * Invoice::USD_GBP_RATE)
   end
+  
+  it 'should create an event at Sift' do
+    Sidekiq::Testing.inline! do
+      invoice = FactoryGirl.create(:invoice)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$create_order", invoice.sift_invoice_properties)
+    end
+  end
 end

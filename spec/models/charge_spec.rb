@@ -35,4 +35,11 @@ describe Charge do
     charge.source = obj
     expect(charge.source_type).to eq(obj.class.to_s)
   end
+  
+  it 'should create an event at Sift' do
+    Sidekiq::Testing.inline! do
+      charge = FactoryGirl.create(:charge)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$transaction", charge.sift_charge_properties)
+    end
+  end
 end

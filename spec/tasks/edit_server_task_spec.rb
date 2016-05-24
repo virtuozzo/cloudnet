@@ -73,5 +73,15 @@ describe EditServerTask do
       server.reload
       expect(server.state).to be :building
     end
+    
+    it 'should create an event at Sift' do
+      Sidekiq::Testing.inline! do
+        expect(@server_tasks).to receive(:perform)
+        expect(@verifier).to receive(:perform_transaction)
+        task = EditServerTask.new(server.user.id, server.id, *entry_params[2])
+        task.edit_server
+        expect(@sift_client_double).to have_received(:perform).with(:create_event, "update_server", server.sift_server_properties)
+      end
+    end
   end
 end

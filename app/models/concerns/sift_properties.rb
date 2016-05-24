@@ -66,6 +66,7 @@ module SiftProperties
       properties.merge! invoice_properties
     end
     # properties.merge! "$items" => sift_server_items_properties(invoice_item)
+    properties
   rescue StandardError
     nil
   end
@@ -139,8 +140,46 @@ module SiftProperties
     nil
   end
   
+  def sift_charge_properties
+    if account.nil?
+      properties = Hash.new
+    else
+      properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    end
+    ch_properties = {
+      "$amount"             => (amount * Invoice::MICROS_IN_MILLICENT).to_i,
+      "$currency_code"      => "USD",
+      "$transaction_type"   => "$withdrawal",
+      "$transaction_status" => "$success",
+      "$transaction_id"     => number,
+      "$order_id"           => invoice_id,
+      "$payment_method"     => {"$payment_type" => "$store_credit"},
+      "charge_source"       => source.number
+    }
+    properties.merge! ch_properties
+  rescue StandardError
+    nil
+  end
+  
+  def sift_credit_note_properties
+    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    transaction_type = (manually_added? || trial_credit?) ? "$deposit" : "$refund"
+    invoice_id = credit_note_items.first.source.try(:last_generated_invoice_item).try(:invoice_id)
+    cr_properties = {
+      "$amount"             => (total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
+      "$currency_code"      => "USD",
+      "$transaction_type"   => transaction_type,
+      "$transaction_status" => "$success",
+      "$transaction_id"     => number,
+      "$order_id"           => invoice_id,
+      "$payment_method"     => {"$payment_type" => "$store_credit"}
+    }
+    properties.merge! cr_properties
+  rescue StandardError
+    nil
+  end
+  
   def self.stripe_success_properties(charge)
-    return {} if charge[:card].nil?
     {
       "$stripe_cvc_check"           => charge[:card][:cvc_check],
       "$stripe_address_line1_check" => charge[:card][:address_line1_check],
@@ -148,6 +187,8 @@ module SiftProperties
       "$stripe_funding"             => charge[:card][:funding],
       "$stripe_brand"               => charge[:card][:brand]
     }
+  rescue StandardError
+    nil
   end
   
   def self.stripe_failure_properties(account, net_cost, error, payment_properties)
@@ -204,48 +245,11 @@ module SiftProperties
     nil
   end
   
-  def sift_charge_properties
-    if account.nil?
-      properties = Hash.new
-    else
-      properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
-    end
-    ch_properties = {
-      "$amount"             => (amount * Invoice::MICROS_IN_MILLICENT).to_i,
-      "$currency_code"      => "USD",
-      "$transaction_type"   => "$withdrawal",
-      "$transaction_status" => "$success",
-      "$transaction_id"     => number,
-      "$order_id"           => invoice_id,
-      "$payment_method"     => {"$payment_type" => "$store_credit"},
-      "charge_source"       => source.number
-    }
-    properties.merge! ch_properties
-  rescue StandardError
-    nil
-  end
-  
-  def sift_credit_note_properties
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
-    transaction_type = (manually_added? || trial_credit?) ? "$deposit" : "$refund"
-    invoice_id = credit_note_items.first.source.try(:last_generated_invoice_item).try(:invoice_id)
-    cr_properties = {
-      "$amount"             => (total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
-      "$currency_code"      => "USD",
-      "$transaction_type"   => transaction_type,
-      "$transaction_status" => "$success",
-      "$transaction_id"     => number,
-      "$order_id"           => invoice_id,
-      "$payment_method"     => {"$payment_type" => "$store_credit"}
-    }
-    properties.merge! cr_properties
-  rescue StandardError
-    nil
-  end
-  
-  def self.sift_label_properties(is_bad, reasons, description = nil, source = nil, analyst = nil)    
+  def self.sift_label_properties(is_bad, reasons, description = nil, source = nil, analyst = nil)
     args = method(__method__).parameters.map { |arg| arg[1] }
     args.map {|arg| ["$#{arg.to_s}", eval(arg.to_s)] }.to_h
+  rescue StandardError
+    nil
   end
 
 end

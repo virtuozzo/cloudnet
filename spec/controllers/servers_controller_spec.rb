@@ -44,6 +44,7 @@ describe ServersController do
         allow(ServerTasks).to receive(:new).and_return(@server_tasks)
         allow(MonitorServer).to receive(:perform_in).and_return(true)
         request.env['HTTP_REFERER'] = servers_path
+        Sidekiq::Worker.clear_all
       end
 
       it 'should allow rebooting of a server' do
@@ -51,6 +52,7 @@ describe ServersController do
         expect(@server_tasks).to have_received(:perform)
         expect(MonitorServer).to have_received(:perform_in)
         expect(response).to redirect_to(servers_path)
+        assert_equal 1, CreateSiftEvent.jobs.size
       end
 
       it 'should show an error if reboot schedule failed' do
@@ -65,6 +67,7 @@ describe ServersController do
         expect(@server_tasks).to have_received(:perform)
         expect(MonitorServer).to have_received(:perform_in)
         expect(response).to redirect_to(servers_path)
+        assert_equal 1, CreateSiftEvent.jobs.size
       end
 
       it 'should show an error if shutdown schedule failed' do
@@ -80,6 +83,7 @@ describe ServersController do
         expect(@server_tasks).to have_received(:perform)
         expect(MonitorServer).to have_received(:perform_in)
         expect(response).to redirect_to(servers_path)
+        assert_equal 1, CreateSiftEvent.jobs.size
       end
 
       it 'should show an error if startup schedule failed' do

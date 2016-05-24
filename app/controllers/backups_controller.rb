@@ -28,7 +28,7 @@ class BackupsController < ApplicationController
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, current_user.id)
     create_sift_event :restore_backup, @server.sift_server_properties
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
-  rescue
+  rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Restore' })
     flash.now[:alert] = 'Could not schedule backup restore. Please try again later'
     redirect_to server_backups_path

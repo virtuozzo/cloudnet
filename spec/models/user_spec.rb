@@ -76,4 +76,12 @@ describe User do
     FactoryGirl.create(:billing_card, account: user.account)
     expect(user.trial_credit_eligible?).to eq(false)
   end
+  
+  it 'should create events at Sift' do
+    Sidekiq::Testing.inline! do
+      user = FactoryGirl.create(:user)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$create_account", user.sift_user_properties)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$login", anything)
+    end
+  end
 end

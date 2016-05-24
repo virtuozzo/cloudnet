@@ -59,6 +59,11 @@ describe DisputeHandler, :vcr do
         expect(@helpdesk).to have_received(:new_ticket).at_least(2).times
         expect(RiskyIpAddress.count).to eq 1
         expect(RiskyCard.count).to eq 1
+        expect(@sift_client_double).to have_received(:perform).with(:create_event, "$chargeback", anything).twice
+        label_properties = SiftProperties.sift_label_properties true, ["$chargeback"], "Received chargeback", "payment_gateway"
+        expect(@sift_client_double).to have_received(:perform).with(:create_label, @user.id.to_s, label_properties).twice
+        expect(@sift_device_double).to have_received(:perform).with(:get_devices, @user.id).twice
+        # expect(@sift_device_double).to have_received(:perform).with(:label_device, anything, "bad")
       end
     end
   end

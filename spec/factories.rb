@@ -38,7 +38,7 @@ FactoryGirl.define do
     gateway_id 'cn_abc123456'
     trait :with_user do
       after(:create) do |account|
-        account.user = FactoryGirl.build(:user_onapp, account: account) if account.user.nil?
+        create(:user_onapp, account: account) if account.user.nil?
       end
     end
   end
@@ -141,7 +141,7 @@ FactoryGirl.define do
     association :location, factory: :location
 
     after(:build) do |s|
-      s.template = FactoryGirl.create(:template, location: s.location)
+      s.template = create(:template, location: s.location)
     end
 
     trait :with_wallet do
@@ -207,7 +207,7 @@ FactoryGirl.define do
   factory :credit_note do
     association :account, factory: [:account, :with_user]
     after(:build) do |credit_note|
-      credit_note.credit_note_items = FactoryGirl.build_list(:credit_note_item, 2, credit_note: credit_note) if credit_note.credit_note_items.empty?
+      credit_note.credit_note_items = build_list(:credit_note_item, 2, credit_note: credit_note) if credit_note.credit_note_items.empty?
     end
   end
 
@@ -246,14 +246,14 @@ FactoryGirl.define do
     after(:build) do |charge|
       unless charge.source
         charge.source_type = 'PaymentReceipt'
-        charge.source_id = FactoryGirl.create(:payment_receipt).id
+        charge.source_id = create(:payment_receipt).id
       end
     end
   end
 
   factory :payment_receipt do
     net_cost 200000_000
-    association :account, factory: :account
+    association :account, factory: [:account, :with_user]
     pay_source :paypal
   end
   

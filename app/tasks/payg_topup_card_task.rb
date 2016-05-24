@@ -58,7 +58,8 @@ class PaygTopupCardTask < BaseTask
   def create_sift_event(charge = nil, error = nil)
     payment_properties = @card.sift_billing_card_properties
     if charge
-      payment_properties.merge! SiftProperties.stripe_success_properties(charge)
+      success_properties = SiftProperties.stripe_success_properties(charge)
+      payment_properties.merge! succes_properties unless success_properties.nil?
       properties = payment_receipt.sift_payment_receipt_properties(payment_properties)
     else
       # If there is no charge, then transaction was failure

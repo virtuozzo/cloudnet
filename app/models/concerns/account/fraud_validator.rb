@@ -72,6 +72,7 @@ class Account < ActiveRecord::Base
     
     def has_bad_device?
       devices = SiftDeviceTasks.new.perform(:get_devices, user_id)
+      return false if devices.nil? || devices["data"].nil?
       is_bad = false
       devices["data"].each do |d|
         device_id = d["id"]
