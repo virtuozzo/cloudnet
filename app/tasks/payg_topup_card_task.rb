@@ -64,7 +64,7 @@ class PaygTopupCardTask < BaseTask
     else
       # If there is no charge, then transaction was failure
       cost = @usd_amount * Invoice::MILLICENTS_IN_DOLLAR
-      payment_properties.merge! "$decline_reason_code": error[:code]
+      payment_properties.merge!("$decline_reason_code" => error[:code])
       properties = SiftProperties.stripe_failure_properties(@account, cost, error, payment_properties)
     end
     CreateSiftEvent.perform_async("$transaction", properties)
