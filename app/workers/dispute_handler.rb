@@ -24,7 +24,7 @@ class DisputeHandler
       begin
         # Process this dispute if it hasn't been already parsed before
         DisputeHandlerTask.new(dispute).process if dispute['metadata']['payment_receipt_id'].blank?
-      rescue Exception => e
+      rescue StandardError => e
         ErrorLogging.new.track_exception(e, extra: { dispute: dispute["charge"], source: 'DisputeHandler' })
       end
     end

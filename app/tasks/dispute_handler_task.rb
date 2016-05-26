@@ -44,9 +44,14 @@ class DisputeHandlerTask < BaseTask
   
   def block_server(server)
     return if server.validation_reason > 0
-    ServerTasks.new.perform(:shutdown, server.user_id, server.id)
-    server.create_activity :shutdown, owner: server.user
-    server.update!(validation_reason: 4)
-    server.create_activity :validation, owner: server.user, params: { reason: server.validation_reason }
+    begin
+      ServerTasks.new.perform(:shutdown, server.user_id, server.id)
+    rescue StandardError => e
+      ErrorLogging.new.track_exception(e, extra: { server: server.id, source: 'DisputeHandlerTask#block_server' })
+    ensure
+      server.create_activity :shutdown, owner: server.user
+      server.update!(validation_reason: 4)
+      server.create_activity :validation, owner: server.user, params: { reason: server.validation_reason }
+    end
   end
 end
