@@ -45,9 +45,17 @@ class PaymentReceipt < ActiveRecord::Base
       nil
     end
   end
+  
+  def billing_card
+    account.billing_cards.find_by_processor_token metadata[:card][:id] rescue nil
+  end
 
   def pretty_pay_source
     pay_source.to_s.split('_').map(&:capitalize).join(' ')
+  end
+  
+  def create_sift_event
+    CreateSiftEvent.perform_async("$transaction", sift_payment_receipt_properties)
   end
 
   private

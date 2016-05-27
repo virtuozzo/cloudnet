@@ -3,7 +3,7 @@ require 'active_support/concern'
 module SiftProperties
   extend ActiveSupport::Concern
 
-  def sift_user_properties
+  def sift_user_properties(include_time_ip = false)
     primary_card = account.primary_billing_card
     properties = {
       "$user_id"                      => id,
@@ -14,8 +14,14 @@ module SiftProperties
       "account_balance_currency_code" => "USD",
       "minfraud_score"                => account.max_minfraud_score,
       "risky_card_attempts"           => account.risky_card_attempts,
-      "is_admin"                      => admin
+      "is_admin"                      => admin,
+      "suspended"                     => suspended
     }
+    time_ip = {
+      "$time"                         => created_at.to_i,
+      "$ip"                           => current_sign_in_ip || last_sign_in_ip
+    }
+    properties.merge! time_ip if include_time_ip
     cards = account.billing_cards.processable.map { |card| card.sift_billing_card_properties }
     cards.push "$payment_type" => "$store_credit"
     properties.merge! "$payment_methods" => cards
@@ -93,7 +99,8 @@ module SiftProperties
       "is_first_time_buyer" => (user.servers.with_deleted.count == 1),
       "$shipping_method"    => "$electronic",
       "invoice_number"      => invoice_number,
-      "$payment_methods"    => [{"$payment_type" => "$store_credit"}]
+      "$payment_methods"    => [{"$payment_type" => "$store_credit"}],
+      "$time"               => created_at.to_i
     }
     properties.merge! invoice_properties
     properties.merge! "coupon_code" => coupon.coupon_code if coupon
@@ -119,6 +126,7 @@ module SiftProperties
         "$quantity"       => 1
       }
       properties.merge!("city" => server.location.city, "$brand" => server.location.provider) if server
+      properties
     }
   rescue StandardError
     nil
@@ -132,8 +140,25 @@ module SiftProperties
       "$transaction_type"           => "$deposit",
       "$transaction_status"         => "$success",
       "$transaction_id"             => number,
-      "payment_processor_reference" => reference
+      "payment_processor_reference" => reference,
+      "$time"                       => created_at.to_i
     }
+    if payment_properties.nil?
+      if pay_source == :billing_card
+        if !billing_card.nil?
+          payment_properties = billing_card.sift_billing_card_properties
+        else
+          payment_properties = { 
+            "$payment_type"     => "$credit_card",
+            "$payment_gateway"  => "$stripe"
+          }
+        end        
+        success_properties = SiftProperties.stripe_success_properties(metadata)
+        payment_properties.merge! success_properties unless success_properties.nil?
+      elsif pay_source == :paypal
+        payment_properties = SiftProperties.paypal_success_properties
+      end
+    end
     properties.merge! "$payment_method" => payment_properties if payment_properties
     properties.merge! pr_properties
   rescue StandardError
@@ -154,7 +179,8 @@ module SiftProperties
       "$transaction_id"     => number,
       "$order_id"           => invoice_id,
       "$payment_method"     => {"$payment_type" => "$store_credit"},
-      "charge_source"       => source.number
+      "charge_source"       => source.number,
+      "$time"               => created_at.to_i
     }
     properties.merge! ch_properties
   rescue StandardError
@@ -172,7 +198,8 @@ module SiftProperties
       "$transaction_status" => "$success",
       "$transaction_id"     => number,
       "$order_id"           => invoice_id,
-      "$payment_method"     => {"$payment_type" => "$store_credit"}
+      "$payment_method"     => {"$payment_type" => "$store_credit"},
+      "$time"               => created_at.to_i
     }
     properties.merge! cr_properties
   rescue StandardError
@@ -206,26 +233,31 @@ module SiftProperties
     nil
   end
   
-  def self.paypal_properties(request)
-    {
+  def self.paypal_properties(request = nil)
+    properties = {
       "$payment_type"           => "$third_party_processor",
-      "$payment_gateway"        => "$paypal",
+      "$payment_gateway"        => "$paypal"
+    }
+    request_properties = {
       "$paypal_payer_id"        => request.payer.identifier,
       "$paypal_payer_email"     => request.payer.email,
       "$paypal_payer_status"    => request.payer.status,
       "$paypal_address_status"  => request.address_status
-    }
+    } if request
+    properties.merge! request_properties if request_properties
+    properties
   rescue StandardError
     nil
   end
   
-  def self.paypal_success_properties(request, response)
+  def self.paypal_success_properties(request = nil, response = nil)
     paypal_props = paypal_properties(request)
     response_properties = {
       "$paypal_protection_eligibility"  => response.payment_info.first.protection_eligibility,
       "$paypal_payment_status"          => response.payment_info.first.payment_status
     } if response
     paypal_props.merge! response_properties if response_properties
+    paypal_props
   rescue StandardError
     nil
   end

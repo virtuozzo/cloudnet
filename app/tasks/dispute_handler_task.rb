@@ -64,8 +64,8 @@ class DisputeHandlerTask < BaseTask
     end
   end
   
-  def dispute_status
-    case @dispute["status"]
+  def self.dispute_status(status)
+    case status
     when "warning_needs_response", "needs_response"
       "$received"
     when "warning_under_review", "under_review"
@@ -79,8 +79,8 @@ class DisputeHandlerTask < BaseTask
     end
   end
   
-  def dispute_reason
-    case @dispute["reason"]
+  def self.dispute_reason(reason)
+    case reason
     when "duplicate"
       "$duplicate"
     when "fraudulent"
@@ -93,14 +93,16 @@ class DisputeHandlerTask < BaseTask
   end
   
   def create_sift_events
-    invoice_id = Charge.where(source_type: 'PaymentReceipt', source_id: @payment_receipt.id).first
+    charge = Charge.where(source_type: 'PaymentReceipt', source_id: @payment_receipt.id).first
+    invoice_id = charge.try(:invoice_id)
     chargeback_properties = {
       "$user_id"            => @account.user_id,
-      "$order_id"           => invoice_id,
       "$transaction_id"     => @payment_receipt.number,
-      "$chargeback_state"   => dispute_status,
-      "$chargeback_reason"  => dispute_reason
+      "$chargeback_state"   => self.class.dispute_status(@dispute["status"]),
+      "$chargeback_reason"  => self.class.dispute_reason(@dispute["reason"])
     }
+    chargeback_properties.merge!("$order_id" => invoice_id) if invoice_id
+    
     order_status_properties = {
       "$user_id"            => @account.user_id,
       "$order_id"           => invoice_id,

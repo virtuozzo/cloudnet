@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
     extend ActiveSupport::Concern
   
     def sift_user
-      @sift_user ||= SiftClientTasks.new.perform(:get_score, id.to_s)
+      @sift_user ||= SiftClientTasks.new.perform(:get_score, id.to_s) rescue nil
     end
     
     def sift_score

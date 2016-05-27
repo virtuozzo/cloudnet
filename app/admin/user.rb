@@ -133,7 +133,7 @@ ActiveAdmin.register User do
         row :card_history do |user|
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
-        row :sift_score_safe do |user|
+        row :sift_actions_safe do |user|
           unless user.sift_user.nil?
             status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?))
           end
@@ -187,7 +187,7 @@ ActiveAdmin.register User do
       row :card_history do
         text_node "Fail indicates credit cards in account has been used for fraudulent activity in the past.".html_safe
       end
-      row :sift_score_safe do
+      row :sift_actions_safe do
         text_node "Fail indicates that account fails to pass formulas created at Sift Science console.".html_safe
       end
       row :sift_device_safe do
@@ -338,6 +338,7 @@ ActiveAdmin.register User do
     user = User.find(params[:id])
     log_risky_entities(user)
     user.update!(suspended: true)
+    user.create_activity(:suspend, owner: user, params: { admin: current_user.id })
 
     flash[:notice] = 'User has been suspended'
     redirect_to admin_user_path(id: user.id)

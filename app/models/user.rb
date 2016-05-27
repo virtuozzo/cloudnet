@@ -126,9 +126,18 @@ class User < ActiveRecord::Base
     servers.reduce(0) {|result, server| result + server.forecasted_rev}
   end
 
-  def create_sift_account
-    CreateSiftEvent.perform_async("$create_account", sift_user_properties)
-    create_sift_login_event
+  def create_sift_account(include_time_ip = false)
+    properties = sift_user_properties(include_time_ip)
+    CreateSiftEvent.perform_async("$create_account", properties)
+  end
+
+  def create_sift_login_event
+    properties = {
+      "$user_id"      => id,
+      "$session_id"   => anonymous_id,
+      "$login_status" => "$success"
+    }
+    CreateSiftEvent.perform_async("$login", properties)
   end
   
   protected
@@ -142,15 +151,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def create_sift_login_event
-    properties = {
-      "$user_id"      => id,
-      "$session_id"   => anonymous_id,
-      "$login_status" => "$success"
-    }
-    CreateSiftEvent.perform_async("$login", properties)
-  end
 
   def create_account
     self.account ||= Account.create!(user: self)

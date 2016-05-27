@@ -62,6 +62,10 @@ class CreditNote < ActiveRecord::Base
   def number
     credit_number
   end
+  
+  def create_sift_event
+    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties)
+  end
 
   private
 
@@ -133,9 +137,5 @@ class CreditNote < ActiveRecord::Base
     credit_note.save!
     account.create_activity(:create_trial_credit, owner: account.user, params: { credit_note: credit_note.id, amount: credit_note.total_cost })
     Analytics.track(account.user, event: 'Issued trial credit', properties: { credit_note: credit_note.id, amount: Invoice.pretty_total(credit_note.total_cost) })
-  end
-  
-  def create_sift_event
-    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties)
   end
 end
