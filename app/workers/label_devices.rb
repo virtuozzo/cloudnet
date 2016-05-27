@@ -15,8 +15,14 @@ class LabelDevices
           # end
         end
       end
-    rescue Exception => e
-      ErrorLogging.new.track_exception(e, extra: { source: 'LabelDevices', user_id: user_id })
+    rescue StandardError => e
+      ErrorLogging.new.track_exception(e,
+        extra: {
+          source: 'LabelDevices',
+          user_id: user_id,
+          label: label
+        }
+      )
     end
   end
 end

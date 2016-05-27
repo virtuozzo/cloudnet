@@ -6,4 +6,5 @@
 :queues:
   - [create_onapp_user, 2]
   - [refresh_all_servers, 1]
+  - [create_sift_event, 1]
   - [default, 2]

@@ -7,6 +7,12 @@ module SiftScience
   class Client
     attr_reader :client
     
+    API_INTERVAL = 30
+    
+    # Error codes as per https://siftscience.com/developers/docs/curl/events-api/error-codes
+    RETRY_ERROR_CODES = [-4, -3, -2, -1]
+    LOG_ERROR_CODES = [51, 52, 53, 55, 56, 57, 60, 104, 105]
+    
     def initialize
       @client ||= Sift::Client.new
     end
