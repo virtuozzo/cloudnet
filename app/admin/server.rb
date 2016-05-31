@@ -83,8 +83,8 @@ ActiveAdmin.register Server do
     column "Forecasted Rev" do |server|
       (server.forecasted_rev / Invoice::MILLICENTS_IN_DOLLAR).round(2)
     end
-    column :tags do |user| 
-      user.tags.pluck(:label).join(', ')
+    column :tags do |server| 
+      server.tag_labels.join(', ')
     end
     column :primary_ip_address do |server|
       (server.unscoped_server_ip_addresses.find(&:primary?) || server.unscoped_server_ip_addresses.first).address rescue nil
@@ -147,7 +147,7 @@ ActiveAdmin.register Server do
   controller do
     def scoped_collection
       super.with_deleted
-        .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
+        .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses, :tags)
     end
   end
 end

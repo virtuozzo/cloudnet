@@ -65,8 +65,8 @@ ActiveAdmin.register User do
       user.servers.count
     end
     column "Balance Notifications", :notif_delivered
-    column :tags do |user| 
-      user.tags.pluck(:label).join(', ')
+    column :tags do |user|
+      user.tag_labels.join(', ')
     end
     
     actions
@@ -242,7 +242,7 @@ ActiveAdmin.register User do
 
   controller do
     def scoped_collection
-      result = super.includes({account: :billing_cards})
+      result = super.includes({account: :billing_cards}, :tags)
       result.uniq! if params["commit"] == "Filter"
       result
     end
