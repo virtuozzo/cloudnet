@@ -4,7 +4,7 @@ ActiveAdmin.register User do
   
   permit_params :email, :full_name, :admin, :onapp_user, :onapp_email, :vm_max, :cpu_max,
                 :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended,
-                :notif_before_shutdown, :notif_before_destroy
+                :notif_before_shutdown, :notif_before_destroy, tag_ids: []
 
   sidebar :control_panel_links do
     ul do
@@ -18,6 +18,7 @@ ActiveAdmin.register User do
   filter :email
   filter :full_name
   filter :onapp_user
+  filter :tags, as: :check_boxes, collection: proc { Tag.for(User) }
 
   filter :notif_delivered
   filter :last_notif_email_sent
@@ -64,12 +65,24 @@ ActiveAdmin.register User do
       user.servers.count
     end
     column "Balance Notifications", :notif_delivered
-
+    column :tags do |user|
+      user.tag_labels.join(', ')
+    end
+    
     actions
   end
   
   show do
+    
     default_main_content
+    
+    panel "Tags for a user" do
+      attributes_table_for user do
+        row :tags do |user|
+          user.tags.pluck(:label).join(', ')
+        end
+      end
+    end
     
     panel "Fraud Details" do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
@@ -215,6 +228,10 @@ ActiveAdmin.register User do
       f.input :bandwidth_max
     end
 
+    f.inputs 'Tags' do
+      f.input :tags, :multiple => true, as: :check_boxes
+    end
+    
     f.inputs 'Notification Limits - Before Action on Servers' do
       f.input :notif_before_shutdown
       f.input :notif_before_destroy
@@ -224,6 +241,12 @@ ActiveAdmin.register User do
   end
 
   controller do
+    def scoped_collection
+      result = super.includes({account: :billing_cards}, :tags)
+      result.uniq! if params["commit"] == "Filter"
+      result
+    end
+    
     def update
       user = params['user']
       if user && (user['password'].nil? || user['password'].empty?)

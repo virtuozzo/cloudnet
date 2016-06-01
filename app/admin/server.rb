@@ -3,7 +3,7 @@ ActiveAdmin.register Server do
   menu priority: 7
 
   permit_params :name, :hostname, :state, :built, :locked, :suspended, :root_password,
-                :cpus, :memory, :disk_size, :bandwidth
+                :cpus, :memory, :disk_size, :bandwidth, tag_ids: []
 
   scope("Existing", default: true) { |scope| scope.where(:deleted_at => nil) }
   scope :with_deleted
@@ -18,6 +18,7 @@ ActiveAdmin.register Server do
   end
 
   filter :id
+  filter :tags, as: :check_boxes, collection: proc { Tag.for(Server) }
   filter :identifier, label: 'Onapp identifier'
   filter :name
   filter :hostname
@@ -47,6 +48,15 @@ ActiveAdmin.register Server do
 
   show do
     default_main_content
+    
+    panel "Tags for a server" do
+      attributes_table_for server do
+        row :tags do |server|
+          server.tags.pluck(:label).join(', ')
+        end
+      end
+    end
+    
     if server.provisioner_job_id
       panel 'Provisioner job status' do
         attributes_table_for Server do
@@ -73,6 +83,9 @@ ActiveAdmin.register Server do
     column "Forecasted Rev" do |server|
       (server.forecasted_rev / Invoice::MILLICENTS_IN_DOLLAR).round(2)
     end
+    column :tags do |server| 
+      server.tag_labels.join(', ')
+    end
     column :primary_ip_address do |server|
       (server.unscoped_server_ip_addresses.find(&:primary?) || server.unscoped_server_ip_addresses.first).address rescue nil
     end
@@ -87,7 +100,18 @@ ActiveAdmin.register Server do
     column('Location') { |server| server.location }
     @resource.content_columns.each { |c| column c.name.to_sym }
   end
+  
+  form do |f|
+    f.semantic_errors *f.object.errors.keys
     
+    f.inputs do
+      f.input :name
+      f.input :tags, :multiple => true, as: :check_boxes
+    end
+    
+    actions
+  end
+  
   collection_action :zombies, method: :get do
     onapp_servers   = AllServers.new.process
     deleted_servers = Server.only_deleted
@@ -123,7 +147,7 @@ ActiveAdmin.register Server do
   controller do
     def scoped_collection
       super.with_deleted
-        .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses)
+        .includes(:unscoped_user, :unscoped_location, :unscoped_server_ip_addresses, :tags)
     end
   end
 end
