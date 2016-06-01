@@ -21,7 +21,7 @@ describe User::SiftUser do
   end
   
   after :each do
-    expect(@sift_client_double).to have_received(:perform).with(:get_score, user.id.to_s)
+    expect(@sift_client_double).to have_received(:perform).with(:create_event, "check_actions", anything, true)
   end
   
 end

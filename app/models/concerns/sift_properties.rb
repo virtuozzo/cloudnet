@@ -1,3 +1,5 @@
+## Contains mappings to Sift science properties
+
 require 'active_support/concern'
 
 module SiftProperties

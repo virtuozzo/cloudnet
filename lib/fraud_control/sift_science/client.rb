@@ -17,8 +17,8 @@ module SiftScience
       @client ||= Sift::Client.new
     end
     
-    def create_event(event_type, properties)
-      client.track(event_type, properties)
+    def create_event(event_type, properties, return_action = false)
+      client.track(event_type, properties, 2, nil, false, KEYS[:sift_science][:api_key], return_action)
     end
     
     def create_label(user_id, properties)

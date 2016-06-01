@@ -172,9 +172,7 @@ $ ->
     e.preventDefault()
     reloadAddfunds()
 
-  reloadAddfunds = ->
-    $("#payg-add-funds").modal("show")
-    
+  reloadAddfunds = ->    
     $('#payg-add-funds').on 'show.bs.modal', (e) -> 
       $("#payg-add-funds .modal-body").html """
         <div class="jg-widget-form pure-g-r clearfix">
@@ -185,6 +183,8 @@ $ ->
           </div>
         </div>
       """
+    
+    $("#payg-add-funds").modal("show")
       
     $.ajax 
       type: "GET",

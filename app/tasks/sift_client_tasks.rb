@@ -8,8 +8,8 @@ class SiftClientTasks < BaseTasks
 
   private
 
-  def create_event(sift_client, event, properties)
-    sift_client.create_event(event, properties)
+  def create_event(sift_client, event, properties, return_action = false)
+    sift_client.create_event(event, properties, return_action)
   end
   
   def create_label(sift_client, user_id, properties)

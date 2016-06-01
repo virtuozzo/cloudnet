@@ -5,26 +5,32 @@ class User < ActiveRecord::Base
     extend ActiveSupport::Concern
   
     def sift_user
-      @sift_user ||= SiftClientTasks.new.perform(:get_score, id.to_s) rescue nil
+      @sift_user ||= begin
+        properties = sift_user_properties.slice "$user_id", "$session_id"
+        task = SiftClientTasks.new.perform(:create_event, "check_actions", properties, true)
+        task.body['score_response']
+      end
+    rescue StandardError
+      nil
     end
     
     def sift_score
       return nil if sift_user.nil?
-      score = sift_user.body['score']
+      score = sift_user['score']
       (score * 100).round(1) unless score.nil?
     end
     
     def is_labelled_bad?
       return false if sift_user.nil?
-      sift_user.body.has_key?('latest_label') ? sift_user.body['latest_label']['is_bad'].present? : false
+      sift_user.has_key?('latest_label') ? sift_user['latest_label']['is_bad'] : false
     end
     
     def sift_actions
       return [] if sift_user.nil?
       actions = []
-      sift_user.body["actions"].try(:each) do |action|
+      sift_user["actions"].try(:each) do |action|
         trigger = action["triggers"].first
-        actions << action["action"]["id"] if action["entity"]["id"] == id.to_s && trigger["type"] == "formula" && trigger["source"] == "score_api"
+        actions << action["action"]["id"] if action["entity"]["id"] == id.to_s
       end
       actions.uniq
     end
