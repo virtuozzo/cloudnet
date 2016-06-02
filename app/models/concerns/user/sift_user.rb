@@ -29,7 +29,6 @@ class User < ActiveRecord::Base
       return [] if sift_user.nil?
       actions = []
       sift_user["actions"].try(:each) do |action|
-        trigger = action["triggers"].first
         actions << action["action"]["id"] if action["entity"]["id"] == id.to_s
       end
       actions.uniq
