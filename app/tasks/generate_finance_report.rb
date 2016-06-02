@@ -16,7 +16,7 @@ class GenerateFinanceReport < BaseTask
   end
 
   def transaction_report
-    columns = %w(account_id account_email account_full_name type state item_id created_at net_cost tax_cost total_cost remaining_cost card_charges_total credit_note_charges_total payment_receipt_charges_total)
+    columns = %w(account_id account_email account_full_name type state item_id created_at source transaction_id net_cost tax_cost total_cost remaining_cost card_charges_total credit_note_charges_total payment_receipt_charges_total)
 
     CSV.generate do |csv|
       csv << columns
@@ -70,6 +70,7 @@ class GenerateFinanceReport < BaseTask
       row.concat [item.class.to_s.downcase, item.state.to_s, item.number, item.created_at]
 
       if item.is_a?(Invoice)
+        row.concat [''] * 2
         row.concat [Invoice.pretty_total(item.net_cost, ''),
                     Invoice.pretty_total(item.tax_cost, ''),
                     Invoice.pretty_total(item.total_cost, ''),
@@ -79,13 +80,16 @@ class GenerateFinanceReport < BaseTask
         payment_receipt_charges = item.charges.where(source_type: 'PaymentReceipt').where('created_at >= ? AND created_at <= ?', @start, @end).to_a.sum(&:amount)
         row.concat [Invoice.pretty_total(card_charges, ''), Invoice.pretty_total(credit_charges, ''), Invoice.pretty_total(payment_receipt_charges, '')]
       elsif item.is_a?(CreditNote)
+        row.concat [''] * 2
         row.concat [Invoice.pretty_total(-item.net_cost, ''),
                     Invoice.pretty_total(-item.tax_cost, ''),
                     Invoice.pretty_total(-item.total_cost, ''),
                     Invoice.pretty_total(-item.remaining_cost, '')]
         row.concat [''] * 3
       elsif item.is_a?(PaymentReceipt)
-        row.concat [Invoice.pretty_total(-item.net_cost, ''),
+        row.concat [item.pay_source,
+                    item.reference,
+                    Invoice.pretty_total(-item.net_cost, ''),
                     0,
                     Invoice.pretty_total(-item.net_cost, ''),
                     Invoice.pretty_total(-item.remaining_cost, '')]
