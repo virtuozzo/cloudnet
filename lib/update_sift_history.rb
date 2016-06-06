@@ -10,6 +10,8 @@ class UpdateSiftHistory
   def run
     User.find_each do |user|
       begin
+        puts "User: #{user.email}"
+        puts "Suspended: #{user.suspended}"
         # Temporarily un-suspend user
         suspended = user.suspended
         user.update_attribute(:suspended, false) if suspended
@@ -22,6 +24,7 @@ class UpdateSiftHistory
           user.update_attribute(:suspended, true)
           user.update_sift_account
         end
+      puts "==============================================================="
       end
     end
   end

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
       @sift_user ||= begin
         properties = sift_user_properties.slice "$user_id", "$session_id"
         task = SiftClientTasks.new.perform(:create_event, "check_actions", properties, true)
-        task.body['score_response']
+        task.body['score_response'] if task
       end
     rescue StandardError
       nil

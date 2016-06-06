@@ -89,7 +89,7 @@ class UpdateSiftHistoryTask
     
     # 3. Check if user had all his servers destroyed for non-payment of invoices
     non_payment_activities = PublicActivity::Activity.where(owner_id: user.id, owner_type: "User", key: "user.destroy_all_servers")
-    if !non_payment_activities.nil?
+    if !non_payment_activities.empty?
       label_properties = SiftProperties.sift_label_properties true, nil, "Balance checker: Unpaid invoices", "negative_balance_checker"
       create_sift_label(label_properties)
       return
