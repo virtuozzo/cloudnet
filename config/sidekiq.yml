@@ -4,6 +4,7 @@
 :logfile: log/sidekiq.log
 :timeout: 30
 :queues:
-  - [create_onapp_user, 2]
-  - [refresh_all_servers, 1]
-  - [default, 2]
+  - [create_onapp_user, 4]
+  - [refresh_all_servers, 2]
+  - [create_sift_event, 1]
+  - [default, 3]

@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'dotenv-rails'
 gem 'foreman', require: false
 
-gem 'rails', '4.2'
+gem 'rails', '4.2.5'
 gem 'activerecord-session_store'
 
 gem 'haml-rails', '~> 0.5.3'
@@ -51,6 +51,7 @@ gem 'prawn', '~> 1.3.0'
 gem 'prawn-table'
 gem 'sequenced', '~> 1.6.0'
 gem 'paypal-express', '~> 0.6.0'
+gem 'sift', '1.1.7.3'
 
 # Zendesk Integration Dependencies
 gem 'zendesk_api', '~> 1.5.0'
@@ -102,6 +103,7 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'jasmine-rails'
   gem 'jasmine-jquery-rails'
+  gem 'license_finder'
 end
 
 group :test do
@@ -125,7 +127,6 @@ end
 
 gem 'puma', '~> 2.15.0'
 gem 'tubesock'
-gem 'agilecrm-wrapper'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

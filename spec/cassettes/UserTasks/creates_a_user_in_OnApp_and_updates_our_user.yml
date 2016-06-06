@@ -5,23 +5,24 @@ http_interactions:
     uri: https://api.stripe.com/v1/customers
     body:
       encoding: US-ASCII
-      string: description=User%20ID%3A%201787&email=adriel_weimann%40parker.biz
+      string: description=User+ID%3A+3811&email=aimee_parker%40kutchstark.org
     headers:
       Accept:
       - "*/*; q=0.5, application/xml"
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
-      - Stripe/v1 RubyBindings/1.14.0
+      - Stripe/v1 RubyBindings/1.39.0
       Authorization:
       - Bearer <%= ENV['STRIPE_API_KEY'] %>
       Content-Type:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"1.14.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-linux","publisher":"stripe","uname":"Linux
-        BLACKBOOK 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt7-1 (2015-03-01) x86_64 GNU/Linux"}'
+      - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Tomaszs-MacBook-Pro.local 15.4.0 Darwin Kernel Version 15.4.0: Fri Feb 26
+        22:08:05 PST 2016; root:xnu-3248.40.184~3/RELEASE_X86_64 x86_64","hostname":"Tomaszs-MacBook-Pro.local"}'
       Content-Length:
-      - '65'
+      - '63'
   response:
     status:
       code: 200
@@ -30,15 +31,15 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 16 Mar 2015 16:56:30 GMT
+      - Wed, 18 May 2016 16:17:14 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '811'
+      - '908'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - 'true'
+      - "true"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -48,62 +49,66 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_CACQFbKLaIImGX0x
+      - req_8TUKxwekhsMeqD
       Stripe-Version:
-      - '2014-06-17'
+      - '2014-01-31'
       Strict-Transport-Security:
       - max-age=31556926; includeSubDomains
     body:
       encoding: UTF-8
       string: |
         {
+          "id": "cus_8TUKQqIVx9XjcX",
           "object": "customer",
-          "created": 1426524990,
-          "id": "cus_5sn6oPwMPJhBGs",
-          "livemode": false,
-          "description": "User ID: 1787",
-          "email": "adriel_weimann@parker.biz",
-          "delinquent": false,
-          "metadata": {},
-          "subscriptions": {
-            "object": "list",
-            "total_count": 0,
-            "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/subscriptions",
-            "data": []
-          },
-          "discount": null,
           "account_balance": 0,
-          "currency": null,
+          "business_vat_id": null,
           "cards": {
             "object": "list",
-            "total_count": 0,
+            "count": 0,
+            "data": [],
             "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/cards",
-            "data": []
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/cards"
           },
+          "created": 1463588234,
+          "currency": null,
           "default_card": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": "User ID: 3811",
+          "discount": null,
+          "email": "aimee_parker@kutchstark.org",
+          "livemode": false,
+          "metadata": {},
+          "shipping": null,
           "sources": {
             "object": "list",
-            "total_count": 0,
+            "count": 0,
+            "data": [],
             "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/sources",
-            "data": []
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/sources"
           },
-          "default_source": null
+          "subscriptions": {
+            "object": "list",
+            "count": 0,
+            "data": [],
+            "has_more": false,
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/subscriptions"
+          }
         }
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:16 GMT
+  recorded_at: Wed, 18 May 2016 16:17:14 GMT
 - request:
     method: post
-    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%=
-      extract_domain ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users.json?user%5Bemail%5D=auto_rspec_user@onapp.com&user%5Blogin%5D=auto_rspec_user&user%5Bpassword%5D=Abcdef123456!&user%5Brole_ids%5D%5B0%5D=2
     body:
       encoding: UTF-8
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.9.0
+      - Faraday v0.9.2
       Content-Length:
       - '0'
       Accept-Encoding:
@@ -116,29 +121,29 @@ http_interactions:
       message: Created
     headers:
       Date:
-      - Mon, 16 Mar 2015 16:56:31 GMT
+      - Wed, 18 May 2016 16:17:14 GMT
       Server:
       - Apache/2.2.15 (CentOS)
       X-Ua-Compatible:
       - IE=Edge,chrome=1
       Etag:
-      - '"ec8d81cfb461068a55a19b6cef22baf3"'
+      - '"221e4b35966a6db0efacfe5da48596c7"'
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - efac26877cb8f5b8940d363377af07d6
+      - e66fcffa0f7154d0885d031be2d123bf
       X-Runtime:
-      - '0.216215'
+      - '0.898426'
       X-Rack-Cache:
       - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
-      - _session_id=b4d001435c3de20413e15cefcdcc7506; path=/; HttpOnly
+      - _session_id=167ffa413aa104f4c3f0e6b4a1394f6b; path=/; HttpOnly
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Location:
-      - https://<%= extract_domain ENV['ONAPP_CP'] %>/users/9
+      - https://<%= extract_domain ENV['ONAPP_CP'] %>/users/740
       Status:
       - 201 Created
       Connection:
@@ -149,115 +154,121 @@ http_interactions:
       - application/json; charset=utf-8
     body:
       encoding: UTF-8
-      string: '{"user":{"activated_at":"2015-03-16T16:56:31+00:00","avatar":null,"billing_plan_id":1,"cdn_account_status":"ACTIVE","cdn_status":"INACTIVE","created_at":"2015-03-16T16:56:31+00:00","deleted_at":null,"email":"auto_rspec_user@onapp.com","firewall_id":null,"first_name":"","group_id":null,"id":9,"image_template_group_id":null,"infoboxes":{"display_infoboxes":true,"hidden_infoboxes":[]},"last_name":"","locale":"en","login":"auto_rspec_user","password_changed_at":"2015-03-16T16:56:31+00:00","status":"active","supplied":false,"suspend_at":null,"time_zone":null,"total_amount":0.0,"updated_at":"2015-03-16T16:56:31+00:00","use_gravatar":null,"user_group_id":null,"outstanding_amount":0.0,"payment_amount":"0.0","roles":[{"role":{"created_at":"2015-03-12T13:24:37+00:00","id":2,"identifier":"user","label":"User","updated_at":"2015-03-12T13:24:37+00:00","permissions":[{"permission":{"created_at":"2015-03-12T13:24:37+00:00","id":7,"identifier":"activity_logs.read.own","label":"See
-        details of own activity log","updated_at":"2015-03-12T13:24:37+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":32,"identifier":"backups.convert.own","label":"Convert
-        own backup to template","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":34,"identifier":"backups.create.own","label":"Create
-        an own backup","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":36,"identifier":"backups.delete.own","label":"Destroy
-        own backup","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":38,"identifier":"backups.read.own","label":"See
-        own backups","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":40,"identifier":"backups.update.own","label":"Update
-        own backup","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":46,"identifier":"base_resources.read.own","label":"See
-        own base resources","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":53,"identifier":"billing_plans.read.own","label":"See
-        own billing plan","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":87,"identifier":"cdn_resources.create","label":"Create
-        a new CDN resource","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":89,"identifier":"cdn_resources.delete.own","label":"Destroy
-        own CDN resource","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":91,"identifier":"cdn_resources.read.own","label":"See
-        own CDN resources","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":93,"identifier":"cdn_resources.update.own","label":"Update
-        own CDN resource","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":96,"identifier":"cdn_usage_stats.read.own","label":"User
-        can see own CDN usage statistics","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":105,"identifier":"customer_networks.create.own","label":"Create
-        own customer networks","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":106,"identifier":"customer_networks.delete.own","label":"Delete
-        own customer networks","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":107,"identifier":"customer_networks.read.own","label":"See
-        own customer networks","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":117,"identifier":"dashboard.show_cloud_dashboard","label":"Show
-        cloud dashboard","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":130,"identifier":"data_stores.read","label":"See
-        all data_stores","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":134,"identifier":"disks.autobackup.own","label":"Autobackup
-        for own disk","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":135,"identifier":"disks.create","label":"Create
-        a new disk","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":137,"identifier":"disks.delete.own","label":"Destroy
-        own disk","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":139,"identifier":"disks.read.own","label":"See
-        own disks","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":140,"identifier":"disks.unlock","label":"Unlock
-        any disk","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":142,"identifier":"disks.update.own","label":"Update
-        own disk","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":144,"identifier":"dns_zone.create","label":"Create
-        a new DNS zone","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":146,"identifier":"dns_zone.delete.own","label":"Destroy
-        own DNS zone","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":148,"identifier":"dns_zone.read.own","label":"See
-        own DNS zones","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":149,"identifier":"dns_zone.record_create","label":"Create
-        a new DNS record","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":153,"identifier":"dns_zone.record_read.own","label":"See
-        own DNS records","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":155,"identifier":"dns_zone.record_update.own","label":"Update
-        own DNS records","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":160,"identifier":"edge_groups.read","label":"See
-        all edge groups","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":190,"identifier":"firewall_rules.create.own","label":"Add
-        own Firewall Rules","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":192,"identifier":"firewall_rules.delete.own","label":"Destroy
-        own Firewall Rules","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":194,"identifier":"firewall_rules.read.own","label":"See
-        own Firewall Rules","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":196,"identifier":"firewall_rules.update.own","label":"Update
-        own Firewall Rules","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":201,"identifier":"groups.read","label":"See
-        all groups","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":221,"identifier":"hypervisors.read","label":"See
-        all hypervisors","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":222,"identifier":"hypervisors.read_vm_creation","label":"Show
-        Hypervisors on VirtualMachine creation.","updated_at":"2015-03-12T13:24:38+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":237,"identifier":"image_template_groups.read","label":"See
-        details of any template group","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":244,"identifier":"io_stats.read.own","label":"See
-        own IO Statistics","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":247,"identifier":"ip_address_joins.create.own","label":"Add
-        IP address to own virtual machine","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":249,"identifier":"ip_address_joins.delete.own","label":"Remove
-        IP address from own virtual machine","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":250,"identifier":"ip_address_joins.read","label":"See
-        IP addresses assigned to any virtual machines","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":260,"identifier":"ip_addresses.read","label":"See
-        all ip addresses","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":265,"identifier":"iso_joins.create.own","label":"Mount
-        own ISO","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":267,"identifier":"iso_joins.delete.own","label":"Umount
-        own mounted ISOs","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":269,"identifier":"iso_joins.read.own","label":"See
-        own mounted ISOs","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":276,"identifier":"isos.manage.own","label":"Create
-        and Manage ISOs","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":288,"identifier":"load_balancers.migrate.own","label":"Migrate
-        own load balancer","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":291,"identifier":"load_balancing_clusters.create","label":"Create
-        a new relation load_balancing","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":293,"identifier":"load_balancing_clusters.delete.own","label":"Delete
-        own load_balancing","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":295,"identifier":"load_balancing_clusters.read.own","label":"See
-        details of own load_balancing","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":297,"identifier":"load_balancing_clusters.update.own","label":"Change
-        own load_balancing","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":305,"identifier":"log_items.delete.own","label":"Delete
-        own log item","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":307,"identifier":"log_items.list.own","label":"See
-        list of own log items","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":309,"identifier":"log_items.read.own","label":"See
-        details of own log item","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":314,"identifier":"monthly_bills.read.own","label":"See
-        own Monthly Bills Statistics","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":318,"identifier":"nameservers.read","label":"See
-        all nameservers","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":329,"identifier":"networks.read","label":"See
-        all networks","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":337,"identifier":"payments.read","label":"See
-        all payments","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":338,"identifier":"payments.read.own","label":"See
-        own payments","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":348,"identifier":"recipe_group_relations.list","label":"See
-        list of recipe group relations","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":349,"identifier":"recipe_group_relations.read","label":"Read
-        recipe group relations","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":354,"identifier":"recipe_groups.list","label":"See
-        list of recipe groups","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":355,"identifier":"recipe_groups.read","label":"Read
-        recipe groups","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":358,"identifier":"recipes.create","label":"Create
-        recipes","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":360,"identifier":"recipes.delete.own","label":"Delete
-        own recipes","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":362,"identifier":"recipes.edit.own","label":"Edit
-        own recipes","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":364,"identifier":"recipes.read.own","label":"Read
-        own recipes","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":376,"identifier":"roles.read","label":"See
-        all Roles","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":437,"identifier":"templates.manage.own","label":"Manage
-        Own Templates","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":442,"identifier":"templates.read.public","label":"See
-        all public templates","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":461,"identifier":"transactions.delete.own","label":"Delete
-        own transactions from logs","updated_at":"2015-03-12T13:24:39+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":463,"identifier":"transactions.list.own","label":"See
-        list of own transactions","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":465,"identifier":"transactions.read.own","label":"See
-        details of own transaction","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":489,"identifier":"users.change_password.own","label":"Change
-        own password","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":495,"identifier":"users.read.own","label":"See
-        own users","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":497,"identifier":"users.read_prices.backups_templates","label":"See
-        User Backups/Templates prices","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":498,"identifier":"users.read_prices.billing_plan","label":"See
-        User billing plan","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":499,"identifier":"users.read_prices.hourly_price","label":"See
-        User hourly prices","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":500,"identifier":"users.read_prices.monthly_price","label":"See
-        User monthly prices","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":501,"identifier":"users.read_prices.outstanding_amount","label":"See
-        User outstanding amount","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":502,"identifier":"users.read_prices.summary_payments","label":"See
-        User summary payments","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":504,"identifier":"users.read_prices.vm_prices","label":"See
-        User Virtual Machine prices","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":508,"identifier":"users.update.own","label":"Update
-        own user","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":510,"identifier":"users.update_api_key.own","label":"Generate
-        Own API key","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":512,"identifier":"virtual_machine_snapshots.create.own","label":"Create/Restore
-        own virtual machine snapshots","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":513,"identifier":"virtual_machine_snapshots.delete.own","label":"Delete
-        own virtual machine snapshots","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":514,"identifier":"virtual_machine_snapshots.read.own","label":"See
-        own virtual machine snapshots","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":517,"identifier":"virtual_machines.build.own","label":"Build/rebuild
-        user''s own virtual server","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":520,"identifier":"virtual_machines.console.own","label":"Console
-        to own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":522,"identifier":"virtual_machines.create","label":"Create
-        a new virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":524,"identifier":"virtual_machines.delete.own","label":"Destroy
-        own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":525,"identifier":"virtual_machines.manage_publications","label":"Manage
-        publications for all virtual servers","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":528,"identifier":"virtual_machines.migrate.own","label":"Migrate
-        own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":530,"identifier":"virtual_machines.power.own","label":"Any
-        power action on own virtual machines","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":532,"identifier":"virtual_machines.read.own","label":"See
-        own virtual machines","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":533,"identifier":"virtual_machines.read_root_password","label":"Read
-        Virtual Machine''s root password","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":537,"identifier":"virtual_machines.rebuild_network.own","label":"Rebuild
-        Network to own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":539,"identifier":"virtual_machines.recipe_manage.own","label":"Manage
-        recipes joins for own virtual servers","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":541,"identifier":"virtual_machines.reset_root_password.own","label":"Reset
-        root password to own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":547,"identifier":"virtual_machines.update.own","label":"Update
-        own virtual machine","updated_at":"2015-03-12T13:24:40+00:00"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":550,"identifier":"vm_stats.read.own","label":"See
-        Own Virtual Machine Statistics","updated_at":"2015-03-12T13:24:40+00:00"}}]}}],"used_cpus":0,"used_memory":0,"used_cpu_shares":0,"used_disk_size":0,"used_ip_addresses":[],"memory_available":184863,"disk_space_available":3276,"additional_fields":[]}}'
+      string: '{"user":{"activated_at":"2016-05-18T16:17:15+00:00","avatar":null,"billing_plan_id":1,"cdn_account_status":"ACTIVE","cdn_status":"INACTIVE","created_at":"2016-05-18T16:17:15+00:00","deleted_at":null,"email":"auto_rspec_user@onapp.com","firewall_id":null,"first_name":"","group_id":null,"id":740,"identifier":"weucmp5hrl61ng","image_template_group_id":null,"infoboxes":{"display_infoboxes":true,"hidden_infoboxes":[]},"last_name":"","locale":"en","login":"auto_rspec_user","password_changed_at":"2016-05-18T16:17:15+00:00","registered_yubikey":null,"status":"active","supplied":false,"suspend_at":null,"system_theme":null,"time_zone":null,"total_amount":0.0,"updated_at":"2016-05-18T16:17:15+00:00","use_gravatar":null,"user_group_id":null,"outstanding_amount":"0.0","payment_amount":"0.0","roles":[{"role":{"created_at":"2015-03-12T13:24:37+00:00","id":2,"identifier":"user","label":"User","updated_at":"2015-11-04T12:41:26+00:00","permissions":[{"permission":{"created_at":"2015-03-12T13:24:37+00:00","id":7,"identifier":"activity_logs.read.own","updated_at":"2015-03-12T13:24:37+00:00","label":"See
+        all own Activity Logs"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":32,"identifier":"backups.convert.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Convert
+        own backup to template"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":34,"identifier":"backups.create.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        backup for own VS"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":36,"identifier":"backups.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own backup"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":38,"identifier":"backups.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own backups"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":40,"identifier":"backups.update.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Update
+        own backup"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":46,"identifier":"base_resources.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own base resources"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":53,"identifier":"billing_plans.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own billing plan"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":87,"identifier":"cdn_resources.create","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        a new CDN resource"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":89,"identifier":"cdn_resources.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own CDN resources"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":91,"identifier":"cdn_resources.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own CDN resources"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":93,"identifier":"cdn_resources.update.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Update
+        own CDN resources"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":96,"identifier":"cdn_usage_stats.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"User
+        can see own CDN usage statistics"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":105,"identifier":"customer_networks.create.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        own customer network"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":106,"identifier":"customer_networks.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own customer network"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":107,"identifier":"customer_networks.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own customer networks"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":117,"identifier":"dashboard.show_cloud_dashboard","updated_at":"2015-03-12T13:24:38+00:00","label":"Show
+        cloud dashboard"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":130,"identifier":"data_stores.read","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        all data stores"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":134,"identifier":"disks.autobackup.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Auto-backup
+        for own disk"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":135,"identifier":"disks.create","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        a new disk"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":137,"identifier":"disks.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own disk"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":139,"identifier":"disks.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own disks"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":140,"identifier":"disks.unlock","updated_at":"2015-03-12T13:24:38+00:00","label":"Unlock
+        any disk"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":142,"identifier":"disks.update.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Update
+        own disk"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":144,"identifier":"dns_zone.create","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        a new DNS zone"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":146,"identifier":"dns_zone.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own DNS zone"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":148,"identifier":"dns_zone.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own DNS zones"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":149,"identifier":"dns_zone.record_create","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        a new DNS record"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":153,"identifier":"dns_zone.record_read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        own DNS records"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":155,"identifier":"dns_zone.record_update.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Update
+        own DNS records"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":160,"identifier":"edge_groups.read","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        all edge groups"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":190,"identifier":"firewall_rules.create.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Create
+        own firewall rules"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":192,"identifier":"firewall_rules.delete.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Destroy
+        own firewall rules"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":194,"identifier":"firewall_rules.read.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Read
+        own firewall rules"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":196,"identifier":"firewall_rules.update.own","updated_at":"2015-03-12T13:24:38+00:00","label":"Update
+        own firewall rules"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":201,"identifier":"groups.read","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        all groups"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":221,"identifier":"hypervisors.read","updated_at":"2015-03-12T13:24:38+00:00","label":"See
+        all compute resources"}},{"permission":{"created_at":"2015-03-12T13:24:38+00:00","id":222,"identifier":"hypervisors.read_vm_creation","updated_at":"2015-03-12T13:24:38+00:00","label":"Show
+        compute resources on virtual server creation"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":237,"identifier":"image_template_groups.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        details of any template group"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":244,"identifier":"io_stats.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        own IO statistics"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":247,"identifier":"ip_address_joins.create.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Add
+        IP address to own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":249,"identifier":"ip_address_joins.delete.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Remove
+        IP address from own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":250,"identifier":"ip_address_joins.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        IP addresses assigned to any virtual servers"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":260,"identifier":"ip_addresses.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all IP addresses"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":276,"identifier":"isos.manage.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Create
+        and manage ISOs"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":288,"identifier":"load_balancers.migrate.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Migrate
+        own load balancer"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":291,"identifier":"load_balancing_clusters.create","updated_at":"2015-03-12T13:24:39+00:00","label":"Create
+        a new load balancing cluster"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":293,"identifier":"load_balancing_clusters.delete.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Delete
+        own load balancing clusters"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":295,"identifier":"load_balancing_clusters.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        details of own load balancing clusters"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":297,"identifier":"load_balancing_clusters.update.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Change
+        own load balancing clusters"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":305,"identifier":"log_items.delete.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Delete
+        own log item"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":307,"identifier":"log_items.list.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        list of own log items"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":309,"identifier":"log_items.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        details of own log item"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":314,"identifier":"monthly_user_bills.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        only own user monthly bills statistics"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":318,"identifier":"nameservers.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all nameservers"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":329,"identifier":"networks.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all networks"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":337,"identifier":"payments.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all payments"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":338,"identifier":"payments.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        own user payments"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":348,"identifier":"recipe_group_relations.list","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        list of all recipe group relations"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":349,"identifier":"recipe_group_relations.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all recipe group relations"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":354,"identifier":"recipe_groups.list","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        list of all recipe groups"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":355,"identifier":"recipe_groups.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all recipe groups"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":358,"identifier":"recipes.create","updated_at":"2015-03-12T13:24:39+00:00","label":"Create
+        new Recipes"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":360,"identifier":"recipes.delete.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Delete
+        own Recipes"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":362,"identifier":"recipes.edit.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Edit
+        own Recipes"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":364,"identifier":"recipes.read.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Read
+        own Recipes"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":376,"identifier":"roles.read","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all roles"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":437,"identifier":"templates.manage.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Manage
+        own templates"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":442,"identifier":"templates.read.public","updated_at":"2015-03-12T13:24:39+00:00","label":"See
+        all public templates"}},{"permission":{"created_at":"2015-03-12T13:24:39+00:00","id":461,"identifier":"transactions.delete.own","updated_at":"2015-03-12T13:24:39+00:00","label":"Delete
+        own transactions from logs"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":463,"identifier":"transactions.list.own","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        list of own transactions"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":465,"identifier":"transactions.read.own","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        details of own transaction"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":489,"identifier":"users.change_password.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Change
+        own password"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":495,"identifier":"users.read.own","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        own users"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":497,"identifier":"users.read_prices.backups_templates","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user backups/templates prices"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":498,"identifier":"users.read_prices.billing_plan","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user billing plan"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":499,"identifier":"users.read_prices.hourly_price","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user hourly prices"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":500,"identifier":"users.read_prices.monthly_price","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user monthly prices"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":501,"identifier":"users.read_prices.outstanding_amount","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user outstanding amount"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":502,"identifier":"users.read_prices.summary_payments","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user summary payments"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":504,"identifier":"users.read_prices.vm_prices","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        user virtual server prices"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":508,"identifier":"users.update.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Update
+        own user"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":510,"identifier":"users.update_api_key.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Generate
+        own API key"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":512,"identifier":"virtual_machine_snapshots.create.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Create
+        or restore own virtual server snapshot"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":513,"identifier":"virtual_machine_snapshots.delete.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Destroy
+        own virtual server snapshot"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":514,"identifier":"virtual_machine_snapshots.read.own","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        own virtual server snapshots"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":517,"identifier":"virtual_machines.build.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Build/rebuild
+        user''s own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":520,"identifier":"virtual_machines.console.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Console
+        to own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":522,"identifier":"virtual_machines.create","updated_at":"2015-03-12T13:24:40+00:00","label":"Create
+        a new virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":524,"identifier":"virtual_machines.delete.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Destroy
+        own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":525,"identifier":"virtual_machines.manage_publications","updated_at":"2015-03-12T13:24:40+00:00","label":"Manage
+        publications for all virtual servers"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":528,"identifier":"virtual_machines.migrate.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Migrate
+        own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":530,"identifier":"virtual_machines.power.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Any
+        power action on own virtual servers"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":532,"identifier":"virtual_machines.read.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Read
+        own virtual servers"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":537,"identifier":"virtual_machines.rebuild_network.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Rebuild
+        network of own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":539,"identifier":"virtual_machines.recipe_manage.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Manage
+        recipes joins for own virtual servers"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":541,"identifier":"virtual_machines.reset_root_password.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Reset
+        root password to own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":547,"identifier":"virtual_machines.update.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Update
+        own virtual server"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":550,"identifier":"vm_stats.read.own","updated_at":"2015-03-12T13:24:40+00:00","label":"See
+        own Virtual Machines Statistics"}},{"permission":{"created_at":"2015-06-24T14:37:54+00:00","id":569,"identifier":"cdn_ssl_certificates.create","updated_at":"2015-06-24T14:37:54+00:00","label":"Create
+        a new CDN SSL Certificate"}},{"permission":{"created_at":"2015-06-24T14:37:54+00:00","id":573,"identifier":"cdn_ssl_certificates.delete.own","updated_at":"2015-06-24T14:37:54+00:00","label":"Destroy
+        own CDN SSL Certificate"}},{"permission":{"created_at":"2015-06-24T14:37:54+00:00","id":574,"identifier":"cdn_ssl_certificates.read.own","updated_at":"2015-06-24T14:37:54+00:00","label":"See
+        own CDN SSL Certificates"}},{"permission":{"created_at":"2015-06-24T14:37:54+00:00","id":575,"identifier":"cdn_ssl_certificates.update.own","updated_at":"2015-06-24T14:37:54+00:00","label":"Update
+        own CDN SSL Certificates"}},{"permission":{"created_at":"2015-09-10T18:45:32+00:00","id":636,"identifier":"virtual_machines.select_resources_manually_on_creation","updated_at":"2015-09-10T18:45:32+00:00","label":"Select
+        resources manually on virtual server creation"}},{"permission":{"created_at":"2015-03-12T13:24:40+00:00","id":534,"identifier":"virtual_machines.read_root_password.own","updated_at":"2015-03-12T13:24:40+00:00","label":"Read
+        own virtual server''s root password"}},{"permission":{"created_at":"2016-03-03T14:02:17+00:00","id":672,"identifier":"federation_failed_actions.clean.own","updated_at":"2016-03-03T14:02:17+00:00","label":"Clean
+        own federation failed actions"}},{"permission":{"created_at":"2016-03-03T14:02:17+00:00","id":674,"identifier":"federation_failed_actions.read.own","updated_at":"2016-03-03T14:02:17+00:00","label":"Read
+        own federation failed actions"}},{"permission":{"created_at":"2016-03-03T14:02:18+00:00","id":687,"identifier":"users.update_yubikey.own","updated_at":"2016-03-03T14:02:18+00:00","label":"Update
+        own Yubikey"}},{"permission":{"created_at":"2016-03-03T14:02:19+00:00","id":709,"identifier":"virtual_machines.autobackup.own","updated_at":"2016-03-03T14:02:19+00:00","label":"Schedule
+        autobackups on own virtual servers"}}]}}],"used_cpus":0,"used_memory":0,"used_cpu_shares":0,"used_disk_size":0,"used_ip_addresses":[],"memory_available":0,"disk_space_available":0,"additional_fields":[]}}'
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:17 GMT
+  recorded_at: Wed, 18 May 2016 16:17:17 GMT
 - request:
     method: get
-    uri: https://api.stripe.com/v1/customers/cus_5sn6oPwMPJhBGs
+    uri: https://api.stripe.com/v1/customers/cus_8TUKQqIVx9XjcX
     body:
       encoding: US-ASCII
       string: ''
@@ -267,14 +278,15 @@ http_interactions:
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
-      - Stripe/v1 RubyBindings/1.14.0
+      - Stripe/v1 RubyBindings/1.39.0
       Authorization:
       - Bearer <%= ENV['STRIPE_API_KEY'] %>
       Content-Type:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"1.14.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-linux","publisher":"stripe","uname":"Linux
-        BLACKBOOK 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt7-1 (2015-03-01) x86_64 GNU/Linux"}'
+      - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Tomaszs-MacBook-Pro.local 15.4.0 Darwin Kernel Version 15.4.0: Fri Feb 26
+        22:08:05 PST 2016; root:xnu-3248.40.184~3/RELEASE_X86_64 x86_64","hostname":"Tomaszs-MacBook-Pro.local"}'
   response:
     status:
       code: 200
@@ -283,15 +295,15 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 16 Mar 2015 16:56:32 GMT
+      - Wed, 18 May 2016 16:17:18 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '811'
+      - '908'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - 'true'
+      - "true"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -301,72 +313,78 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_1WVY8GwhAQYhGWOy
+      - req_8TUKV5s3FoF7By
       Stripe-Version:
-      - '2014-06-17'
+      - '2014-01-31'
       Strict-Transport-Security:
       - max-age=31556926; includeSubDomains
     body:
       encoding: UTF-8
       string: |
         {
+          "id": "cus_8TUKQqIVx9XjcX",
           "object": "customer",
-          "created": 1426524990,
-          "id": "cus_5sn6oPwMPJhBGs",
-          "livemode": false,
-          "description": "User ID: 1787",
-          "email": "adriel_weimann@parker.biz",
-          "delinquent": false,
-          "metadata": {},
-          "subscriptions": {
-            "object": "list",
-            "total_count": 0,
-            "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/subscriptions",
-            "data": []
-          },
-          "discount": null,
           "account_balance": 0,
-          "currency": null,
+          "business_vat_id": null,
           "cards": {
             "object": "list",
-            "total_count": 0,
+            "count": 0,
+            "data": [],
             "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/cards",
-            "data": []
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/cards"
           },
+          "created": 1463588234,
+          "currency": null,
           "default_card": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": "User ID: 3811",
+          "discount": null,
+          "email": "aimee_parker@kutchstark.org",
+          "livemode": false,
+          "metadata": {},
+          "shipping": null,
           "sources": {
             "object": "list",
-            "total_count": 0,
+            "count": 0,
+            "data": [],
             "has_more": false,
-            "url": "/v1/customers/cus_5sn6oPwMPJhBGs/sources",
-            "data": []
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/sources"
           },
-          "default_source": null
+          "subscriptions": {
+            "object": "list",
+            "count": 0,
+            "data": [],
+            "has_more": false,
+            "total_count": 0,
+            "url": "/v1/customers/cus_8TUKQqIVx9XjcX/subscriptions"
+          }
         }
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:18 GMT
+  recorded_at: Wed, 18 May 2016 16:17:18 GMT
 - request:
     method: post
-    uri: https://api.stripe.com/v1/customers/cus_5sn6oPwMPJhBGs/cards
+    uri: https://api.stripe.com/v1/customers/cus_8TUKQqIVx9XjcX/cards
     body:
       encoding: US-ASCII
-      string: card[number]=4242424242424242&card[exp_month]=06&card[exp_year]=15&card[cvc]=424
+      string: card[cvc]=424&card[exp_month]=06&card[exp_year]=17&card[number]=4242424242424242
     headers:
       Accept:
       - "*/*; q=0.5, application/xml"
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
-      - Stripe/v1 RubyBindings/1.14.0
+      - Stripe/v1 RubyBindings/1.39.0
       Authorization:
       - Bearer <%= ENV['STRIPE_API_KEY'] %>
       Content-Type:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"1.14.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-linux","publisher":"stripe","uname":"Linux
-        BLACKBOOK 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt7-1 (2015-03-01) x86_64 GNU/Linux"}'
+      - '{"bindings_version":"1.39.0","lang":"ruby","lang_version":"2.2.1 p85 (2015-02-26)","platform":"x86_64-darwin14","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Tomaszs-MacBook-Pro.local 15.4.0 Darwin Kernel Version 15.4.0: Fri Feb 26
+        22:08:05 PST 2016; root:xnu-3248.40.184~3/RELEASE_X86_64 x86_64","hostname":"Tomaszs-MacBook-Pro.local"}'
       Content-Length:
       - '80'
   response:
@@ -377,15 +395,15 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 16 Mar 2015 16:56:33 GMT
+      - Wed, 18 May 2016 16:17:18 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '546'
+      - '595'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
-      - 'true'
+      - "true"
       Access-Control-Allow-Methods:
       - GET, POST, HEAD, OPTIONS, DELETE
       Access-Control-Allow-Origin:
@@ -395,50 +413,51 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_InpNLI0tFRw3Y6Ym
+      - req_8TUKhnWyiGUj8R
       Stripe-Version:
-      - '2014-06-17'
+      - '2014-01-31'
       Strict-Transport-Security:
       - max-age=31556926; includeSubDomains
     body:
       encoding: UTF-8
       string: |
         {
-          "id": "card_15h1W14uZwGGrGulDyrSLtVv",
+          "id": "card_18CXMI2mXYoFp2cEApz62NnS",
           "object": "card",
-          "last4": "4242",
-          "brand": "Visa",
-          "funding": "credit",
-          "exp_month": 6,
-          "exp_year": 2015,
-          "fingerprint": "rvIZI9IDHOATwHKP",
-          "country": "US",
-          "name": null,
-          "address_line1": null,
-          "address_line2": null,
           "address_city": null,
+          "address_country": null,
+          "address_line1": null,
+          "address_line1_check": null,
+          "address_line2": null,
           "address_state": null,
           "address_zip": null,
-          "address_country": null,
-          "cvc_check": "pass",
-          "address_line1_check": null,
           "address_zip_check": null,
+          "brand": "Visa",
+          "country": "US",
+          "customer": "cus_8TUKQqIVx9XjcX",
+          "cvc_check": "pass",
           "dynamic_last4": null,
+          "exp_month": 6,
+          "exp_year": 2017,
+          "fingerprint": "s725M79uVYg1ZNB7",
+          "funding": "credit",
+          "last4": "4242",
           "metadata": {},
-          "customer": "cus_5sn6oPwMPJhBGs"
+          "name": null,
+          "tokenization_method": null,
+          "type": "Visa"
         }
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:19 GMT
+  recorded_at: Wed, 18 May 2016 16:17:18 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%=
-      extract_domain ENV['ONAPP_CP'] %>/users/9.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.9.0
+      - Faraday v0.9.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -449,7 +468,7 @@ http_interactions:
       message: No Content
     headers:
       Date:
-      - Mon, 16 Mar 2015 16:56:34 GMT
+      - Wed, 18 May 2016 16:17:19 GMT
       Server:
       - Apache/2.2.15 (CentOS)
       X-Ua-Compatible:
@@ -457,15 +476,15 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 66ee1e60782ddb73e49b33b8b97896f4
+      - 5a584c54949fe2bee81d9b41262fe61a
       X-Runtime:
-      - '0.068857'
+      - '0.371659'
       X-Rack-Cache:
       - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
-      - _session_id=328ecab32169b104d09843745e344595; path=/; HttpOnly
+      - _session_id=25e5dfb5706ac43af687a1d41951cc1b; path=/; HttpOnly
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Status:
@@ -480,17 +499,16 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:20 GMT
+  recorded_at: Wed, 18 May 2016 16:17:21 GMT
 - request:
     method: delete
-    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%=
-      extract_domain ENV['ONAPP_CP'] %>/users/9.json
+    uri: https://<%= ENV['ONAPP_USER'] %>:<%= CGI.escape ENV['ONAPP_PASS'] %>@<%= extract_domain ENV['ONAPP_CP'] %>/users/740.json
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.9.0
+      - Faraday v0.9.2
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -501,7 +519,7 @@ http_interactions:
       message: No Content
     headers:
       Date:
-      - Mon, 16 Mar 2015 16:56:34 GMT
+      - Wed, 18 May 2016 16:17:21 GMT
       Server:
       - Apache/2.2.15 (CentOS)
       X-Ua-Compatible:
@@ -509,15 +527,15 @@ http_interactions:
       Cache-Control:
       - no-cache
       X-Request-Id:
-      - 19ae1ab297a17e7e9907252c9059e860
+      - 309ebd406a3882c74f286cf6499f823b
       X-Runtime:
-      - '0.070564'
+      - '0.264821'
       X-Rack-Cache:
       - invalidate, pass
       X-Powered-By:
       - Phusion Passenger 4.0.35
       Set-Cookie:
-      - _session_id=4189b745562e009ae93e419bd7e66bf0; path=/; HttpOnly
+      - _session_id=bcec4252e8950109ca5a8537500acb28; path=/; HttpOnly
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Status:
@@ -532,81 +550,4 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Mon, 16 Mar 2015 16:55:20 GMT
-- request:
-    method: post
-    uri: https://<%= CGI.escape ENV['AGILECRM_EMAIL'] %>:<%= ENV['AGILECRM_API_KEY']
-      %>@<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/dev/api/contacts/search/email
-    body:
-      encoding: UTF-8
-      string: email_ids=[]
-    headers:
-      Accept:
-      - application/json
-      User-Agent:
-      - Faraday v0.9.2
-      Content-Type:
-      - application/x-www-form-urlencoded
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 10 Dec 2015 20:03:15 GMT
-      Server:
-      - Google Frontend
-      Cache-Control:
-      - private
-      Alt-Svc:
-      - clear
-      Transfer-Encoding:
-      - chunked
-    body:
-      encoding: ASCII-8BIT
-      string: "[]"
-    http_version: 
-  recorded_at: Thu, 10 Dec 2015 20:03:16 GMT
-- request:
-    method: post
-    uri: https://<%= CGI.escape ENV['AGILECRM_EMAIL'] %>:<%= ENV['AGILECRM_API_KEY']
-      %>@<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/dev/api/contacts
-    body:
-      encoding: UTF-8
-      string: '{"properties":[{"type":"SYSTEM","name":"first_name","value":"Wilber"},{"type":"SYSTEM","name":"last_name","value":"Fahey"},{"type":"SYSTEM","name":"email","value":"cecile@herzogreynolds.biz"},{"type":"CUSTOM","name":"CloudnetID","value":17711},{"type":"CUSTOM","name":"StripeID","value":"cus_5sn6oPwMPJhBGs"},{"type":"CUSTOM","name":"EmailVerified","value":false}]}'
-    headers:
-      Accept:
-      - application/json
-      User-Agent:
-      - Faraday v0.9.2
-      Content-Type:
-      - application/json
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 10 Dec 2015 20:03:17 GMT
-      Server:
-      - Google Frontend
-      Cache-Control:
-      - private
-      Alt-Svc:
-      - clear
-      Transfer-Encoding:
-      - chunked
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":"5686812383117312","type":"PERSON","created_time":1449777797,"updated_time":0,"last_contacted":0,"last_emailed":0,"last_campaign_emaild":0,"last_called":0,"viewed_time":0,"viewed":{"viewed_time":0},"star_value":0,"lead_score":0,"tags":[],"tagsWithTime":[],"properties":[{"type":"SYSTEM","name":"first_name","value":"Wilber"},{"type":"SYSTEM","name":"last_name","value":"Fahey"},{"type":"SYSTEM","name":"email","value":"cecile@herzogreynolds.biz"},{"type":"CUSTOM","name":"CloudnetID","value":"17711"},{"type":"CUSTOM","name":"StripeID","value":"cus_5sn6oPwMPJhBGs"},{"type":"CUSTOM","name":"EmailVerified","value":"false"}],"campaignStatus":[],"entity_type":"contact_entity","unsubscribeStatus":[],"emailBounceStatus":[],"formId":0,"owner":{"id":6668978039029760,"domain":"<%= ENV['AGILECRM_DOMAIN'] %>","email":"<%= ENV['AGILECRM_EMAIL'] %>","referer":{"referral_count":0},"is_admin":true,"is_account_owner":true,"is_disabled":false,"is_send_password":false,"scopes":["ADD_NEW_TAG","EXPORT_CONTACTS","UPDATE_CONTACT","CREATE_CONTACT","IMPORT_CONTACTS","VIEW_CONTACTS","DELETE_CONTACTS"],"newscopes":["ADD_NEW_TAG","EXPORT_CONTACTS","UPDATE_CONTACT","CREATE_CONTACT","IMPORT_CONTACTS","VIEW_CONTACTS","DELETE_CONTACTS"],"newMenuScopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"menu_scopes":["CONTACT","CALENDAR","DEALS","CAMPAIGN","CASES","SOCIAL","WEBRULE","DOCUMENT","ACTIVITY","REPORT"],"restricted_menu_scopes":[],"name":"Bernino","password":"PASSWORD","info_json_string":"{\"lat_long\":\"51.508515,-0.125487\",\"ip_address\":\"\",\"last_logged_in_time\":\"1449775526\",\"logged_in_time\":1449777290,\"created_time\":1440157244,\"city\":\"london\",\"country\":\"GB\"}","schedule_id":"bernino","meeting_types":"In Person, Phone, Skype, Google Hangouts","business_hours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","meeting_durations":"{\"15mins\":\"say hi\",\"30mins\":\"let''s keep it short\",\"60mins\":\"let''s chat\"}","calendar_url":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino","is_forms_updated":true,"defaultBusinessHours":"[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]","ownerPic":"https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/62.png","createdTime":1440157244,"hashedString":"8258932b87df9d7f6bbac2cc29d6c17f","calendarURL":"https://<%= ENV['AGILECRM_DOMAIN'] %>.agilecrm.com/calendar/bernino"}}'
-    http_version: 
-  recorded_at: Thu, 10 Dec 2015 20:03:18 GMT
-recorded_with: VCR 2.9.3
+  recorded_at: Wed, 18 May 2016 16:17:21 GMT

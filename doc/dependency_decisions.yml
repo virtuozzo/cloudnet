@@ -1,0 +1,178 @@
+---
+- - :license
+  - xpath
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:10:39.885723000 Z
+- - :name_project
+  - cloudnet
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:11:54.204200000 Z
+- - :ignore_group
+  - test
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:12:30.386841000 Z
+- - :ignore_group
+  - development
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:12:55.107540000 Z
+- - :license
+  - websocket
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:16:36.510864000 Z
+- - :license
+  - unicode_utils
+  - BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:23:46.937270000 Z
+- - :license
+  - ttfunk
+  - ruby,GPL-2,GPL-3
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:25:24.902731000 Z
+- - :license
+  - rdoc
+  - GPL-2
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:29:13.450608000 Z
+- - :heed_group
+  - test
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:30:25.412411000 Z
+- - :heed_group
+  - development
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:30:35.230204000 Z
+- - :license
+  - colored
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:36:08.570365000 Z
+- - :license
+  - em-websocket
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:36:36.569050000 Z
+- - :license
+  - guard-sidekiq
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:37:48.957627000 Z
+- - :license
+  - terminal-table
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-11 10:38:43.867735000 Z
+- - :whitelist
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:25:37.178159000 Z
+- - :whitelist
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:26:00.791554000 Z
+- - :whitelist
+  - ruby
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:26:20.492953000 Z
+- - :whitelist
+  - Apache
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:26:28.822601000 Z
+- - :whitelist
+  - GPL-2
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:26:51.702855000 Z
+- - :whitelist
+  - GPL-3
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:26:54.753749000 Z
+- - :whitelist
+  - LGPL
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:27:18.975341000 Z
+- - :whitelist
+  - BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:27:24.466515000 Z
+- - :whitelist
+  - ISC
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:27:39.759695000 Z
+- - :approve
+  - puma
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:28:13.113828000 Z
+- - :approve
+  - rubyzip
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:28:21.567623000 Z
+- - :approve
+  - sshkit
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:28:29.538971000 Z
+- - :approve
+  - symmetric-encryption
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:28:41.042343000 Z
+- - :approve
+  - ttfunk
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-05-18 15:28:48.816149000 Z

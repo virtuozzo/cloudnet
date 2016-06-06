@@ -11,7 +11,7 @@ ActiveAdmin.register Server, as: "ServerValidation" do
 
   index :title => 'Server Validation List' do
     panel "Servers under validation" do 
-      "The following servers have been placed under validation due to possible fraud."
+      text_node "The following servers have been placed under validation due to possible fraud. When you approve a server, the respective account is marked as 'safe' and future servers created on the account are less likely to come under validation unless the account's fraud parameters change in the future.".html_safe
     end
     
     selectable_column
@@ -55,6 +55,9 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         # Boot the server
         ServerTasks.new.perform(:startup, server.user_id, server.id)
         server.monitor_and_provision
+        create_sift_event(server, "$approved")
+        remove_sift_label(server)
+        label_devices(server, "not_bad")
         create_activity(server, :startup)
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#approve' })
@@ -78,6 +81,9 @@ ActiveAdmin.register Server, as: "ServerValidation" do
       begin
         server = Server.find(id)
         destroy = DestroyServerTask.new(server, server.user, request.remote_ip)
+        create_sift_event(server, "$canceled", "$payment_risk")
+        create_sift_label(server)
+        label_devices(server, "bad")
         create_activity(server, :destroy) if destroy.process && destroy.success?
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: server.user, source: 'ServerValidation#destroy' })
@@ -102,7 +108,37 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         }
       )
     end
+    
+    def create_sift_event(server, order_status, reason = nil, description = nil)
+      properties = {
+        "$user_id"        => server.user_id,
+        "$order_id"       => server.try(:last_generated_invoice_item).try(:invoice_id),
+        "$source"         => "$manual_review",
+        "$order_status"   => order_status,
+        "$description"    => description,
+        "$reason"         => reason,
+        "$analyst"        => current_user.email
+      }
+      CreateSiftEvent.perform_async("$order_status", properties)
+    end
+    
+    def create_sift_label(server)
+      reasons = case server.validation_reason
+        when 2, 5; ["$duplicate_account"]
+        when 4; ["$chargeback"]
+      end
+      description = Account::FraudValidator::VALIDATION_REASONS[server.validation_reason]
+      label_properties = SiftProperties.sift_label_properties true, reasons, description, "manual_review", current_user.email
+      SiftLabel.perform_async(:create, server.user_id.to_s, label_properties)
+    end
+    
+    def remove_sift_label(server)
+      SiftLabel.perform_async(:remove, server.user_id.to_s)
+    end
+    
+    def label_devices(server, label)
+      LabelDevices.perform_async(server.user_id, label)
+    end
   end
   
-
 end

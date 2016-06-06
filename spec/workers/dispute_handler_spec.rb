@@ -20,10 +20,6 @@ describe DisputeHandler, :vcr do
     let(:mailer_queue) { ActionMailer::Base.deliveries }
     
     before :each do
-      agilecrm = double('UpdateAgilecrmContact', perform_async: true)
-      allow(UpdateAgilecrmContact).to receive(:perform_async).and_return(agilecrm)
-      allow(agilecrm).to receive(:perform_async).and_return(true)
-      
       user_tasks = double('UserTasks', perform: true)
       allow(UserTasks).to receive(:new).and_return(user_tasks)
       allow(user_tasks).to receive(:perform).and_return(true)
@@ -63,6 +59,11 @@ describe DisputeHandler, :vcr do
         expect(@helpdesk).to have_received(:new_ticket).at_least(2).times
         expect(RiskyIpAddress.count).to eq 1
         expect(RiskyCard.count).to eq 1
+        expect(@sift_client_double).to have_received(:perform).with(:create_event, "$chargeback", anything).twice
+        label_properties = SiftProperties.sift_label_properties true, ["$chargeback"], "Received chargeback", "payment_gateway"
+        expect(@sift_client_double).to have_received(:perform).with(:create_label, @user.id.to_s, label_properties).twice
+        expect(@sift_device_double).to have_received(:perform).with(:get_devices, @user.id).twice
+        # expect(@sift_device_double).to have_received(:perform).with(:label_device, anything, "bad")
       end
     end
   end

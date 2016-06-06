@@ -15,6 +15,7 @@ class BackupsController < ApplicationController
     CreateBackup.perform_async(current_user.id, @server.id)
     Analytics.track(current_user, event: 'Created a manual backup', properties: { server_id: @server.id })
     Rails.cache.write([Server::BACKUP_CREATED_CACHE, @server.id], true)
+    create_sift_event :create_backup, @server.sift_server_properties
     redirect_to server_backups_path(@server), notice: 'Backup has been requested and will be created shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Create' })
@@ -25,8 +26,9 @@ class BackupsController < ApplicationController
     BackupTasks.new.perform(:restore_backup, current_user.id, @server.id, @backup.id)
     Analytics.track(current_user, event: 'Restored a backup', properties: { server_id: @server.id })
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, @server.id, current_user.id)
+    create_sift_event :restore_backup, @server.sift_server_properties
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
-  rescue
+  rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Restore' })
     flash.now[:alert] = 'Could not schedule backup restore. Please try again later'
     redirect_to server_backups_path
@@ -35,6 +37,7 @@ class BackupsController < ApplicationController
   def destroy
     BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
     Analytics.track(current_user, event: 'Deleted a backup', properties: { server_id: @server.id })
+    create_sift_event :destroy_backup, @server.sift_server_properties
     @backup.destroy!
     redirect_to server_backups_path, notice: 'Backup has been deleted'
   rescue Exception => e

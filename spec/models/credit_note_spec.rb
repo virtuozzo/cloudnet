@@ -66,9 +66,10 @@ describe CreditNote do
   end
 
   it 'should return if there are no items associated with this invoice' do
-    expect(credit_note.items?).to be false
-    credit_note.credit_note_items << FactoryGirl.create(:credit_note_item, credit_note: credit_note)
     expect(credit_note.items?).to be true
+    expect(credit_note.credit_note_items.count).to be 2
+    credit_note.credit_note_items << FactoryGirl.create(:credit_note_item, credit_note: credit_note)
+    expect(credit_note.credit_note_items.count).to be 3
   end
 
   it 'should have VAT exempt status determined from the account' do
@@ -277,6 +278,13 @@ describe CreditNote do
       expect(items.count).to eq 1
       only_item = items.first
       expect(only_item.description).to eq 'Trial Credit'
+    end
+  end
+  
+  it 'should create an event at Sift' do
+    Sidekiq::Testing.inline! do
+      credit_note = FactoryGirl.create(:credit_note)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$transaction", credit_note.sift_credit_note_properties)
     end
   end
 end

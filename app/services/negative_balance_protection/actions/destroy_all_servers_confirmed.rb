@@ -12,7 +12,10 @@ module NegativeBalanceProtection
       def perform
         return nil unless destroy_confirmed_by_admin?
         destroy_all_servers
-        create_activity if destroy_performed
+        if destroy_performed
+          create_activity
+          log_risky_entities
+        end
       end
 
       def destroy_confirmed_by_admin?
@@ -102,6 +105,22 @@ module NegativeBalanceProtection
           :destroy_all_servers, 
           owner: user
         )
+      end
+      
+      def log_risky_entities
+        user.account.log_risky_ip_addresses
+        user.account.log_risky_cards
+        create_sift_label
+        label_devices
+      end
+      
+      def create_sift_label
+        label_properties = SiftProperties.sift_label_properties true, nil, "Balance checker: Unpaid invoices", "negative_balance_checker"
+        SiftLabel.perform_async(:create, user.id.to_s, label_properties)
+      end
+      
+      def label_devices
+        LabelDevices.perform_async(user.id, "bad")
       end
       
       def log_error(e, server)

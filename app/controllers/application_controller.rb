@@ -74,6 +74,10 @@ class ApplicationController < ActionController::Base
       'An error occured. Could not complete action'
     end
   end
+  
+  def create_sift_event(event, properties)
+    CreateSiftEvent.perform_async(event, properties)
+  end
 
   private
 

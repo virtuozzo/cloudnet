@@ -27,16 +27,28 @@ RSpec.describe IpAddressesController, :type => :controller do
       end
     end
       
-    describe '#create' do
-      it 'should add a new IP address' do
-        allow(AssignIpAddress).to receive(:perform_async).and_return(true)
-        allow_any_instance_of(Server).to receive(:primary_network_interface).and_return(['abc'])
-        post :create, { server_id: @server.id }
-        expect(AssignIpAddress).to have_received(:perform_async)
-        expect(response).to redirect_to(server_ip_addresses_path(@server))
-        expect(flash[:notice]).to eq('IP address has been requested and will be added shortly')
-        @server.reload
-        expect(@server.ip_addresses).to eq(2)
+    describe '#create' do      
+      describe 'add new IP' do
+        before :each do
+          allow(AssignIpAddress).to receive(:perform_async).and_return(true)
+          allow_any_instance_of(Server).to receive(:primary_network_interface).and_return(['abc'])
+        end
+        
+        it 'should add a new IP address' do
+          post :create, { server_id: @server.id }
+          expect(AssignIpAddress).to have_received(:perform_async)
+          expect(response).to redirect_to(server_ip_addresses_path(@server))
+          expect(flash[:notice]).to eq('IP address has been requested and will be added shortly')
+          @server.reload
+          expect(@server.ip_addresses).to eq(2)
+        end
+        
+        it 'should create an event at Sift' do
+          Sidekiq::Testing.inline! do
+            post :create, { server_id: @server.id }
+            expect(@sift_client_double).to have_received(:perform).with(:create_event, "create_ip_address", @server.sift_server_properties)
+          end
+        end
       end
       
       it 'should not allow more than MAX_IPS limit' do
@@ -46,16 +58,28 @@ RSpec.describe IpAddressesController, :type => :controller do
       end
     end
     
-    describe '#destroy' do
-      it 'should remove IP address' do
-        @ip_address_tasks = double('IpAddressTasks', perform: true)
-        allow(IpAddressTasks).to receive(:new).and_return(@ip_address_tasks)
-        @server_ip_address.update(primary: false)
-        delete :destroy, { server_id: @server.id, id: @server_ip_address.id }
+    describe '#destroy' do      
+      describe 'remove IP' do
+        before :each do
+          @ip_address_tasks = double('IpAddressTasks', perform: true)
+          allow(IpAddressTasks).to receive(:new).and_return(@ip_address_tasks)
+          @server_ip_address.update(primary: false)
+        end
         
-        expect(@ip_address_tasks).to have_received(:perform)
-        expect(response).to redirect_to(server_ip_addresses_path(@server))
-        expect(flash[:notice]).to eq('IP address has been removed')
+        it 'should remove IP address' do
+          delete :destroy, { server_id: @server.id, id: @server_ip_address.id }
+          
+          expect(@ip_address_tasks).to have_received(:perform)
+          expect(response).to redirect_to(server_ip_addresses_path(@server))
+          expect(flash[:notice]).to eq('IP address has been removed')
+        end
+        
+        it 'should create an event at Sift' do
+          Sidekiq::Testing.inline! do
+            delete :destroy, { server_id: @server.id, id: @server_ip_address.id }
+            expect(@sift_client_double).to have_received(:perform).with(:create_event, "destroy_ip_address", @server.sift_server_properties)
+          end
+        end
       end
       
       it 'should not allow to remove a primary IP address' do

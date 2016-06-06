@@ -4,7 +4,7 @@ ActiveAdmin.register User do
   
   permit_params :email, :full_name, :admin, :onapp_user, :onapp_email, :vm_max, :cpu_max,
                 :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended,
-                :notif_before_shutdown, :notif_before_destroy
+                :notif_before_shutdown, :notif_before_destroy, tag_ids: []
 
   sidebar :control_panel_links do
     ul do
@@ -18,6 +18,7 @@ ActiveAdmin.register User do
   filter :email
   filter :full_name
   filter :onapp_user
+  filter :tags, as: :check_boxes, collection: proc { Tag.for(User) }
 
   filter :notif_delivered
   filter :last_notif_email_sent
@@ -64,18 +65,33 @@ ActiveAdmin.register User do
       user.servers.count
     end
     column "Balance Notifications", :notif_delivered
-
+    column :tags do |user|
+      user.tag_labels.join(', ')
+    end
+    
     actions
   end
   
   show do
+    
     default_main_content
+    
+    panel "Tags for a user" do
+      attributes_table_for user do
+        row :tags do |user|
+          user.tags.pluck(:label).join(', ')
+        end
+      end
+    end
     
     panel "Fraud Details" do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
         row :minfraud_score do |user|
-          user.account.billing_cards.map{|card| card.fraud_score.round(2).to_f}.max rescue nil
+          user.account.max_minfraud_score unless user.account.nil?
+        end
+        row :sift_score do |user|
+          link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank'
         end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
@@ -83,7 +99,7 @@ ActiveAdmin.register User do
         row :stripe_account do |user|
           if !user.account.nil? && !user.account.gateway_id.nil?
             test_env = Rails.env.production? ? "" : "test/"
-            link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}"
+            link_to user.account.gateway_id, "https://dashboard.stripe.com/#{test_env}customers/#{user.account.gateway_id}", target: '_blank'
           end
         end
         row :primary_card_country_match do |user|
@@ -110,7 +126,7 @@ ActiveAdmin.register User do
               billing_cards = BillingCard.with_deleted.where('account_id != ? AND ip_address IN (?)', user.account.id, associated_ips.flatten.uniq)
               billing_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
               matching_cards.map {|card| duplicate_users.push card.account.user unless card.account.blank?}
-              raw duplicate_users.flatten.uniq.map {|user| link_to user.full_name, admin_user_path(user) }.join(', ')
+              raw duplicate_users.flatten.uniq.map {|user| link_to user.full_name, admin_user_path(user), target: '_blank' }.join(', ')
             end
           rescue StandardError => e
             ErrorLogging.new.track_exception(e, extra: { user: user, source: 'User#possible_duplicate_accounts' })
@@ -129,6 +145,21 @@ ActiveAdmin.register User do
         end
         row :card_history do |user|
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
+        end
+        row :sift_actions_safe do |user|
+          unless user.sift_user.nil?
+            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?))
+          end
+        end
+        row :sift_device_safe do |user|
+          unless user.account.nil?
+            if params[:device_safety]
+              device_safe = !user.account.has_bad_device?
+              status_tag(device_safe, class: 'important', label: boolean_to_results(device_safe))
+            else
+              link_to "Show", admin_user_path(user.id, device_safety: true)
+            end
+          end
         end
       end
     end
@@ -169,6 +200,12 @@ ActiveAdmin.register User do
       row :card_history do
         text_node "Fail indicates credit cards in account has been used for fraudulent activity in the past.".html_safe
       end
+      row :sift_actions_safe do
+        text_node "Fail indicates that account fails to pass formulas created at Sift Science console.".html_safe
+      end
+      row :sift_device_safe do
+        text_node "Fail indicates that one of the devices associated with the account has been labelled bad.".html_safe
+      end
     end
   end
 
@@ -191,6 +228,10 @@ ActiveAdmin.register User do
       f.input :bandwidth_max
     end
 
+    f.inputs 'Tags' do
+      f.input :tags, :multiple => true, as: :check_boxes
+    end
+    
     f.inputs 'Notification Limits - Before Action on Servers' do
       f.input :notif_before_shutdown
       f.input :notif_before_destroy
@@ -200,6 +241,12 @@ ActiveAdmin.register User do
   end
 
   controller do
+    def scoped_collection
+      result = super.includes({account: :billing_cards}, :tags)
+      result.uniq! if params["commit"] == "Filter"
+      result
+    end
+    
     def update
       user = params['user']
       if user && (user['password'].nil? || user['password'].empty?)
@@ -208,6 +255,7 @@ ActiveAdmin.register User do
       end
       shutdown_destroy_notifications_activity(user)
       update!
+      User.find(params[:id]).update_sift_account
     end
     
     def shutdown_destroy_notifications_activity(user)
@@ -235,6 +283,30 @@ ActiveAdmin.register User do
     
     def destroy_changed?(user)
       resource.notif_before_destroy != user['notif_before_destroy'].to_i
+    end
+    
+    def log_risky_entities(user)
+      account = user.account
+      unless account.nil?
+        account.log_risky_ip_addresses
+        account.log_risky_cards
+      end
+      create_sift_label(user)
+      label_devices(user, "bad")
+    end
+  
+    def create_sift_label(user)
+      label_properties = SiftProperties.sift_label_properties true, nil, "Manually suspended", "manual_review", current_user.email
+      SiftLabel.perform_async(:create, user.id.to_s, label_properties)
+    end
+    
+    # Label all devices associated with user as 'bad' or 'not_bad'
+    def label_devices(user, label)
+      LabelDevices.perform_async(user.id, label)
+    end
+    
+    def remove_sift_label(user)
+      SiftLabel.perform_async(:remove, user.id.to_s)
     end
   end
   
@@ -287,7 +359,9 @@ ActiveAdmin.register User do
 
   member_action :suspend, method: :post do
     user = User.find(params[:id])
+    log_risky_entities(user)
     user.update!(suspended: true)
+    user.create_activity(:suspend, owner: user, params: { admin: current_user.id })
 
     flash[:notice] = 'User has been suspended'
     redirect_to admin_user_path(id: user.id)
@@ -296,6 +370,9 @@ ActiveAdmin.register User do
   member_action :unsuspend, method: :post do
     user = User.find(params[:id])
     user.update!(suspended: false)
+    
+    remove_sift_label(user)
+    label_devices(user, "not_bad")
 
     flash[:notice] = 'User has been unsuspended'
     redirect_to admin_user_path(id: user.id)

@@ -1,0 +1,18 @@
+<script type="text/javascript">
+  var _user_id = '<%= current_user ? current_user.id : '' %>';
+  var _session_id = '<%= session.id %>';
+
+  var _sift = window._sift = window._sift || [];
+  _sift.push(['_setAccount', '<%= KEYS[:sift_science][:js_key] %>']);
+  _sift.push(['_setUserId', _user_id]);
+  _sift.push(['_setSessionId', _session_id]);
+  _sift.push(['_trackPageview']);
+
+  (function(d, s, id) {
+    var e, f = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    e = d.createElement(s); e.id = id;
+    e.src = 'https://cdn.siftscience.com/s.js';
+    f.parentNode.insertBefore(e, f);
+  })(document, 'script', 'sift-beacon');
+</script>

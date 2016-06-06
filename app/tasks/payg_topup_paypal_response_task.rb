@@ -20,7 +20,12 @@ class PaygTopupPaypalResponseTask < BaseTask
 
     response = request.checkout!(@token, @payer_id, payment)  # DoExpressCheckoutPayment
     create_payment_receipt(details.amount, response.token, response_to_hash(response))
+    create_sift_event(details, response)
     return true
+  rescue StandardError => e
+    errors << "Checkout Failure: #{e.message}"
+    create_sift_event(details)
+    return false
   end
 
   attr_reader :payment_receipt
@@ -43,5 +48,15 @@ class PaygTopupPaypalResponseTask < BaseTask
       @payment_receipt.metadata = metadata
       @payment_receipt.save
     end
+  end
+  
+  def create_sift_event(details, response = nil)
+    if response
+      payment_properties = SiftProperties.paypal_success_properties(details, response)
+      properties = payment_receipt.sift_payment_receipt_properties(payment_properties)
+    else
+      properties = SiftProperties.paypal_failure_properties(@account, details)
+    end
+    CreateSiftEvent.perform_async("$transaction", properties)
   end
 end

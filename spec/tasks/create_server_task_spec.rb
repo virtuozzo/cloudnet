@@ -13,7 +13,7 @@ describe CreateServerTask do
 
     allow_any_instance_of(CreateServer).to receive_messages(process: { 'id' => '12345' })
     allow(MonitorServer).to receive(:perform_async).and_return(true)
-    server_double = double('Server', id: 123, destroy: true, provisioner_role: 'ping', update_attribute: true)
+    server_double = double('Server', id: 123, destroy: true, provisioner_role: 'ping', update_attribute: true, validation_reason: 0, sift_server_properties: {})
     allow(server_double).to receive(:monitor_and_provision).and_return(true)
     allow_any_instance_of(ServerWizard).to receive_messages(save_server_details: server_double)
   end
@@ -234,6 +234,15 @@ describe CreateServerTask do
       expect(charges.second.source_id).to eq(@payment_receipts.first.id)
 
       expect(@invoice.state).to eq(:paid)
+    end
+    
+    it 'should create an event at Sift' do
+      Sidekiq::Testing.inline! do
+        task = CreateServerTask.new(@wizard, @user)
+        task.process
+        expect(@sift_client_double).to have_received(:perform).with(:create_event, "$order_status", anything)
+        expect(@sift_client_double).to have_received(:perform).with(:create_event, "create_server", task.server.sift_server_properties)
+      end
     end
   end
 end

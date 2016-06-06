@@ -278,6 +278,11 @@ describe Account do
       expect(user.account.set_coupon_code(coupon.coupon_code)).to be true
     end
 
+    it 'returns true if expiry coupon date is today' do
+      coupon = FactoryGirl.create(:coupon, expiry_date: Date.today)
+      expect(user.account.set_coupon_code(coupon.coupon_code)).to be true
+    end
+    
     it 'should return false if attempted to set an invalid coupon code' do
       coupon = FactoryGirl.create(:coupon)
       expect(user.account.set_coupon_code('NOTVALID')).to be false
@@ -299,6 +304,18 @@ describe Account do
       Timecop.freeze Time.now.change(day: 25, month: 1, year: 2014, hour: 1, min: 0, sec: 1) do
         user.account.coupon_activated_at = Time.now - Account::COUPON_LIMIT_MONTHS + 1.second
         expect(user.account.can_set_coupon_code?).to be false
+      end
+    end
+    
+    context 'expired coupon' do
+      it 'does not set inactive coupon coupon' do
+        coupon = FactoryGirl.create(:coupon, active: false)
+        expect(user.account.set_coupon_code(coupon.coupon_code)).to be false
+      end
+      
+      it 'does not set expired coupon coupon' do
+        coupon = FactoryGirl.create(:coupon, expiry_date: Date.today - 1.day)
+        expect(user.account.set_coupon_code(coupon.coupon_code)).to be false
       end
     end
   end

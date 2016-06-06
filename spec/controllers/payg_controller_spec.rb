@@ -67,7 +67,7 @@ RSpec.describe PaygController, :type => :controller do
       post :card_payment, { amount: '25' }
       invoice.reload
       expect(invoice.state).to eq(:paid)
-      expect(@current_user.account.wallet_balance).to eq(1300000)
+      expect(@current_user.account.reload.wallet_balance).to eq(1300000)
     end
     
     it 'should render on error' do

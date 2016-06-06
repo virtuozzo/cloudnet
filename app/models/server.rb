@@ -3,6 +3,8 @@
 class Server < ActiveRecord::Base
   include PublicActivity::Common
   include Billing::ServerInvoiceable
+  include SiftProperties
+  include Taggable
   acts_as_paranoid
 
   # Maximum time for server to be in states such as building, booting, etc
@@ -221,7 +223,7 @@ class Server < ActiveRecord::Base
   end
 
   def coupon_percentage
-    coupon = user.account.try(:coupon)
+    coupon = user.account.coupon
     if coupon.present? then coupon.percentage_decimal else 0 end
   end
   

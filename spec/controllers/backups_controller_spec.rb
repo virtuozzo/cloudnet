@@ -28,37 +28,68 @@ RSpec.describe BackupsController, :type => :controller do
     end
       
     describe '#create' do
-      it 'should add a new backup' do
+      before :each do
         allow(CreateBackup).to receive(:perform_async).and_return(true)
+      end
+      
+      it 'should add a new backup' do
         post :create, { server_id: @server.id }
         expect(CreateBackup).to have_received(:perform_async)
         expect(response).to redirect_to(server_backups_path(@server))
         expect(flash[:notice]).to eq('Backup has been requested and will be created shortly')
         expect(Rails.cache.read([Server::BACKUP_CREATED_CACHE, @server.id])).to eq(true)
       end
+      
+      it 'should create an event at Sift' do
+        Sidekiq::Testing.inline! do
+          post :create, { server_id: @server.id }
+          expect(@sift_client_double).to have_received(:perform).with(:create_event, "create_backup", @server.sift_server_properties)
+        end
+      end
     end
     
     describe '#restore' do
-      it 'should restore a backup' do
+      before :each do
         @backup_tasks = double('BackupTasks', perform: true)
         allow(BackupTasks).to receive(:new).and_return(@backup_tasks)
+        allow(MonitorServer).to receive(:perform_in).and_return(true)
+      end
+      
+      it 'should restore a backup' do
         post :restore, { server_id: @server.id, id: @server_backup.id }
 
         expect(@backup_tasks).to have_received(:perform)
         expect(response).to redirect_to(server_path(@server))
         expect(flash[:notice]).to eq('Backup restore will occur shortly')
       end
+      
+      it 'should create an event at Sift' do
+        Sidekiq::Testing.inline! do
+          post :restore, { server_id: @server.id, id: @server_backup.id }
+          expect(@sift_client_double).to have_received(:perform).with(:create_event, "restore_backup", @server.sift_server_properties)
+        end
+      end
     end
     
     describe '#destroy' do
-      it 'should remove backup' do
+      before :each do
         @backup_tasks = double('BackupTasks', perform: true)
         allow(BackupTasks).to receive(:new).and_return(@backup_tasks)
+      end
+      
+      it 'should remove backup' do
         delete :destroy, { server_id: @server.id, id: @server_backup.id }
 
         expect(@backup_tasks).to have_received(:perform)
         expect(response).to redirect_to(server_backups_path(@server))
         expect(flash[:notice]).to eq('Backup has been deleted')
+      end
+      
+      it 'should create an event at Sift' do
+        Sidekiq::Testing.inline! do
+          delete :destroy, { server_id: @server.id, id: @server_backup.id }
+          expect(@sift_client_double).to have_received(:perform).with(:create_event, "destroy_backup", @server.sift_server_properties)
+        end
       end
     end
     

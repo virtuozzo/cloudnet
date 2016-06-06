@@ -65,6 +65,7 @@ class ServersController < ServerCommonController
   def console
     @console = ServerConsole.new(@server, current_user).process
     log_activity :console
+    create_sift_event :console_access, @server.sift_server_properties
   rescue Faraday::Error::ClientError => e
     ErrorLogging.new.track_exception(
       e,
@@ -81,6 +82,7 @@ class ServersController < ServerCommonController
   def reboot
     schedule_task(:reboot, @server)
     log_activity :reboot
+    create_sift_event :reboot_server, @server.sift_server_properties
     redirect_to :back, notice: 'Server has been scheduled for a reboot.'
   rescue Faraday::Error::ClientError
     flash[:warning] = 'Could not schedule reboot server. Please try again later'
@@ -90,6 +92,7 @@ class ServersController < ServerCommonController
   def shut_down
     schedule_task(:shutdown, @server)
     log_activity :shutdown
+    create_sift_event :shutdown_server, @server.sift_server_properties
     redirect_to :back, notice: 'Server has been scheduled for shut down.'
   rescue Faraday::Error::ClientError => e
     ErrorLogging.new.track_exception(
@@ -107,6 +110,7 @@ class ServersController < ServerCommonController
   def start_up
     schedule_task(:startup, @server)
     log_activity :startup
+    create_sift_event :startup_server, @server.sift_server_properties
     redirect_to :back, notice: 'Server has been scheduled for start up.'
   rescue Faraday::Error::ClientError => e
     ErrorLogging.new.track_exception(

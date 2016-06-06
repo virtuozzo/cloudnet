@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506104409) do
+ActiveRecord::Schema.define(version: 20160513093224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,7 +136,10 @@ ActiveRecord::Schema.define(version: 20160506104409) do
     t.integer  "duration_months",             default: 3
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "expiry_date"
   end
+
+  add_index "coupons", ["coupon_code"], name: "index_coupons_on_coupon_code", unique: true, using: :btree
 
   create_table "credit_note_items", force: :cascade do |t|
     t.string   "description",    limit: 255
@@ -495,6 +498,24 @@ ActiveRecord::Schema.define(version: 20160506104409) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], name: "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", unique: true, using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["label"], name: "index_tags_on_label", unique: true, using: :btree
 
   create_table "templates", force: :cascade do |t|
     t.string   "os_type",         limit: 255

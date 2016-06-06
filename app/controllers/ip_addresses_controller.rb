@@ -21,6 +21,7 @@ class IpAddressesController < ApplicationController
       Analytics.track(current_user, event: 'Added a new IP address')
       @server.increment! :ip_addresses
       Rails.cache.write([Server::IP_ADDRESS_ADDED_CACHE, @server.id], true)
+      create_sift_event :create_ip_address, @server.sift_server_properties
       redirect_to server_ip_addresses_path(@server), notice: 'IP address has been requested and will be added shortly'
     else
       alert = @charge_error || 'Unable to add IP addresses to this server.'
@@ -40,6 +41,7 @@ class IpAddressesController < ApplicationController
     @ip_address.destroy!
     Analytics.track(current_user, event: 'Removed IP address')
     Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
+    create_sift_event :destroy_ip_address, @server.sift_server_properties
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'
   rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Destroy' })

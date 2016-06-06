@@ -26,6 +26,10 @@ class UserTasks < BaseTasks
       onapp_password: acc[:password],
       status: :active
     )
+    
+    # Create a Sift Science account for user
+    user.create_sift_account
+    user.create_sift_login_event
   end
 
   def generate_user_credentials(id, full_name)

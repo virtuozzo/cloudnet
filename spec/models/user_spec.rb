@@ -1,11 +1,13 @@
 require 'rails_helper'
+require 'models/concerns/taggable_shared'
 include NegativeBalanceProtection
 include NegativeBalanceProtection::Actions
 
 describe User do
   let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:admin) }
-
+  it_behaves_like 'taggable'
+  
   it 'has a valid factory' do
     expect(user).to be_valid
   end
@@ -75,7 +77,11 @@ describe User do
     expect(user.trial_credit_eligible?).to eq(false)
   end
   
-  it 'should push a job to the queue to create a AgileCRM contact' do
-    expect { user.save! }.to change(UpdateAgilecrmContact.jobs, :size).by(1)
+  it 'should create events at Sift' do
+    Sidekiq::Testing.inline! do
+      user = FactoryGirl.create(:user)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$create_account", user.sift_user_properties)
+      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$login", anything)
+    end
   end
 end

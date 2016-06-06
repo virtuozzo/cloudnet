@@ -6,6 +6,7 @@
 class CreditNote < ActiveRecord::Base
   include InvoiceCreditShared
   include CreditPaymentsShared
+  include SiftProperties
 
   acts_as_paranoid
   acts_as_sequenced start_at: 1
@@ -17,6 +18,8 @@ class CreditNote < ActiveRecord::Base
   enum_field :state, allowed_values: [:uncredited, :credited], default: :credited
 
   validate :remaining_cost_can_not_be_negative
+  
+  after_create :create_sift_event
   
   TRIAL_CREDIT = 10
 
@@ -58,6 +61,10 @@ class CreditNote < ActiveRecord::Base
 
   def number
     credit_number
+  end
+  
+  def create_sift_event
+    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties)
   end
 
   private

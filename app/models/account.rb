@@ -159,6 +159,10 @@ class Account < ActiveRecord::Base
       Payg::VALID_TOP_UP_AMOUNTS
     end
   end
+  
+  def max_minfraud_score
+    billing_cards.map{|card| card.fraud_score.round(2).to_f unless card.fraud_score.nil?}.max
+  end
 
   private
 
