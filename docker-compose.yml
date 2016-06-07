@@ -1,5 +1,5 @@
 cloudnet-web:
-  image: jwilder/nginx-proxy
+  image: jwilder/nginx-proxy:0.2.0
   restart: always
   volumes:
     - ./certs:/etc/nginx/certs:ro
