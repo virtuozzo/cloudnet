@@ -45,6 +45,9 @@ module CloudNet
     config.i18n.enforce_available_locales = true
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
+    config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
+    config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
+
 #    require 'dev_database_switch'
 #    include DevDatabaseSwitch
     config.generators do |g|

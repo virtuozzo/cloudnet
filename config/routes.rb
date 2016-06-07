@@ -1,17 +1,22 @@
 require 'sidekiq/web'
 
 CloudNet::Application.routes.draw do
+
+  scope subdomain: 'api' do
+    mount Api => '/'
+  end
+
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)
-  
+
   get 'sockets/event' => 'events#event'
   get 'search' => 'server_search#index'
   get 'features' => 'public#features', as: 'public_features'
   get 'about_us' => 'public#about_us', as: 'public_about_us'
   get 'contact' => 'public#contact', as: 'public_contact'
   post 'contact' => 'public#user_message'
-  
+
   get 'public/howitworks'
   get 'payg/add_funds'
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', tokens: 'tokens', confirmations: 'confirmations' }
@@ -36,7 +41,7 @@ CloudNet::Application.routes.draw do
   get 'servers/create/prepaid_server_cost', to: 'server_wizards#prepaid_server_cost'
   get 'servers/create/payg_server_cost', to: 'server_wizards#payg_server_cost'
   get 'servers/(:id)/create/payg', to: 'server_wizards#payg'
-  
+
   resources :locations, only: [:show] do
     member do
       get :templates
