@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     "#{full_name}"
   end
 
+  def self.api_authorize(auth_header)
+    User.find(auth_header)
+  end
+  
   def active_for_authentication?
     super && !suspended?
   end
