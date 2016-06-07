@@ -46,14 +46,13 @@ module CloudNet
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
-    config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
-
+    config.autoload_paths += Dir["#{config.root}/app/api/**/"]
 #    require 'dev_database_switch'
 #    include DevDatabaseSwitch
     config.generators do |g|
       g.test_framework :rspec
     end
-    
+
     config.after_initialize do
       require 'devise_otp_redirect_patch'
     end
