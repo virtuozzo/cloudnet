@@ -91,7 +91,7 @@ ActiveAdmin.register User do
           user.account.max_minfraud_score unless user.account.nil?
         end
         row :sift_score do |user|
-          link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank'
+          link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank' unless user.sift_score.nil?
         end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
