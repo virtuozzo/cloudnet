@@ -73,6 +73,13 @@ gem 'sentry-raven', git: 'https://github.com/getsentry/raven-ruby.git'
 # Segment.io Analytics Tracking
 gem 'analytics-ruby', '~> 2.0.0', require: 'segment/analytics'
 
+# API
+gem 'grape'
+# For presenting lovely serialised API responses of objects
+gem 'grape-roar'
+# Auto-generate API documentation
+gem 'grape-swagger'
+
 gem 'pry-rails', '0.3.2'
 
 gem 'capistrano', '~> 3.2.1'
