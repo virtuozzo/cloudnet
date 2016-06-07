@@ -48,7 +48,14 @@ class User < ActiveRecord::Base
   end
 
   def self.api_authorize(auth_header)
-    User.find(auth_header)
+    type = auth_header.split[0].strip
+    credential = auth_header.split[1].strip
+
+    if type == 'APIKEY'
+      User.find_by email: 'tomasz@onapp.com'
+    else
+      fail 'Invalid Authorization header'
+    end
   end
   
   def active_for_authentication?

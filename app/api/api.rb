@@ -1,5 +1,5 @@
 # Base Grape class
-class Api < Grape::API
+class API < Grape::API
   version :v1, using: :accept_version_header
   default_format :json
   format :json
@@ -15,7 +15,7 @@ class Api < Grape::API
 
   helpers do
     def current_user
-      #error!('Please provide an Authorization header', 401) unless headers.key? 'Authorization'
+      error!('Please provide an Authorization header', 401) unless headers.key? 'Authorization'
       @current_user ||= User.api_authorize(headers['Authorization'])
     rescue ActiveRecord::RecordNotFound
       error!('401 Unauthorized', 401)
@@ -32,8 +32,12 @@ class Api < Grape::API
     { 'version' => 1 }
   end
 
-  # get '/' do
-  #   { 'root' => 2 }
-  # end
+  get '/' do
+    { 'root' => 2 }
+  end
+  
+  get '/server' do
+    current_user.servers.to_a
+  end
 
 end
