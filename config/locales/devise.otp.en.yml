@@ -1,5 +1,8 @@
 en:
   devise:
+    sessions:
+      user:
+        signed_in_but_otp: 'Please set up two-factor authentication on your account'
 
     otp:
       submit_token:
