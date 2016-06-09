@@ -4,7 +4,7 @@ ActiveAdmin.register User do
   
   permit_params :email, :full_name, :admin, :onapp_user, :onapp_email, :vm_max, :cpu_max,
                 :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended,
-                :notif_before_shutdown, :notif_before_destroy, tag_ids: []
+                :notif_before_shutdown, :notif_before_destroy, :otp_mandatory, tag_ids: []
 
   sidebar :control_panel_links do
     ul do
@@ -253,6 +253,7 @@ ActiveAdmin.register User do
         user.delete('password')
         user.delete('password_confirmation')
       end
+      user['otp_mandatory'] = user['admin']
       shutdown_destroy_notifications_activity(user)
       update!
       User.find(params[:id]).update_sift_account
