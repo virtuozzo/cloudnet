@@ -1,3 +1,3 @@
 @app.service "Locations", ["$resource", ($resource) ->
-  $resource "/api/v1/server_search", null
+  $resource "/inapi/v1/server_search", null
 ]

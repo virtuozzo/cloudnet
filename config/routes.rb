@@ -1,9 +1,9 @@
 require 'sidekiq/web'
 
 CloudNet::Application.routes.draw do
-
-  scope subdomain: 'api' do
-    mount Api => '/'
+  
+  constraints subdomain: /^api/ do
+    mount API => '/'
   end
 
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
@@ -128,7 +128,7 @@ CloudNet::Application.routes.draw do
   
   resources :keys
   
-  namespace :api, defaults: {format: :json} do
+  namespace :inapi, defaults: {format: :json} do
     namespace :v1 do
       resources :server_search, only: [:index, :create]
       get '/status', to: 'base#status'
