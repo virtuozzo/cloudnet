@@ -77,6 +77,7 @@ gem 'analytics-ruby', '~> 2.0.0', require: 'segment/analytics'
 gem 'grape'
 # For presenting lovely serialised API responses of objects
 gem 'grape-roar'
+gem 'roar-rails'
 # Auto-generate API documentation
 gem 'grape-swagger'
 
