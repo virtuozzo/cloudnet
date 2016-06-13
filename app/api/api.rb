@@ -43,13 +43,9 @@ class API < Grape::API
       }
     }
   end
-  
-  get '/server' do
-    current_user.servers.to_a
-  end
-  
+
   mount Routes::Datacentres
-  #mount Routes::Servers
+  mount Routes::Servers
 
   get '*' do
     { 'version' => ENV['API_VERSION'],

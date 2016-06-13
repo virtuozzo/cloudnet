@@ -3,8 +3,6 @@ module TemplateRepresenter
   include BaseRepresenter
 
   property :id
-  property :created_at
-  property :updated_at
   property :name
   property :os_type
   property :os_distro
