@@ -4,7 +4,7 @@ describe UserAnalytics::ServerCountUpdater do
   
   context 'user with VM data count' do
     before(:all) do
-      @test_date = Time.new(2016,06,14,14,55,43)
+      @test_date = Time.now + 20.days
       @user = FactoryGirl.create(:user)
       @user2 = FactoryGirl.create(:user)
       8.times do |i|
