@@ -29,15 +29,26 @@ class API < Grape::API
 
   desc 'API version'
   get '/version' do
-    { 'version' => 1 }
+    { 'version' => ENV['API_VERSION'] }
   end
 
+  desc 'About the API'
   get '/' do
-    { 'root' => 2 }
-  end
-  
-  get '/server' do
-    current_user.servers.to_a
+    worker_size = Sidekiq::ProcessSet.new.size rescue 0
+    {
+      'Cloudnet API' => ENV['API_VERSION'],
+      status: {
+        datacentres: Location.count,
+        worker: worker_size
+      }
+    }
   end
 
+  mount Routes::Datacentres
+  mount Routes::Servers
+
+  get '*' do
+    { 'version' => ENV['API_VERSION'],
+      'message' => 'Non existing API path' }
+  end
 end
