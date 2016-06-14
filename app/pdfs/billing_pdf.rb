@@ -7,7 +7,7 @@ class BillingPdf < Prawn::Document
   end
 
   def header(title)
-    image "#{Rails.root}/app/assets/images/cloudnetbeta-large.png", width: 138, height: 55
+    image "#{Rails.root}/app/assets/images/cloudnet-large.png", width: 91, height: 54
 
     move_down 10
     ENV['PDF_HEADER'].lines.each do |line|
