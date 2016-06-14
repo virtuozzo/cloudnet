@@ -91,7 +91,11 @@ ActiveAdmin.register User do
           user.account.max_minfraud_score unless user.account.nil?
         end
         row :sift_score do |user|
-          link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank' unless user.sift_score.nil?
+          if params[:show_sift]
+            link_to user.sift_score, "https://siftscience.com/console/users/#{user.id.to_s}", target: '_blank' unless user.sift_user.nil?
+          else
+            link_to "Show", admin_user_path(user.id, show_sift: true)
+          end
         end
         row :risky_cards do |user|
           user.account.risky_card_attempts unless user.account.nil?
@@ -147,17 +151,19 @@ ActiveAdmin.register User do
           status_tag(user.account.safe_card?, class: 'important', label: boolean_to_results(user.account.safe_card?)) unless user.account.nil?
         end
         row :sift_actions_safe do |user|
-          unless user.sift_user.nil?
-            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?))
+          if params[:show_sift]
+            status_tag(user.sift_valid?, class: 'important', label: boolean_to_results(user.sift_valid?)) unless user.sift_user.nil?
+          else
+            link_to "Show", admin_user_path(user.id, show_sift: true)
           end
         end
         row :sift_device_safe do |user|
           unless user.account.nil?
-            if params[:device_safety]
+            if params[:show_sift]
               device_safe = !user.account.has_bad_device?
               status_tag(device_safe, class: 'important', label: boolean_to_results(device_safe))
             else
-              link_to "Show", admin_user_path(user.id, device_safety: true)
+              link_to "Show", admin_user_path(user.id, show_sift: true)
             end
           end
         end
