@@ -74,12 +74,14 @@ gem 'sentry-raven', git: 'https://github.com/getsentry/raven-ruby.git'
 gem 'analytics-ruby', '~> 2.0.0', require: 'segment/analytics'
 
 # API
+gem 'rack-cors', :require => 'rack/cors'
 gem 'grape'
 # For presenting lovely serialised API responses of objects
 gem 'grape-roar'
 gem 'roar-rails'
 # Auto-generate API documentation
 gem 'grape-swagger'
+gem 'grape-swagger-rails'
 
 gem 'pry-rails', '0.3.2'
 

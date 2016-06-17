@@ -47,8 +47,10 @@ class API < Grape::API
   mount Routes::Datacentres
   mount Routes::Servers
 
-  get '*' do
-    { 'version' => ENV['API_VERSION'],
-      'message' => 'Non existing API path' }
-  end
+  add_swagger_documentation(
+    mount_path: '/api_docs',
+    add_version: true,
+    doc_version: ENV['API_VERSION'],
+    info: { title: "" }
+  )
 end

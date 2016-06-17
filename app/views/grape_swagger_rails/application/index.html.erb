@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html data-swagger-options="<%= GrapeSwaggerRails.options.marshal_dump.to_json %>">
+<head>
+  <title><%= GrapeSwaggerRails.options.app_name || 'Swagger UI' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
+  <%= stylesheet_link_tag 'grape_swagger_rails/application.css' %>
+  <%= javascript_include_tag 'grape_swagger_rails/application.js' %>
+  <style media="screen">
+    .swagger-section #header {
+      background-color: #f0f0f0;
+    }
+    .swagger-section #header a#logo { color: #23809e; }
+    .auth-details div { line-height: 2em; }
+    .auth-details pre {
+      display: inline-block;
+    }
+    .auth-details input {
+      font-size: 1em;
+      padding: .25em;
+    }
+  </style>
+  
+  <script type="text/javascript">
+	$(function () {
+    var hostname = document.location.hostname.replace('docs.', 'api.');
+    var protocol = document.location.protocol;
+    var port = ':' + document.location.port;
+    var url = protocol + '//' + hostname;
+    if(port.trim() != ":") {url = url + port};
+    $('.api_endpoint').text(url);
+    $('.api_endpoint').attr('href', url);
+	  var options = $("html").data('swagger-options');
+
+    var headers = {};
+    <% GrapeSwaggerRails.options.headers.each_with_index do |(key, value), index| %>
+      <%=raw "headers.header_#{index} = new SwaggerClient.ApiKeyAuthorization('#{CGI.escapeHTML(key)}', '#{CGI.escapeHTML(value)}', 'header');" %>
+    <% end %>
+
+    window.swaggerUi = new SwaggerUi({
+      url: options.app_url + options.url,
+      dom_id: "swagger-ui-container",
+      supportHeaderParams: true,
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      authorizations: headers,
+      onComplete: function(swaggerApi, swaggerUi){
+        if('console' in window) {
+          console.log("Loaded SwaggerUI")
+          console.log(swaggerApi);
+          console.log(swaggerUi);
+        }
+        $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+        addApiKeyAuthorization();
+      },
+      onFailure: function(data) {
+        if('console' in window) {
+          console.log("Unable to Load SwaggerUI");
+          console.log(data);
+        }
+      },
+      docExpansion: options.doc_expansion,
+      validatorUrl: options.validator_url,
+      apisSorter: "alpha"
+    });
+
+    function addApiKeyAuthorization() {
+      
+      var key = encodeURIComponent($('#input_apiKey')[0].value);
+      if(key && key.trim() != "") {
+        swaggerUi.api.clientAuthorizations.add(
+          "key",
+          new SwaggerClient.ApiKeyAuthorization("Authorization", 'APIKEY ' + key, "header")
+        );
+      }
+    }
+
+    $('#input_apiKey').change(addApiKeyAuthorization);
+
+    window.swaggerUi.load();
+
+  });
+  </script>
+  <style>
+    input#input_baseUrl, a#explore.exploreBtn {
+      <% if GrapeSwaggerRails.options.hide_url_input %>
+      display: none;
+      <% end %>
+    }
+
+    input#input_apiKey {
+      <% if GrapeSwaggerRails.options.hide_api_key_input %>
+      display: none;
+      <% end %>
+    }
+  </style>
+</head>
+
+<body class="swagger-section">
+<div id='header'>
+  <div class="swagger-ui-wrap">
+    <a id="logo" href="<%= GrapeSwaggerRails.options.app_url %>"><%= GrapeSwaggerRails.options.app_name %></a>
+  </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+<div class="swagger-ui-wrap auth-details">
+  <div>
+    <strong>API Endpoint: </strong> <a href="" class="api_endpoint"></a>
+  </div>
+  <div>
+    Get your API key from your account profile. The key should be added as a header to all API requests
+    using the following format: <pre>Authorization: APIKEY yourAPIKey</pre>
+  </div>
+  <div>
+    For the purposes of interacting with the methods in this documentation you can add your key to all demo requests:
+    <input placeholder="API Key" id="input_apiKey" name="apiKey" type="text"/>
+  </div>
+</div>
+
+<div id="swagger-ui-container" class="swagger-ui-wrap">
+
+</div>
+
+</body>
+
+</html>
