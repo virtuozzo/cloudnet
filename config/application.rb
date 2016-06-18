@@ -53,6 +53,13 @@ module CloudNet
       g.test_framework :rspec
     end
 
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: :any
+      end
+    end
+    
     config.after_initialize do
       require 'devise_otp_redirect_patch'
     end

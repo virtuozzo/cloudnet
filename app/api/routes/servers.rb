@@ -30,7 +30,6 @@ module Routes
       route_param :id do
         desc 'Destroy a server'
         delete do
-          
           { message: "Server #{params[:id]} has been scheduled for destruction" }
         end
 

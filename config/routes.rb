@@ -4,8 +4,9 @@ CloudNet::Application.routes.draw do
   
   constraints subdomain: /^api/ do
     mount API => '/'
+    mount GrapeSwaggerRails::Engine => '/docs'
   end
-
+  
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)

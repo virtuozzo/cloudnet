@@ -272,6 +272,9 @@ GEM
       roar (>= 1.0)
     grape-swagger (0.21.0)
       grape (>= 0.12.0)
+    grape-swagger-rails (0.2.1)
+      grape-swagger (>= 0.7.2)
+      railties (>= 3.2.12)
     gretel (3.0.8)
       rails (>= 3.2.0)
     guard (2.11.0)
@@ -424,6 +427,7 @@ GEM
     rack (1.6.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-cors (0.4.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -696,6 +700,7 @@ DEPENDENCIES
   grape
   grape-roar
   grape-swagger
+  grape-swagger-rails
   gretel (~> 3.0.6)
   guard
   guard-livereload
@@ -728,6 +733,7 @@ DEPENDENCIES
   public_activity (~> 1.4.1)
   puma (~> 2.15.0)
   quiet_assets
+  rack-cors
   rails (= 4.2.5)
   rails_12factor
   rails_best_practices

@@ -19,7 +19,7 @@ class Server < ActiveRecord::Base
   belongs_to :unscoped_location, -> { unscope(where: :deleted_at) }, foreign_key: :location_id, class_name: "Location"
   belongs_to :template
   belongs_to :location
-  has_many :server_events, dependent: :destroy
+  has_many :server_events, -> { order transaction_updated: :desc}, dependent: :destroy
   has_many :server_usages, dependent: :destroy
   has_many :server_backups, dependent: :destroy
   has_many :server_hourly_transactions, dependent: :destroy
