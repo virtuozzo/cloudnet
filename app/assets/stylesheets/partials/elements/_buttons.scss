@@ -96,7 +96,7 @@ table {
   &.provisioning {
       background: #4775d2;
     }
-  &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary, &.success {
+  &.solved, &.on, &.complete, &.backup-built, &.paid, &.credited, &.primary, &.success, &.enabled {
     background: #6ebd8d;
   }
   &.hold, &.error, &.off, &.unpaid, &.failed {

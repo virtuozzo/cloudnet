@@ -1,0 +1,18 @@
+// Place all the styles related to the api_keys controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "partials/base";
+
+table.api-keys {
+    span.api-key {
+      font-family: monospace;
+      background-color: #EEEEEE;
+      border: 1px solid #DDDDDD;
+      border-radius: 6px;
+      padding: 3px 5px;
+    }
+    td.title {
+      font-weight: bold;
+    }
+}

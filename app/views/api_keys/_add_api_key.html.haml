@@ -1,0 +1,10 @@
+.jg-widget-body
+  = form_for :api_key, url: api_keys_path do |f|
+    .jg-widget-form.pure-g.pure-u-1
+      .form-group.pure-u-1.jg-inline
+        .pure-u-1
+          = f.label :title, class: 'pure-u-1 jg-mandatory'
+          %span.jg-relative.field-container= f.text_field :title, class: 'pure-u-1'
+    .jg-widget-footer.actions.clearfix
+      %ul.jg-widget-controls
+        %li= f.button "Generate API key", class: 'btn jg-submit-button'

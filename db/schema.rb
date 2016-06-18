@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160513093224) do
+ActiveRecord::Schema.define(version: 20160617092338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,19 @@ ActiveRecord::Schema.define(version: 20160513093224) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string   "title",                     null: false
+    t.string   "key",                       null: false
+    t.integer  "user_id"
+    t.boolean  "active",     default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "api_keys", ["key"], name: "index_api_keys_on_key", unique: true, using: :btree
+  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
 
   create_table "billing_cards", force: :cascade do |t|
     t.string   "bin",             limit: 255
@@ -237,7 +250,7 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.text     "billing_address"
     t.integer  "coupon_id"
     t.string   "invoice_type",        limit: 255
-    t.boolean  "transactions_capped"
+    t.boolean  "transactions_capped",             default: true
   end
 
   add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
@@ -277,11 +290,11 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.boolean  "budget_vps",                      default: false
     t.integer  "inclusive_bandwidth",             default: 100
     t.boolean  "ssd_disks",                       default: false
-    t.datetime "deleted_at"
     t.integer  "max_index_cpu",                   default: 0
     t.integer  "max_index_iops",                  default: 0
     t.integer  "max_index_bandwidth",             default: 0
     t.float    "max_index_uptime",                default: 0.0
+    t.datetime "deleted_at"
     t.integer  "region_id"
     t.text     "summary"
     t.integer  "pingdom_id"
@@ -465,12 +478,12 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.datetime "deleted_at"
     t.string   "delete_ip_address",        limit: 255
     t.boolean  "in_beta",                              default: false
-    t.integer  "ip_addresses",                         default: 1
     t.boolean  "payg",                                 default: false
     t.string   "payment_type",             limit: 255, default: "prepaid"
     t.time     "state_changed_at"
     t.boolean  "stuck",                                default: false
     t.decimal  "forecasted_rev",                       default: 0.0
+    t.integer  "ip_addresses",                         default: 1
     t.string   "provisioner_role"
     t.boolean  "no_refresh",                           default: false
     t.integer  "free_billing_bandwidth",               default: 0
@@ -521,7 +534,7 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.string   "os_type",         limit: 255
     t.string   "onapp_os_distro", limit: 255
     t.string   "identifier",      limit: 255
-    t.integer  "hourly_cost",                 default: 1
+    t.integer  "hourly_cost",     limit: 8,   default: 1
     t.string   "name",            limit: 255
     t.integer  "location_id"
     t.datetime "created_at"
@@ -622,8 +635,8 @@ ActiveRecord::Schema.define(version: 20160513093224) do
     t.integer  "storage_max",                          default: 120
     t.integer  "bandwidth_max",                        default: 1024
     t.datetime "deleted_at"
-    t.boolean  "suspended",                            default: false
     t.integer  "account_id"
+    t.boolean  "suspended",                            default: false
     t.string   "otp_auth_secret",          limit: 255
     t.string   "otp_recovery_secret",      limit: 255
     t.boolean  "otp_enabled",                          default: false,     null: false
@@ -653,6 +666,7 @@ ActiveRecord::Schema.define(version: 20160513093224) do
   add_index "users", ["otp_session_challenge"], name: "index_users_on_otp_session_challenge", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "api_keys", "users"
   add_foreign_key "indices", "locations"
   add_foreign_key "keys", "users"
   add_foreign_key "locations", "regions"

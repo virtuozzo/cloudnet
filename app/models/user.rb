@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   has_one :account, dependent: :destroy
   has_many :keys, dependent: :destroy
   has_many :server_count_history, class_name: UserServerCount, dependent: :destroy
+  has_many :api_keys, dependent: :destroy
 
   enum_field :status, allowed_values: [:active, :pending, :suspended], default: :pending
 

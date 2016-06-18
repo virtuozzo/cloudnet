@@ -10,6 +10,7 @@ class RegistrationsController < Devise::RegistrationsController
   
   def edit
     @keys = current_user.keys
+    @api_keys = current_user.api_keys
     super
   end
   

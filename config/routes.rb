@@ -128,6 +128,12 @@ CloudNet::Application.routes.draw do
   
   resources :keys
   
+  resources :api_keys do
+    member do
+      post :toggle_active
+    end
+  end
+  
   namespace :inapi, defaults: {format: :json} do
     namespace :v1 do
       resources :server_search, only: [:index, :create]

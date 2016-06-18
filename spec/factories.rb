@@ -286,6 +286,11 @@ FactoryGirl.define do
     association :user, factory: :user_onapp
   end
   
+  factory :api_key do
+    title 'cloudnet-control-panel'
+    association :user, factory: :user_onapp
+  end
+  
   factory :user_server_count do
   end
   

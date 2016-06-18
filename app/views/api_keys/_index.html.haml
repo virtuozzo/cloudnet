@@ -1,0 +1,54 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.pure-u.jg-icon.icon-user API Keys
+    
+  .jg-widget-body.pure-u-1
+    .jg-widget-form.pure-g.jg-disabled
+      .jg-widget.pure-u-1.pure-g
+        %table.table.table-hover.jg-tables.api-keys
+          %thead
+            %tr.pure-g
+              %td.pure-u-7-24 Title
+              %td.pure-u-7-24 API Key
+              %td.pure-u-4-24 Created
+              %td.pure-u-3-24 Status
+              %td.pure-u-3-24 Actions
+
+          %tbody
+            - if @api_keys.empty?
+              %tr.pure-g
+                %td.pure-u-1-1.no-data{colspan: "5"}
+                  %p= "You don't have any API keys generated"
+            - else
+              - @api_keys.each do |api_key|
+                %tr.pure-g
+                  %td.pure-u-7-24.title= api_key.title
+                  %td.pure-u-7-24
+                    %span.api-key= api_key.key
+                  %td.pure-u-4-24
+                    %span{"data-toggle":"tooltip", "data-placement": "top", "title": api_key.created_at.to_formatted_s(:long_ordinal)}= time_ago_in_words(api_key.created_at) + " ago"
+                  %td.pure-u-3-24
+                    - active_tag = api_key.active ? 'enabled' : 'disabled'
+                    %span.tags{class: active_tag }= active_tag
+                  %td.pure-u-3-24
+                    .btn-group{class: 'sticky'}
+                      %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button", "data-target" => "#"}
+                        %span.icon-settings
+                        %span.icon-arrow-down
+                      %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+                        %li
+                          - active_status = api_key.active ? 'disable' : 'enable'
+                          = link_to active_status.camelize, toggle_active_api_key_path(api_key), method: :post, data: { confirm: "Are you sure you want to #{active_status} this API key?" }
+                        %li
+                          = link_to "Remove", api_key, method: :delete, data: { confirm: "Are you sure you want to delete this API key?" }
+        
+    .jg-widget-form.pure-g.jg-disabled
+      .jg-widget.pure-u-1
+        .jg-widget-header.pure-g.jg-external-header.jg-relative.jg-toggle.clearfix
+          %h2.icon-wallet.jg-icon.pure-u Generate API Key
+          .jg-disclosure.icon-arrow-down
+        .pure-u-md-4-24
+        .jg-widget-content.pure-u-1.pure-u-md-16-24#jg-add-api-key.jg-toggleable
+          = render partial: 'api_keys/add_api_key'
+
+= javascript_include_tag "shared/tooltip"
