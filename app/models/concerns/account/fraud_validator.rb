@@ -98,6 +98,8 @@ class Account < ActiveRecord::Base
     def card_fingerprints
       cards = Payments.new.get_cards(user)
       cards.map {|c| c["fingerprint"]}.uniq
+    rescue StandardError
+      []
     end
     
     def log_risky_cards
