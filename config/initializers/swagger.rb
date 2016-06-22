@@ -6,3 +6,7 @@ GrapeSwaggerRails.options.before_filter_proc = proc {
 
 GrapeSwaggerRails.options.doc_expansion = 'list'
 GrapeSwaggerRails.options.app_name = ENV['BRAND_NAME'] + ' API documentation'
+
+GrapeSwaggerRails.options.api_auth     = 'basic'
+GrapeSwaggerRails.options.api_key_name = 'Authorization'
+GrapeSwaggerRails.options.api_key_type = 'header'

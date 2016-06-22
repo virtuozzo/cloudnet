@@ -15,7 +15,6 @@ describe API do
     it 'returns general info about the API' do
       FactoryGirl.create(:location)
       worker_size = Sidekiq::ProcessSet.new.size rescue 0
-      
       get "#{api}/"
       
       body = JSON.parse(response.body)
@@ -24,7 +23,7 @@ describe API do
       ).to eq worker_size
       
       expect(
-        body['status']['datacentres']
+        body['status']['datacenters']
       ).to eq 1
     end
   end

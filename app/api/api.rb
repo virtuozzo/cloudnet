@@ -16,9 +16,11 @@ class API < Grape::API
   helpers do
     def current_user
       error!('Please provide an Authorization header', 401) unless headers.key? 'Authorization'
-      @current_user ||= User.api_authorize(headers['Authorization'])
+      @current_user ||= User.api_authenticate(headers['Authorization'])
     rescue ActiveRecord::RecordNotFound
-      error!('401 Unauthorized', 401)
+      error! '401 Unauthorized', 401
+    rescue User::Unauthorized => e
+      error! "401 #{e.message}", 401
     end
 
     def authenticate!
@@ -26,7 +28,7 @@ class API < Grape::API
     end
   end
 
-
+  
   desc 'API version'
   get '/version' do
     { 'version' => ENV['API_VERSION'] }
@@ -38,7 +40,7 @@ class API < Grape::API
     {
       'Cloudnet API' => ENV['API_VERSION'],
       status: {
-        datacentres: Location.count,
+        datacenters: Location.count,
         worker: worker_size
       }
     }

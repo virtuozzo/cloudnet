@@ -3,8 +3,9 @@ module Routes
   class Servers < Grape::API
     version :v1, using: :accept_version_header
     resource :servers do
+      
       before do
-        #authenticate!
+        authenticate!
       end
 
       desc 'List all servers'

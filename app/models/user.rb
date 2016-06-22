@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   include User::SiftUser
   include Taggable
   
+  class Unauthorized < StandardError; end
+  
   acts_as_paranoid
 
   devise :otp_authenticatable, :database_authenticatable, :registerable, :confirmable, :lockable,
@@ -48,15 +50,28 @@ class User < ActiveRecord::Base
     "#{full_name}"
   end
 
-  def self.api_authorize(auth_header)
-    type = auth_header.split[0].strip
-    credential = auth_header.split[1].strip
-
-    if type == 'APIKEY'
-      User.find_by email: 'tomasz@onapp.com'
+  def self.api_authenticate(auth_header)
+    split_header = auth_header.delete("\n").split
+    type = split_header[0].strip
+    credential = split_header[1].strip
+    
+    if type == 'Basic'
+      email, api_key = *Base64.decode64(credential).split(':')
+      user = find_by! email: email.encode("UTF-8")
+      if user.valid_api_key?(api_key)
+        user
+      else
+        raise(Unauthorized, 'Unauthorized')
+      end
     else
-      fail 'Invalid Authorization header'
+      raise(Unauthorized, "Invalid Authorization header. Use: 'Authorization: Basic encoded64(yourEmail:yourAPIKey)'")
     end
+  rescue Encoding::UndefinedConversionError
+    raise(Unauthorized, 'Make sure you encoded64 yourEmail:APIkey sequence')
+  end
+  
+  def valid_api_key?(api_key)
+    api_keys.where(active: true).pluck(:key).include?(api_key)
   end
   
   def active_for_authentication?
