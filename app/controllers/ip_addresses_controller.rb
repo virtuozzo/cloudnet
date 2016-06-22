@@ -35,10 +35,10 @@ class IpAddressesController < ApplicationController
   
   def destroy
     raise "Cannot remove Primary IP address" if @ip_address.primary?
-    charge(@server.ip_addresses - 1)
-    @server.decrement! :ip_addresses
     IpAddressTasks.new.perform(:remove_ip, current_user.id, @server.id, @ip_address.identifier)
     @ip_address.destroy!
+    charge(@server.ip_addresses - 1)
+    @server.decrement! :ip_addresses
     Analytics.track(current_user, event: 'Removed IP address')
     Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
     create_sift_event :destroy_ip_address, @server.sift_server_properties
