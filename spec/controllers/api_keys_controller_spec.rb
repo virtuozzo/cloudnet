@@ -31,7 +31,11 @@ RSpec.describe ApiKeysController, type: :controller do
     it 'should toggle active status of api key' do
       expect(@api_key.active).to be_truthy
       post :toggle_active, {id: @api_key.id}
+      expect(@api_key.reload.active).to be_falsey
       expect(flash[:notice]).to eq('API key was successfully disabled')
+      post :toggle_active, {id: @api_key.id}
+      expect(@api_key.reload.active).to be_truthy
+      expect(flash[:notice]).to eq('API key was successfully enabled')
     end
   end
   

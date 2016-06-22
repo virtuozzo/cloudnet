@@ -84,4 +84,48 @@ describe User do
       expect(@sift_client_double).to have_received(:perform).with(:create_event, "$login", anything)
     end
   end
+  
+  describe 'API authentication' do
+    let(:api_key) {FactoryGirl.create(:api_key, user: user)}
+    let(:correct_credentials) { "#{user.email}:#{api_key.key}" }
+    let(:wrong_email) { "#{user.email}wrong:#{api_key.key}" }
+    let(:wrong_api_key) { "#{user.email}:#{api_key.key}wrong" }
+    
+    def encode(value)
+      Base64.encode64(value)
+    end
+    
+    it 'authenticates correctly' do
+      header = "Basic " + encode(correct_credentials)
+      expect(User.api_authenticate(header)).to eq user
+    end
+    
+    it 'doesnt authenticate if wrong email' do
+      header = "Basic " + encode(wrong_email)
+      expect {User.api_authenticate(header)}.to raise_error ActiveRecord::RecordNotFound
+    end
+    
+    it 'doesnt authenticate if wrong API key' do
+      header = "Basic " + encode(wrong_api_key)
+      expect {User.api_authenticate(header)}.to raise_error User::Unauthorized, 'Unauthorized'
+    end
+    
+    it 'doesnt authenticate if wrong authentication method' do
+      header = "Token " + encode(correct_credentials)
+      expect {User.api_authenticate(header)}.to raise_error User::Unauthorized,
+      "Invalid Authorization header. Use: 'Authorization: Basic encoded64(yourEmail:yourAPIKey)'"
+    end
+    
+    it 'doesnt authenticate if not encoded credentials' do
+      header = "Basic " + correct_credentials
+      expect {User.api_authenticate(header)}.to raise_error User::Unauthorized,
+      "Make sure you encoded64 yourEmail:APIkey sequence"
+    end
+    
+    it 'doesnt authenticate if inactive API key' do
+      header = "Basic " + encode(correct_credentials)
+      api_key.update_attribute(:active, false)
+      expect {User.api_authenticate(header)}.to raise_error User::Unauthorized, 'Unauthorized'
+    end
+  end
 end

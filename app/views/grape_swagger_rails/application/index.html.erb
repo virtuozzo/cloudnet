@@ -64,13 +64,15 @@
     });
 
     function addApiKeyAuthorization() {
-      
-      var key = encodeURIComponent($('#input_apiKey')[0].value);
-      if(key && key.trim() != "") {
-        swaggerUi.api.clientAuthorizations.add(
-          "key",
-          new SwaggerClient.ApiKeyAuthorization("Authorization", 'APIKEY ' + key, "header")
-        );
+      var key = $('#input_apiKey')[0].value;
+
+      if (key && key.trim() != "") {
+        if (options.api_auth == 'basic') {
+          key = "Basic " + Base64.encode(key);
+        } else if (options.api_auth == 'bearer') {
+          key = "Bearer " + key
+        }
+        window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization(options.api_key_name, key, options.api_key_type));
       }
     }
 
@@ -108,12 +110,12 @@
     <strong>API Endpoint: </strong> <a href="" class="api_endpoint"></a>
   </div>
   <div>
-    Get your API key from your account profile. The key should be added as a header to all API requests
-    using the following format: <pre>Authorization: APIKEY yourAPIKey</pre>
+    Please use basic authentication for all the requests. Get your API secret key from your account profile. Use your email and API secret, separated by colon (:) and base64 encode it for receiving proper authentication string.
+    Use the following format: <pre>Authorization: Basic encoded64(yourEmail:yourAPIKey)</pre>
   </div>
   <div>
-    For the purposes of interacting with the methods in this documentation you can add your key to all demo requests:
-    <input placeholder="API Key" id="input_apiKey" name="apiKey" type="text"/>
+    For the purposes of interacting with the methods in this documentation you can add your credentials (not encoded) below:
+    <input placeholder="yourEmail:yourAPIKey" id="input_apiKey" name="apiKey" type="text"/>
   </div>
 </div>
 
