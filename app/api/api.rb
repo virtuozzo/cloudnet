@@ -46,7 +46,7 @@ class API < Grape::API
     }
   end
 
-  mount Routes::Datacentres
+  mount Routes::Datacenters
   mount Routes::Servers
 
   add_swagger_documentation(

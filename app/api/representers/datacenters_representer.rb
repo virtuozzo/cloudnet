@@ -1,6 +1,6 @@
 # For representing more than one at a time
-module DatacentresRepresenter
+module DatacentersRepresenter
   include BaseRepresenter
   include Representable::JSON::Collection
-  items extend: DatacentreRepresenter
+  items extend: DatacenterRepresenter
 end

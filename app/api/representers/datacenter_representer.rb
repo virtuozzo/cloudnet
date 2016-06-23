@@ -1,5 +1,5 @@
 # Serialise datacentre objects
-module DatacentreRepresenter
+module DatacenterRepresenter
   include BaseRepresenter
 
   property :id
