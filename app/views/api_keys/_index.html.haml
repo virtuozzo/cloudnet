@@ -26,13 +26,13 @@
                   %td.pure-u-7-24
                     %span.api-key= api_key.key
                   %td.pure-u-4-24
-                    %span{"data-toggle": "tooltip", "data-placement": "top", "title": api_key.created_at.to_formatted_s(:long_ordinal)}= time_ago_in_words(api_key.created_at) + " ago"
+                    %span{:"data-toggle" => "tooltip", :"data-placement" => "top", title: api_key.created_at.to_formatted_s(:long_ordinal)}= time_ago_in_words(api_key.created_at) + " ago"
                   %td.pure-u-3-24
                     - active_tag = api_key.active ? 'enabled' : 'disabled'
                     %span.tags{class: active_tag }= active_tag
                   %td.pure-u-3-24
                     .btn-group{class: 'sticky'}
-                      %button.btn.btn-default.dropdown-toggle{"data-toggle": "dropdown", "type": "button", "data-target": "#"}
+                      %button.btn.btn-default.dropdown-toggle{:"data-toggle" => "dropdown", type: "button", :"data-target" => "#"}
                         %span.icon-settings
                         %span.icon-arrow-down
                       %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
