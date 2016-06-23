@@ -6,11 +6,11 @@ class API < Grape::API
   formatter :json, Grape::Formatter::Roar
 
   rescue_from RuntimeError do |e|
-    error!({ message: { error: 'Internal Server Error. This has been logged.' } }, 500)
+    error! 'Internal Server Error. This has been logged.', 500
   end
 
   rescue_from Grape::Exceptions::ValidationErrors do |e|
-    error!({ message: { error: e } }, 400)
+    error! "#{e.message}", 400
   end
 
   helpers do
@@ -18,9 +18,9 @@ class API < Grape::API
       error!('Please provide an Authorization header', 401) unless headers.key? 'Authorization'
       @current_user ||= User.api_authenticate(headers['Authorization'])
     rescue ActiveRecord::RecordNotFound
-      error! '401 Unauthorized', 401
+      error! 'Unauthorized', 401
     rescue User::Unauthorized => e
-      error! "401 #{e.message}", 401
+      error! "#{e.message}", 401
     end
 
     def authenticate!
