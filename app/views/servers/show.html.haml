@@ -17,7 +17,7 @@
               %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
                 - unless @server.provisioner_role.blank?
                   %li
-                    %a{"data-target" => "#install-notes", "data-toggle" => "modal", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Install Notes
+                    %a{"ng-show" => "server.state == 'on'", "rel" => "nofollow", "id" => "install-notes-button", "server-id" => @server.id} Install Notes
                 %li
                   %a{"href" => "/servers/{{ server.id }}/edit", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Edit Server
                 %li
