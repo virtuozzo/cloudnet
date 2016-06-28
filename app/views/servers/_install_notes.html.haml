@@ -1,0 +1,23 @@
+- notes = DockerProvisionerTasks.new.status(server.provisioner_job_id).body rescue nil
+- notes_json = JSON.parse(notes)['install_notes'] unless notes.nil?
+#install-notes.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "install-notes-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#instal-notes-label.modal-title Install Notes
+
+      .modal-body
+        .jg-widget-form.pure-g-r.clearfix
+          %div
+            %p
+              - unless notes_json.blank?
+                = markdown(notes_json)
+              - else
+                - if notes_json.nil?
+                  Unable to connect
+                - else
+                  No install notes available
+      
+        .modal-footer
+          %button.btn.jg-back-button{"data-dismiss" => "modal"} Close
