@@ -1,0 +1,13 @@
+.jg-widget-form.pure-g-r.clearfix
+  %div
+    %p
+      - unless notes_json.blank?
+        = markdown(notes_json)
+      - else
+        - if notes_json.nil?
+          Unable to connect
+        - else
+          No install notes available
+
+.modal-footer
+  %button.btn.jg-back-button{"data-dismiss" => "modal"} Close

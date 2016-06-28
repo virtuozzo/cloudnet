@@ -67,6 +67,7 @@ CloudNet::Application.routes.draw do
       get :console
       get :calculate_credit
       post :rebuild_network
+      get :install_notes
     end
 
     resources :backups, only: [:index, :create, :destroy] do

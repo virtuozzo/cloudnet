@@ -10,6 +10,12 @@ class ServersController < ServerCommonController
     cpu_usages
     network_usages
   end
+  
+  def install_notes
+    notes = DockerProvisionerTasks.new.status(@server.provisioner_job_id).body rescue nil
+    notes_json = JSON.parse(notes)['install_notes'] unless notes.nil?
+    render partial: 'show_install_notes', layout: false, locals: {notes_json: notes_json}
+  end
 
   def edit
     @server = Server.find(params[:id])

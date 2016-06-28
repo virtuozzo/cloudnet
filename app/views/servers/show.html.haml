@@ -15,6 +15,9 @@
                 %span.icon-settings
                 %span.icon-arrow-down
               %ul.jg-dropmenu.dropdown-menu.dropdown-menu-right{role: "menu"}
+                - unless @server.provisioner_role.blank?
+                  %li
+                    %a{"ng-show" => "server.state == 'on'", "rel" => "nofollow", "id" => "install-notes-button", "server-id" => @server.id} Install Notes
                 %li
                   %a{"href" => "/servers/{{ server.id }}/edit", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Edit Server
                 %li
@@ -96,6 +99,7 @@
 
 = render partial: 'server_delete_dialog', locals: { server: @server }
 = render partial: 'ip_addresses/rebuild_network_popover' if @server.supports_multiple_ips?
+= render partial: 'install_notes', locals: { server: @server } unless @server.provisioner_role.blank?
 
 - if flash.notice =~ /successfully created/
   :javascript
