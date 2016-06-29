@@ -1,6 +1,5 @@
 # Base Grape class
 class API < Grape::API
-  version :v1, using: :accept_version_header
   default_format :json
   format :json
   formatter :json, Grape::Formatter::Roar
@@ -46,12 +45,11 @@ class API < Grape::API
     }
   end
 
-  mount Routes::Datacenters
-  mount Routes::Servers
+  mount Routes::V1::Datacenters
+  mount Routes::V1::Servers
 
   add_swagger_documentation(
     mount_path: '/api_docs',
-    add_version: true,
     doc_version: ENV['API_VERSION'],
     info: { title: "" }
   )

@@ -1,4 +1,4 @@
-module Routes
+module Routes::V1
   # /datacenters
   class Datacenters < Grape::API
     version :v1, using: :accept_version_header

@@ -5,6 +5,7 @@ describe API do
   let(:user) { FactoryGirl.create :user }
   let(:api_key) { FactoryGirl.create :api_key, user: user}
   let(:encoded) { Base64.encode64("#{user.email}:#{api_key.key}") }
+  let(:good_header) { {"Authorization": "Basic #{encoded}", "Accept-Version": "v1"} }
   
   describe 'Datacenters methods' do
     before :each do
@@ -14,7 +15,7 @@ describe API do
     it_behaves_like "api authentication", "datacenters"
 
     it 'returns all the datacenters' do
-      get "#{api}/datacenters", nil, 'Authorization': "Basic #{encoded}"
+      get "#{api}/datacenters", nil, good_header
       body = JSON.parse(response.body)
       datacenter = body.first
       expect(body.count).to eq Location.count
@@ -24,7 +25,7 @@ describe API do
     end
 
     it 'returns info about a particular datacenter' do
-      get "#{api}/datacenters/#{Location.first.id}", nil, 'Authorization': "Basic #{encoded}"
+      get "#{api}/datacenters/#{Location.first.id}", nil, good_header
       body = JSON.parse(response.body)
       expect(body['provider']).to eq Location.first.provider
       expect(body['templates'].count).to eq 1
