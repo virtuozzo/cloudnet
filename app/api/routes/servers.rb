@@ -36,7 +36,11 @@ module Routes
 
         desc 'Show information about a server'
         get do
-          present Server.find(params[:id]), with: ServerRepresenter
+          begin
+            present current_user.servers.find(params[:id]), with: ServerRepresenter
+          rescue ActiveRecord::RecordNotFound
+            error! "Not Found", 404
+          end
         end
       end
     end

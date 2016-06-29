@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
   def self.api_authenticate(auth_header)
     split_header = auth_header.delete("\n").split
     type = split_header[0].strip
-    credential = split_header[1].strip
+    credential = split_header[1].try(:strip)
     
     if type == 'Basic'
       email, api_key = *Base64.decode64(credential).split(':')
