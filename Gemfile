@@ -82,6 +82,7 @@ gem 'roar-rails'
 # Auto-generate API documentation
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
+gem 'grape_logging'
 
 gem 'pry-rails', '0.3.2'
 

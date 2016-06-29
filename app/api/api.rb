@@ -3,7 +3,11 @@ class API < Grape::API
   default_format :json
   format :json
   formatter :json, Grape::Formatter::Roar
-
+  
+  use GrapeLogging::Middleware::RequestLogger,
+    instrumentation_key: 'grape_key',
+    include: [GrapeLogging::Loggers::SelectedHeaders.new(:default)]
+  
   rescue_from RuntimeError do |e|
     error! 'Internal Server Error. This has been logged.', 500
   end
