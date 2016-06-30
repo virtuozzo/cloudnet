@@ -83,6 +83,7 @@ gem 'roar-rails'
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
 gem 'grape_logging'
+#gem 'grape-swagger-representable'
 
 gem 'pry-rails', '0.3.2'
 
