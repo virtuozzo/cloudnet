@@ -6,8 +6,10 @@ class ApiKey < ActiveRecord::Base
   
   before_save :ensure_api_key
 
+  attr_encrypted :key
+  
   validates :title, presence: true
-  validates :key, uniqueness: true
+  validates :encrypted_key, uniqueness: true
   validate :api_keys_limit
   
   def ensure_api_key
@@ -21,7 +23,8 @@ class ApiKey < ActiveRecord::Base
   def generate_api_key
     loop do
       token = Devise.friendly_token
-      break token unless ApiKey.with_deleted.where(key: token).first
+      encrypted = SymmetricEncryption.encrypt token
+      break token unless ApiKey.with_deleted.where(encrypted_key: encrypted).first
     end
   end
   
