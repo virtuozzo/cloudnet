@@ -1,12 +1,13 @@
 module NegativeBalanceProtection
   module Actions
     class ShutdownAllServers
-      attr_reader :user, :manager, :shutdown_performed
+      attr_reader :user, :manager, :shutdown_performed, :reason
       
-      def initialize(user)
+      def initialize(user, reason = 'NegativeBalanceProtection')
         @user = user
         @shutdown_performed = false
         @manager = ServerTasks.new
+        @reason = reason
       end
       
       def perform
@@ -33,7 +34,8 @@ module NegativeBalanceProtection
       def create_activity
         user.create_activity(
           :shutdown_all_servers, 
-          owner: user
+          owner: user,
+          reason: reason
         )
       end
       
@@ -44,7 +46,7 @@ module NegativeBalanceProtection
             user_id: user.id,
             server_id: server.id,
             source: 'ShutdownAllServers',
-            faraday: e.response
+            faraday: e.try(:response)
           }
         )
       end

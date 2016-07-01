@@ -133,19 +133,19 @@ class ServerTasks < BaseTasks
   
   def reboot(server, squall)
     squall.reboot(server.identifier)
-    server.update!(state: :rebooting)
+    server.update_attribute :state, :rebooting
     server
   end
 
   def shutdown(server, squall)
     squall.shutdown(server.identifier)
-    server.update!(state: :shutting_down)
+    server.update_attribute :state, :shutting_down
     server
   end
 
   def startup(server, squall)
     squall.startup(server.identifier)
-    server.update!(state: :starting_up)
+    server.update_attribute :state, :starting_up
     server
   end
 

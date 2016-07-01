@@ -1,1 +1,1 @@
-Because of negative balance, all servers of <%= link_to activity.owner.full_name, admin_user_path(activity.owner) %> were shut down
+All servers of <%= link_to activity.owner.full_name, admin_user_path(activity.owner) %> was shut down due to <%= activity.parameters[:reason].blank? ? 'Negative balance protection' : activity.parameters[:reason].underscore.humanize %>
