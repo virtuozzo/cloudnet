@@ -15,6 +15,7 @@ class RegistrationsController < Devise::RegistrationsController
   
   def update
     @keys = current_user.keys
+    @api_keys = current_user.api_keys
     super
     current_user.reload
     current_user.update_sift_account

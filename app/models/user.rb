@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   enum_field :status, allowed_values: [:active, :pending, :suspended], default: :pending
 
   validates :full_name, presence: true
+  validate :disposable_emails
   # validate :whitelisted_email, on: :create
 
   # We want the password field to be symmetrically encrypted so we can grab
@@ -140,6 +141,12 @@ class User < ActiveRecord::Base
     CreateSiftEvent.perform_async("$login", properties)
   end
   
+  def self.disposable_email_domains
+    Rails.cache.fetch("disposable_email_domains") do
+      CSV.read("#{Rails.root}/db/disposable_email_domains.csv").flatten
+    end
+  end
+  
   protected
 
   def send_on_create_confirmation_instructions
@@ -178,6 +185,14 @@ class User < ActiveRecord::Base
 
   def anonymous_id
     Thread.current[:session_id]
+  end
+  
+  def disposable_emails
+    email_domain = Mail::Address.new(email).domain
+    if User.disposable_email_domains.include? email_domain
+      errors.add(:email, "is a disposable email address. Please use a genuine email address.")
+      false
+    end
   end
 
   # def whitelisted_email
