@@ -16,6 +16,11 @@ describe User do
     user.full_name = ''
     expect(user).not_to be_valid
   end
+  
+  it 'is invalid with a disposable email' do
+    user.email = 'someone@maildrop.cc'
+    expect(user).not_to be_valid
+  end
 
   it 'contains a full name' do
     expect(user.full_name).not_to be_empty

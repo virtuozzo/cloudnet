@@ -368,6 +368,7 @@ ActiveAdmin.register User do
     user = User.find(params[:id])
     log_risky_entities(user)
     user.update!(suspended: true)
+    ShutdownAllUserServers.perform_async(user.id)
     user.create_activity(:suspend, owner: user, params: { admin: current_user.id })
 
     flash[:notice] = 'User has been suspended'
