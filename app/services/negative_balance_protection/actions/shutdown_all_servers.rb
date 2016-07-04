@@ -35,7 +35,9 @@ module NegativeBalanceProtection
         user.create_activity(
           :shutdown_all_servers, 
           owner: user,
-          reason: reason
+          params: { 
+            reason: reason
+          }
         )
       end
       

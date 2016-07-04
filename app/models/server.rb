@@ -214,6 +214,7 @@ class Server < ActiveRecord::Base
   end
   
   def forecasted_revenue
+    return 0.0 if user.suspended?
     discount = (1 - coupon_percentage).round(3)
     (monthly_price * discount).round
   end
