@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
       raise(Unauthorized, "Invalid Authorization header. Use: 'Authorization: Basic encoded64(yourEmail:yourAPIKey)'")
     end
   rescue Encoding::UndefinedConversionError
-    raise(Unauthorized, 'Unauthorized. Make sure you encoded64 yourEmail:APIkey sequence')
+    raise(Unauthorized, 'Make sure you encoded64 yourEmail:APIkey sequence')
   end
   
   def valid_api_key?(api_key)

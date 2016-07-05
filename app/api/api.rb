@@ -11,7 +11,11 @@ class API < Grape::API
   rescue_from RuntimeError do |e|
     error! 'Internal Server Error. This has been logged.', 500
   end
-
+  
+  rescue_from ActiveRecord::RecordNotFound do
+    error! "Not Found", 404
+  end
+  
   rescue_from Grape::Exceptions::ValidationErrors do |e|
     error! "#{e.message}", 400
   end

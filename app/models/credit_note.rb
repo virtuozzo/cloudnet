@@ -64,7 +64,7 @@ class CreditNote < ActiveRecord::Base
   end
   
   def create_sift_event
-    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties)
+    CreateSiftEvent.perform_async("$transaction", sift_credit_note_properties) rescue nil
   end
 
   private

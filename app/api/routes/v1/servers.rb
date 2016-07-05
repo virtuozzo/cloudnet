@@ -31,25 +31,32 @@ module Routes::V1
       end
 
       params do
-        requires :id, type: String, desc: 'Server ID'
+        requires :id, type: Integer, desc: 'Server ID'
       end
       route_param :id do
         desc 'Destroy a server' do
-          failure [[401, 'Unauthorized'], [404, 'Not Found']]
+          failure [
+            {code: 200, message: 'ok'},
+            {code: 401, message: 'Unauthorized'}, 
+            {code: 404, message: 'Not Found'} ]
         end
+
         delete do
-          { message: "Server #{params[:id]} has been scheduled for destruction" }
+          server = current_user.servers.find(params[:id])
+          destroy = DestroyServerTask.new(server, current_user, request.ip)
+          if destroy.process && destroy.success?
+            body false
+            #{ message: "Server #{params[:id]} has been scheduled for destruction" }
+          else
+            error! destroy.errors.join(', '), 500
+          end
         end
 
         desc 'Show information about a server' do
           failure [[401, 'Unauthorized'], [404, 'Not Found']]
         end
         get do
-          begin
-            present current_user.servers.find(params[:id]), with: ServerRepresenter
-          rescue ActiveRecord::RecordNotFound
-            error! "Not Found", 404
-          end
+          present current_user.servers.find(params[:id])
         end
       end
     end

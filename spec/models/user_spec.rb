@@ -124,7 +124,7 @@ describe User do
     it 'doesnt authenticate if not encoded credentials' do
       header = "Basic " + correct_credentials
       expect {User.api_authenticate(header)}.to raise_error User::Unauthorized,
-      "Unauthorized. Make sure you encoded64 yourEmail:APIkey sequence"
+      "Make sure you encoded64 yourEmail:APIkey sequence"
     end
     
     it 'doesnt authenticate if inactive API key' do

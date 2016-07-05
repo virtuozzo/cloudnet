@@ -44,6 +44,6 @@ class DestroyServerTask < BaseTask
   end
   
   def create_sift_event
-    CreateSiftEvent.perform_async("destroy_server", @server.sift_server_properties)
+    CreateSiftEvent.perform_async("destroy_server", @server.sift_server_properties) rescue nil
   end
 end

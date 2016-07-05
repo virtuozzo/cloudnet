@@ -24,11 +24,7 @@ module Routes::V1
           requires :id, type: Integer, desc: 'ID of the datacenter'
         end
         get do
-          begin
-            present Location.find(params[:id]), with: DatacenterRepresenter
-          rescue ActiveRecord::RecordNotFound
-            error! "Not Found", 404
-          end
+          present Location.find(params[:id]), with: DatacenterRepresenter
         end
       end
     end
