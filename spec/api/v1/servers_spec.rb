@@ -45,9 +45,8 @@ describe API do
         expect(user.account.credit_notes.count).to eq 0
         expect {delete "#{api}/servers/#{server_id}", nil, good_header}. to change {Server.count}.by(-1)
         expect(user.account.credit_notes.count).to eq 1
-        body = JSON.parse(response.body)
-        expect(response.status).to eq 200
-        expect(body['message']).to eq "Server #{server_id} has been scheduled for destruction"
+        expect(response.body).to be_empty
+        expect(response.status).to eq 204
       end
       
       it 'returns "not found" if a user is not authorized' do
