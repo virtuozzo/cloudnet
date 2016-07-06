@@ -432,7 +432,7 @@ class ServerWizard
 
   def within_package_if_budget_vps_package
     return false unless location
-    return true if !location.budget_vps? && !existing_server_id.nil?
+    return true if !location.budget_vps? #&& !existing_server_id.nil?
 
     matches = false
     packages.each do |package|
