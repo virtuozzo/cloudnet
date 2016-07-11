@@ -3,8 +3,8 @@ require 'sidekiq/web'
 CloudNet::Application.routes.draw do
   
   constraints subdomain: /^api/ do
-    mount API => '/'
     mount GrapeSwaggerRails::Engine => '/docs'
+    mount API => '/'
   end
   
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"

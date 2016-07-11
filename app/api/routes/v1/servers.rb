@@ -1,6 +1,8 @@
 module Routes::V1
   # /servers
   class Servers < Grape::API
+    class CreateError < StandardError; end
+    
     version :v1, using: :accept_version_header
     resource :servers do
       
@@ -16,12 +18,13 @@ module Routes::V1
       end
 
       desc 'Create a server' do
-        failure [[401, 'Unauthorized']]
+        detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY CREATES</strong> a server on your account, for which you will be charged.'
+        failure [[400, 'Bad Request'], [401, 'Unauthorized']]
       end
       
       params do
         requires :template_id, type: Integer, desc: "Template IDs available from 'GET /datacentres/:id'"
-        optional :name, type: String, desc: 'Human-readable name for server'
+        optional :name, type: String, desc: 'Human-readable name for server', documentation: { example: 'Jim' }
         optional :hostname, type: String, desc: 'OS-compatible hostname'
         optional :memory, type: Integer, default: 1024, desc: 'Amount of memory in MBs, default 1024 MB'
         optional :disk_size, type: Integer, default: 20, desc: 'Size of primary disk in GBs, default 20 GB'
@@ -29,23 +32,17 @@ module Routes::V1
       end
       post do
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
-        location_id = Template.find(requested_params[:template_id]).location.id
-        validation_reason = current_user.account.fraud_validation_reason(request.ip)
-        server_params = { location_id: location_id, name: 'def', hostname: 'def', 
-                          provisioner_role: nil,
-                          ip_addresses: 1, validation_reason: validation_reason, user: current_user
-                        }.merge(requested_params)
-            
-        server_check = ServerWizard.new(server_params)
-        if server_check.valid?
+        actions = CreateServerSupportActions.new(current_user)
+        server_check = actions.server_check(requested_params, request.ip)
+        
+        begin
+          raise CreateError unless server_check.valid?
           create_task = CreateServerTask.new(server_check, current_user)
-          if create_task.process
-            present create_task.server,  with: ServerRepresenter
-          else
-            error! 'not good'
-          end
-        else
-          error! server_check.errors.messages.values.join(', '), 500
+          raise CreateError unless create_task.process
+          present create_task.server,  with: ServerRepresenter
+          
+        rescue CreateError
+          error! actions.build_api_errors, 500
         end
       end
 
@@ -54,8 +51,10 @@ module Routes::V1
       end
       route_param :id do
         desc 'Destroy a server' do
+          detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY DESTROYS</strong> a server on your account.'
           failure [
             {code: 200, message: 'ok'},
+            {code: 400, message: 'Bad Request'},
             {code: 401, message: 'Unauthorized'}, 
             {code: 404, message: 'Not Found'} ]
         end
@@ -72,7 +71,7 @@ module Routes::V1
         end
 
         desc 'Show information about a server' do
-          failure [[401, 'Unauthorized'], [404, 'Not Found']]
+          failure [[400, 'Bad Request'], [401, 'Unauthorized'], [404, 'Not Found']]
         end
         get do
           present current_user.servers.find(params[:id]),  with: ServerRepresenter

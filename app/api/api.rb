@@ -1,7 +1,8 @@
 # Base Grape class
 class API < Grape::API
-  default_format :json
+  cascade false
   format :json
+  default_format :json
   formatter :json, Grape::Formatter::Roar
   
   use GrapeLogging::Middleware::RequestLogger,
@@ -61,4 +62,8 @@ class API < Grape::API
     doc_version: ENV['API_VERSION'],
     info: { title: "" }
   )
+  
+  route :any, '*path' do
+    error! "non existing path: #{params['path']}", 404
+  end
 end
