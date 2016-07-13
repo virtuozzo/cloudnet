@@ -4,6 +4,7 @@
 #       * Have atleast one processable billing card
 #       * Have a Wallet balance of less than $2
 #       * Does not have a 100% discounted active coupon code
+#       * Is not flagged for fraud
 
 class AutoTopup
   include Sidekiq::Worker
@@ -17,6 +18,7 @@ class AutoTopup
                   account.billing_cards.processable.count > 0 && 
                   account.wallet_balance < 200_000
       next if account.coupon && account.coupon.percentage == 100
+      next unless account.fraud_safe?
       begin
         current_balance = account.remaining_balance
         topup = perform_topup(account)

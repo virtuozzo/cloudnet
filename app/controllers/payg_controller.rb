@@ -22,7 +22,7 @@ class PaygController < ApplicationController
 
   def card_payment
     @amount = params[:amount]
-    @task = PaygTopupCardTask.new(current_user.account, @amount)
+    @task = PaygTopupCardTask.new(current_user.account, @amount, ip)
     if @task.process
       unpaid_invoices = current_user.account.invoices.not_paid
       ChargeInvoicesTask.new(current_user, unpaid_invoices).process unless unpaid_invoices.empty?
@@ -35,7 +35,7 @@ class PaygController < ApplicationController
 
   def paypal_request
     @amount = params[:amount]
-    @task = PaygTopupPaypalRequestTask.new(current_user.account, @amount, request)
+    @task = PaygTopupPaypalRequestTask.new(current_user.account, @amount, request, ip)
 
     if @task.process
       redirect_to @task.popup_uri
