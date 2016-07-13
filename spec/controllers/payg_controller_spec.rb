@@ -40,7 +40,14 @@ RSpec.describe PaygController, :type => :controller do
       allow(Payments).to receive_messages(new: @payments)
     end
     
+    it 'should not process Wallet top-up because not fraud safe' do
+      allow_any_instance_of(Account).to receive(:fraud_safe?).and_return(false)
+      post :card_payment, { amount: '25' }
+      expect(@current_user.account.wallet_balance).to eq(0)
+    end
+    
     it 'should process Wallet top-up using card payment' do
+      allow_any_instance_of(Account).to receive(:fraud_safe?).and_return(true)
       post :card_payment, { amount: '25' }
       expect(@current_user.account.wallet_balance).to eq(2500000)
       expect(response).to be_success
@@ -62,6 +69,7 @@ RSpec.describe PaygController, :type => :controller do
     end
     
     it 'should mark invoices as paid on top-up' do
+      allow_any_instance_of(Account).to receive(:fraud_safe?).and_return(true)
       invoice = FactoryGirl.create(:invoice, account: @current_user.account)
       FactoryGirl.create_list(:invoice_item, 2, invoice: invoice, net_cost: 500000)
       post :card_payment, { amount: '25' }
