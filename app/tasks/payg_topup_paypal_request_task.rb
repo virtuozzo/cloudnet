@@ -1,5 +1,5 @@
 class PaygTopupPaypalRequestTask < BaseTask
-  def initialize(account, usd_amount, request)
+  def initialize(account, usd_amount, request, ip = nil)
     Paypal.sandbox! unless Rails.env.production?
 
     @usd_amount = usd_amount
@@ -8,10 +8,15 @@ class PaygTopupPaypalRequestTask < BaseTask
     @account = account
     @user    = account.user
     @request = request
+    @remote_ip  = ip
   end
 
   def process    
     begin
+      unless @account.fraud_safe?(@remote_ip)
+        errors << 'Restricted account. Please contact support.'
+        return false
+      end
       
       unless @account.valid_top_up_amounts.include?(@usd_amount.to_i)
         errors << 'Invalid top up amount'

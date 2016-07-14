@@ -97,10 +97,10 @@ class ServerWizardsController < ServerCommonController
   def meets_minimum_server_requirements?
     return true unless current_user
     if !@wizard_object.can_create_new_server?
-      redirect_to servers_path, alert: 'You already have the maximum number of servers allowed for the beta'
+      redirect_to servers_path, alert: 'You already have the maximum number of servers allowed. Please contact support to increase the limit.'
       false
     elsif !@wizard_object.has_minimum_resources?
-      redirect_to servers_path, alert: 'You do not have enough resources to create a new server'
+      redirect_to servers_path, alert: 'You do not have enough resources to create a new server. Please contact support to increase the limit.'
       false
     else
       true

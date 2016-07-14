@@ -1,13 +1,19 @@
 class PaygTopupCardTask < BaseTask
-  def initialize(account, usd_amount)
+  def initialize(account, usd_amount, ip = nil)
     @usd_amount = usd_amount.to_f
     @amount     = (@usd_amount * Payg::CENTS_IN_DOLLAR).to_i
     @account    = account
     @user       = account.user
     @card       = @account.primary_billing_card
+    @remote_ip  = ip
   end
 
-  def process    
+  def process
+    unless @account.fraud_safe?(@remote_ip)
+      errors << 'Restricted account. Please contact support.'
+      return false
+    end
+    
     unless @account.valid_top_up_amounts.include?(@usd_amount.to_i)
       errors << 'Invalid top up amount'
       return false

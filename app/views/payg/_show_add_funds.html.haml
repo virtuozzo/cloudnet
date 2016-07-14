@@ -1,23 +1,32 @@
+- fraud_safe = current_user.account.fraud_safe?(request.remote_ip)
 .jg-widget-form.pure-g-r.clearfix
-  %div
-    %p 
-      Your current balance is
-      %strong{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }= remaining_balance(current_user)
-    %p Please select the amount you wish to top up (minimum is $25 USD)
-  .form-group.pure-u-1
-    = select_tag :payg_amount, payg_options(current_user.account)
+  - if fraud_safe
+    %div
+      %p 
+        Your current balance is
+        %strong{ :class => (remaining_balance_in_credit?(current_user) ? 'in_credit_colour' : 'in_debt_colour') }= remaining_balance(current_user)
+      %p Please select the amount you wish to top up (minimum is $25 USD)
+    .form-group.pure-u-1
+      = select_tag :payg_amount, payg_options(current_user.account)
+  - else
+    %div
+      %p We are unable to accept payments from your account at this moment. Please contact support to enable payments.
 
 .modal-footer
-  - if has_stripe?
-    - if current_user.account.primary_billing_card.present?
-      %a.btn.jg-submit-button#payg-top-up-card 
-        Pay with Primary Card (&#9679;&#9679;&#9679; 
-        = "#{current_user.account.primary_billing_card.last4})"
-    - else
-      %a.btn.jg-submit-button#add-card-button Add new Card to pay
-    or
-  = link_to payg_paypal_request_path, id: "payg_paypal_button" do
-    = image_tag 'https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif'
+  - if fraud_safe
+    - if has_stripe?
+      - if current_user.account.primary_billing_card.present?
+        %a.btn.jg-submit-button#payg-top-up-card 
+          Pay with Primary Card (&#9679;&#9679;&#9679; 
+          = "#{current_user.account.primary_billing_card.last4})"
+      - else
+        %a.btn.jg-submit-button#add-card-button Add new Card to pay
+      or
+    = link_to payg_paypal_request_path, id: "payg_paypal_button" do
+      = image_tag 'https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif'
+  - else
+    = link_to 'Contact Support', new_ticket_path, {class: 'btn jg-submit-button'}
 
-:javascript
-  var pp_flow = new PAYPAL.apps.DGFlow( {trigger : 'payg_paypal_button', stage: 'sandbox'} );
+- if fraud_safe
+  :javascript
+    var pp_flow = new PAYPAL.apps.DGFlow( {trigger : 'payg_paypal_button', stage: 'sandbox'} );

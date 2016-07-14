@@ -219,7 +219,7 @@ class ServerWizard
     remote = CreateServer.new(self, user).process
     if remote.nil? || remote['id'].nil?
       @build_errors.push('Could not create server on remote system. Please try again later')
-      fail WizardError
+      fail WizardError 
     end
     @newly_built_server = save_server_details(remote, user)
   rescue Faraday::Error::ClientError, StandardError => e
@@ -290,7 +290,9 @@ class ServerWizard
 
   def has_minimum_resources?
     minimum = minimum_resources
-    remaining_server_resources.each { |k, v| return false if minimum[k] > v }
+    remaining_resources = remaining_server_resources
+    remaining_resources.delete(:vms)
+    remaining_resources.each { |k, v| return false if minimum[k] > v }
     true
   end
 
@@ -351,6 +353,7 @@ class ServerWizard
 
   def has_enough_remaining_resources?(package)
     max = remaining_server_resources
+    max.delete(:vms)
     max.each { |k, v| return false if package.send(k.to_sym) > v }
     true
   end
@@ -401,12 +404,16 @@ class ServerWizard
       errors.add(:memory, "is limited to a total of #{user.memory_max} MB across all servers. Please contact support to get this limit increased")
     end
 
-    # if cpus.to_i > resources[:cpus]
-    #   errors.add(:cpus, "are limited to a total of #{user.cpu_max} Cores across all servers")
-    # end
+    if cpus.to_i > resources[:cpus]
+      errors.add(:cpus, "are limited to a total of #{user.cpu_max} Cores across all servers")
+    end
 
     if disk_size.to_i > resources[:disk_size]
       errors.add(:disk_size, "is limited to a total of #{user.storage_max} GB across all servers. Please contact support to get this limit increased")
+    end
+    
+    if resources[:vms] < 1
+      errors.add(:vms, "are limited to a total of #{user.vm_max}. Please contact support to get this limit increased")
     end
   end
 
@@ -419,20 +426,22 @@ class ServerWizard
       servers = user.servers
       memory_used = servers.map(&:memory).reduce(:+) || 0
       storage_used = servers.map(&:disk_size).reduce(:+) || 0
+      cpu_used = servers.map(&:cpus).reduce(:+) || 0
 
       {
         memory:       user.memory_max - memory_used,
-        cpus:         user.cpu_max,
-        disk_size:    user.storage_max - storage_used
+        cpus:         user.cpu_max - cpu_used,
+        disk_size:    user.storage_max - storage_used,
+        vms:          user.vm_max - servers.count
       }
     else
-      { memory: 7680, cpus: 4, disk_size: 100 }
+      { memory: 7680, cpus: 4, disk_size: 100, vms: 3 }
     end
   end
 
   def within_package_if_budget_vps_package
     return false unless location
-    return true if !location.budget_vps? && !existing_server_id.nil?
+    return true if !location.budget_vps? #&& !existing_server_id.nil?
 
     matches = false
     packages.each do |package|
