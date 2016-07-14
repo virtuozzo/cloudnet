@@ -30,7 +30,7 @@ $ ->
   showMessages = (messages, type) ->
     alert_box = $("#jg-add-card").find('#cc_card_alert')
     alert_box.html "<div class='alert alert-#{type}'>#{messages}</div>"
-    $('html, body').scrollTop($('#cc_card_alert').offset().top - 100)
+    $('#jg-add-card').scrollTop(0)
 
   hideMessages = ->
     alert_box = $("#jg-add-card").find('#cc_card_alert').first()
@@ -106,7 +106,7 @@ $ ->
           showErrorMessages ["We are currently experiencing some issues validating your card. Please try again later"]
           enableAddCardButton()
       error: (xhr, status, error) ->
-        showErrorMessages ["We are currently experiencing some issues validating your card. Please try again later"]
+        showErrorMessages xhr.responseJSON.error
         enableAddCardButton()
 
   sendCardToPaymentProcessor = (card_id, data, number, cvc) ->
@@ -167,6 +167,54 @@ $ ->
     e.preventDefault()
     $('#payg-add-funds').modal('hide')
     $('#payg-add-card').modal('show')
+  
+  $('#phone-number-verification').hide()
+  
+  $(document).on "click", "#verify-phone-button", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      data: { phone_number: $("#user_phone_number").val() },
+      url: "/phone_numbers",
+      dataType: "JSON",
+      success: (response) ->
+        $('#phone-number-input').toggle()
+        $('#phone-number-verification').toggle()
+        $('#phone_verification_pin').focus()
+        showSuccessMessage("PIN has been sent to your phone number for verification")
+      error: (xhr, status, error) ->
+        showErrorMessages xhr.responseJSON.error
+  
+  $(document).on "click", "#retry-phone-pin", (e) ->
+    e.preventDefault()
+    $('#phone-number-verification').toggle()
+    $('#phone-number-input').toggle()
+  
+  $(document).on "click", "#resend-phone-pin", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      url: "/phone_numbers/resend",
+      dataType: "JSON",
+      success: (response) ->
+        showSuccessMessage("PIN has been resent")
+      error: (xhr, status, error) ->
+        showErrorMessages xhr.responseJSON.error
+  
+  $(document).on "click", "#confirm-phone-pin", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      data: { phone_verification_pin: $("#phone_verification_pin").val() },
+      url: "/phone_numbers/verify",
+      dataType: "JSON",
+      success: (response) ->
+        $("#phone-number-input").html(response.html_content)
+        $('#phone-number-verification').toggle()
+        $('#phone-number-input').toggle()
+        showSuccessMessage("Thank you! Your phone number is now verified")
+      error: (xhr, status, error) ->
+        showErrorMessages xhr.responseJSON.error
 
   $(document).on "click", "#add-funds-button", (e) ->
     e.preventDefault()

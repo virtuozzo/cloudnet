@@ -182,7 +182,7 @@ describe Invoice do
 
   describe 'billing address' do
     before(:each) do
-      @account = FactoryGirl.create(:account)
+      @account = FactoryGirl.create(:account, :with_user)
     end
 
     it 'should allow setting and retrieving of an address' do

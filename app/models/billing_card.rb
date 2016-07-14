@@ -9,6 +9,7 @@ class BillingCard < ActiveRecord::Base
             :cardholder, :last4, :account, :address1, presence: true
 
   validate :verify_valid_country_code
+  validate :phone_verification, on: :create
   
   before_destroy :verify_card_deletable
 
@@ -62,6 +63,10 @@ class BillingCard < ActiveRecord::Base
 
   def verify_valid_country_code
     errors.add(:country, 'Invalid Country Selected') unless country && IsoCountryCodes.all.detect { |c| c.alpha2.downcase == country.downcase }
+  end
+  
+  def phone_verification
+    errors.add(:base, 'Phone number is not verified. A verified phone number is required to add a credit card.') unless account.user.phone_verified?
   end
   
   def verify_card_deletable

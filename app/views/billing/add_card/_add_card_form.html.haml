@@ -62,6 +62,23 @@
       .pure-u-1.pure-u-md-1-2
         = label_tag 'cc_country', 'Billing Country' , {class: 'pure-u-1 jg-mandatory'}
         = country_select_tag 'cc_country', 'US', {priority: ['US', 'GB', 'CA', 'AU']} 
+  .jg-widget-form.pure-g.pure-u-1
+    .form-group.pure-u-1.jg-inline
+      .pure-u-1.pure-u-md-1-2
+        = label_tag 'user_phone_number', 'Phone Number', {class: 'pure-u-1 jg-mandatory'}
+        #phone-number-input= render partial: 'billing/add_card/verify_phone'
+        #phone-number-verification
+          .input-group
+            = text_field_tag 'phone_verification_pin', '', {class: 'pure-u-1 form-control', placeholder: 'Enter PIN'}
+            .input-group-btn
+              = button_tag 'Confirm', {class: 'btn btn-default btn-verify', id: 'confirm-phone-pin'}
+              = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', 'data-toggle': 'dropdown', id: 'more-phone-pin'}
+              %ul.dropdown-menu.dropdown-menu-right
+                %li= link_to 'Resend', '#', {id: 'resend-phone-pin'}
+                %li= link_to 'Retry', '#', {id: 'retry-phone-pin'}
+      .pure-u-1.pure-u-md-1-2
+        - unless current_user.phone_verified?
+          .alert.alert-warning A verified phone number is required to add a credit card. Please enter phone number and click Verify.
   .jg-widget-footer.actions.clearfix
     %ul.jg-widget-controls
       %li= button_tag "Add card", {class: 'btn jg-submit-button', id: "cc_card_submit"}
