@@ -32,6 +32,6 @@ class CreateServerSupportActions < Struct.new(:user)
     error = {}
     error.merge! build: @server_check.build_errors if @server_check.build_errors.any?
     error.merge! @server_check.errors.messages.each_with_object({}) { |e, m| m[e[0]] = e[1] }
-    { "error": error }
+    { "error" => error }
   end
 end
