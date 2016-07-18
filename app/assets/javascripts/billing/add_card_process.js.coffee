@@ -15,6 +15,12 @@ $ ->
   cc_region     = '#cc_region'
   cc_postal     = '#cc_postal_code'
   cc_cardholder = '#cc_holder_name'
+  
+  phone_num     = '#user_phone_number'
+  phone_btn     = '#verify-phone-button'
+  pin_num       = '#phone_verification_pin'
+  pin_btn       = '#confirm-phone-pin'
+  more_btn      = '#more-phone-pin'
 
   addCard = (card) ->
     account_cards.push card
@@ -30,7 +36,7 @@ $ ->
   showMessages = (messages, type) ->
     alert_box = $("#jg-add-card").find('#cc_card_alert')
     alert_box.html "<div class='alert alert-#{type}'>#{messages}</div>"
-    $('html, body').scrollTop($('#cc_card_alert').offset().top - 100)
+    $('#jg-add-card').scrollTop(0)
 
   hideMessages = ->
     alert_box = $("#jg-add-card").find('#cc_card_alert').first()
@@ -106,7 +112,7 @@ $ ->
           showErrorMessages ["We are currently experiencing some issues validating your card. Please try again later"]
           enableAddCardButton()
       error: (xhr, status, error) ->
-        showErrorMessages ["We are currently experiencing some issues validating your card. Please try again later"]
+        showErrorMessages xhr.responseJSON.error
         enableAddCardButton()
 
   sendCardToPaymentProcessor = (card_id, data, number, cvc) ->
@@ -167,6 +173,90 @@ $ ->
     e.preventDefault()
     $('#payg-add-funds').modal('hide')
     $('#payg-add-card').modal('show')
+  
+  $('#phone-number-verification').hide()
+  
+  disablePhone = ->
+    # $(phone_btn).text("Please wait...")
+    $(phone_btn).attr('disabled', 'disabled')
+    $(phone_num).attr('disabled', 'disabled')
+
+  enablePhone = ->
+    $(phone_num).removeAttr('disabled')
+    $(phone_btn).removeAttr('disabled')
+    # $(phone_btn).text("Verify")
+  
+  disablePin = ->
+    # $(pin_btn).text("Please wait...")
+    $(pin_btn).attr('disabled', 'disabled')
+    $(pin_num).attr('disabled', 'disabled')
+    $(more_btn).attr('disabled', 'disabled')
+
+  enablePin = ->
+    $(pin_num).removeAttr('disabled')
+    $(more_btn).removeAttr('disabled')
+    $(pin_btn).removeAttr('disabled')
+    # $(pin_btn).text("Confirm")
+  
+  $(document).on "click", "#verify-phone-button", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      data: { phone_number: $("#user_phone_number").val() },
+      url: "/phone_numbers",
+      dataType: "JSON",
+      beforeSend: ->
+        disablePhone()
+      success: (response) ->
+        enablePhone()
+        $('#phone-number-input').toggle('slide')
+        $('#phone-number-verification').toggle('slide')
+        $('#phone_verification_pin').focus()
+        showSuccessMessage("PIN has been sent to your phone number for verification")
+      error: (xhr, status, error) ->
+        enablePhone()
+        showErrorMessages xhr.responseJSON.error
+  
+  $(document).on "click", "#retry-phone-pin", (e) ->
+    e.preventDefault()
+    $('#phone-number-verification').toggle('slide')
+    $('#phone-number-input').toggle('slide')
+  
+  $(document).on "click", "#resend-phone-pin", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      url: "/phone_numbers/resend",
+      dataType: "JSON",
+      beforeSend: ->
+        disablePin()
+      success: (response) ->
+        enablePin()
+        showSuccessMessage("PIN has been resent")
+      error: (xhr, status, error) ->
+        enablePin()
+        showErrorMessages xhr.responseJSON.error
+  
+  $(document).on "click", "#confirm-phone-pin", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      data: { phone_verification_pin: $("#phone_verification_pin").val() },
+      url: "/phone_numbers/verify",
+      dataType: "JSON",
+      beforeSend: ->
+        disablePin()
+      success: (response) ->
+        enablePin()
+        $("#phone-number-input").html(response.html_content)
+        $('#phone-number-verification').toggle('slide')
+        $('#phone-number-input').toggle('slide')
+        showSuccessMessage("Thank you! Your phone number is now verified")
+      error: (xhr, status, error) ->
+        enablePin()
+        $("#phone_verification_pin").val('')
+        $('#phone_verification_pin').focus()
+        showErrorMessages xhr.responseJSON.error
 
   $(document).on "click", "#add-funds-button", (e) ->
     e.preventDefault()

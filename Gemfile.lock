@@ -323,6 +323,7 @@ GEM
     highline (1.6.21)
     hike (1.2.3)
     hitimes (1.2.2)
+    htmlentities (4.3.4)
     http_parser.rb (0.6.0)
     httparty (0.13.7)
       json (~> 1.8)
@@ -411,6 +412,12 @@ GEM
     pghero (0.1.7)
       activerecord
     phantomjs (1.9.8.0)
+    phonelib (0.6.2)
+    plivo (0.3.19)
+      builder (>= 2.1.2)
+      htmlentities (~> 4.3, >= 4.3.1)
+      json (~> 1.6, >= 1.6.6)
+      rest-client (~> 1.6, >= 1.6.7)
     polyamorous (1.3.0)
       activerecord (>= 3.0)
     postgresql_lo_streamer (0.1.2)
@@ -736,6 +743,8 @@ DEPENDENCIES
   paypal-express (~> 0.6.0)
   pg
   pghero
+  phonelib
+  plivo
   postgresql_lo_streamer
   prawn (~> 1.3.0)
   prawn-table

@@ -144,6 +144,13 @@ CloudNet::Application.routes.draw do
     end
   end
   
+  resources :phone_numbers, only: [:create] do
+    collection do
+      post :verify
+      post :resend
+    end
+  end
+  
   # Add Sidekiq only if we are an admin and have authenticated as such
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'

@@ -3,6 +3,8 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password 'sekret123'
     full_name { Faker::Name.name }
+    phone_number { Faker::Base.numerify('91940033####') }
+    phone_verified_at Time.now
     association :account, factory: :account
     
     factory :active_user do
@@ -228,7 +230,7 @@ FactoryGirl.define do
     expiry_year '17'
     last4 '1234'
     cardholder 'Mr John Smith'
-    association :account, factory: :account
+    association :account, factory: [:account, :with_user]
     processor_token 'abcd-1234567'
   end
 
