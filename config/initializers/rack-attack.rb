@@ -22,9 +22,14 @@ class Rack::Attack
     end
   
     # Throttle API GET by IP
-  
     throttle('api/get/ip', :limit => 20, :period => 60.seconds) do |req|
-      req.get? && req.host =~ /^api/ && req.ip
+      if req.get? && req.host =~ /^api/
+        if req.path =~ /^\/(docs|assets)/
+          false
+        else
+          req.ip
+        end
+      end
     end
   
     # Throttle API DELETE by IP
