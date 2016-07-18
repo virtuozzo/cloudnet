@@ -24,7 +24,7 @@ class Rack::Attack
     # Throttle API GET by IP
     throttle('api/get/ip', :limit => 20, :period => 60.seconds) do |req|
       if req.get? && req.host =~ /^api/
-        if req.path =~ /^\/(docs|assets)/
+        if req.path =~ /^\/(docs|assets|api)/
           false
         else
           req.ip
