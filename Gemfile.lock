@@ -39,6 +39,13 @@ GIT
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
 
+GIT
+  remote: https://github.com/twiduch/rack-attack.git
+  revision: c863333356e11740e77ce7f4a28bfa924ed8c784
+  specs:
+    rack-attack (5.0.0.beta1)
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -745,6 +752,7 @@ DEPENDENCIES
   public_activity (~> 1.4.1)
   puma (~> 2.15.0)
   quiet_assets
+  rack-attack!
   rack-cors
   rails (= 4.2.5)
   rails_12factor

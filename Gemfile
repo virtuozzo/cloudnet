@@ -83,7 +83,8 @@ gem 'roar-rails'
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
 gem 'grape_logging'
-#gem 'grape-swagger-representable'
+# API throttling
+gem 'rack-attack', git: 'https://github.com/twiduch/rack-attack.git'
 
 gem 'pry-rails', '0.3.2'
 
