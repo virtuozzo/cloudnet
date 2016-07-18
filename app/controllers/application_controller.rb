@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_admin_user?
   helper_method :logged_in_as?
   helper_method :has_stripe?
-
+  helper_method :can_send_sms?
 
   def is_admin_user?
     current_user && current_user.admin?
@@ -42,6 +42,10 @@ class ApplicationController < ActionController::Base
   
   def has_stripe?
     PAYMENTS[:stripe][:api_key].present?
+  end
+  
+  def can_send_sms?
+    KEYS[:plivo][:auth_id].present?
   end
 
   protected

@@ -1,15 +1,15 @@
 require 'plivo'
 include Plivo
 
-AUTH_ID = ENV['PLIVO_AUTH_ID']
-AUTH_TOKEN = ENV['PLIVO_AUTH_TOKEN']
+AUTH_ID = KEYS[:plivo][:auth_id]
+AUTH_TOKEN = KEYS[:plivo][:auth_token]
 
 class PhoneNotification
   
   def self.send_text(number, text)
     p = RestAPI.new(AUTH_ID, AUTH_TOKEN)
     params = {
-        'src'     => ENV['PLIVO_PHONE_NUMBER'],
+        'src'     => KEYS[:plivo][:phone_number],
         'dst'     => number,
         'text'    => text,
         'method'  => 'POST'

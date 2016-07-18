@@ -66,6 +66,7 @@ class BillingCard < ActiveRecord::Base
   end
   
   def phone_verification
+    return true unless KEYS[:plivo][:auth_id].present?
     errors.add(:base, 'Phone number is not verified. A verified phone number is required to add a credit card.') unless account.user.phone_verified?
   end
   
