@@ -173,6 +173,53 @@ $ ->
     e.preventDefault()
     $('#payg-add-funds').modal('hide')
     $('#payg-add-card').modal('show')
+
+  $(document).on "click", "#add-funds-button", (e) ->
+    e.preventDefault()
+    reloadAddfunds()
+
+  reloadAddfunds = ->    
+    $('#payg-add-funds').on 'show.bs.modal', (e) -> 
+      $("#payg-add-funds .modal-body").html """
+        <div class="jg-widget-form pure-g-r clearfix">
+          <div>
+            <p>
+              Please wait, loading Wallet information...
+            </p>
+          </div>
+        </div>
+      """
+    
+    $("#payg-add-funds").modal("show")
+      
+    $.ajax 
+      type: "GET",
+      url: "/payg/show_add_funds",
+      dataType: "html",
+      success: (response) ->
+        $("#payg-add-funds .modal-body").html(response)
+        $("#payg_amount").select2()
+
+  bindAddCardEvents()
+  
+  isPhoneEnabled = ->
+    $(phone_num).attr("disabled") != "disabled"
+  
+  bindIntlInput = ->
+    $(phone_num).intlTelInput
+      allowDropdown: isPhoneEnabled()
+      initialCountry: 'auto'
+      geoIpLookup: (callback) ->
+        $.get('http://ipinfo.io', (->
+        ), 'jsonp').always (resp) ->
+          countryCode = if resp and resp.country then resp.country else ''
+          callback countryCode
+          return
+        return
+      preferredCountries: ["us", "gb", "ca", "au"]
+      utilsScript: "<%= asset_path('intlTelInput/utils.js') %>"
+  
+  bindIntlInput()
   
   $('#phone-number-verification').hide()
   
@@ -200,9 +247,10 @@ $ ->
   
   $(document).on "click", "#verify-phone-button", (e) ->
     e.preventDefault()
+    full_phone_num = $("#user_phone_number").intlTelInput("getNumber")
     $.ajax
       type: "POST",
-      data: { phone_number: $("#user_phone_number").val() },
+      data: { phone_number: full_phone_num },
       url: "/phone_numbers",
       dataType: "JSON",
       beforeSend: ->
@@ -251,37 +299,10 @@ $ ->
         $("#phone-number-input").html(response.html_content)
         $('#phone-number-verification').toggle('slide')
         $('#phone-number-input').toggle('slide')
+        bindIntlInput()
         showSuccessMessage("Thank you! Your phone number is now verified")
       error: (xhr, status, error) ->
         enablePin()
         $("#phone_verification_pin").val('')
         $('#phone_verification_pin').focus()
         showErrorMessages xhr.responseJSON.error
-
-  $(document).on "click", "#add-funds-button", (e) ->
-    e.preventDefault()
-    reloadAddfunds()
-
-  reloadAddfunds = ->    
-    $('#payg-add-funds').on 'show.bs.modal', (e) -> 
-      $("#payg-add-funds .modal-body").html """
-        <div class="jg-widget-form pure-g-r clearfix">
-          <div>
-            <p>
-              Please wait, loading Wallet information...
-            </p>
-          </div>
-        </div>
-      """
-    
-    $("#payg-add-funds").modal("show")
-      
-    $.ajax 
-      type: "GET",
-      url: "/payg/show_add_funds",
-      dataType: "html",
-      success: (response) ->
-        $("#payg-add-funds .modal-body").html(response)
-        $("#payg_amount").select2()
-
-  bindAddCardEvents()

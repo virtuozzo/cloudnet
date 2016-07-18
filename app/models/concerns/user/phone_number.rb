@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     end
     
     def phone_verified?
-      !phone_verified_at.nil?
+      phone_number.present? && !phone_verified_at.nil?
     end
   end
 end
