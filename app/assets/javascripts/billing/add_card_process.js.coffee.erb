@@ -210,9 +210,9 @@ $ ->
       allowDropdown: isPhoneEnabled()
       initialCountry: 'auto'
       geoIpLookup: (callback) ->
-        $.get('http://ipinfo.io', (->
-        ), 'jsonp').always (resp) ->
-          countryCode = if resp and resp.country then resp.country else ''
+        $.get('https://freegeoip.net/json/', (->
+        )).always (resp) ->
+          countryCode = if resp and resp.country_code then resp.country_code else ''
           callback countryCode
           return
         return
