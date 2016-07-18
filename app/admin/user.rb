@@ -367,7 +367,7 @@ ActiveAdmin.register User do
   member_action :suspend, method: :post do
     user = User.find(params[:id])
     log_risky_entities(user)
-    user.update!(suspended: true)
+    user.update_attribute(:suspended, true)
     ShutdownAllUserServers.perform_async(user.id)
     user.create_activity(:suspend, owner: user, params: { admin: current_user.id })
 
@@ -377,7 +377,7 @@ ActiveAdmin.register User do
 
   member_action :unsuspend, method: :post do
     user = User.find(params[:id])
-    user.update!(suspended: false)
+    user.update_attribute(:suspended, false)
     
     remove_sift_label(user)
     label_devices(user, "not_bad")
