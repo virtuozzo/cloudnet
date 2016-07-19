@@ -73,7 +73,7 @@
               = text_field_tag 'phone_verification_pin', '', {class: 'pure-u-1 form-control', placeholder: 'Enter PIN'}
               .input-group-btn
                 = button_tag 'Confirm', {class: 'btn btn-default btn-verify', id: 'confirm-phone-pin'}
-                = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', 'data-toggle': 'dropdown', id: 'more-phone-pin'}
+                = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', :'data-toggle' => 'dropdown', id: 'more-phone-pin'}
                 %ul.dropdown-menu.dropdown-menu-right
                   %li= link_to 'Resend', '#', {id: 'resend-phone-pin'}
                   %li= link_to 'Retry', '#', {id: 'retry-phone-pin'}
