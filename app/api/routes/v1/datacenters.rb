@@ -12,7 +12,7 @@ module Routes::V1
         failure [[401, 'Unauthorized']]
       end
       get do
-        present Location.where(hidden: false), with: DatacentersRepresenter
+        present Location.where(hidden: false, budget_vps: false), with: DatacentersRepresenter
       end
 
       route_param :id do

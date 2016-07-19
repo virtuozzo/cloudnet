@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: https://github.com/twiduch/rack-attack.git
-  revision: c863333356e11740e77ce7f4a28bfa924ed8c784
+  revision: d5e7b31dc6512d1608dca652662e60a9267bc267
   specs:
     rack-attack (5.0.0.beta1)
       rack
