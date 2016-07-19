@@ -29,9 +29,9 @@ class User < ActiveRecord::Base
   validates :full_name, presence: true
   validate :disposable_emails
   # validate :whitelisted_email, on: :create
-  validates :phone_number, presence: true, allow_nil: true
+  validates :phone_number, :unverified_phone_number, presence: true, allow_nil: true
   validates_uniqueness_of :phone_number, allow_nil: true
-  validates :phone_number, phone: { possible: false, allow_blank: true, types: [:mobile] }
+  validates :phone_number, :unverified_phone_number, phone: { possible: false, allow_blank: true, types: [:mobile] }
 
   # We want the password field to be symmetrically encrypted so we can grab
   # the contents later on if need be. This stores a value in encrypted_onapp_password
