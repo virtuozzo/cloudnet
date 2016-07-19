@@ -312,6 +312,9 @@ li#auto-topup-btn {
 .btn-verify {
   height: 42px;
   font-weight: bold;
+}
+
+#verify-phone-button {
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
@@ -334,5 +337,9 @@ li#auto-topup-btn {
   height: 42px;
 }
 .intl-tel-input .country-list.dropup {
+  font-size: 12px;
+}
+
+#error-message.help-block, #success-message.help-block {
   font-size: 12px;
 }

@@ -245,28 +245,62 @@ $ ->
     $(pin_btn).removeAttr('disabled')
     # $(pin_btn).text("Confirm")
   
+  showPhoneVerificationErrors = (errors) ->
+    $('#error-message').html(errors.join(', '))
+    $('#verify-phone').addClass("has-error")
+    $('#error-message').removeClass("hidden")
+    resetPhoneSuccess()
+  
+  showPhoneVerificationSuccess = (message) ->
+    resetPhoneNum()
+    $('#success-message').html(message)
+    $('#success-message').removeClass("hidden")
+    $('#verify-phone').addClass("has-success")
+  
+  resetPhoneSuccess = ->
+    $('#verify-phone').removeClass("has-success")
+    $('#success-message').addClass("hidden")
+  
+  resetPhoneNum = ->
+    $('#verify-phone').removeClass("has-error")
+    $('#error-message').addClass("hidden")
+  
   $(document).on "click", "#verify-phone-button", (e) ->
     e.preventDefault()
-    full_phone_num = $("#user_phone_number").intlTelInput("getNumber")
-    $.ajax
-      type: "POST",
-      data: { phone_number: full_phone_num },
-      url: "/phone_numbers",
-      dataType: "JSON",
-      beforeSend: ->
-        disablePhone()
-      success: (response) ->
-        enablePhone()
-        $('#phone-number-input').toggle('slide')
-        $('#phone-number-verification').toggle('slide')
-        $('#phone_verification_pin').focus()
-        showSuccessMessage("PIN has been sent to your phone number for verification")
-      error: (xhr, status, error) ->
-        enablePhone()
-        showErrorMessages xhr.responseJSON.error
+    resetPhoneNum()
+    if $.trim($(phone_num).val())
+      full_phone_num = $(phone_num).intlTelInput("getNumber")
+      if $(phone_num).intlTelInput("isValidNumber")
+        $.ajax
+          type: "POST",
+          data: { phone_number: full_phone_num },
+          url: "/phone_numbers",
+          dataType: "JSON",
+          beforeSend: ->
+            disablePhone()
+          success: (response) ->
+            enablePhone()
+            $('#phone-number-input').toggle('slide')
+            $('#phone-number-verification').toggle('slide')
+            $('#phone_verification_pin').val('')
+            $('#phone_verification_pin').focus()
+            showPhoneVerificationSuccess("PIN has been sent to your phone number for verification")
+          error: (xhr, status, error) ->
+            enablePhone()
+            showPhoneVerificationErrors xhr.responseJSON.error
+      else
+        $('#verify-phone').addClass("has-error")
+        $('#error-message').removeClass("hidden")
+    else
+      $('#verify-phone').addClass("has-error")
+      $('#error-message').removeClass("hidden")
+  
+  $(document).on "keyup change", "#user_phone_number, #phone_verification_pin", (e) ->
+    resetPhoneNum()
   
   $(document).on "click", "#retry-phone-pin", (e) ->
     e.preventDefault()
+    resetPhoneNum()
     $('#phone-number-verification').toggle('slide')
     $('#phone-number-input').toggle('slide')
   
@@ -277,10 +311,11 @@ $ ->
       url: "/phone_numbers/reset",
       dataType: "JSON",
       success: (response) ->
+        resetPhoneNum()
         $("#phone-number-input").html(response.html_content)
         bindIntlInput()
       error: (xhr, status, error) ->
-        showErrorMessages xhr.responseJSON.error
+        showPhoneVerificationErrors xhr.responseJSON.error
   
   $(document).on "click", "#resend-phone-pin", (e) ->
     e.preventDefault()
@@ -291,11 +326,13 @@ $ ->
       beforeSend: ->
         disablePin()
       success: (response) ->
+        resetPhoneNum()
         enablePin()
-        showSuccessMessage("PIN has been resent")
+        $('#phone_verification_pin').focus()
+        showPhoneVerificationSuccess("PIN has been resent")
       error: (xhr, status, error) ->
         enablePin()
-        showErrorMessages xhr.responseJSON.error
+        showPhoneVerificationErrors xhr.responseJSON.error
   
   $(document).on "click", "#confirm-phone-pin", (e) ->
     e.preventDefault()
@@ -312,9 +349,9 @@ $ ->
         $('#phone-number-verification').toggle('slide')
         $('#phone-number-input').toggle('slide')
         bindIntlInput()
-        showSuccessMessage("Thank you! Your phone number is now verified")
+        showPhoneVerificationSuccess("Thank you! Your phone number is now verified")
       error: (xhr, status, error) ->
         enablePin()
         $("#phone_verification_pin").val('')
         $('#phone_verification_pin').focus()
-        showErrorMessages xhr.responseJSON.error
+        showPhoneVerificationErrors xhr.responseJSON.error

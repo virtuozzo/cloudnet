@@ -64,7 +64,7 @@
         = country_select_tag 'cc_country', 'US', {priority: ['US', 'GB', 'CA', 'AU']} 
   - if can_send_sms?
     .jg-widget-form.pure-g.pure-u-1
-      .form-group.pure-u-1.jg-inline
+      .form-group.pure-u-1.jg-inline#verify-phone
         .pure-u-1.pure-u-md-1-2
           = label_tag 'user_phone_number', 'Phone Number', {class: 'pure-u-1 jg-mandatory'}
           #phone-number-input= render partial: 'billing/add_card/verify_phone', locals: {verified: current_user.phone_verified?}
@@ -77,6 +77,8 @@
                 %ul.dropdown-menu.dropdown-menu-right
                   %li= link_to 'Resend', '#', {id: 'resend-phone-pin'}
                   %li= link_to 'Change', '#', {id: 'retry-phone-pin'}
+          %span#error-message.help-block.hidden Invalid number
+          %span#success-message.help-block.hidden Invalid number
         .pure-u-1.pure-u-md-1-2
           - unless current_user.phone_verified?
             .alert.alert-warning A verified phone number is required to add a credit card. Please enter phone number and click Verify.

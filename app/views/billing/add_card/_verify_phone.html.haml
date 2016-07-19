@@ -1,6 +1,6 @@
 .input-group
   - disabled = verified ? 'disabled' : nil
-  = text_field_tag 'user_phone_number', current_user.phone_number, {class: 'pure-u-1 form-control', disabled: disabled, type: 'tel'}
+  = text_field_tag 'user_phone_number', current_user.phone_number, {class: 'pure-u-1 form-control', disabled: disabled, type: 'tel', :'aria-describedby' => 'error-message'}
   %span.input-group-btn
     - content = verified ? content_tag(:span, '', class: ['glyphicon', 'glyphicon-ok-sign', 'verified-glyph']) + content_tag(:span, ' Verified') : 'Verify'
     = button_tag content, {class: 'btn btn-default btn-verify', id: 'verify-phone-button', disabled: disabled}
