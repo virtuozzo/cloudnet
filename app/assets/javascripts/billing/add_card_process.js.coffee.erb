@@ -270,6 +270,18 @@ $ ->
     $('#phone-number-verification').toggle('slide')
     $('#phone-number-input').toggle('slide')
   
+  $(document).on "click", "#change-phone-num", (e) ->
+    e.preventDefault()
+    $.ajax
+      type: "POST",
+      url: "/phone_numbers/reset",
+      dataType: "JSON",
+      success: (response) ->
+        $("#phone-number-input").html(response.html_content)
+        bindIntlInput()
+      error: (xhr, status, error) ->
+        showErrorMessages xhr.responseJSON.error
+  
   $(document).on "click", "#resend-phone-pin", (e) ->
     e.preventDefault()
     $.ajax

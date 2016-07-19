@@ -312,6 +312,8 @@ li#auto-topup-btn {
 .btn-verify {
   height: 42px;
   font-weight: bold;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 
 .verified-glyph {
