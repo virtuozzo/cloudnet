@@ -205,16 +205,36 @@ $ ->
   isPhoneEnabled = ->
     $(phone_num).attr("disabled") != "disabled"
   
+  setCookie = (key, value) ->
+    expires = new Date
+    expires.setTime expires.getTime() + 30 * 24 * 60 * 60 * 1000
+    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString()
+    return
+
+  getCookie = (key) ->
+    keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)')
+    if keyValue then keyValue[2] else null
+  
+  setCountrySelect = (val) ->
+    $(cc_country).select2("val", val)
+  
   bindIntlInput = ->
     $(phone_num).intlTelInput
       allowDropdown: isPhoneEnabled()
       initialCountry: 'auto'
       geoIpLookup: (callback) ->
-        $.get('https://freegeoip.net/json/', (->
-        )).always (resp) ->
-          countryCode = if resp and resp.country_code then resp.country_code else ''
-          callback countryCode
-          return
+        countryCodeCookie = getCookie('countryCode')
+        if countryCodeCookie != null
+          callback countryCodeCookie
+          setCountrySelect(countryCodeCookie)
+        else
+          $.get('https://freegeoip.net/json/', (->
+          )).always (resp) ->
+            countryCode = if resp and resp.country_code then resp.country_code else ''
+            setCookie('countryCode', countryCode)
+            setCountrySelect(countryCode)
+            callback countryCode
+            return  
         return
       preferredCountries: ["us", "gb", "ca", "au"]
       utilsScript: "<%= asset_path('intlTelInput/utils.js') %>"
