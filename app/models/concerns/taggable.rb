@@ -13,6 +13,7 @@ module Taggable
 
   # removes tag binding from object
   def remove_tagging(tag)
+    return 0 if tag.nil?
     tag.taggings.where(taggable: self).delete_all
   end
 end
