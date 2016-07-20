@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
     end
     
     def phone_verification_pin
-      Rails.cache.fetch(["phone_verification_pin", id], expires_in: 1.hour) do
+      Rails.cache.fetch(["phone_verification_pin", unverified_phone_number, id], expires_in: 1.hour) do
         generate_phone_verification_pin
       end
     end
@@ -18,12 +18,20 @@ class User < ActiveRecord::Base
       rand(0000..9999).to_s.rjust(4, "0")
     end
     
-    def phone_number_parsed
-      Phonelib.parse(phone_number)
+    def phone_number_full
+      Phonelib.parse(phone_number).full_e164
     end
     
-    def phone_number_full
-      phone_number_parsed.full_e164
+    def unverified_phone_number
+      Rails.cache.read(["unverified_phone_number", id])
+    end
+    
+    def unverified_phone_number=(number)
+      Rails.cache.write(["unverified_phone_number", id], number, expires_in: 1.hour)
+    end
+    
+    def unverified_phone_number_full
+      Phonelib.parse(unverified_phone_number).full_e164
     end
     
     def phone_verified?

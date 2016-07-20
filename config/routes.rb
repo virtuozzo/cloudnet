@@ -148,6 +148,7 @@ CloudNet::Application.routes.draw do
     collection do
       post :verify
       post :resend
+      post :reset
     end
   end
   

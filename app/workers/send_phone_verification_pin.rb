@@ -4,8 +4,8 @@ class SendPhoneVerificationPin
   def perform(user_id)
     return false unless KEYS[:plivo][:auth_id].present?
     user = User.find user_id
-    number = user.phone_number_full
-    return false if number.blank? or user.phone_verified?
+    number = user.unverified_phone_number_full
+    return false if number.blank?
     text = user.phone_verification_sms
     begin
       response = PhoneNotification.send_text number, text
