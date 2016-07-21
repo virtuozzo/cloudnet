@@ -1,6 +1,8 @@
 module Routes::V1
   # /datacenters
   class Datacenters < Grape::API
+    include Grape::Kaminari
+    
     version :v1, using: :accept_version_header
     resource :datacenters do
       before do
@@ -11,8 +13,9 @@ module Routes::V1
         detail 'together with an array of templates available'
         failure [[401, 'Unauthorized']]
       end
+      paginate per_page: 10, max_per_page: 20, offset: false
       get do
-        present Location.where(hidden: false, budget_vps: false), with: DatacentersRepresenter
+        present paginate(Location.where(hidden: false, budget_vps: false)), with: DatacentersRepresenter
       end
 
       route_param :id do

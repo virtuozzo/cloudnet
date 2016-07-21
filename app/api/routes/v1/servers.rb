@@ -2,6 +2,7 @@ module Routes::V1
   # /servers
   class Servers < Grape::API
     class CreateError < StandardError; end
+    include Grape::Kaminari
     
     version :v1, using: :accept_version_header
     resource :servers do
@@ -13,8 +14,9 @@ module Routes::V1
       desc 'List all servers' do
         failure [[401, 'Unauthorized']]
       end
+      paginate per_page: 10, max_per_page: 20, offset: false
       get do
-        present current_user.servers.to_a, with: ServersRepresenter
+        present paginate(current_user.servers), with: ServersRepresenter
       end
 
       desc 'Create a server' do
