@@ -46,8 +46,12 @@ class PhoneNumbersController < ApplicationController
     respond_to do |format|
       begin
         if !current_user.unverified_phone_number_full.blank?
-          SendPhoneVerificationPin.new.perform(current_user.id)
-          format.json { render json: current_user.as_json(only: [:email, :phone_number]), status: :ok }
+          response = SendPhoneVerificationPin.new.perform(current_user.id)
+          if response != true
+            format.json { render json: { error: [response] }, status: :unprocessable_entity }
+          else
+            format.json { render json: current_user.as_json(only: [:email, :phone_number]), status: :ok }
+          end
         else
           format.json { render json: { error: ['Invalid request'] }, status: :unprocessable_entity }
         end

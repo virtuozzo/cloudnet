@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
   
   def can_send_sms?
-    KEYS[:plivo][:auth_id].present?
+    KEYS[:nexmo][:api_key].present?
   end
 
   protected

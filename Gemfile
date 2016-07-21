@@ -142,7 +142,7 @@ end
 gem 'puma', '~> 2.15.0'
 gem 'tubesock'
 
-gem 'plivo'
+gem 'nexmo'
 gem 'phonelib'
 
 group :doc do
