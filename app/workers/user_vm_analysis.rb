@@ -5,7 +5,6 @@ class UserVmAnalysis
   
   def perform
     update_server_count
-    make_sure_tags_ready
     update_user_auto_tags
   end
   
@@ -49,9 +48,5 @@ class UserVmAnalysis
   
   def user_ids_with_no_servers_recently
     User.where.not(id: user_ids_with_servers_recently).ids
-  end
-  
-  def make_sure_tags_ready
-    AutoTags.check_auto_tags_ready
   end
 end

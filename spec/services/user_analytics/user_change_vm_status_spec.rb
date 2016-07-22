@@ -18,6 +18,23 @@ describe UserAnalytics::UserChangeVmStatus do
     it 'marks as shrinking' do
       expect(subject.user_status).to eq :shrinking
     end
+    
+    it 'creates proper tag' do
+      expect(Tag.count).to eq 0
+      subject.tag_user_vm_trend
+      expect(Tag.count).to eq 1
+      expect(@user.tags.count).to eq 1
+      expect(@user.tags.first.label).to eq 'shrinking'
+    end
+    
+    it 'removes old tags' do
+      @user.add_tags_by_label(UserAnalytics::UserChangeVmStatus::POSSIBLE_TAGS)
+      expect(Tag.count).to eq 3
+      subject.tag_user_vm_trend
+      expect(Tag.count).to eq 3
+      expect(@user.tags.count).to eq 1
+      expect(@user.tags.first.label).to eq 'shrinking'
+    end
   end
   
   context 'growing' do

@@ -10,16 +10,8 @@ module UserAnalytics
     end
     
     def tag_user_vm_trend
-      new_tag = Tag.find_by label: user_status
-      return unless new_tag
-      remove_old_tag
-      user.tags << new_tag
-    end
-    
-    def remove_old_tag
-      POSSIBLE_TAGS.each do |label|
-        user.remove_tagging(Tag.find_by label: label)
-      end
+      user.remove_tags_by_label(POSSIBLE_TAGS)
+      user.add_tags_by_label(user_status)
     end
     
     # shrinking, stable, growing
