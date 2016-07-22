@@ -21,7 +21,8 @@ module UserAnalytics
       when recent_change? then last_number_bigger? ? :growing : :shrinking
       when average_difference < -0.4 then :shrinking
       when average_difference > 0.4 then :growing
-      else :stable
+      else 
+        servers_count[0] == 0 ? nil : :stable
       end
     end
   
