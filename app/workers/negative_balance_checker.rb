@@ -13,8 +13,10 @@ class NegativeBalanceChecker
     user.update_attribute(:suspended, false) if suspended
     if user.account.remaining_balance > 100_000
       user.act_for_negative_balance
+      user.add_tags_by_label(:negative_balance)
     else
       user.clear_unpaid_notifications('balance is correct')
+      user.remove_tags_by_label(:negative_balance)
     end
   rescue => e
     log_error(e, user)
