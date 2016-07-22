@@ -52,7 +52,7 @@ ActiveAdmin.register Server do
     panel "Tags for a server" do
       attributes_table_for server do
         row :tags do |server|
-          server.tags.pluck(:label).join(', ')
+          server.tag_labels.join(', ')
         end
       end
     end

@@ -79,7 +79,7 @@ ActiveAdmin.register User do
     panel "Tags for a user" do
       attributes_table_for user do
         row :tags do |user|
-          user.tags.pluck(:label).join(', ')
+          user.tag_labels.join(', ')
         end
       end
     end
