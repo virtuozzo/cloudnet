@@ -4,18 +4,12 @@ class User < ActiveRecord::Base
   module User::PhoneNumber
     extend ActiveSupport::Concern
     
-    def phone_verification_sms
-      "Your #{ENV['BRAND_NAME']} phone verification PIN is #{phone_verification_pin}. This PIN will expire in one hour."
+    def phone_verification_id
+      Rails.cache.read(["phone_verification_id", id])
     end
     
-    def phone_verification_pin
-      Rails.cache.fetch(["phone_verification_pin", unverified_phone_number, id], expires_in: 1.hour) do
-        generate_phone_verification_pin
-      end
-    end
-    
-    def generate_phone_verification_pin
-      rand(0000..9999).to_s.rjust(4, "0")
+    def phone_verification_id=(verification_id)
+      Rails.cache.write(["phone_verification_id", id], verification_id, expires_in: 1.hour)
     end
     
     def phone_number_full

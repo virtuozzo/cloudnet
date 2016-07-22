@@ -75,8 +75,8 @@
                 = button_tag 'Confirm', {class: 'btn btn-default btn-verify', id: 'confirm-phone-pin'}
                 = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', :'data-toggle' => 'dropdown', id: 'more-phone-pin'}
                 %ul.dropdown-menu.dropdown-menu-right
-                  %li= link_to 'Resend', '#', {id: 'resend-phone-pin'}
-                  %li= link_to 'Change', '#', {id: 'retry-phone-pin'}
+                  %li= link_to 'Send PIN via call', '#', {id: 'resend-phone-pin'}
+                  %li= link_to 'Change number', '#', {id: 'retry-phone-pin'}
           %span#error-message.help-block.hidden Invalid number
           %span#success-message.help-block.hidden Invalid number
         .pure-u-1.pure-u-md-1-2

@@ -5,8 +5,15 @@ class PhoneNumbersController < ApplicationController
     respond_to do |format|
       begin
         if current_user.save
-          SendPhoneVerificationPin.perform_async(current_user.id)
-          format.json { render json: current_user.as_json(only: [:email, :phone_number]), status: :ok }
+          PhoneVerify.new.cancel(current_user.phone_verification_id) if current_user.phone_verification_id.present?
+          verification = PhoneVerify.new.start current_user.unverified_phone_number_full
+          success, response = verification[0], verification[1]
+          if success
+            current_user.phone_verification_id = response
+            format.json { render json: current_user.as_json(only: [:email, :phone_number]), status: :ok }
+          else
+            format.json { render json: { error: [response] }, status: :unprocessable_entity }
+          end
         else
           format.json { render json: { error: current_user.errors.full_messages }, status: :unprocessable_entity }
         end
@@ -20,12 +27,13 @@ class PhoneNumbersController < ApplicationController
   def verify
     respond_to do |format|
       begin
-        if current_user.phone_verification_pin.to_s == params[:phone_verification_pin].to_s
+        check = PhoneVerify.new.check current_user.phone_verification_id, params[:phone_verification_pin].to_s
+        success, response = check[0], check[1]
+        if success
           current_user.phone_number = current_user.unverified_phone_number_full
           current_user.phone_verified_at = Time.now
           if current_user.save
-            Rails.cache.delete(["phone_verification_pin", current_user.unverified_phone_number, current_user.id])
-            current_user.unverified_phone_number = nil
+            current_user.phone_verification_id = current_user.unverified_phone_number = nil
             current_user.update_sift_account
             html_content = render_to_string partial: 'billing/add_card/verify_phone', locals: {verified: true}
             format.json { render json: { html_content: html_content }, status: :ok }
@@ -33,7 +41,7 @@ class PhoneNumbersController < ApplicationController
             format.json { render json: { error: current_user.errors.full_messages }, status: :unprocessable_entity }
           end
         else
-          format.json { render json: { error: ['Incorrect PIN'] }, status: :unprocessable_entity }
+          format.json { render json: { error: [response] }, status: :unprocessable_entity }
         end
       rescue StandardError => e
         ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'PhoneNumbersController#verify'})
@@ -45,12 +53,12 @@ class PhoneNumbersController < ApplicationController
   def resend
     respond_to do |format|
       begin
-        if !current_user.unverified_phone_number_full.blank?
-          response = SendPhoneVerificationPin.new.perform(current_user.id)
-          if response != true
-            format.json { render json: { error: [response] }, status: :unprocessable_entity }
-          else
+        if current_user.phone_verification_id.present?
+          response = PhoneVerify.new.trigger_next current_user.phone_verification_id
+          if response
             format.json { render json: current_user.as_json(only: [:email, :phone_number]), status: :ok }
+          else
+            format.json { render json: { error: ['Attempts to verify this number has failed. Please try alternate number.'] }, status: :unprocessable_entity }
           end
         else
           format.json { render json: { error: ['Invalid request'] }, status: :unprocessable_entity }

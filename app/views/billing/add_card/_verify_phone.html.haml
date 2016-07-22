@@ -7,4 +7,4 @@
     - if verified
       = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', :'data-toggle' => 'dropdown', id: 'more-phone-pin'}
       %ul.dropdown-menu.dropdown-menu-right
-        %li= link_to 'Change', '#', {id: 'change-phone-num'}
+        %li= link_to 'Change number', '#', {id: 'change-phone-num'}

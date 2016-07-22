@@ -349,7 +349,7 @@ $ ->
         resetPhoneNum()
         enablePin()
         $('#phone_verification_pin').focus()
-        showPhoneVerificationSuccess("PIN has been resent")
+        showPhoneVerificationSuccess("You will receive a phone call with PIN shortly")
       error: (xhr, status, error) ->
         enablePin()
         showPhoneVerificationErrors xhr.responseJSON.error
