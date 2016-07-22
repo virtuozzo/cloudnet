@@ -3,7 +3,7 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password 'sekret123'
     full_name { Faker::Name.name }
-    phone_number { Faker::Base.numerify('91940033####') }
+    phone_number { Faker::Base.numerify('919400######') }
     phone_verified_at Time.now
     association :account, factory: :account
     
