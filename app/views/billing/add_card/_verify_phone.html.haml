@@ -1,0 +1,10 @@
+.input-group
+  - disabled = verified ? 'disabled' : nil
+  = text_field_tag 'user_phone_number', current_user.phone_number, {class: 'pure-u-1 form-control', disabled: disabled, type: 'tel', :'aria-describedby' => 'error-message'}
+  %span.input-group-btn
+    - content = verified ? content_tag(:span, '', class: ['glyphicon', 'glyphicon-ok-sign', 'verified-glyph']) + content_tag(:span, ' Verified') : 'Verify'
+    = button_tag content, {class: 'btn btn-default btn-verify', id: 'verify-phone-button', disabled: disabled}
+    - if verified
+      = button_tag content_tag(:span, '', class: 'caret') + content_tag(:span, 'Toggle dropdown', class: 'sr-only'), {class: 'btn btn-default btn-verify dropdown-toggle', :'data-toggle' => 'dropdown', id: 'more-phone-pin'}
+      %ul.dropdown-menu.dropdown-menu-right
+        %li= link_to 'Change number', '#', {id: 'change-phone-num'}

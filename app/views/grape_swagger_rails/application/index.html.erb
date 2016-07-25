@@ -111,8 +111,19 @@
   </div>
   <div>
     Please use basic authentication for all the requests. Get your API secret key from your account profile. Use your email and API secret, separated by colon (:) and base64 encode it for receiving proper authentication string.
-    Use the following format: <pre>Authorization: Basic encoded64(yourEmail:yourAPIKey)</pre>
+    Use the following format: 
+    <pre style="margin-left:10px;padding-left:0px;">
+  Authorization: Basic encoded64(yourEmail:yourAPIKey)</pre>
   </div>
+  </br>
+  <div>
+    All requests are throttled. Please verify the following response headers:</br>
+    <pre style="margin-left:10px;padding-left:0px;line-height:1.6em">
+  X-RateLimit-Limit       - number of total allowed requests in a given period
+  X-RateLimit-Remaining   - number of requests left until end of period
+  X-RateLimit-Reset       - time remaining to clear counters and start a new period</pre>
+  </div>
+  </br>
   <div>
     For the purposes of interacting with the methods in this documentation you can add your credentials (not encoded) below:
     <input placeholder="yourEmail:yourAPIKey" id="input_apiKey" name="apiKey" type="text"/>

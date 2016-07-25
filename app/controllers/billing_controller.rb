@@ -73,7 +73,7 @@ class BillingController < ApplicationController
         @card.account.calculate_risky_card(assessment[:assessment])
         format.json { render json: assessment.merge(card_id: @card.id) }
       else
-        format.json { render json: @card.errors, status: :unprocessable_entity }
+        format.json { render json: {error: @card.errors.full_messages}, status: :unprocessable_entity }
       end
     end
   end

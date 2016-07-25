@@ -83,7 +83,9 @@ gem 'roar-rails'
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
 gem 'grape_logging'
-#gem 'grape-swagger-representable'
+# API throttling
+gem 'rack-attack', git: 'https://github.com/twiduch/rack-attack.git'
+gem 'grape-kaminari'
 
 gem 'pry-rails', '0.3.2'
 
@@ -139,6 +141,9 @@ end
 
 gem 'puma', '~> 2.15.0'
 gem 'tubesock'
+
+gem 'nexmo'
+gem 'phonelib'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

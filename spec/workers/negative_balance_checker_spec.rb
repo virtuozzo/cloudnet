@@ -38,11 +38,18 @@ describe NegativeBalanceChecker do
       scope.perform
     end
     
-    it "calls proper actions for users" do
+    it "calls proper actions for users and sets tags" do
+      user2.add_tags_by_label(:negative_balance)
       expect(user1).to receive(:act_for_negative_balance)
       expect(user2).to receive(:clear_unpaid_notifications)
+      expect(user2.tags.count).to eq 1
+      
       scope.check_user(user1)
       scope.check_user(user2)
+      
+      expect(user1.tags.count).to eq 1
+      expect(user1.tags.first.label).to eq 'negative_balance'
+      expect(user2.tags.count).to eq 0
     end
     
     context "integration tests for active user" do

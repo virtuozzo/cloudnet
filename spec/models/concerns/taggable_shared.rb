@@ -95,4 +95,76 @@ shared_examples_for "taggable" do
       expect(object.remove_tagging(tag)).to eq 0
     end
   end
+  
+  context '#add_tags_by_label' do
+    it 'creates new tags and binds to a model' do
+      existing_label = tag.label
+      expect(object.tags).to be_empty
+      expect {object.add_tags_by_label(:new_tag, existing_label, 'second new')}.to change {Tag.count}.by(2)
+      expect(object.tags.count).to eq 3
+    end
+    
+    it 'creates new tags as array and binds to a model' do
+      existing_label = tag.label
+      expect(object.tags).to be_empty
+      expect {object.add_tags_by_label([:new_tag, existing_label], 'second new')}.to change {Tag.count}.by(2)
+      expect(object.tags.count).to eq 3
+    end
+    
+    it 'doesnt raise error if tags already added' do
+      existing_label = tag.label
+      object.tags << tag
+      expect(object.tags.count).to eq 1
+      expect {object.add_tags_by_label(existing_label)}.not_to raise_error
+      expect(object.tags.count).to eq 1
+    end
+    
+    it 'skips nil values' do
+      existing_label = tag.label
+      object.tags << tag
+      expect {object.add_tags_by_label(nil, existing_label, nil)}.not_to raise_error
+      expect(object.tags.count).to eq 1
+    end
+  end
+  
+  context '#remove_tags_by_label' do
+    it 'removes tags bindings from a model' do
+      tag1 = Tag.new(label: 'one')
+      tag2 = Tag.new(label: 'two')
+      object.tags << tag << tag1 << tag2
+      expect(object.tags.count).to eq 3
+      expect {object.remove_tags_by_label(tag.label, tag2.label)}.not_to change {Tag.count}
+      object.reload
+      expect(object.tags.count).to eq 1
+      expect(object.tags.first).to eq tag1
+    end
+    
+    it 'removes tags as array from a model' do
+      tag1 = Tag.new(label: 'one')
+      tag2 = Tag.new(label: 'two')
+      tag3 = Tag.new(label: 'three')
+      object.tags << tag << tag1 << tag2
+      expect(object.tags.count).to eq 3
+      expect {object.remove_tags_by_label([tag.label, tag2.label], tag3.label)}.not_to change {Tag.count}
+      object.reload
+      expect(object.tags.count).to eq 1
+      expect(object.tags.first).to eq tag1
+    end
+    
+    it 'doesnt raise error if non existing tag' do
+      object.tags << tag
+      expect(object.tags.count).to eq 1
+      expect {object.remove_tags_by_label(:non_existing_label)}.not_to raise_error
+      expect(object.tags.count).to eq 1
+    end
+    
+    it 'skips nil values' do
+      tag1 = Tag.new(label: 'one')
+      tag2 = Tag.new(label: 'two')
+      object.tags << tag << tag1 << tag2
+      expect(object.tags.count).to eq 3
+      expect {object.remove_tags_by_label(nil, :non_existing, tag.label, nil)}.not_to change {Tag.count}
+      expect(object.tags.count).to eq 2
+    end
+  end
 end

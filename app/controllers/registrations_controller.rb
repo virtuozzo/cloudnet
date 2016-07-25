@@ -1,6 +1,7 @@
 class RegistrationsController < Devise::RegistrationsController
   include SessionOrderReport
   before_action :prepare_order
+  before_action :load_keys, only: [:edit, :update]
 
   def new
     analytics_info unless monitoring_service?
@@ -9,14 +10,10 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def edit
-    @keys = current_user.keys
-    @api_keys = current_user.api_keys
     super
   end
   
   def update
-    @keys = current_user.keys
-    @api_keys = current_user.api_keys
     super
     current_user.reload
     current_user.update_sift_account
@@ -37,5 +34,12 @@ class RegistrationsController < Devise::RegistrationsController
     {event: 'Registration Page',
       properties: UtmTracker.extract_properties(params)
     }
+  end
+  
+  private
+  
+  def load_keys
+    @keys = current_user.keys
+    @api_keys = current_user.api_keys
   end
 end

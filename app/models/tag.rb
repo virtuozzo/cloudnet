@@ -6,6 +6,7 @@ class Tag < ActiveRecord::Base
     tag.has_many :servers, :source_type => 'Server'
   end
 
+  
   scope :unscoped_for, -> (asset) { joins(:taggings).where(taggings: {taggable_type: "#{asset.to_s.capitalize}"}).distinct }
   
   scope :for, -> (asset) { joins(asset.to_s.downcase.pluralize.to_sym).distinct }

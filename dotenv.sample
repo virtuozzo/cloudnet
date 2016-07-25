@@ -103,6 +103,10 @@ DOCKER_PROVISIONER=
 DOCKER_PROVISIONER_USER=
 DOCKER_PROVISIONER_PASS=
 
+# Nexmo - for verifying phone numbers
+NEXMO_API_KEY=
+NEXMO_API_SECRET=
+
 # Use 'true' if you're hosting on Docker or a PaaS like Heroku
 SERVE_STATIC_FILES=
 

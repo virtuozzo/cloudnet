@@ -12,12 +12,14 @@ module SiftProperties
       "$session_id"                   => anonymous_id,
       "$user_email"                   => email,
       "$name"                         => full_name,
+      "$phone"                        => phone_number_full,
       "account_balance_amount"        => (account.reload.wallet_balance * Invoice::MICROS_IN_MILLICENT).to_i,
       "account_balance_currency_code" => "USD",
       "minfraud_score"                => account.max_minfraud_score,
       "risky_card_attempts"           => account.risky_card_attempts,
       "is_admin"                      => admin,
-      "suspended"                     => suspended
+      "suspended"                     => suspended,
+      "phone_verified"                => phone_verified?
     }
     time_ip = {
       "$time"                         => created_at.to_i,
@@ -60,7 +62,7 @@ module SiftProperties
   
   def sift_server_properties
     invoice_item = last_generated_invoice_item
-    properties = user.sift_user_properties.except! "$name", "$payment_methods", "$billing_address"
+    properties = user.sift_user_properties.except! "$name", "$payment_methods", "$billing_address", "$phone"
     server_properties = {
       "server_id"           => id,
       "primary_ip_address"  => primary_ip_address
@@ -93,7 +95,7 @@ module SiftProperties
 
   def sift_invoice_properties
     user = account.user
-    properties = user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     invoice_properties = {
       "$order_id"           => id,
       "$amount"             => (total_cost * Invoice::MICROS_IN_MILLICENT).to_i,
@@ -135,7 +137,7 @@ module SiftProperties
   end
   
   def sift_payment_receipt_properties(payment_properties = nil)
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = account.user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     pr_properties = {
       "$amount"                     => (net_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code"              => "USD",
@@ -171,7 +173,7 @@ module SiftProperties
     if account.nil?
       properties = Hash.new
     else
-      properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+      properties = account.user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     end
     ch_properties = {
       "$amount"             => (amount * Invoice::MICROS_IN_MILLICENT).to_i,
@@ -190,7 +192,7 @@ module SiftProperties
   end
   
   def sift_credit_note_properties
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = account.user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     transaction_type = (manually_added? || trial_credit?) ? "$deposit" : "$refund"
     invoice_id = credit_note_items.first.source.try(:last_generated_invoice_item).try(:invoice_id)
     cr_properties = {
@@ -221,7 +223,7 @@ module SiftProperties
   end
   
   def self.stripe_failure_properties(account, net_cost, error, payment_properties)
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = account.user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     pr_properties = {
       "$amount"                     => (net_cost * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code"              => "USD",
@@ -265,7 +267,7 @@ module SiftProperties
   end
   
   def self.paypal_failure_properties(account, request)
-    properties = account.user.sift_user_properties.except! "$name", "$payment_methods"
+    properties = account.user.sift_user_properties.except! "$name", "$payment_methods", "$phone"
     pr_properties = {
       "$amount"                     => (request.amount.total.to_f * Invoice::MILLICENTS_IN_DOLLAR * Invoice::MICROS_IN_MILLICENT).to_i,
       "$currency_code"              => "USD",

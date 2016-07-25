@@ -18,6 +18,9 @@ defaults: &defaults
     validate_action_id: <%= ENV["SIFT_USER_VALIDATE_ACTION_ID"] %>
     approve_action_id: <%= ENV["SIFT_USER_APPROVE_ACTION_ID"] %>
     account_id: <%= ENV["SIFT_SCIENCE_ACCOUNT_ID"] %>
+  nexmo:
+    api_key: <%= ENV["NEXMO_API_KEY"] %>
+    secret: <%= ENV["NEXMO_API_SECRET"] %>
 
 development:
   <<: *defaults

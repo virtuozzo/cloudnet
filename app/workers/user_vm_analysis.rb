@@ -5,13 +5,20 @@ class UserVmAnalysis
   
   def perform
     update_server_count
-  rescue => e
-    ErrorLogging.new.track_exception(e, extra: { source: 'UserVmAnalysis' })
+    update_user_auto_tags
+  end
+  
+  def update_user_auto_tags
+    User.find_each do |user|
+      UserAnalytics::UserChangeVmStatus.new(user).tag_user_vm_trend
+    end
   end
   
   def update_server_count
     update_vm_count_for_users_with_servers
     set_zero_vm_for_users_without_servers
+  rescue => e
+    ErrorLogging.new.track_exception(e, extra: { source: 'UserVmAnalysis' })
   end
   
   def update_vm_count_for_users_with_servers

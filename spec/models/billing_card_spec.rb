@@ -12,6 +12,13 @@ describe BillingCard do
     card.account = nil
     expect(card).not_to be_valid
   end
+  
+  it 'should be invalid without phone verification' do
+    user.phone_number = nil
+    new_card = FactoryGirl.build(:billing_card, account: user.account)
+    expect(user.phone_verified?).to be false
+    expect(new_card).not_to be_valid
+  end
 
   describe 'Country and Country Codes' do
     it 'should be invalid without a country' do

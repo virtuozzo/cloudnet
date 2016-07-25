@@ -308,3 +308,38 @@ li#auto-topup-btn {
 .auto-topup-info {
   font-size: 14px;
 }
+
+.btn-verify {
+  height: 42px;
+  font-weight: bold;
+}
+
+#verify-phone-button {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.verified-glyph {
+  color: #6ebd8d;
+}
+
+.intl-tel-input {
+  display: table-cell;
+}
+.intl-tel-input .flag-container {
+  z-index: 4;
+}
+.input-group .intl-tel-input .form-control {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 0;
+  height: 42px;
+}
+.intl-tel-input .country-list.dropup {
+  font-size: 12px;
+}
+
+#error-message.help-block, #success-message.help-block {
+  font-size: 12px;
+}
