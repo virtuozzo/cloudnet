@@ -113,6 +113,8 @@ class DisputeHandlerTask < BaseTask
     
     CreateSiftEvent.perform_async("$chargeback", chargeback_properties)
     CreateSiftEvent.perform_async("$order_status", order_status_properties) if invoice_id
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: @account.user.id, source: 'DisputeHandlerTask#create_sift_events' })
   end
   
   def create_sift_label

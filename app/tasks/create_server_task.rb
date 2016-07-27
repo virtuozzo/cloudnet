@@ -35,5 +35,7 @@ class CreateServerTask < BaseTask
     }
     CreateSiftEvent.perform_async("$order_status", order_properties)
     CreateSiftEvent.perform_async("create_server", server.sift_server_properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: user.id, source: 'CreateServerTask#create_sift_events' })
   end
 end

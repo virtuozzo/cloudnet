@@ -94,6 +94,8 @@ class Invoice < ActiveRecord::Base
   
   def create_sift_event
     CreateSiftEvent.perform_async("$create_order", sift_invoice_properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: account.user.id, source: 'Invoice#create_sift_event' })
   end
 
   private

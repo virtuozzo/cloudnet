@@ -25,5 +25,7 @@ class Charge < ActiveRecord::Base
   
   def create_sift_event
     CreateSiftEvent.perform_async("$transaction", sift_charge_properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: account.user.id, source: 'Charge#create_sift_event' })
   end
 end

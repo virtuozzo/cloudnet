@@ -120,6 +120,8 @@ ActiveAdmin.register Server, as: "ServerValidation" do
         "$analyst"        => current_user.email
       }
       CreateSiftEvent.perform_async("$order_status", properties)
+    rescue StandardError => e
+      ErrorLogging.new.track_exception(e, extra: { user: server.user.id, source: 'ServerValidation#create_sift_event' })
     end
     
     def create_sift_label(server)

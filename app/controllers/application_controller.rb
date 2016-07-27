@@ -81,6 +81,8 @@ class ApplicationController < ActionController::Base
   
   def create_sift_event(event, properties)
     CreateSiftEvent.perform_async(event, properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: current_user.id, source: 'ApplicationController#create_sift_event' })
   end
 
   private

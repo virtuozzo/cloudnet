@@ -125,5 +125,7 @@ class EditServerTask
     
     def create_sift_event
       CreateSiftEvent.perform_async("update_server", @server.sift_server_properties)
+    rescue StandardError => e
+      ErrorLogging.new.track_exception(e, extra: { user: @user.id, source: 'EditServerTask#create_sift_event' })
     end
 end
