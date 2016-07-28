@@ -38,17 +38,16 @@ describe DestroyAllServersConfirmed do
   end
   
   it "should label user at Sift science" do
-    Sidekiq::Testing.inline! do
-      task = instance_double('ServerTasks')
-      expect(ServerTasks).to receive(:new).and_return(task)
-      expect(task).to receive(:perform).with(:destroy, user.id, anything).twice
-      allow(scope).to receive(:destroy_confirmed_by_admin?).and_return(true)
-      allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
-      
-      scope.perform
-      label_properties = SiftProperties.sift_label_properties true, nil, "Balance checker: Unpaid invoices", "negative_balance_checker"
-      expect(@sift_client_double).to have_received(:perform).with(:create_label, user.id.to_s, label_properties)
-      expect(@sift_device_double).to have_received(:perform).with(:get_devices, user.id)
-    end
+    CreateSiftEvent.jobs.clear
+    task = instance_double('ServerTasks')
+    expect(ServerTasks).to receive(:new).and_return(task)
+    expect(task).to receive(:perform).with(:destroy, user.id, anything).twice
+    allow(scope).to receive(:destroy_confirmed_by_admin?).and_return(true)
+    allow_any_instance_of(Account).to receive(:card_fingerprints).and_return(['abcd12345'])
+    
+    scope.perform
+    label_properties = SiftProperties.sift_label_properties true, nil, "Balance checker: Unpaid invoices", "negative_balance_checker"
+    assert_equal 2, CreateSiftEvent.jobs.size
+    assert_equal 1, LabelDevices.jobs.size
   end
 end

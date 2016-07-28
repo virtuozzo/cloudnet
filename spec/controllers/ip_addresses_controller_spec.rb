@@ -32,6 +32,7 @@ RSpec.describe IpAddressesController, :type => :controller do
         before :each do
           allow(AssignIpAddress).to receive(:perform_async).and_return(true)
           allow_any_instance_of(Server).to receive(:primary_network_interface).and_return(['abc'])
+          CreateSiftEvent.jobs.clear
         end
         
         it 'should add a new IP address' do
@@ -41,13 +42,7 @@ RSpec.describe IpAddressesController, :type => :controller do
           expect(flash[:notice]).to eq('IP address has been requested and will be added shortly')
           @server.reload
           expect(@server.ip_addresses).to eq(2)
-        end
-        
-        it 'should create an event at Sift' do
-          Sidekiq::Testing.inline! do
-            post :create, { server_id: @server.id }
-            expect(@sift_client_double).to have_received(:perform).with(:create_event, "create_ip_address", @server.sift_server_properties)
-          end
+          assert_equal 1, CreateSiftEvent.jobs.size
         end
       end
       
@@ -64,6 +59,7 @@ RSpec.describe IpAddressesController, :type => :controller do
           @ip_address_tasks = double('IpAddressTasks', perform: true)
           allow(IpAddressTasks).to receive(:new).and_return(@ip_address_tasks)
           @server_ip_address.update(primary: false)
+          CreateSiftEvent.jobs.clear
         end
         
         it 'should remove IP address' do
@@ -72,13 +68,7 @@ RSpec.describe IpAddressesController, :type => :controller do
           expect(@ip_address_tasks).to have_received(:perform)
           expect(response).to redirect_to(server_ip_addresses_path(@server))
           expect(flash[:notice]).to eq('IP address has been removed')
-        end
-        
-        it 'should create an event at Sift' do
-          Sidekiq::Testing.inline! do
-            delete :destroy, { server_id: @server.id, id: @server_ip_address.id }
-            expect(@sift_client_double).to have_received(:perform).with(:create_event, "destroy_ip_address", @server.sift_server_properties)
-          end
+          assert_equal 1, CreateSiftEvent.jobs.size
         end
       end
       

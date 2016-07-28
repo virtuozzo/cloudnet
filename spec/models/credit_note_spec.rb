@@ -281,10 +281,7 @@ describe CreditNote do
     end
   end
   
-  it 'should create an event at Sift' do
-    Sidekiq::Testing.inline! do
-      credit_note = FactoryGirl.create(:credit_note)
-      expect(@sift_client_double).to have_received(:perform).with(:create_event, "$transaction", credit_note.sift_credit_note_properties)
-    end
+  it 'should create events at Sift' do
+    expect { FactoryGirl.create(:credit_note) }.to change(CreateSiftEvent.jobs, :size).by(1)
   end
 end

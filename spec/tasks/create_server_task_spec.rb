@@ -236,13 +236,8 @@ describe CreateServerTask do
       expect(@invoice.state).to eq(:paid)
     end
     
-    it 'should create an event at Sift' do
-      Sidekiq::Testing.inline! do
-        task = CreateServerTask.new(@wizard, @user)
-        task.process
-        expect(@sift_client_double).to have_received(:perform).with(:create_event, "$order_status", anything)
-        expect(@sift_client_double).to have_received(:perform).with(:create_event, "create_server", task.server.sift_server_properties)
-      end
+    it 'should create events at Sift' do
+      expect { CreateServerTask.new(@wizard, @user).process }.to change(CreateSiftEvent.jobs, :size).by(4)
     end
   end
 end
