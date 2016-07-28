@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe IpAddressesController, :type => :controller do
   
-  render_views
-  
-  let(:json) { JSON.parse(response.body) }
-  
   describe 'on a server with multiple IP support' do
     before(:each) { 
       sign_in_onapp_user
@@ -21,9 +17,14 @@ RSpec.describe IpAddressesController, :type => :controller do
         expect(response).to render_template('ip_addresses/index')
       end
       
-      it 'should get list of IP addresses as JSON' do
-        get :index, { server_id: @server.id, format: :json }
-        expect(json.collect{|ip| ip["address"]}).to include(@server_ip_address.address)
+      context "with JSON format" do
+        render_views
+        let(:json) { JSON.parse(response.body) }
+        
+        it 'should get list of IP addresses as JSON' do
+          get :index, { server_id: @server.id, format: :json }
+          expect(json.collect{|ip| ip["address"]}).to include(@server_ip_address.address)
+        end
       end
     end
       

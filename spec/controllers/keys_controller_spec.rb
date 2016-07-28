@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe KeysController, :type => :controller do
   
-  render_views
-  
-  let(:json) { JSON.parse(response.body) }
-  
   before(:each) { 
     sign_in_onapp_user 
     @key = FactoryGirl.create(:key, user: @current_user)
@@ -13,9 +9,14 @@ RSpec.describe KeysController, :type => :controller do
   }
   
   describe '#index' do
-    it 'should render SSH keys list as JSON' do
-      get :index, { format: :json }
-      expect(json.collect{|key| key["title"]}).to include(@key.title)
+    context "with JSON format" do
+      render_views
+      let(:json) { JSON.parse(response.body) }
+      
+      it 'should render SSH keys list as JSON' do
+        get :index, { format: :json }
+        expect(json.collect{|key| key["title"]}).to include(@key.title)
+      end
     end
   end
   

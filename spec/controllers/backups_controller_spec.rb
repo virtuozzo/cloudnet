@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe BackupsController, :type => :controller do
   
-  render_views
-  
-  let(:json) { JSON.parse(response.body) }
-  
   before(:all) { Rails.cache.clear }
   
   before(:each) {
@@ -15,7 +11,7 @@ RSpec.describe BackupsController, :type => :controller do
   
   let(:server) { FactoryGirl.create(:server, state: :on, user: @current_user) }
   
-  describe 'on a server with manual backup support' do    
+  describe 'on a server with manual backup support' do
     describe '#index' do
       it 'should render the servers backups list' do
         get :index, { server_id: server.id }
@@ -23,10 +19,15 @@ RSpec.describe BackupsController, :type => :controller do
         expect(response).to render_template('backups/index')
       end
       
-      it 'should get list of backups as JSON' do
-        @server_backup = FactoryGirl.create(:server_backup, server: server)
-        get :index, { server_id: server.id, format: :json }
-        expect(json.collect{|backup| backup["identifier"]}).to include(@server_backup.identifier)
+      context "with JSON format" do
+        render_views
+        let(:json) { JSON.parse(response.body) }
+        
+        it 'should get list of backups as JSON' do
+          @server_backup = FactoryGirl.create(:server_backup, server: server)
+          get :index, { server_id: server.id, format: :json }
+          expect(json.collect{|backup| backup["identifier"]}).to include(@server_backup.identifier)
+        end
       end
     end
       
