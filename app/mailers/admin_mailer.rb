@@ -26,6 +26,15 @@ class AdminMailer < ActionMailer::Base
 
     mail(to: mailto, subject: "#{ENV['BRAND_NAME']} Monthly CSV Reports - #{@date_name}")
   end
+  
+  def periodic_csv(start_date, end_date, report, admin_id)
+    @start_date, @end_date, @report = start_date, end_date, report
+    admin_user = User.where(admin: true, id: admin_id).first
+    filename = "cloudnet_#{report.to_s}_#{@start_date}_#{@end_date}.csv"
+    reporter = GenerateFinanceReport.new(@start_date, @end_date)
+    attachments[filename] = reporter.send(@report)
+    mail(to: admin_user.email, subject: "#{ENV['BRAND_NAME']} Billing Reports")
+  end
 
   def notify_stuck_server_state(server)
     @server = server
