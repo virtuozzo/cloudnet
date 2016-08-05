@@ -1,5 +1,6 @@
 =#FIXME: Not allowing to rebuild Windows platform until onapp core dev team fix the bug
-- hideTemplates = @server && (@server.try(:os) == "windows" || @server.try(:provisioner_role))
+- hideTemplates = @server && !@server.supports_rebuild?
+#rebuild_server
 .jg-widget-content{:class => ("hidden" if hideTemplates)}
   .jg-widget-header.pure-g.clearfix{class: ('jg-form-withTabs' if @server.blank?)}
     %h2.jg-icon.icon-cloud.pure-u Select Template

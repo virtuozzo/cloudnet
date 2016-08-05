@@ -251,6 +251,10 @@ class Server < ActiveRecord::Base
     DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
   
+  def supports_rebuild?
+    !(try(:os) == "windows" || try(:provisioner_role))
+  end
+  
   private
 
   def template_should_match_location

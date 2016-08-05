@@ -20,6 +20,9 @@
                     %a{"ng-show" => "server.state == 'on'", "rel" => "nofollow", "id" => "install-notes-button", "server-id" => @server.id} Install Notes
                 %li
                   %a{"href" => "/servers/{{ server.id }}/edit", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Edit Server
+                - if @server.supports_rebuild?
+                  %li
+                    %a{"href" => "/servers/{{ server.id }}/edit#rebuild_server", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Rebuild Server
                 %li
                   %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/reboot", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Reboot Server
                 %li
