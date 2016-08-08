@@ -8,8 +8,9 @@ ActiveAdmin.register_page 'Billing Accounts' do
       start_date = Date.strptime params['account_report']['start'], '%Y-%m-%d'
       end_date   = Date.strptime params['account_report']['end'], '%Y-%m-%d'
 
-      filename = "cloudnet_account_report_#{start_date}_#{end_date}.csv"
-      send_data GenerateFinanceReport.new(start_date, end_date).account_report, filename: filename
+      SendAdminFinancials.perform_async(:periodic_csv, start_date, end_date, :account_report, current_user.id)
+      flash[:notice] = "Report will be emailed to you once generated"
+      redirect_to admin_billing_accounts_path
     end
   end
 
@@ -17,9 +18,10 @@ ActiveAdmin.register_page 'Billing Accounts' do
     if params['transaction_report'].present?
       start_date = Date.strptime params['transaction_report']['start'], '%Y-%m-%d'
       end_date   = Date.strptime params['transaction_report']['end'], '%Y-%m-%d'
-
-      filename = "cloudnet_transaction_report_#{start_date}_#{end_date}.csv"
-      send_data GenerateFinanceReport.new(start_date, end_date).transaction_report, filename: filename
+      
+      SendAdminFinancials.perform_async(:periodic_csv, start_date, end_date, :transaction_report, current_user.id)
+      flash[:notice] = "Report will be emailed to you once generated"
+      redirect_to admin_billing_accounts_path
     end
   end
 
@@ -28,8 +30,9 @@ ActiveAdmin.register_page 'Billing Accounts' do
       start_date = Date.strptime params['charge_report']['start'], '%Y-%m-%d'
       end_date   = Date.strptime params['charge_report']['end'], '%Y-%m-%d'
 
-      filename = "cloudnet_charge_report_#{start_date}_#{end_date}.csv"
-      send_data GenerateFinanceReport.new(start_date, end_date).charge_report, filename: filename
+      SendAdminFinancials.perform_async(:periodic_csv, start_date, end_date, :charge_report, current_user.id)
+      flash[:notice] = "Report will be emailed to you once generated"
+      redirect_to admin_billing_accounts_path
     end
   end
 end

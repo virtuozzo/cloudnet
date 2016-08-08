@@ -42,6 +42,7 @@ describe EditServerTask do
       @verifier = double('CoreTransactionVerifier')
       allow(ServerTasks).to receive_messages(new: @server_tasks)
       allow(CoreTransactionVerifier).to receive_messages(new: @verifier)
+      CreateSiftEvent.jobs.clear
     end
     
     it "should send one call" do
@@ -74,14 +75,12 @@ describe EditServerTask do
       expect(server.state).to be :building
     end
     
-    it 'should create an event at Sift' do
-      Sidekiq::Testing.inline! do
-        expect(@server_tasks).to receive(:perform)
-        expect(@verifier).to receive(:perform_transaction)
-        task = EditServerTask.new(server.user.id, server.id, *entry_params[2])
-        task.edit_server
-        expect(@sift_client_double).to have_received(:perform).with(:create_event, "update_server", server.sift_server_properties)
-      end
+    it 'should create events at Sift' do
+      expect(@server_tasks).to receive(:perform)
+      expect(@verifier).to receive(:perform_transaction)
+      task = EditServerTask.new(server.user.id, server.id, *entry_params[2])
+      task.edit_server
+      assert_equal 1, CreateSiftEvent.jobs.size
     end
   end
 end

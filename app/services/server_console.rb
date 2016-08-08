@@ -3,15 +3,29 @@ class ServerConsole
     @server = server
     @user = user
   end
+  
+  def resolve_redirects(url)
+    response = fetch_response(url, method: :head)
+    if response
+      return response.to_hash[:url].to_s
+    else
+      return nil
+    end
+  end
+
+  def fetch_response(url, method: :get)
+    conn = Faraday.new do |b|
+      b.use FaradayMiddleware::FollowRedirects;
+      b.adapter :net_http
+      b.basic_auth @user.onapp_user, @user.onapp_password
+    end
+    return conn.send method, url
+  rescue Faraday::Error, Faraday::Error::ConnectionFailed => e
+    return nil
+  end
 
   def process
-    squall = Squall::VirtualMachine.new(uri: ONAPP_CP[:uri], user: @user.onapp_user, pass: @user.onapp_password)
-    console = squall.console(@server.identifier)
-
-    {
-      port: console['port'],
-      remote_key: console['remote_key'],
-      console_src: "#{ONAPP_CP[:uri]}/console_remote/#{console['remote_key']}"
-    }
+    console_url = resolve_redirects("#{ONAPP_CP[:uri]}/virtual_machines/#{@server.identifier}/console_popup")
+    { console_src: console_url }
   end
 end

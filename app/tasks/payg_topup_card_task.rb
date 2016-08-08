@@ -74,5 +74,7 @@ class PaygTopupCardTask < BaseTask
       properties = SiftProperties.stripe_failure_properties(@account, cost, error, payment_properties)
     end
     CreateSiftEvent.perform_async("$transaction", properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: @user.id, source: 'PaygTopupCardTask#create_sift_event' })
   end
 end

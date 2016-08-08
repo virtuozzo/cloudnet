@@ -56,6 +56,8 @@ class PaymentReceipt < ActiveRecord::Base
   
   def create_sift_event
     CreateSiftEvent.perform_async("$transaction", sift_payment_receipt_properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: account.user.id, source: 'PaymentReceipt#create_sift_event' })
   end
 
   private

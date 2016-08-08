@@ -58,5 +58,7 @@ class PaygTopupPaypalResponseTask < BaseTask
       properties = SiftProperties.paypal_failure_properties(@account, details)
     end
     CreateSiftEvent.perform_async("$transaction", properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: @user.id, source: 'PaygTopupPaypalResponseTask#create_sift_event' })
   end
 end

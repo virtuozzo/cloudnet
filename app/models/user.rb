@@ -149,6 +149,8 @@ class User < ActiveRecord::Base
 
   def update_sift_account
     CreateSiftEvent.perform_async("$update_account", sift_user_properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: self.id, source: 'User#update_sift_account' })
   end
   
   def update_forecasted_revenue
@@ -162,6 +164,8 @@ class User < ActiveRecord::Base
   def create_sift_account(include_time_ip = false)
     properties = sift_user_properties(include_time_ip)
     CreateSiftEvent.perform_async("$create_account", properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: self.id, source: 'User#create_sift_account' })
   end
 
   def create_sift_login_event
@@ -171,6 +175,8 @@ class User < ActiveRecord::Base
       "$login_status" => "$success"
     }
     CreateSiftEvent.perform_async("$login", properties)
+  rescue StandardError => e
+    ErrorLogging.new.track_exception(e, extra: { user: self.id, source: 'User#create_sift_login_event' })
   end
   
   def self.disposable_email_domains
