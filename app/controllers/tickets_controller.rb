@@ -16,7 +16,7 @@ class TicketsController < ApplicationController
   end
 
   def show
-    @ticket_replies = @ticket.ticket_replies(true).order(id: :asc)
+    @ticket_replies = @ticket.ticket_replies(true).order(created_at: :asc)
     respond_to do |format|
       format.json
       format.html
