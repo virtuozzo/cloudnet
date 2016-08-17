@@ -27,6 +27,7 @@ class AutoTopup
         user_info = { email: user.email, full_name: user.full_name }
         NotifyUsersMailer.delay.notify_auto_topup(user_info, topup)
         charge_unpaid_invoices(account) if topup
+        account.expire_wallet_balance
       rescue Exception => e
         ErrorLogging.new.track_exception(e, extra: { current_user: user, source: 'AutoTopup' })
       end

@@ -81,7 +81,7 @@ module InvoiceCreditShared
       # credit note PDF.
       nil
     else
-      Coupon.find_by_id(coupon_id)
+      super
     end
   end
 

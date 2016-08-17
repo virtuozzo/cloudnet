@@ -13,12 +13,12 @@ class Account < ActiveRecord::Base
 
     # Sum of Invoice balances
     def remaining_invoice_balance
-      invoices.to_a.sum(&:remaining_cost)
+      invoices.includes(:invoice_items, :charges, :coupon).to_a.sum(&:remaining_cost)
     end
 
     # Sum of Credit notes
     def remaining_credit_balance
-      credit_notes.to_a.sum(&:remaining_cost)
+      credit_notes.includes(:credit_note_items, :coupon).to_a.sum(&:remaining_cost)
     end
 
     # Sum of Payment receipts
@@ -40,6 +40,10 @@ class Account < ActiveRecord::Base
     def wallet_server_days(server)
       hourly_cost = server.hourly_cost
       ((remaining_balance * -1).to_f / hourly_cost.to_f) / 24.0
+    end
+    
+    def expire_wallet_balance
+      Rails.cache.delete(['remaining_balance', user.id])
     end
   end
 end

@@ -202,6 +202,7 @@ module Billing
       # Make a note of charges made for financial reports
       create_credit_note_charges if @notes_used.present?
       create_payment_receipt_charges if @payment_receipts_used.present?
+      user.account.expire_wallet_balance
     end
     
     def create_payment_receipt_charges

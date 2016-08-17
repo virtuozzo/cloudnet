@@ -21,6 +21,7 @@ class PaygTopupPaypalResponseTask < BaseTask
     response = request.checkout!(@token, @payer_id, payment)  # DoExpressCheckoutPayment
     create_payment_receipt(details.amount, response.token, response_to_hash(response))
     create_sift_event(details, response)
+    @account.expire_wallet_balance
     return true
   rescue StandardError => e
     errors << "Checkout Failure: #{e.message}"

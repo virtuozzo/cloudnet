@@ -49,6 +49,12 @@ module ApplicationHelper
     balance.gsub!('-', '')
     remaining_balance_in_credit?(user) ? "#{balance}" : "-#{balance}"
   end
+  
+  def current_user_remaining_balance
+    Rails.cache.fetch(['remaining_balance', current_user.id], expires_in: 1.hour) do
+      remaining_balance(current_user)
+    end
+  end
 
   def remaining_balance_in_credit?(user)
     user.account.remaining_balance <= 0

@@ -13,6 +13,8 @@ class CreditNote < ActiveRecord::Base
 
   belongs_to :account
   has_many :credit_note_items, dependent: :destroy
+  belongs_to :coupon
+  
   validates :account, presence: true
 
   enum_field :state, allowed_values: [:uncredited, :credited], default: :credited
@@ -89,14 +91,14 @@ class CreditNote < ActiveRecord::Base
 
   # Was this credit note manually issued throught the admin interface?
   def manually_added?
-    if credit_note_items.count == 1
+    if credit_note_items.size == 1
       return true if credit_note_items.first.source_type == 'User'
     end
     false
   end
   
   def trial_credit?
-    if credit_note_items.count == 1
+    if credit_note_items.size == 1
       return true if credit_note_items.first.description == 'Trial Credit'
     end
     false

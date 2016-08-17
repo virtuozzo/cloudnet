@@ -211,6 +211,9 @@ class ServerWizard
 
       # Undo server creation
       @newly_built_server.destroy if @newly_built_server
+      
+      # Expire cache if any
+      user.account.expire_wallet_balance
     end
   end
 

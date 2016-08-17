@@ -8,6 +8,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :account
   has_many :invoice_items, dependent: :destroy
   has_many :charges, dependent: :destroy
+  belongs_to :coupon
 
   validates :account, presence: true
   enum_field :state, allowed_values: [:unpaid, :partially_paid, :paid], default: :unpaid
@@ -81,7 +82,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def remaining_cost
-    total_cost - charges.sum(:amount)
+    total_cost - charges.inject(0) { |sum, charge| sum + charge.amount }
   end
 
   def prepaid?

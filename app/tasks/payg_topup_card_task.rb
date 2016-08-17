@@ -32,6 +32,7 @@ class PaygTopupCardTask < BaseTask
       @account.create_activity :add_funds_wallet, owner: @user, params: { amount: @amount, card: @card.id }
       create_payment_receipt(charge)
       create_sift_event(charge)
+      @account.expire_wallet_balance
       return true
     rescue Stripe::CardError => e
       log_error(e)

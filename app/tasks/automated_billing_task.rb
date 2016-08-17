@@ -22,6 +22,8 @@ class AutomatedBillingTask < BaseTask
     ChargeInvoicesTask.new(@user, [invoice], true).process
     invoice.reload
     send_auto_email(@user, invoice)
+    
+    @user.account.expire_wallet_balance
   end
 
   private

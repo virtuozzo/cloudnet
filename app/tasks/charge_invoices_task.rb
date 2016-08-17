@@ -32,6 +32,7 @@ class ChargeInvoicesTask < BaseTask
       create_payment_receipt_charges(account, invoice, notes_used)
     end
     unblock_servers if @user.account.remaining_balance <= 100_000
+    @user.account.expire_wallet_balance
   end
   
   def unblock_servers
