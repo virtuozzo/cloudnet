@@ -6,9 +6,14 @@ class ServersController < ServerCommonController
   end
 
   def show
-    calculate_server_costs
-    cpu_usages
-    network_usages
+    respond_to do |format|
+      format.html { 
+        calculate_server_costs
+        cpu_usages
+        network_usages
+      }
+      format.json
+    end
   end
   
   def install_notes
@@ -190,12 +195,13 @@ class ServersController < ServerCommonController
   def calculate_server_costs
     monthly = @server.monthly_cost
     hourly  = @server.hourly_cost
+    coupon_per = coupon_percentage
 
     @server_costs = {
-      monthly:          monthly * (1 - coupon_percentage),
-      monthly_with_vat: Invoice.with_tax(monthly) * (1 - coupon_percentage),
-      hourly:           hourly * (1 - coupon_percentage),
-      hourly_with_vat:  Invoice.with_tax(hourly) * (1 - coupon_percentage)
+      monthly:          monthly * (1 - coupon_per),
+      monthly_with_vat: Invoice.with_tax(monthly) * (1 - coupon_per),
+      hourly:           hourly * (1 - coupon_per),
+      hourly_with_vat:  Invoice.with_tax(hourly) * (1 - coupon_per)
     }
   end
 

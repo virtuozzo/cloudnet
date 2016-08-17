@@ -83,11 +83,11 @@ class ServerWizard
   end
 
   def location
-    @location = Location.find_by_id(location_id) if location_id
+    @location ||= Location.find_by_id(location_id) if location_id
   end
 
   def template
-    @template = Template.where(hidden: false, location_id: location_id).find_by_id(template_id) if location && template_id
+    @template ||= Template.where(hidden: false, location_id: location_id).find_by_id(template_id) if location && template_id
     @template
   end
 
@@ -100,7 +100,7 @@ class ServerWizard
   end
 
   def card
-    @card = BillingCard.where(account: user.account).find_by_id(card_id)
+    @card ||= BillingCard.where(account: user.account).find_by_id(card_id)
     @card
   end
 

@@ -89,8 +89,9 @@ class Server < ActiveRecord::Base
   end
   
   def primary_ip_address
-    return (server_ip_addresses.with_deleted.find(&:primary?) || server_ip_addresses.with_deleted.first).address if server_ip_addresses.with_deleted.present?
-    nil
+    @primary_ip_address ||= begin
+      server_ip_addresses.with_deleted.present? ? ((server_ip_addresses.with_deleted.find(&:primary?) || server_ip_addresses.with_deleted.first).address) : nil
+    end
   end
   
   # Returns the primary network interface of server from Onapp, useful when assigning new IP

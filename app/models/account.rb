@@ -138,10 +138,11 @@ class Account < ActiveRecord::Base
     end
   end
 
-  def primary_billing_card
-    cards = billing_cards.processable
-    return (cards.find(&:primary?) || cards.first) if cards.present?
-    nil
+  def primary_billing_card    
+    @primary_billing_card ||= begin
+      cards = billing_cards.processable
+      cards.present? ? (cards.find(&:primary?) || cards.first) : nil
+    end
   end
 
   def self.in_gb?(code)
