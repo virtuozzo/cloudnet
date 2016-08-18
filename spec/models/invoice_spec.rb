@@ -73,6 +73,7 @@ describe Invoice do
         expect(invoice.remaining_cost).to eq(invoice.total_cost - charge1.amount)
 
         charge2 = FactoryGirl.create(:charge, invoice: invoice)
+        invoice.reload
         expect(invoice.remaining_cost).to eq(invoice.total_cost - charge1.amount - charge2.amount)
       end
     end

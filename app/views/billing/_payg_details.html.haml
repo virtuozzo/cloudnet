@@ -13,7 +13,7 @@
       .form-group.jg-inline.pure-g-r.clearfix.pure-g.pure-u-1
         .pure-u-1-3
           .jg-widget-body
-          #jg-wallet-details= render partial: 'billing/wallet_details'
+          .jg-wallet-details= yield :wallet_balance_info
           - unless defined?(wizard)
             %p.auto-topup-info
               - if has_stripe?

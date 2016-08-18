@@ -21,6 +21,7 @@ class ChargeInvoicesTask < BaseTask
     @invoices.each(&:reload)
     if Invoice.milli_to_cents(@invoices.to_a.sum(&:remaining_cost)) == 0
       unblock_servers
+      @user.account.expire_wallet_balance
       return
     end
 
@@ -46,6 +47,8 @@ class ChargeInvoicesTask < BaseTask
       Charge.create(source: source, invoice: invoice, amount: v)
       account.create_activity :payment_receipt_charge, owner: @user, params: { invoice: invoice.id, amount: v, payment_receipt: k }
     end
+    
+    invoice.reload
 
     if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && payment_receipts.present?
       invoice.update(state: :partially_paid)
@@ -79,6 +82,8 @@ class ChargeInvoicesTask < BaseTask
       Charge.create(source: source, invoice: invoice, amount: v)
       account.create_activity :credit_charge, owner: user, params: { invoice: invoice.id, amount: v, credit_note: k }
     end
+    
+    invoice.reload
 
     if Invoice.milli_to_cents(invoice.remaining_cost) > 0 && credit_notes.present?
       invoice.update(state: :partially_paid)

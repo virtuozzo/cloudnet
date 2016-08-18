@@ -7,7 +7,7 @@ class BillingController < ApplicationController
     @account = current_user.account
     @billing = Kaminari.paginate_array(invoice_credits_receipts).page(params[:page]).per(10)
     @cards   = @account.billing_cards.processable
-    @payg    = payg_details
+    # @payg    = payg_details
     @topups  = Kaminari.paginate_array(PublicActivity::Activity.where(owner_id: current_user.id, owner_type: 'User', key: 'account.auto_topup').order('created_at DESC')).page(params[:topup_pg]).per(10)
 
     respond_to do |format|
@@ -142,9 +142,9 @@ class BillingController < ApplicationController
     ].max
 
     Rails.cache.fetch([@account, maximum, :invoice_credits_receipts]) do
-      invoices          = @account.invoices.order(created_at: :desc).to_a
-      credit_notes      = @account.credit_notes.order(created_at: :desc).to_a
-      payment_receipts  = @account.payment_receipts.order(created_at: :desc).to_a
+      invoices          = @account.invoices.includes(:charges, :invoice_items).to_a
+      credit_notes      = @account.credit_notes.includes(:credit_note_items).to_a
+      payment_receipts  = @account.payment_receipts.to_a
 
       all = invoices.concat(credit_notes).concat(payment_receipts)
       all.sort { |a, b| b.created_at <=> a.created_at }

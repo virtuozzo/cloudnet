@@ -59,9 +59,11 @@ describe ServerWizard do
     server_wizard.location_id = location1.id
     server_wizard.template_id = template.id
     expect(server_wizard).to be_valid
-    server_wizard.location_id = location2.id
-    server_wizard.template_id = template.id
-    expect(server_wizard).not_to be_valid
+    
+    server_wizard_new = FactoryGirl.create(:server_wizard, :with_wallet)
+    server_wizard_new.location_id = location2.id
+    server_wizard_new.template_id = template.id
+    expect(server_wizard_new).not_to be_valid
   end
 
   it 'should validate the name of the server' do
