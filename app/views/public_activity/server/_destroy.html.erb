@@ -1,1 +1,5 @@
 <%= link_to activity.owner.full_name, admin_user_path(activity.owner) %> (IP: <%= activity.parameters[:ip] %>) scheduled destroy of server (ID: <%= activity.trackable_id %>)
+
+<% if activity.parameters[:api]%>
+  by API call
+<% end %>

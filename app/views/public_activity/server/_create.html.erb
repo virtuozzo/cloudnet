@@ -4,6 +4,10 @@
   as 'one click app', role: <%= activity.parameters[:provisioned]%>,
 <% end %>
 
+<% if activity.parameters[:api]%>
+  by API call,
+<% end %>
+
 <% if activity.trackable %>
   <%= link_to activity.trackable.name, activity.trackable %>
 <% else %>

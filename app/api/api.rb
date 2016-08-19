@@ -4,19 +4,19 @@ class API < Grape::API
   format :json
   default_format :json
   formatter :json, Grape::Formatter::Roar
-  
+
   use GrapeLogging::Middleware::RequestLogger,
     instrumentation_key: 'grape_key',
     include: [GrapeLogging::Loggers::SelectedHeaders.new(:default)]
-  
+
   rescue_from RuntimeError do |e|
     error! 'Internal Server Error. This has been logged.', 500
   end
-  
+
   rescue_from ActiveRecord::RecordNotFound do
     error! "Not Found", 404
   end
-  
+
   rescue_from Grape::Exceptions::ValidationErrors do |e|
     error! "#{e.message}", 400
   end
@@ -34,9 +34,13 @@ class API < Grape::API
     def authenticate!
       current_user
     end
+
+    def log_activity(activity, server, options = {})
+      server.create_activity activity, owner: current_user, params: { ip: request.ip, api: true }.merge(options)
+    end
   end
 
-  
+
   desc 'API version'
   get '/version' do
     { 'version' => ENV['API_VERSION'] }
@@ -62,7 +66,7 @@ class API < Grape::API
     doc_version: ENV['API_VERSION'],
     info: { title: "" }
   )
-  
+
   route :any, '*path' do
     error! "non existing path: #{params['path']}", 404
   end

@@ -3,10 +3,10 @@ module Routes::V1
   class Servers < Grape::API
     class CreateError < StandardError; end
     include Grape::Kaminari
-    
+
     version :v1, using: :accept_version_header
     resource :servers do
-      
+
       before do
         authenticate!
       end
@@ -23,7 +23,7 @@ module Routes::V1
         detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY CREATES</strong> a server on your account, for which you will be charged.'
         failure [[400, 'Bad Request'], [401, 'Unauthorized']]
       end
-      
+
       params do
         requires :template_id, type: Integer, desc: "Template IDs available from 'GET /datacentres/:id'"
         optional :name, type: String, desc: 'Human-readable name for server', documentation: { example: 'Jim' }
@@ -36,13 +36,27 @@ module Routes::V1
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
         actions = CreateServerSupportActions.new(current_user)
         server_check = actions.server_check(requested_params, request.ip)
-        
+
         begin
           raise CreateError unless server_check.valid?
           create_task = CreateServerTask.new(server_check, current_user)
           raise CreateError unless create_task.process
-          present create_task.server,  with: ServerRepresenter
-          
+
+          server = create_task.server
+          log_activity :create, server, provisioned: server.provisioner_role
+
+          Analytics.track(
+            current_user,
+            event: "API New Server Created",
+            properties: {
+              location: server.location.to_s,
+              template: server.template.to_s,
+              server: "#{server.memory}MB RAM, #{server.disk_size}GB Disk, #{server.cpus} Cores",
+              provisioned: server.provisioner_role
+            }
+          )
+          present server,  with: ServerRepresenter
+
         rescue CreateError
           error! actions.build_api_errors, 500
         end
@@ -52,12 +66,13 @@ module Routes::V1
         requires :id, type: Integer, desc: 'Server ID'
       end
       route_param :id do
+
         desc 'Destroy a server' do
           detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY DESTROYS</strong> a server on your account.'
           failure [
             {code: 200, message: 'ok'},
             {code: 400, message: 'Bad Request'},
-            {code: 401, message: 'Unauthorized'}, 
+            {code: 401, message: 'Unauthorized'},
             {code: 404, message: 'Not Found'} ]
         end
 
@@ -65,6 +80,15 @@ module Routes::V1
           server = current_user.servers.find(params[:id])
           destroy = DestroyServerTask.new(server, current_user, request.ip)
           if destroy.process && destroy.success?
+            log_activity :destroy, server
+            Analytics.track(
+              current_user,
+              event: 'API Destroyed Server',
+              properties: {
+                server: server.to_s,
+                specs: "#{server.memory}MB RAM, #{server.disk_size}GB Disk, #{server.cpus} Cores"
+              }
+            )
             body false
             #{ message: "Server #{params[:id]} has been scheduled for destruction" }
           else
