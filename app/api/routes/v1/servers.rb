@@ -28,9 +28,9 @@ module Routes::V1
         requires :template_id, type: Integer, desc: "Template IDs available from 'GET /datacentres/:id'"
         optional :name, type: String, desc: 'Human-readable name for server', documentation: { example: 'Jim' }
         optional :hostname, type: String, desc: 'OS-compatible hostname'
-        optional :memory, type: Integer, default: 1024, desc: 'Amount of memory in MBs, default 1024 MB'
-        optional :disk_size, type: Integer, default: 20, desc: 'Size of primary disk in GBs, default 20 GB'
-        optional :cpus, type: Integer, default: 1, desc: 'Number of cpus, default 1'
+        optional :memory, type: Integer, default: 1024, desc: 'Amount of memory in MBs, default 1024 MB, max 8192 MB', values: 128..8192
+        optional :disk_size, type: Integer, default: 20, desc: 'Size of primary disk in GBs, default 20 GB, max 120 GB', values: 5..120
+        optional :cpus, type: Integer, default: 1, desc: 'Number of cpus, default 1, max 6', values: 1..6
       end
       post do
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
@@ -66,6 +66,32 @@ module Routes::V1
         requires :id, type: Integer, desc: 'Server ID'
       end
       route_param :id do
+        desc 'Edit server' do
+          failure [
+            {code: 200, message: 'ok'},
+            {code: 400, message: 'Bad Request'},
+            {code: 401, message: 'Unauthorized'},
+            {code: 404, message: 'Not Found'} ]
+        end
+        params do
+          optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 1..8192
+          optional :cpus, type: Integer, desc: 'Number of cpus (1..6)', values: 1..6
+        end
+        put do
+          server = current_user.servers.find(params[:id])
+          old_server_specs = Server.new server.as_json
+          requested_params = declared(params, include_missing: false).deep_symbolize_keys
+          actions = CreateServerSupportActions.new(current_user)
+          edit_wizard = actions.prepare_edit(server, requested_params)
+          begin
+            raise CreateError unless edit_wizard.valid?
+            result = actions.schedule_edit(edit_wizard, old_server_specs)
+            raise CreateError if result.build_errors.length > 0
+            present server, with: ServerRepresenter
+          rescue CreateError
+            error! 'edit error', 500
+          end
+        end
 
         desc 'Destroy a server' do
           detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY DESTROYS</strong> a server on your account.'

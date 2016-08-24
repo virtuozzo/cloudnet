@@ -7,7 +7,7 @@ class ServersController < ServerCommonController
 
   def show
     respond_to do |format|
-      format.html { 
+      format.html {
         calculate_server_costs
         cpu_usages
         network_usages
@@ -15,7 +15,7 @@ class ServersController < ServerCommonController
       format.json
     end
   end
-  
+
   def install_notes
     notes = DockerProvisionerTasks.new.status(@server.provisioner_job_id).body rescue nil
     notes_json = JSON.parse(notes)['install_notes'] unless notes.nil?
@@ -43,12 +43,16 @@ class ServersController < ServerCommonController
     @packages = @wizard_object.packages
     if @wizard.save
       log_activity :edit
-      if schedule_edit
+      actions = CreateServerSupportActions.new(current_user)
+      old_server_specs = Server.new @server.as_json
+      edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
+      result = actions.schedule_edit(edit_wizard, old_server_specs)
+      if result.build_errors.length == 0
         flash[:info] = 'Server scheduled for update'
         redirect_to server_path(@server)
         return
       else
-        @wizard_object.errors.add(:base, @edit_wizard.build_errors.join(', ')) if @edit_wizard.build_errors.length > 0
+        @wizard_object.errors.add(:base, result.build_errors.join(', '))
         step3
       end
     elsif @wizard_object.current_step == 3
@@ -178,7 +182,7 @@ class ServersController < ServerCommonController
     net_cost = 0 if @server.in_beta?
     render json: { credit: net_cost, bandwidth: bandwidth_cost }
   end
-  
+
   def rebuild_network
     raise "Server is not built" if @server.state != :on && @server.state != :off
     RebuildNetwork.new(@server, current_user).process
@@ -221,25 +225,5 @@ class ServersController < ServerCommonController
 
   def log_activity(activity)
     @server.create_activity activity, owner: current_user, params: { ip: ip, admin: real_admin_id }
-  end
-
-  def schedule_edit
-    # as_json() effectively serializes and bypasses any pass-by-ref prolems
-    old_server_specs = Server.new @server.as_json
-    @server.edit(session[:server_wizard_params])
-    # Bit of an ugly hack to piggy back off the server wizard. We're pretending as if the current
-    # server with new specs is being asked to be built from scratch - that's what the wizard was
-    # orginally designed to do, ie; building servers from scratch.
-    server_hash = @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
-    @edit_wizard = ServerWizard.new server_hash
-    @edit_wizard.existing_server_id = @server.id
-    @edit_wizard.card = current_user.account.billing_cards.first
-    @edit_wizard.user = current_user
-    @edit_wizard.ip_addresses = @server.ip_addresses
-    @edit_wizard.hostname = @server.hostname
-    # Update bandwidth
-    @server.update_attribute(:bandwidth, @edit_wizard.bandwidth)
-    # Send the old server so that a credit note can be issued for it
-    @edit_wizard.edit_server(old_server_specs)
   end
 end
