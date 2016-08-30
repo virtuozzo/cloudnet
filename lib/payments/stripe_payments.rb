@@ -1,6 +1,7 @@
 require 'stripe'
 
 Stripe.api_key = PAYMENTS[:stripe][:api_key]
+Stripe.api_version = PAYMENTS[:stripe][:api_version]
 
 class StripePayments < Payments::Methods
   def create_customer(user)

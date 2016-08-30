@@ -2,6 +2,7 @@ defaults: &defaults
   stripe:
     api_key: <%= ENV["STRIPE_API_KEY"] %>
     publishable_key: <%= ENV["STRIPE_PUBLISH_KEY"] %>
+    api_version: <%= ENV["STRIPE_API_VERSION"] %>
   paypal:
     api_user: <%= ENV["PAYPAL_USER"] %>
     api_pass: <%= ENV["PAYPAL_PASS"] %>

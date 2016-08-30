@@ -95,6 +95,7 @@ PDF_HEADER="Company name\nAddress line 1\nVAT number\netc"
 # Stripe - required to accept credit cards
 STRIPE_API_KEY=
 STRIPE_PUBLISH_KEY=
+STRIPE_API_VERSION=2014-06-17
 
 # Credit card fraud detection
 MAXMIND_KEY=
