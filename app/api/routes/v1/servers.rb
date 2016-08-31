@@ -74,7 +74,7 @@ module Routes::V1
             {code: 404, message: 'Not Found'} ]
         end
         params do
-          optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 1..8192
+          optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 128..8192
           optional :cpus, type: Integer, desc: 'Number of cpus (1..6)', values: 1..6
         end
         put do
@@ -85,11 +85,16 @@ module Routes::V1
           edit_wizard = actions.prepare_edit(server, requested_params)
           begin
             raise CreateError unless edit_wizard.valid?
+            actions.update_edited_server(server, requested_params, edit_wizard)
             result = actions.schedule_edit(edit_wizard, old_server_specs)
             raise CreateError if result.build_errors.length > 0
             present server, with: ServerRepresenter
           rescue CreateError
-            error! 'edit error', 500
+            error = {}
+            error.merge! build: result.build_errors if result && result.build_errors.any?
+            error.merge! edit_wizard.errors.messages.each_with_object({}) { |e, m| m[e[0]] = e[1] }
+            msg = { "error" => error }
+            error! msg, 500
           end
         end
 

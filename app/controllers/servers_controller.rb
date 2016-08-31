@@ -46,6 +46,7 @@ class ServersController < ServerCommonController
       actions = CreateServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
+      actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
       result = actions.schedule_edit(edit_wizard, old_server_specs)
       if result.build_errors.length == 0
         flash[:info] = 'Server scheduled for update'
