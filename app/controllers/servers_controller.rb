@@ -1,5 +1,6 @@
 class ServersController < ServerCommonController
   before_action :set_server, except: [:index, :new, :create]
+  before_action :check_server_state, only: [:rebuild_network, :reset_root_password]
 
   def index
     @servers = current_user.servers.order(id: :asc)
@@ -185,7 +186,6 @@ class ServersController < ServerCommonController
   end
 
   def rebuild_network
-    raise "Server is not built" if @server.state != :on && @server.state != :off
     RebuildNetwork.new(@server, current_user).process
     Analytics.track(current_user, event: 'Rebuilt network')
     redirect_to :back, notice: 'Network rebuild has been scheduled'
@@ -194,8 +194,23 @@ class ServersController < ServerCommonController
     flash.now[:alert] = 'Could not rebuild network. Please try again later'
     redirect_to :back
   end
+  
+  def reset_root_password
+    raise "Location does not support root password reset" unless @server.supports_root_password_reset?
+    ResetRootPassword.new(@server, current_user).process
+    Analytics.track(current_user, event: 'Reset root password')
+    redirect_to :back, notice: 'Password has been reset'
+  rescue Exception => e
+    ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Servers#reset_root_password' })
+    flash.now[:alert] = 'Could not reset root password. Please try again later'
+    redirect_to :back
+  end
 
   private
+  
+  def check_server_state
+    raise "Server is not built" if @server.state != :on && @server.state != :off
+  end
 
   def calculate_server_costs
     monthly = @server.monthly_cost

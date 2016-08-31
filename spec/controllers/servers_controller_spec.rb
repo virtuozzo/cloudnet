@@ -103,6 +103,16 @@ describe ServersController do
         expect(rebuild_network).to have_received(:process)
         expect(flash[:notice]).to eq('Network rebuild has been scheduled')
       end
+      
+      it 'should reset password of a server' do
+        server.update(state: :on)
+        reset_password = double('ResetRootPassword', process: true)
+        allow(ResetRootPassword).to receive(:new).and_return(reset_password)
+        
+        post :reset_root_password, id: server.id
+        expect(reset_password).to have_received(:process)
+        expect(flash[:notice]).to eq('Password has been reset')
+      end
 
       describe 'editing server' do
         context 'before editing' do

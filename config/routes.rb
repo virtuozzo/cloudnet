@@ -67,6 +67,7 @@ CloudNet::Application.routes.draw do
       get :console
       get :calculate_credit
       post :rebuild_network
+      post :reset_root_password
       get :install_notes
     end
 

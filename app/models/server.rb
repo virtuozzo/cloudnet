@@ -205,7 +205,11 @@ class Server < ActiveRecord::Base
   def supports_manual_backups?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.0.0')
   end
-
+  
+  def supports_root_password_reset?
+    Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.2.0')
+  end
+  
   def no_auto_refresh!
     update_attribute(:no_refresh, true)
   end

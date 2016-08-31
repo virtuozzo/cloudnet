@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/OnApp/squall
-  revision: 85f9115abd9da994d6a74ae4e92b9a21754e764c
+  revision: 8f65fb9261b958d856f06bd25091bfa0678ffd33
   specs:
     squall (1.4.1)
       faraday (~> 0.9.0)

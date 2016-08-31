@@ -72,7 +72,7 @@ ZeroClipboard.config
     timeout     = undefined
 
     $el.click (e) ->
-      $el.text(obfuscate)
+      $el.text($el.attr('obfuscate'))
       $el.addClass('revealed')
 
     $el.parent().parent().mouseover (e) ->

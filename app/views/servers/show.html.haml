@@ -31,6 +31,9 @@
                   %a{"data-method" => "post", "href" => "/servers/{{ server.id }}/start_up", "ng-show" => "server.state == 'off'", "rel" => "nofollow"} Start Up Server
                 %li
                   %a{"href" => "/servers/{{ server.id }}/console", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Server Console
+                - if @server.supports_root_password_reset?
+                  %li
+                    %a{"data-target" => "#reset-password", "data-toggle" => "modal", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Reset root Password
                 - if @server.supports_multiple_ips?
                   %li
                     %a{"data-target" => "#rebuild-network", "data-toggle" => "modal", "ng-show" => "server.state == 'on'", "rel" => "nofollow"} Rebuild Network
@@ -102,6 +105,7 @@
 
 = render partial: 'server_delete_dialog', locals: { server: @server }
 = render partial: 'ip_addresses/rebuild_network_popover' if @server.supports_multiple_ips?
+= render partial: 'reset_password_popover' if @server.supports_root_password_reset?
 = render partial: 'install_notes', locals: { server: @server } unless @server.provisioner_role.blank?
 
 - if flash.notice =~ /successfully created/
