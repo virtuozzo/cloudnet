@@ -9,7 +9,7 @@ class Server < ActiveRecord::Base
 
   # Maximum time for server to be in states such as building, booting, etc
   MAX_TIME_FOR_INTERMEDIATE_STATES = 30.minutes
-  
+
   # Maximum number of IPs that can be added to a server
   MAX_IPS = 4
 
@@ -44,10 +44,10 @@ class Server < ActiveRecord::Base
 
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
-  
+
   IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
-  
+
   def self.provisioner_roles
     return [] unless ENV['DOCKER_PROVISIONER'].present?
     Rails.cache.fetch("provisioner_roles", expires_in: 12.hours) do
@@ -72,14 +72,14 @@ class Server < ActiveRecord::Base
 
   def self.clear_bandwidth_notifications(servers)
     servers.each { |s| s.update(
-      exceed_bw_user_notif: 0, 
+      exceed_bw_user_notif: 0,
       exceed_bw_value: 0,
       exceed_bw_user_last_sent: nil,
       exceed_bw_admin_notif: 0
-      ) 
+      )
     }
   end
-  
+
   def name_with_ip
     "#{name} (IP: #{primary_ip_address})"
   end
@@ -87,13 +87,13 @@ class Server < ActiveRecord::Base
   def to_s
     "#{name}, #{hostname} (Belongs to: #{user})"
   end
-  
+
   def primary_ip_address
     @primary_ip_address ||= begin
       server_ip_addresses.with_deleted.present? ? ((server_ip_addresses.with_deleted.find(&:primary?) || server_ip_addresses.with_deleted.first).address) : nil
     end
   end
-  
+
   # Returns the primary network interface of server from Onapp, useful when assigning new IP
   def primary_network_interface
     server_task = ServerTasks.new
@@ -146,14 +146,18 @@ class Server < ActiveRecord::Base
   # Federation does, gives instant feedback to the user that their server has been updated.
   #
   # `resources` hash, new resources for server
-  def edit(resources)
+  def edit(resources, store = true)
     resources.stringify_keys!
     editable_properties = %w(name cpus memory disk_size template_id)
     updates = {}
     editable_properties.each do |field|
       updates[field] = resources[field] if resources.key? field
     end
-    update_attributes! updates
+    if store
+      update_attributes!(updates)
+    else
+      assign_attributes(updates)
+    end
   end
 
   # Check whether the current resources attributed to the server match a given package.
@@ -181,31 +185,31 @@ class Server < ActiveRecord::Base
       break if Time.now - start > 10.minutes
     end
   end
-  
+
   # Check temp cache of IP count is within permissible limit of IPs that can be added to a server, also check if location supports multiple IPs
   def can_add_ips?
     return false if state != :on && state != :off
     supports_multiple_ips? && (ips_chargeable? || ip_addresses < MAX_IPS)
   end
-  
+
   def ips_chargeable?
     location.price_ip_address.to_f > 0
   end
-  
+
   # Check if version of Onapp supports multiple IPs - should be 4.1.0+
   def supports_multiple_ips?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.1.0')
   end
-  
+
   # Check if version of Onapp supports manual backups - should be 4.0.0+
   def supports_manual_backups?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.0.0')
   end
-  
+
   def no_auto_refresh!
     update_attribute(:no_refresh, true)
   end
-  
+
   def auto_refresh_on!
     update_attribute(:no_refresh, false)
   end
@@ -213,7 +217,7 @@ class Server < ActiveRecord::Base
   def update_forecasted_revenue
     self.forecasted_rev = forecasted_revenue
   end
-  
+
   def forecasted_revenue
     return 0.0 if user.suspended?
     discount = (1 - coupon_percentage).round(3)
@@ -228,34 +232,34 @@ class Server < ActiveRecord::Base
     coupon = user.account.coupon
     if coupon.present? then coupon.percentage_decimal else 0 end
   end
-  
+
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
   end
-  
+
   def inform_if_bandwidth_exceeded
     BandwidthChecker.new(self).check_bandwidth
   end
-  
+
   def provisioned?
     !provisioned_at.nil?
   end
-  
+
   def can_provision?
     !provisioner_role.nil? && validation_reason == 0 && !provisioned?
   end
-  
+
   def monitor_and_provision
     docker_provision = can_provision?
     no_auto_refresh! if docker_provision
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, user_id, docker_provision)
     DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
-  
+
   def supports_rebuild?
     !(try(:os) == "windows" || try(:provisioner_role))
   end
-  
+
   private
 
   def template_should_match_location

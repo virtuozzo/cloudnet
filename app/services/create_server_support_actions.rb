@@ -4,21 +4,25 @@ class CreateServerSupportActions < Struct.new(:user)
     @server_check ||= ServerWizard.new(default_params(params, ip).merge(params))
   end
 
-  def prepare_edit(server, params)
-    server.edit(params)
+  def prepare_edit(edited_server, params)
+    server = edited_server.dup
+    server.edit(params, false)
     # Bit of an ugly hack to piggy back off the server wizard. We're pretending as if the current
     # server with new specs is being asked to be built from scratch - that's what the wizard was
     # orginally designed to do, ie; building servers from scratch.
     server_hash = server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
     edit_wizard = ServerWizard.new server_hash
-    edit_wizard.existing_server_id = server.id
+    edit_wizard.existing_server_id = edited_server.id
     edit_wizard.card = user.account.billing_cards.first
     edit_wizard.user = user
-    edit_wizard.ip_addresses = server.ip_addresses
-    edit_wizard.hostname = server.hostname
-    # Update bandwidth
-    server.update_attribute(:bandwidth, edit_wizard.bandwidth)
+    edit_wizard.ip_addresses = edited_server.ip_addresses
+    edit_wizard.hostname = edited_server.hostname
     edit_wizard
+  end
+
+  def update_edited_server(server, params, edit_wizard)
+    server.edit(params)
+    server.update_attribute(:bandwidth, edit_wizard.bandwidth)
   end
 
   def schedule_edit(edit_wizard, old_server_specs)
