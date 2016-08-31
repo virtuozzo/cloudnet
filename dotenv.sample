@@ -73,6 +73,7 @@ SMTP_PORT=
 SMTP_USER=
 SMTP_PASSWORD=
 SMTP_AUTH_METHOD=
+SMTP_SSL_VERIFY=
 
 # Admin recipients
 MAILER_ADMIN_RECIPIENTS="sample@email.com, joebloggs@website.com"
