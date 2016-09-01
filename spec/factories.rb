@@ -70,7 +70,7 @@ FactoryGirl.define do
     price_disk 60
     price_bw 100
     price_memory 100
-    hv_group_version '4.1.0'
+    hv_group_version '4.3.0'
     after(:build) do |location|
       3.times {|i| create("pack#{i}".to_sym, location: location) }
     end

@@ -49,6 +49,8 @@ CloudNet::Application.configure do
     authentication: ENV['SMTP_AUTH_METHOD'],
     domain: 'cloud.net'
   }
+  
+  config.action_mailer.smtp_settings.merge!({ openssl_verify_mode: ENV['SMTP_SSL_VERIFY'] }) unless ENV['SMTP_SSL_VERIFY'].blank?
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
