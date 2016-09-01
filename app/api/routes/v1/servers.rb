@@ -88,6 +88,7 @@ module Routes::V1
             actions.update_edited_server(server, requested_params, edit_wizard)
             result = actions.schedule_edit(edit_wizard, old_server_specs)
             raise CreateError if result.build_errors.length > 0
+            log_activity :edit, server
             present server, with: ServerRepresenter
           rescue CreateError
             error = {}
