@@ -8,9 +8,9 @@ class User < ActiveRecord::Base
   include User::SiftUser
   include Taggable
   include User::PhoneNumber
-  
+
   class Unauthorized < StandardError; end
-  
+
   acts_as_paranoid
 
   devise :otp_authenticatable, :database_authenticatable, :registerable, :confirmable, :lockable,
@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
     split_header = auth_header.delete("\n").split
     type = split_header[0].strip
     credential = split_header[1].try(:strip)
-    
+
     if type == 'Basic'
       email, api_key = *Base64.decode64(credential).split(':')
       user = find_by! email: email.encode("UTF-8")
@@ -74,12 +74,12 @@ class User < ActiveRecord::Base
   rescue Encoding::UndefinedConversionError
     raise(Unauthorized, 'Make sure you encoded64 yourEmail:APIkey sequence')
   end
-  
+
   def valid_api_key?(api_key)
     encrypted = SymmetricEncryption.encrypt api_key
     api_keys.where(active: true).pluck(:encrypted_key).include?(encrypted)
   end
-  
+
   def active_for_authentication?
     super && !suspended?
   end
@@ -152,11 +152,11 @@ class User < ActiveRecord::Base
   rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { user: self.id, source: 'User#update_sift_account' })
   end
-  
+
   def update_forecasted_revenue
     servers.each {|server| server.update_attribute(:forecasted_rev, server.forecasted_revenue)}
   end
-  
+
   def forecasted_revenue
     servers.reduce(0) {|result, server| result + server.forecasted_rev}
   end
@@ -178,13 +178,13 @@ class User < ActiveRecord::Base
   rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { user: self.id, source: 'User#create_sift_login_event' })
   end
-  
+
   def self.disposable_email_domains
     Rails.cache.fetch("disposable_email_domains") do
       CSV.read("#{Rails.root}/db/disposable_email_domains.csv").flatten
     end
   end
-  
+
   protected
 
   def send_on_create_confirmation_instructions
@@ -224,7 +224,7 @@ class User < ActiveRecord::Base
   def anonymous_id
     Thread.current[:session_id]
   end
-  
+
   def disposable_emails
     email_domain = Mail::Address.new(email).domain
     if User.disposable_email_domains.include? email_domain

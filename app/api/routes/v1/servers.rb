@@ -12,7 +12,7 @@ module Routes::V1
       end
 
       desc 'List all servers' do
-        failure [[401, 'Unauthorized']]
+        failure [[400, 'Bad Request'], [401, 'Unauthorized']]
       end
       paginate per_page: 10, max_per_page: 20, offset: false
       get do
@@ -34,7 +34,7 @@ module Routes::V1
       end
       post do
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
-        actions = CreateServerSupportActions.new(current_user)
+        actions = ServerSupportActions.new(current_user)
         server_check = actions.server_check(requested_params, request.ip)
 
         begin
@@ -66,38 +66,6 @@ module Routes::V1
         requires :id, type: Integer, desc: 'Server ID'
       end
       route_param :id do
-        desc 'Edit server' do
-          failure [
-            {code: 200, message: 'ok'},
-            {code: 400, message: 'Bad Request'},
-            {code: 401, message: 'Unauthorized'},
-            {code: 404, message: 'Not Found'} ]
-        end
-        params do
-          optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 128..8192
-          optional :cpus, type: Integer, desc: 'Number of cpus (1..6)', values: 1..6
-        end
-        put do
-          server = current_user.servers.find(params[:id])
-          old_server_specs = Server.new server.as_json
-          requested_params = declared(params, include_missing: false).deep_symbolize_keys
-          actions = CreateServerSupportActions.new(current_user)
-          edit_wizard = actions.prepare_edit(server, requested_params)
-          begin
-            raise CreateError unless edit_wizard.valid?
-            actions.update_edited_server(server, requested_params, edit_wizard)
-            result = actions.schedule_edit(edit_wizard, old_server_specs)
-            raise CreateError if result.build_errors.length > 0
-            log_activity :edit, server
-            present server, with: ServerRepresenter
-          rescue CreateError
-            error = {}
-            error.merge! build: result.build_errors if result && result.build_errors.any?
-            error.merge! edit_wizard.errors.messages.each_with_object({}) { |e, m| m[e[0]] = e[1] }
-            msg = { "error" => error }
-            error! msg, 500
-          end
-        end
 
         desc 'Destroy a server' do
           detail '<br><strong>WARNING:</strong> If successful that <strong>REALLY DESTROYS</strong> a server on your account.'
@@ -133,6 +101,39 @@ module Routes::V1
         end
         get do
           present current_user.servers.find(params[:id]),  with: ServerRepresenter
+        end
+
+        desc 'Edit server' do
+          failure [
+            {code: 200, message: 'Schedule server change'},
+            {code: 400, message: 'Bad Request'},
+            {code: 401, message: 'Unauthorized'},
+            {code: 404, message: 'Not Found'} ]
+        end
+        params do
+          optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 128..8192
+          optional :cpus, type: Integer, desc: 'Number of cpus (1..6)', values: 1..6
+        end
+        put do
+          server = current_user.servers.find(params[:id])
+          old_server_specs = Server.new server.as_json
+          requested_params = declared(params, include_missing: false).deep_symbolize_keys
+          actions = ServerSupportActions.new(current_user)
+          edit_wizard = actions.prepare_edit(server, requested_params)
+          begin
+            raise CreateError unless edit_wizard.valid?
+            actions.update_edited_server(server, requested_params, edit_wizard)
+            result = actions.schedule_edit(edit_wizard, old_server_specs)
+            raise CreateError if result.build_errors.length > 0
+            log_activity :edit, server
+            present server, with: ServerRepresenter
+          rescue CreateError
+            error = {}
+            error.merge! build: result.build_errors if result && result.build_errors.any?
+            error.merge! edit_wizard.errors.messages.each_with_object({}) { |e, m| m[e[0]] = e[1] }
+            msg = { "error" => error }
+            error! msg, 500
+          end
         end
       end
     end
