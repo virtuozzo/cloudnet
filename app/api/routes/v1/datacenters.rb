@@ -2,16 +2,16 @@ module Routes::V1
   # /datacenters
   class Datacenters < Grape::API
     include Grape::Kaminari
-    
+
     version :v1, using: :accept_version_header
     resource :datacenters do
       before do
         authenticate!
       end
-      
+
       desc 'List all datacenters' do
         detail 'together with an array of templates available'
-        failure [[401, 'Unauthorized']]
+        failure [[400, 'Bad Request'], [401, 'Unauthorized']]
       end
       paginate per_page: 10, max_per_page: 20, offset: false
       get do

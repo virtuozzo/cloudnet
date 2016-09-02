@@ -44,7 +44,7 @@ class ServersController < ServerCommonController
     @packages = @wizard_object.packages
     if @wizard.save
       log_activity :edit
-      actions = CreateServerSupportActions.new(current_user)
+      actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
@@ -194,7 +194,7 @@ class ServersController < ServerCommonController
     flash.now[:alert] = 'Could not rebuild network. Please try again later'
     redirect_to :back
   end
-  
+
   def reset_root_password
     raise "Location does not support root password reset" unless @server.supports_root_password_reset?
     ResetRootPassword.new(@server, current_user).process
@@ -207,7 +207,7 @@ class ServersController < ServerCommonController
   end
 
   private
-  
+
   def check_server_state
     raise "Server is not built" if @server.state != :on && @server.state != :off
   end

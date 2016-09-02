@@ -1,4 +1,4 @@
-class CreateServerSupportActions < Struct.new(:user)
+class ServerSupportActions < Struct.new(:user)
 
   def server_check(params, ip)
     @server_check ||= ServerWizard.new(default_params(params, ip).merge(params))

@@ -10,6 +10,7 @@ class API < Grape::API
     include: [GrapeLogging::Loggers::SelectedHeaders.new(:default)]
 
   rescue_from RuntimeError do |e|
+    ErrorLogging.new.track_exception(e, extra: { source: 'API call'})
     error! 'Internal Server Error. This has been logged.', 500
   end
 
@@ -19,6 +20,17 @@ class API < Grape::API
 
   rescue_from Grape::Exceptions::ValidationErrors do |e|
     error! "#{e.message}", 400
+  end
+
+  rescue_from Faraday::Error do |e|
+    ErrorLogging.new.track_exception(
+      e,
+      extra: {
+        source: 'API call',
+        faraday: e.message
+      }
+    )
+    error! "#{e.message}", 500
   end
 
   helpers do
