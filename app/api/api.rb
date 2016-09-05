@@ -50,6 +50,12 @@ class API < Grape::API
     def log_activity(activity, server, options = {})
       server.create_activity activity, owner: current_user, params: { ip: request.ip, api: true }.merge(options)
     end
+    
+    def create_sift_event(event, properties)
+      CreateSiftEvent.perform_async(event, properties)
+    rescue StandardError => e
+      ErrorLogging.new.track_exception(e, extra: { user: current_user.id, source: 'API#create_sift_event' })
+    end
   end
 
 
