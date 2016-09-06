@@ -230,9 +230,9 @@ class ServersController < ServerCommonController
     coupon.present? ? coupon.percentage_decimal : 0
   end
 
+  # delegate, so api calls use the same code
   def schedule_task(task, server, monitor = true)
-    ServerTasks.new.perform(task, current_user.id, server.id)
-    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, current_user.id) if monitor
+    ServerSupportActions.new(current_user).schedule_task(task, server.id, monitor)
   end
 
   def set_server

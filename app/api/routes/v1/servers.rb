@@ -135,24 +135,6 @@ module Routes::V1
             error! msg, 500
           end
         end
-
-
-        desc 'Reboot server' do
-          failure [
-            {code: 200, message: 'Schedule server reboot'},
-            {code: 400, message: 'Bad Request'},
-            {code: 401, message: 'Unauthorized'},
-            {code: 404, message: 'Not Found'} ]
-        end
-
-        put 'reboot' do
-          server = current_user.servers.find(params[:id])
-          ServerTasks.new.perform(:reboot, current_user.id, server.id)
-          MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server.id, current_user.id)
-          log_activity :reboot, server
-          create_sift_event :reboot_server, server.sift_server_properties
-          present server, with: ServerRepresenter
-        end
       end
     end
   end

@@ -50,7 +50,7 @@ class API < Grape::API
     def log_activity(activity, server, options = {})
       server.create_activity activity, owner: current_user, params: { ip: request.ip, api: true }.merge(options)
     end
-    
+
     def create_sift_event(event, properties)
       CreateSiftEvent.perform_async(event, properties)
     rescue StandardError => e
@@ -78,6 +78,7 @@ class API < Grape::API
 
   mount Routes::V1::Datacenters
   mount Routes::V1::Servers
+  mount Routes::V1::ServerApiTasks
 
   add_swagger_documentation(
     mount_path: '/api_docs',

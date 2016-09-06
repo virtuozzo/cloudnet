@@ -31,6 +31,11 @@ class ServerSupportActions < Struct.new(:user)
     edit_wizard
   end
 
+  def schedule_task(task, server_id, monitor = true)
+    ServerTasks.new.perform(task, user.id, server_id)
+    MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server_id, user.id) if monitor
+  end
+  
   def default_params(params, ip)
     { location_id: Template.find(params[:template_id]).location.id,
       name: auto_server_name,
