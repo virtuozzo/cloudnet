@@ -103,7 +103,7 @@ module Routes::V1
           present current_user.servers.find(params[:id]),  with: ServerRepresenter
         end
 
-        desc 'Edit server' do
+        desc 'Edit a server' do
           failure [
             {code: 200, message: 'Schedule server change'},
             {code: 400, message: 'Bad Request'},

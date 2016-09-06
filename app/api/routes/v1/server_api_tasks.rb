@@ -14,7 +14,7 @@ module Routes::V1
         requires :id, type: Integer, desc: 'Server ID'
       end
       route_param :id do
-        desc 'Reboot server' do
+        desc 'Reboot a server' do
           failure [
             {code: 200, message: 'Schedule server reboot'},
             {code: 400, message: 'Bad Request'},
@@ -29,7 +29,7 @@ module Routes::V1
           present @server, with: ServerRepresenter
         end
 
-        desc 'Shut down server' do
+        desc 'Shut down a server' do
           failure [
             {code: 200, message: 'Schedule server shutdown'},
             {code: 400, message: 'Bad Request'},
@@ -44,7 +44,7 @@ module Routes::V1
           present @server, with: ServerRepresenter
         end
 
-        desc 'Start up server' do
+        desc 'Start up a server' do
           failure [
             {code: 200, message: 'Schedule server startup'},
             {code: 400, message: 'Bad Request'},
