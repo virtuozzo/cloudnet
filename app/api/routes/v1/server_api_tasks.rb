@@ -6,14 +6,18 @@ module Routes::V1
 
       before do
         authenticate!
-        @server = current_user.servers.find(params[:id])
-        @actions = ServerSupportActions.new(current_user)
+
       end
 
       params do
         requires :id, type: Integer, desc: 'Server ID'
       end
+
       route_param :id do
+        before do
+          @server = current_user.servers.find(params[:id])
+          @actions = ServerSupportActions.new(current_user)
+        end
         desc 'Reboot a server' do
           failure [
             {code: 200, message: 'Schedule server reboot'},
