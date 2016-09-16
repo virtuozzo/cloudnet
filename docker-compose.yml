@@ -69,3 +69,10 @@ cloudnet-db:
   volumes_from:
     - cloudnet-dbdata
   restart: always
+
+cloudnet-dbbackup:
+  image: hackedunit/docker-postgres-backup
+  env_file: .env.docker
+  restart: always
+  links:
+    - cloudnet-db

@@ -135,6 +135,18 @@ NEW_RELIC_KEY=
 # Logging
 SENTRY_DSN_URI=http://localhost
 
+# DB Backups
+CRON_SCHEDULE=0 0 * * *
+S3_PATH=s3://bucket-name/path/to/dir
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-west-1
+# Optional
+# MAIL_TO=backups@example.com
+# MAIL_FROM=admin@example.com
+# WEBHOOK=https://example.com/some/path
+# WEBHOOK_METHOD=GET
+
 # Capistrano deployment config. (Not needed if using Docker installation method)
 #GIT_ORIGIN=git@github.com:OnApp/cloudnet.git
 #PROD_SERVER1_IP=1.2.3.4
