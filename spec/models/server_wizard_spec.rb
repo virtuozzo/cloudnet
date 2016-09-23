@@ -146,7 +146,7 @@ describe ServerWizard do
       allow(server_wizard.user).to receive_messages(cpu_max: 5)
       expect(server_wizard.user.servers.count).to eq(0)
 
-      server_wizard.cpus = 5
+      server_wizard.cpus = 2
       expect(server_wizard).to be_valid
       server_wizard.cpus = 6
       expect(server_wizard).not_to be_valid
