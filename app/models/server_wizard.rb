@@ -166,7 +166,6 @@ class ServerWizard
       # new.
       @credit_note_for_time_remaining = @old_server_specs.create_credit_note_for_time_remaining
     end
-
     # Generate invoice, use credit notes if any, finally charge payment receipts
     charge_wallet
 
@@ -211,7 +210,7 @@ class ServerWizard
 
       # Undo server creation
       @newly_built_server.destroy if @newly_built_server
-      
+
       # Expire cache if any
       user.account.expire_wallet_balance
     end
@@ -222,7 +221,7 @@ class ServerWizard
     remote = CreateServer.new(self, user).process
     if remote.nil? || remote['id'].nil?
       @build_errors.push('Could not create server on remote system. Please try again later')
-      fail WizardError 
+      fail WizardError
     end
     @newly_built_server = save_server_details(remote, user)
   rescue Faraday::Error::ClientError, StandardError => e
@@ -414,8 +413,9 @@ class ServerWizard
     if disk_size.to_i > resources[:disk_size]
       errors.add(:disk_size, "is limited to a total of #{user.storage_max} GB across all servers. Please contact support to get this limit increased")
     end
-    
-    if resources[:vms] < 1
+
+    # check only for new server creations
+    if existing_server_id.nil? && resources[:vms] < 1
       errors.add(:vms, "are limited to a total of #{user.vm_max}. Please contact support to get this limit increased")
     end
   end
