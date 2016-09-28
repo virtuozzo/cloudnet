@@ -36,7 +36,6 @@ module Routes::V1
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
         actions = ServerSupportActions.new(current_user)
         server_check = actions.server_check(requested_params, request.ip)
-
         begin
           raise CreateError unless server_check.valid?
           create_task = CreateServerTask.new(server_check, current_user)

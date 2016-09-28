@@ -31,7 +31,7 @@ class DockerProvision
     Rails.logger.warn "Provisioner of #{role} for server #{server_id} failed"
     ErrorLogging.new.track_exception(e, extra: prov_error_params)
   ensure
-    unset_server_from_provision
+    @server.auto_refresh_on!
     ServerTasks.new.perform(:refresh_server, server.user.id, server_id)
   end
   
@@ -60,10 +60,6 @@ class DockerProvision
   
   def set_provision_time
     server.update_attribute(:provisioned_at, Time.now)
-  end
-  
-  def unset_server_from_provision
-    server.update_attribute(:no_refresh, false)
   end
   
   def prov_error_params
