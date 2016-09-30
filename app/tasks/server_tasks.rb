@@ -12,7 +12,7 @@ class ServerTasks < BaseTasks
   def show(server, squall)
     squall.show(server.identifier)
   end
-  
+
   def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
     docker_provision = args[0] == true ? :provisioning : nil
@@ -38,10 +38,15 @@ class ServerTasks < BaseTasks
     else
       state = old_state
     end
-    
+
     server.detect_stuck_state
+    old_server_specs = Server.new server.as_json if billing_params_changed?(server, info)
 
     disk_size = info['total_disk_size'].to_i
+
+    #FIXME: Report unattached storage: disk_size == 0
+    #binding.pry if disk_size < 1
+
     server.update(
       built:                  info['built'],
       suspended:              info['suspended'],
@@ -51,12 +56,14 @@ class ServerTasks < BaseTasks
       hypervisor_id:          info['hypervisor_id'],
       cpus:                   info['cpus'],
       memory:                 info['memory'],
-      disk_size:              disk_size > 0 ? disk_size.to_s : server.disk_size,
+      disk_size:              disk_size > 1 ? disk_size.to_s : server.disk_size,
       os:                     info['operating_system'],
       state:                  state,
       template_id:            onapp_template ? onapp_template.id : server.template_id
     )
-    
+
+    prepare_invoice(server, old_server_specs) if old_server_specs
+
     # For backwards compatibility sake, check if location supports multiple IPs. If it does, then go ahead and schedule a fetch, otherwise extract IP address from server info.
     if server.supports_multiple_ips?
       ip_address_task = IpAddressTasks.new
@@ -66,6 +73,29 @@ class ServerTasks < BaseTasks
     end
 
     server
+  end
+
+  # When changing VM parameters we immediatelly update local DB
+  # and generate credit_note for unused time and a new invoice.
+  # When syncing with OnApp these params should stay intact
+  # If that is not the case - most probably the 'edit' operation failed
+  # In that case we need to update billing (credit_note + invoice)
+  # It is important that server is not refreshed during 'edit' operation - no_refresh: true
+  def billing_params_changed?(server, info)
+    # Do not process if server is being created
+    return false if info['locked'] == true || info['built'] == false
+    disk_size = info['total_disk_size'].to_i
+
+    # For unknown reason the storage can be faulty and not attached to VM
+    (server.disk_size.to_i != disk_size && disk_size > 1) ||
+    server.cpus != info['cpus'] ||
+    server.memory != info['memory']
+  end
+
+  def prepare_invoice(server, old_server_specs)
+    old_server_specs.create_credit_note_for_time_remaining
+    server.charge_wallet
+    server.charging_paperwork
   end
 
   def refresh_events(server, squall)
@@ -110,7 +140,7 @@ class ServerTasks < BaseTasks
     cpu_type.usages = parsed.to_json
     cpu_type.save!
   end
-  
+
   def get_network_interfaces(server, squall)
     squall.network_interfaces(server.identifier)
   end
@@ -130,7 +160,7 @@ class ServerTasks < BaseTasks
     network_type.usages = parsed.to_json
     network_type.save!
   end
-  
+
   def reboot(server, squall)
     squall.reboot(server.identifier)
     server.update_attribute :state, :rebooting
@@ -179,13 +209,12 @@ class ServerTasks < BaseTasks
       :get_network_interfaces
     ] + super
   end
-  
-  private
-    def active_template(template_id, location_id, provisioner_role)
-      if provisioner_role.blank?
-        Template.where(identifier: template_id, location_id: location_id).where.not(os_distro: 'docker').first
-      else
-        Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
-      end
+
+  def active_template(template_id, location_id, provisioner_role)
+    if provisioner_role.blank?
+      Template.where(identifier: template_id, location_id: location_id).where.not(os_distro: 'docker').first
+    else
+      Template.where(identifier: template_id, location_id: location_id, os_distro: 'docker').first
     end
+  end
 end

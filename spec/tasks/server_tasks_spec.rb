@@ -1,13 +1,18 @@
 require 'rails_helper'
 
-xdescribe ServerTasks do
+describe ServerTasks do
+  before :each do
+    allow_any_instance_of(Server).to receive(:supports_multiple_ips?).and_return(false)
+  end
+
   it 'sets the correct state when refreshing the server' do
-    info = {
-      'ip_addresses' => [{ 'ip_address' => { 'address' => '192.168.1.1' } }],
-      'locked' => false
-    }
     server = FactoryGirl.create :server
     task = ServerTasks.new
+    info = {
+      'ip_addresses' => [{ 'ip_address' => { 'address' => '192.168.1.1' } }],
+      'locked' => false, 'cpus' => server.cpus, 'memory' => server.memory,
+      'total_disk_size' => server.disk_size
+    }
 
     info['built'] = false
     allow_any_instance_of(Squall::VirtualMachine).to receive(:show).and_return(info)
@@ -30,7 +35,41 @@ xdescribe ServerTasks do
     expect(server.state).to eq(:on)
   end
 
-  context 'against real existing server', :vcr do
+  context 'update billing when params changed' do
+    let(:server) { FactoryGirl.create :server }
+    let(:account) { server.user.account }
+    let(:task) { ServerTasks.new }
+    let(:info) { { 'ip_addresses' => [{ 'ip_address' => { 'address' => '192.168.1.1' } }],
+              'locked' => false, 'booted' => true, 'cpus' => server.cpus,
+              'memory' => server.memory, 'total_disk_size' => server.disk_size } }
+    before :each do
+      allow_any_instance_of(Squall::VirtualMachine).to receive(:show).and_return(info)
+      FactoryGirl.create :payment_receipt, account: account
+    end
+
+    it 'creates credit_note and invoice if memory changed' do
+      info['memory'] = server.memory + 1
+      task.perform(:refresh_server, server.user.id, server.id)
+      expect(account.invoices.count).to eq 1
+      expect(account.credit_notes.count).to eq 1
+    end
+
+    it 'creates credit_note and invoice if cpu changed' do
+      info['cpus'] = server.cpus + 1
+      task.perform(:refresh_server, server.user.id, server.id)
+      expect(account.invoices.count).to eq 1
+      expect(account.credit_notes.count).to eq 1
+    end
+
+    it 'creates credit_note and invoice if disk_size changed' do
+      info['total_disk_size'] = server.disk_size + 1
+      task.perform(:refresh_server, server.user.id, server.id)
+      expect(account.invoices.count).to eq 1
+      expect(account.credit_notes.count).to eq 1
+    end
+  end
+
+  xcontext 'against real existing server', :vcr do
     include_context :with_server
 
     it 'grabs the CPU usages for the server' do
