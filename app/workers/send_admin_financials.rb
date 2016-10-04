@@ -45,6 +45,11 @@ class SendAdminFinancials
     
     AdminMailer.periodic_csv(start_date, end_date, report, admin_id).deliver_now
   end
+  
+  # List of all servers and their market cost vs selling price
+  def cost_analysis
+    AdminMailer.cost_analysis.deliver_now
+  end
 
   def scope(klass, time)
     klass.where('created_at > ? AND created_at < ?', time.beginning_of_day, time.end_of_day)
