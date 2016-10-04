@@ -16,7 +16,7 @@ class UserTasks < BaseTasks
   private
 
   def create(user, squall)
-    acc = generate_user_credentials(user.id, user.full_name).merge(role_ids: [ONAPP_CP[:user_role]])
+    acc = generate_user_credentials(user.id, user.full_name).merge(role_ids: [ONAPP_CP[:user_role]], billing_plan_id: ONAPP_CP[:billing_plan])
 
     response = squall.create(acc)
     user.update!(
