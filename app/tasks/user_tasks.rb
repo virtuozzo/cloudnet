@@ -31,6 +31,11 @@ class UserTasks < BaseTasks
     user.create_sift_account
     user.create_sift_login_event
   end
+  
+  def update_billing_plan(user, squall)
+    params = { billing_plan_id: ONAPP_CP[:billing_plan] }
+    squall.edit(user.onapp_id, params)
+  end
 
   def generate_user_credentials(id, full_name)
     begin
@@ -44,7 +49,7 @@ class UserTasks < BaseTasks
   end
 
   def allowable_methods
-    super + [:create]
+    super + [:create, :update_billing_plan]
   end
 
   def generate_password(size)
