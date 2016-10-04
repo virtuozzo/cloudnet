@@ -35,6 +35,7 @@ ONAPP_CP=https://onapp.api.endpoint.com
 ONAPP_USER=
 ONAPP_PASS=
 ONAPP_ROLE=
+ONAPP_BILLING_PLAN_ID=
 
 # PayPal Config
 PAYPAL_USER=
