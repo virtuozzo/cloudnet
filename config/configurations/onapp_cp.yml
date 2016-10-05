@@ -3,6 +3,7 @@ defaults: &defaults
   user: <%= ENV["ONAPP_USER"] %>
   pass: <%= ENV["ONAPP_PASS"] %>
   user_role: <%= ENV["ONAPP_ROLE"] %>
+  billing_plan: <%= ENV["ONAPP_BILLING_PLAN_ID"] %>
 
 development:
   <<: *defaults

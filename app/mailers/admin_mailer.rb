@@ -35,6 +35,17 @@ class AdminMailer < ActionMailer::Base
     attachments[filename] = reporter.send(@report)
     mail(to: admin_user.email, subject: "#{ENV['BRAND_NAME']} Billing Reports")
   end
+  
+  def cost_analysis(mailto = FINANCE_RECIPIENTS)
+    time = Time.now
+    @date_name = time.strftime("#{ActiveSupport::Inflector.ordinalize(time.day)} %B %Y")
+    report = CostAnalysisReport.new
+
+    filename = "cloudnet_cost_analysis_report_#{@date_name}.csv"
+    attachments[filename] = report.generate
+
+    mail(to: mailto, subject: "#{ENV['BRAND_NAME']} Cost Analysis Report - #{@date_name}")
+  end
 
   def notify_stuck_server_state(server)
     @server = server
