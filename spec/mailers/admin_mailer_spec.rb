@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AdminMailer, :type => :mailer do
   let(:user) { FactoryGirl.create(:user, notif_delivered: 11) }
   let(:from) { Mail::Address.new(ENV['MAILER_ADMIN_DEFAULT_FROM']) }
-  
+
   describe "shutdown_action" do
     let(:mail) { AdminMailer.shutdown_action(user) }
 
@@ -17,20 +17,20 @@ RSpec.describe AdminMailer, :type => :mailer do
       expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
       expect(mail.from).to eq([from.address])
     end
-    
+
     context "rendering" do
       before(:each) do
         send_mail :shutdown_action, user
       end
-      
+
       it "assigns variables" do
         expect(assigns(:user)).to eq user
         expect(assigns(:pretty_negative_balance)).to eq "$0.00"
       end
-    
+
       it "renders the body" do
         balance = assigns(:pretty_negative_balance)
-        
+
         expect(response).to match("Admin SHUTDOWN notification!")
         expect(response).to match("The automatic shutdown was performed on all servers of #{CGI.escapeHTML(user.full_name)}.")
         expect(response).to include("negative balance on this account by #{balance}")
@@ -40,7 +40,7 @@ RSpec.describe AdminMailer, :type => :mailer do
       end
     end
   end
-  
+
   describe "destroy_warning" do
     let(:mail) { AdminMailer.destroy_warning(user) }
 
@@ -54,17 +54,17 @@ RSpec.describe AdminMailer, :type => :mailer do
       expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
       expect(mail.from).to eq([from.address])
     end
-    
+
     context "rendering" do
       before(:each) do
         send_mail :destroy_warning, user
       end
-      
+
       it "assigns variables" do
         expect(assigns(:user)).to eq user
         expect(assigns(:pretty_negative_balance)).to eq "$0.00"
       end
-    
+
       it "renders the body" do
         balance = assigns(:pretty_negative_balance)
 
@@ -77,7 +77,7 @@ RSpec.describe AdminMailer, :type => :mailer do
       end
     end
   end
-  
+
   describe "request_for_server_destroy" do
     let(:mail) { AdminMailer.request_for_server_destroy(user) }
 
@@ -91,17 +91,17 @@ RSpec.describe AdminMailer, :type => :mailer do
       expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
       expect(mail.from).to eq([from.address])
     end
-    
+
     context "rendering" do
       before(:each) do
         send_mail :request_for_server_destroy, user
       end
-      
+
       it "assigns variables" do
         expect(assigns(:user)).to eq user
         expect(assigns(:pretty_negative_balance)).to eq "$0.00"
       end
-    
+
       it "renders the body" do
         balance = assigns(:pretty_negative_balance)
 
@@ -114,7 +114,7 @@ RSpec.describe AdminMailer, :type => :mailer do
       end
     end
   end
-  
+
   describe "destroy_action" do
     let(:mail) { AdminMailer.destroy_action(user) }
 
@@ -128,25 +128,64 @@ RSpec.describe AdminMailer, :type => :mailer do
       expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
       expect(mail.from).to eq([from.address])
     end
-    
+
     context "rendering" do
       before(:each) do
         send_mail :destroy_action, user
       end
-      
+
       it "assigns variables" do
         expect(assigns(:user)).to eq user
         expect(assigns(:pretty_negative_balance)).to eq "$0.00"
       end
-    
+
       it "renders the body" do
         balance = assigns(:pretty_negative_balance)
-        
+
         expect(response).to match("Admin DESTROY notification!")
         expect(response).to match("The automatic destroy was performed on all servers of #{CGI.escapeHTML(user.full_name)}.")
         expect(response).to include("negative balance on this account by #{balance}")
         expect(response).to match("There were 11 warnings delivered to that user.")
         expect(response).to match("profile: #{admin_user_url(user) }")
+      end
+    end
+  end
+
+  describe 'notify faulty server' do
+    let(:server) { FactoryGirl.create(:server) }
+    let(:mail) { AdminMailer.notify_faulty_server(server, true, true) }
+
+    it "fills mailer queue" do
+      mail.deliver_now
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("#{ENV['BRAND_NAME']}: Faulty server for user #{server.user.full_name}")
+      expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
+      expect(mail.from).to eq([from.address])
+    end
+
+    context "rendering" do
+      before(:each) do
+        send_mail :notify_faulty_server, server, true, true
+      end
+
+      it "assigns variables" do
+        expect(assigns(:server)).to eq server
+        expect(assigns(:no_disk)).to be_truthy
+        expect(assigns(:no_ip)).to be_truthy
+        expect(assigns(:link_to_onapp_server)).to be
+      end
+
+      it "renders the body" do
+        onapp_link = assigns(:link_to_onapp_server)
+        expect(response).to match("Server issues warning.")
+        expect(response).to match(CGI.escapeHTML(server.user.full_name))
+        expect(response).to match("storage attached")
+        expect(response).to match("and no ip address")
+        expect(response).to match(admin_server_url(server))
+        expect(response).to match(onapp_link)
       end
     end
   end

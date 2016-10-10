@@ -103,6 +103,7 @@ class AdminMailer < ActionMailer::Base
 
   def notify_faulty_server(server, no_disk, no_ip)
     @server, @no_disk, @no_ip = server, no_disk, no_ip
+    @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{server.identifier}"
     mail(
       to: ADMIN_RECIPIENTS,
       subject: "#{ENV['BRAND_NAME']}: Faulty server for user #{server.user.full_name}"

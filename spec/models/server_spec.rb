@@ -4,7 +4,7 @@ require 'models/concerns/taggable_shared'
 describe Server do
   let(:server) {FactoryGirl.create(:server, memory: 1024, cpus: 1, disk_size: 20)}
   it_behaves_like 'taggable'
-  
+
   it 'has a valid server' do
     expect(server).to be_valid
   end
@@ -37,29 +37,29 @@ describe Server do
     server.template = nil
     expect(server).not_to be_valid
   end
-  
+
   it 'should have a primary IP address' do
     server_ip_address = FactoryGirl.create(:server_ip_address, server: server)
     expect(server.primary_ip_address).to eq('123.456.789.1')
   end
-  
+
   it 'should be false for servers that are building' do
     expect(server.can_add_ips?).to eq(false)
   end
-  
+
   it 'should be true for locations with multiple IP compatibility' do
     server.state = :on
     expect(server.can_add_ips?).to eq(true)
   end
-  
+
   it 'should be true for locations with multiple IP compatibility' do
     expect(server.supports_multiple_ips?).to eq(true)
   end
-  
+
   it 'should be true for locations with manual backup compatibility' do
     expect(server.supports_manual_backups?).to eq(true)
   end
-  
+
   it 'should be false for older locations without multiple IP compatibility' do
     server.location.hv_group_version = '4.0.0'
     expect(server.supports_multiple_ips?).to eq(false)
@@ -116,7 +116,7 @@ describe Server do
       expect(server.stuck).to be false
     end
   end
-  
+
   it 'should return and cache provisioner roles' do
     Rails.cache.clear
     provisioner_tasks = double(DockerProvisionerTasks)
@@ -128,9 +128,89 @@ describe Server do
     expect(roles.size).to eq 3
     expect(Rails.cache.read("provisioner_roles")).to eq(roles)
   end
-  
+
   it 'calculates forecasted revenue for server' do
     server.user.account.coupon = FactoryGirl.create(:coupon)
     expect(server.forecasted_revenue).to eq 55722240
+  end
+
+  describe "notify faulty server" do
+    context 'more than 1 day after creation' do
+      before :each do
+        server.update_attributes created_at: Time.zone.now - (1.day + 1.hour)
+      end
+
+      it "notifies when no storage" do
+        expect(AdminMailer).to receive(:notify_faulty_server).with(server, true, false).
+          and_return(double(deliver_now: true))
+        server.notify_fault(true, false)
+        expect(server.fault_reported_at).to be
+      end
+
+      it "notifies when no ip" do
+        expect(AdminMailer).to receive(:notify_faulty_server).with(server, false, true).
+          and_return(double(deliver_now: true))
+        server.notify_fault(false, true)
+        expect(server.fault_reported_at).to be
+      end
+
+      it "notifies when no storage and no ip" do
+        expect(AdminMailer).to receive(:notify_faulty_server).with(server, true, true).
+          and_return(double(deliver_now: true))
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).to be
+      end
+
+      it 'doesnt notify when storage and ip exist' do
+        expect(AdminMailer).not_to receive(:notify_faulty_server)
+        server.notify_fault(false, false)
+        expect(server.fault_reported_at).not_to be
+      end
+
+      it "notifies once" do
+        expect(AdminMailer).to receive(:notify_faulty_server).with(server, true, true).
+          and_return(double(deliver_now: true)).once
+
+        server.notify_fault(true, true)
+        report_time = server.fault_reported_at
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).to eq report_time
+
+        # pass less time than REPORT_FAULTY_VM_EVERY
+        time_reported = Time.zone.now - Server::REPORT_FAULTY_VM_EVERY + 1.hour
+        server.update_attributes fault_reported_at: time_reported
+        expect(server).not_to receive(:update_attribute)
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).to eq time_reported
+      end
+
+      it 're-notifies after REPORT_FAULTY_VM_EVERY time' do
+        expect(AdminMailer).to receive(:notify_faulty_server).with(server, true, true).
+          and_return(double(deliver_now: true)).twice
+
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).to be
+        report_time_1 = server.fault_reported_at
+
+        # simulating last notification sent more than REPORT_FAULTY_VM_EVERY ago
+        time_pass = Server::REPORT_FAULTY_VM_EVERY
+        server.update_attributes fault_reported_at: Time.zone.now - (time_pass + 1.hour)
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).not_to eq report_time_1
+        report_time_2 = server.fault_reported_at
+
+        # no more notifications before next REPORT_FAULTY_VM_EVERY
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).to eq report_time_2
+      end
+    end
+
+    context 'less than 1 day of creation' do
+      it 'doesnt notify when no storage and no ip' do
+        expect(AdminMailer).not_to receive(:notify_faulty_server)
+        server.notify_fault(true, true)
+        expect(server.fault_reported_at).not_to be
+      end
+    end
   end
 end
