@@ -42,6 +42,7 @@ class ServersController < ServerCommonController
     @wizard_object.existing_server_id = @server.id
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
+
     if @wizard.save
       log_activity :edit
       actions = ServerSupportActions.new(current_user)

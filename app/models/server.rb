@@ -1,6 +1,8 @@
 # Cloud.net's definition of a server. As opposed to OnApp's definition of a server. It should
 # reliably reflect the existence and state of an OnApp Federation server.
 class Server < ActiveRecord::Base
+  REPORT_FAULTY_VM_EVERY = 7.days
+
   include PublicActivity::Common
   include Billing::ServerInvoiceable
   include SiftProperties
@@ -140,6 +142,20 @@ class Server < ActiveRecord::Base
     update_attributes(stuck: detected_stuck) if detected_stuck != stuck
   end
 
+  # Notify admin if server has no storage attached or no IPs
+  def notify_fault(no_disk, no_ip)
+    return unless no_disk || no_ip
+    days_since_creation = ((Time.now - created_at) / 1.day).floor
+    last_warning_threshold = case fault_reported_at
+      when nil then 1
+      else ((Time.now - fault_reported_at) / REPORT_FAULTY_VM_EVERY).floor
+    end
+    if days_since_creation >= 1 && last_warning_threshold >= 1
+      AdminMailer.notify_faulty_server(self, no_disk, no_ip).deliver_now
+      update_attribute :fault_reported_at, Time.now
+    end
+  end
+
   # Change the resources for a server in our DB. Does not sync these changes to the server on the
   # Federation. It is true that, should the server be updated through the Federation API, then our
   # worker processes will eventually update the server anyway. But updating the server before the
@@ -205,11 +221,11 @@ class Server < ActiveRecord::Base
   def supports_manual_backups?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.0.0')
   end
-  
+
   def supports_root_password_reset?
     Gem::Version.new(location.hv_group_version) >= Gem::Version.new('4.2.0')
   end
-  
+
   def no_auto_refresh!
     update_attribute(:no_refresh, true)
   end

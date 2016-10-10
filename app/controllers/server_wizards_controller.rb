@@ -23,7 +23,7 @@ class ServerWizardsController < ServerCommonController
     create_task = CreateServerTask.new(@wizard_object, current_user)
     @wizard_object.ip_addresses = 1
     @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip) if current_user
-    
+
     unless @wizard_object.provisioner_role.blank?
       provisioner_template = @wizard_object.location.provisioner_templates.first
       @wizard_object.os_type = provisioner_template.os_type

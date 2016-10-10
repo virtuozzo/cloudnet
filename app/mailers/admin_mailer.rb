@@ -26,7 +26,7 @@ class AdminMailer < ActionMailer::Base
 
     mail(to: mailto, subject: "#{ENV['BRAND_NAME']} Monthly CSV Reports - #{@date_name}")
   end
-  
+
   def periodic_csv(start_date, end_date, report, admin_id)
     @start_date, @end_date, @report = start_date, end_date, report
     admin_user = User.where(admin: true, id: admin_id).first
@@ -53,7 +53,7 @@ class AdminMailer < ActionMailer::Base
     @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
     mail(to: SUPPORT_RECIPIENTS, subject: "#{ENV['BRAND_NAME']} Server stuck in intermediate state")
   end
-  
+
   def shutdown_action(user)
     @user = user
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
@@ -62,7 +62,7 @@ class AdminMailer < ActionMailer::Base
       subject: "#{ENV['BRAND_NAME']}: Automatic shutdown - #{user.full_name}"
     )
   end
-  
+
   def destroy_warning(user)
     @user = user
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
@@ -71,7 +71,7 @@ class AdminMailer < ActionMailer::Base
       subject: "#{ENV['BRAND_NAME']}: DESTROY warning! - #{user.full_name}"
     )
   end
-  
+
   def request_for_server_destroy(user)
     @user = user
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
@@ -80,7 +80,7 @@ class AdminMailer < ActionMailer::Base
       subject: "#{ENV['BRAND_NAME']}: DESTROY request! - #{user.full_name}"
     )
   end
-  
+
   def destroy_action(user)
     @user = user
     @pretty_negative_balance = Invoice.pretty_total user.account.remaining_balance
@@ -89,15 +89,24 @@ class AdminMailer < ActionMailer::Base
       subject: "#{ENV['BRAND_NAME']}: Automatic destroy - #{user.full_name}"
     )
   end
-  
+
   def notify_bandwidth_exceeded(server, bandwidth_over)
     @server = server
     # changing MB to Bytes
     @bandwidth_over = bandwidth_over * 1024 * 1024
     @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{@server.identifier}"
     mail(
-      to: ADMIN_RECIPIENTS, 
+      to: ADMIN_RECIPIENTS,
       subject: "#{ENV['BRAND_NAME']}: User #{server.user.full_name} is exceeding free bandwidth allocation"
+    )
+  end
+
+  def notify_faulty_server(server, no_disk, no_ip)
+    @server, @no_disk, @no_ip = server, no_disk, no_ip
+    @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{server.identifier}"
+    mail(
+      to: ADMIN_RECIPIENTS,
+      subject: "#{ENV['BRAND_NAME']}: Faulty server for user #{server.user.full_name}"
     )
   end
 end

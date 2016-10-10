@@ -1,0 +1,23 @@
+<p>Server issues warning.</p>
+
+<p>The server of the <%= link_to @server.user.full_name, admin_user_url(@server.user) %> has no
+  <% if @no_disk %>
+    storage attached
+  <% end %>
+  <% if @no_ip %>
+    <%= 'and no' if @no_disk %> ip address
+  <% end %>
+  .
+</p>
+<ul>
+  <li>
+    Server on <%= ENV['BRAND_NAME'] %> admin: <%= link_to @server.hostname, admin_server_url(@server) %>
+  </li>
+  <li>
+    Server on OnApp: <a href="<%= @link_to_onapp_server %>"><%= @link_to_onapp_server %></a>
+  </li>
+</ul>
+
+<p>Thanks,</p>
+
+<p><%= ENV['BRAND_NAME'] %> Team</p>

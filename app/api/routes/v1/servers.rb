@@ -36,7 +36,6 @@ module Routes::V1
         requested_params = declared(params, include_missing: false).deep_symbolize_keys
         actions = ServerSupportActions.new(current_user)
         server_check = actions.server_check(requested_params, request.ip)
-
         begin
           raise CreateError unless server_check.valid?
           create_task = CreateServerTask.new(server_check, current_user)
@@ -113,6 +112,8 @@ module Routes::V1
         params do
           optional :memory, type: Integer, desc: 'Amount of memory in MBs (128..8192)', values: 128..8192
           optional :cpus, type: Integer, desc: 'Number of cpus (1..6)', values: 1..6
+          optional :disk_size, type: Integer, desc: 'Size of primary disk in GBs, min 6 GB,  max 120 GB', values: 6..120
+          optional :template_id, type: Integer, desc: "Template IDs available from 'GET /datacentres/:id'"
         end
         put do
           server = current_user.servers.find(params[:id])

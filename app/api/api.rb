@@ -70,7 +70,7 @@ class API < Grape::API
     {
       'Cloudnet API' => ENV['API_VERSION'],
       status: {
-        datacenters: Location.count(hidden: false, budget_vps: false),
+        datacenters: Location.where(hidden: false, budget_vps: false).count,
         worker: worker_size
       }
     }

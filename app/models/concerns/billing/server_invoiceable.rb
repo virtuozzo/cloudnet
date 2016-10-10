@@ -100,7 +100,7 @@ module Billing
         net_cost: 0.0
       }
     end
-    
+
     # Additional bandwidth is post-paid
     # TODO: bandwidth price is taken from location, which can be changed after server creation
     def bandwidth_paid_invoice_item(reason)
@@ -113,7 +113,7 @@ module Billing
         description: billable_bandwidth_description(bandwidth_usage),
         net_cost: location.price_bw * bandwidth_usage[:billable] # price in milicents / MB
       }
-    end 
+    end
 
     def billable_bandwidth_description(bandwidth_usage)
       billable_MB = bandwidth_usage[:billable]
@@ -121,7 +121,7 @@ module Billing
       hours_used = bandwidth_usage[:hours]
       "#{billable_MB}MB over free #{free_MB}MB for past #{hours_used} hours"
     end
-    
+
     def ip_invoice_item(hours)
       additional_ips = ip_addresses.to_i - 1
       {
@@ -142,7 +142,7 @@ module Billing
         net_cost: template.hourly_cost * hours
       }
     end
-    
+
     def charge_wallet
       @remaining_cost = calculate_amount_to_charge
       if @remaining_cost > 0
@@ -204,7 +204,7 @@ module Billing
       create_payment_receipt_charges if @payment_receipts_used.present?
       user.account.expire_wallet_balance
     end
-    
+
     def create_payment_receipt_charges
       ChargeInvoicesTask.new(user, [@invoice], true).create_payment_receipt_charges(user.account, @invoice, @payment_receipts_used)
     end

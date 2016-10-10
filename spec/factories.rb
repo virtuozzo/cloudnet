@@ -6,7 +6,7 @@ FactoryGirl.define do
     phone_number { Faker::Base.numerify('919400######') }
     phone_verified_at Time.now
     association :account, factory: :account
-    
+
     factory :active_user do
       status :active
       confirmed_at Time.now
@@ -21,7 +21,7 @@ FactoryGirl.define do
       confirmed_at Time.now
       onapp_user 'user_onapp_test'
       onapp_password 'abcdef123456'
-      
+
       trait :with_wallet do
         after(:build) do |user|
           create(:payment_receipt, account: user.account)
@@ -115,11 +115,11 @@ FactoryGirl.define do
     association :template, factory: :template
 
     after(:build) { |s| s.update location: s.template.location }
-    
+
     after(:build) do |server|
       create_list(:server_ip_address, 1, server: server)
     end
-    
+
     trait :payg do
       after(:build) do |s|
         s.payment_type = :payg
@@ -127,7 +127,7 @@ FactoryGirl.define do
       end
     end
   end
-  
+
   factory :server_hourly_transaction do
     association :server, factory: :server
     association :account, factory: :account
@@ -157,13 +157,13 @@ FactoryGirl.define do
     usage_type :cpu
     usages '[{"cpu_time":1,"created_at":"2014-05-05T12:01:08Z"},{"cpu_time":0,"created_at":"2014-05-05T13:01:16Z"},{"cpu_time":0,"created_at":"2014-05-05T14:01:03Z"}]'
     association :server, factory: :server
-    
+
     factory :network_server_usage do
       usage_type :network
       usages '[{"created_at":"2016-02-16T13:01:49Z","data_received":1058,"data_sent":364},{"created_at":"2016-02-17T00:59:46Z","data_received":1511,"data_sent":1664},{"created_at":"2016-02-17T01:00:54Z","data_received":11432,"data_sent":6348},{"created_at":"2016-02-19T16:01:46Z","data_received":163491,"data_sent":253359},{"created_at":"2016-03-01T17:01:49Z","data_received":853430,"data_sent":634344}]'
     end
   end
-  
+
   factory :server_event do
     action 'create_virtual_server'
     status 'completed'
@@ -258,7 +258,7 @@ FactoryGirl.define do
     association :account, factory: [:account, :with_user]
     pay_source :paypal
   end
-  
+
   factory :uptime do
     avgresponse 108
     downtime 100
@@ -267,36 +267,36 @@ FactoryGirl.define do
     uptime 86300
     association :location, factory: :location
   end
-  
+
   factory :index do
     index_cpu 235
     index_iops 187
     index_bandwidth 453
     association :location, factory: :location
   end
-  
+
   factory :server_ip_address do
     address '123.456.789.1'
     identifier 'xyz987'
     primary true
     association :server, factory: :server
   end
-  
+
   factory :key do
     title 'joeys-macbook-pro'
     key 'ssh-rsa abc1234== joe@joeys-macbook-pro'
     association :user, factory: :user_onapp
   end
-  
+
   factory :api_key do
     title 'cloudnet-control-panel'
     association :user, factory: :user_onapp
   end
-  
+
   factory :user_server_count do
   end
-  
+
   factory :tag do
-    sequence(:label) { |n| "tag label #{n}"} 
+    sequence(:label) { |n| "tag label #{n}"}
   end
 end
