@@ -145,6 +145,8 @@ describe Server do
           and_return(double(deliver_now: true))
         server.notify_fault(true, false)
         expect(server.fault_reported_at).to be
+        expect(server.activities.count).to eq 1
+        expect(server.activities.first.parameters).to eq :no_disk=>true, :no_ip=>false
       end
 
       it "notifies when no ip" do
@@ -152,6 +154,8 @@ describe Server do
           and_return(double(deliver_now: true))
         server.notify_fault(false, true)
         expect(server.fault_reported_at).to be
+        expect(server.activities.count).to eq 1
+        expect(server.activities.first.parameters).to eq :no_disk=>false, :no_ip=>true
       end
 
       it "notifies when no storage and no ip" do
@@ -159,12 +163,15 @@ describe Server do
           and_return(double(deliver_now: true))
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to be
+        expect(server.activities.count).to eq 1
+        expect(server.activities.first.parameters).to eq :no_disk=>true, :no_ip=>true
       end
 
       it 'doesnt notify when storage and ip exist' do
         expect(AdminMailer).not_to receive(:notify_faulty_server)
         server.notify_fault(false, false)
         expect(server.fault_reported_at).not_to be
+        expect(server.activities).to be_empty
       end
 
       it "notifies once" do
@@ -182,6 +189,9 @@ describe Server do
         expect(server).not_to receive(:update_attribute)
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to eq time_reported
+
+        expect(server.activities.count).to eq 1
+        expect(server.activities.first.parameters).to eq :no_disk=>true, :no_ip=>true
       end
 
       it 're-notifies after REPORT_FAULTY_VM_EVERY time' do
@@ -202,14 +212,16 @@ describe Server do
         # no more notifications before next REPORT_FAULTY_VM_EVERY
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to eq report_time_2
+        expect(server.activities.count).to eq 2
       end
     end
 
     context 'less than 1 day of creation' do
-      it 'doesnt notify when no storage and no ip' do
+      it 'doesnt notify when no storage or no ip' do
         expect(AdminMailer).not_to receive(:notify_faulty_server)
         server.notify_fault(true, true)
         expect(server.fault_reported_at).not_to be
+        expect(server.activities).to be_empty
       end
     end
   end

@@ -1,0 +1,21 @@
+Server (ID: <%= activity.trackable_id %>)
+
+<% if activity.trackable %>
+  <%= link_to activity.trackable.name, activity.trackable %>
+<% else %>
+  which has since been removed,
+<% end %>
+
+was reported as faulty because
+<% if activity.parameters[:no_disk]%>
+  no storage
+<% end %>
+<% if activity.parameters[:no_ip]%>
+  <%= 'and ' if activity.parameters[:no_disk] %> no IP address
+<% end %>
+<% if activity.parameters[:no_disk] and activity.parameters[:no_ip] %>
+  have
+<% else %>
+  has
+<% end %>
+been detected
