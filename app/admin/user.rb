@@ -1,7 +1,7 @@
 ActiveAdmin.register User do
   actions :all, except: [:destroy]
   menu priority: 6
-  
+
   permit_params :email, :full_name, :admin, :onapp_user, :onapp_email, :vm_max, :cpu_max,
                 :storage_max, :bandwidth_max, :memory_max, :password, :password_confirmation, :suspended,
                 :notif_before_shutdown, :notif_before_destroy, :otp_mandatory, tag_ids: []
@@ -32,12 +32,12 @@ ActiveAdmin.register User do
   filter :unconfirmed_email
   filter :servers
   filter :keys
-  
+
   filter :current_sign_in_ip
   filter :last_sign_in_ip
   filter :notif_before_shutdown
   filter :notif_before_destroy
-  
+
   filter :created_at
   filter :updated_at
   filter :locked_at
@@ -46,7 +46,7 @@ ActiveAdmin.register User do
   filter :confirmed_at
   filter :current_sign_in_at
   filter :last_sign_in_at
-  
+
   index do
     column :id
     column :email
@@ -68,14 +68,14 @@ ActiveAdmin.register User do
     column :tags do |user|
       user.tag_labels.join(', ')
     end
-    
+
     actions
   end
-  
+
   show do
-    
+
     default_main_content
-    
+
     panel "Tags for a user" do
       attributes_table_for user do
         row :tags do |user|
@@ -83,7 +83,7 @@ ActiveAdmin.register User do
         end
       end
     end
-    
+
     panel "Fraud Details" do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
@@ -115,7 +115,7 @@ ActiveAdmin.register User do
         row :primary_card_anon_proxy do |user|
           boolean_to_words fraud_body['anonymous_proxy'] unless fraud_body.nil?
         end
-        
+
         row :possible_duplicate_accounts do
           begin
             unless user.account.nil?
@@ -136,7 +136,7 @@ ActiveAdmin.register User do
             ErrorLogging.new.track_exception(e, extra: { user: user, source: 'User#possible_duplicate_accounts' })
           end
         end
-        
+
         # fraud validator methods
         row :minfraud_safe do |user|
           status_tag(user.account.minfraud_safe?, class: 'important', label: boolean_to_results(user.account.minfraud_safe?)) unless user.account.nil?
@@ -170,17 +170,17 @@ ActiveAdmin.register User do
       end
     end
   end
-  
+
   sidebar "Legend", only: :show do
     attributes_table_for user do
-      row :minfraud_score do 
-        text_node "Minfraud score of customer's credit card. Higher the score, higher the possibility of fraud. If multiple cards in account, highest score is shown.".html_safe 
+      row :minfraud_score do
+        text_node "Minfraud score of customer's credit card. Higher the score, higher the possibility of fraud. If multiple cards in account, highest score is shown.".html_safe
       end
-      row :risky_cards do 
-        text_node "Number of bad card attempts (rejected because of wrong info or high Minfraud scores)".html_safe 
+      row :risky_cards do
+        text_node "Number of bad card attempts (rejected because of wrong info or high Minfraud scores)".html_safe
       end
-      row :stripe_account do 
-        text_node "Quick link to account at Stripe".html_safe 
+      row :stripe_account do
+        text_node "Quick link to account at Stripe".html_safe
       end
       row :primary_card_country_match do
         text_node "It indicates whether the country of user's IP address matched the billing address country of the primary credit card. A mismatch indicates a higher risk of fraud.".html_safe
@@ -237,12 +237,12 @@ ActiveAdmin.register User do
     f.inputs 'Tags' do
       f.input :tags, :multiple => true, as: :check_boxes
     end
-    
+
     f.inputs 'Notification Limits - Before Action on Servers' do
       f.input :notif_before_shutdown
       f.input :notif_before_destroy
     end
-    
+
     f.actions
   end
 
@@ -252,7 +252,7 @@ ActiveAdmin.register User do
       result.uniq! if params["commit"] == "Filter"
       result
     end
-    
+
     def update
       user = params['user']
       if user && (user['password'].nil? || user['password'].empty?)
@@ -264,34 +264,34 @@ ActiveAdmin.register User do
       update!
       User.find(params[:id]).update_sift_account
     end
-    
+
     def shutdown_destroy_notifications_activity(user)
       create_activity(user, :notif_before_shutdown_changed) if shutdown_changed?(user)
       create_activity(user, :notif_before_destroy_changed) if destroy_changed?(user)
     end
-    
+
     def create_activity(user, activity)
       param = activity.to_s
       param.slice! '_changed'
       resource.create_activity(
-        activity, 
-        owner: resource, 
-        params: { 
-          admin: current_user.id, 
+        activity,
+        owner: resource,
+        params: {
+          admin: current_user.id,
           from: resource.send(param),
           to: user[param].to_i
         }
       )
     end
-    
+
     def shutdown_changed?(user)
       resource.notif_before_shutdown != user['notif_before_shutdown'].to_i
     end
-    
+
     def destroy_changed?(user)
       resource.notif_before_destroy != user['notif_before_destroy'].to_i
     end
-    
+
     def log_risky_entities(user)
       account = user.account
       unless account.nil?
@@ -301,22 +301,22 @@ ActiveAdmin.register User do
       create_sift_label(user)
       label_devices(user, "bad")
     end
-  
+
     def create_sift_label(user)
       label_properties = SiftProperties.sift_label_properties true, nil, "Manually suspended", "manual_review", current_user.email
       SiftLabel.perform_async(:create, user.id.to_s, label_properties)
     end
-    
+
     # Label all devices associated with user as 'bad' or 'not_bad'
     def label_devices(user, label)
       LabelDevices.perform_async(user.id, label)
     end
-    
+
     def remove_sift_label(user)
       SiftLabel.perform_async(:remove, user.id.to_s)
     end
   end
-  
+
   collection_action :notify_users, method: :get do
     @page_title = 'Notify Users'
   end
@@ -345,7 +345,7 @@ ActiveAdmin.register User do
   end
 
   member_action :activity, method: :get do
-    @activities = PublicActivity::Activity.where(owner_id: params[:id], owner_type: 'User').order('created_at DESC')
+    @activities = PublicActivity::Activity.where(owner_id: params[:id], owner_type: 'User').order('created_at DESC').page(params[:page]).per(50)
   end
 
   # Display form to manually add credit note
@@ -378,7 +378,7 @@ ActiveAdmin.register User do
   member_action :unsuspend, method: :post do
     user = User.find(params[:id])
     user.update_attribute(:suspended, false)
-    
+
     remove_sift_label(user)
     label_devices(user, "not_bad")
 
@@ -413,7 +413,7 @@ ActiveAdmin.register User do
   action_item :edit, only: :show do
     link_to 'Login As User', login_as_path(user_id: user.id), method: :post unless user.suspended?
   end
-  
+
   action_item :edit, only: :show do
     link_to 'Issue Credit Note', issue_credit_note_admin_user_path(user)
   end

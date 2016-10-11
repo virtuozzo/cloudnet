@@ -153,6 +153,7 @@ class Server < ActiveRecord::Base
     if days_since_creation >= 1 && last_warning_threshold >= 1
       AdminMailer.notify_faulty_server(self, no_disk, no_ip).deliver_now
       update_attribute :fault_reported_at, Time.now
+      create_activity :faulty_server_report, owner: user, params: { no_disk: no_disk, no_ip: no_ip}
     end
   end
 
