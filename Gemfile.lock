@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/OnApp/squall
-  revision: 8f65fb9261b958d856f06bd25091bfa0678ffd33
+  revision: 440f392797a9189779bea6d55dd0ba928319dd32
   specs:
     squall (1.4.1)
       faraday (~> 0.9.0)
@@ -789,4 +789,4 @@ DEPENDENCIES
   zendesk_api (~> 1.5.0)
 
 BUNDLED WITH
-   1.11.2
+   1.13.1
