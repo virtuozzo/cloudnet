@@ -144,6 +144,7 @@ class Server < ActiveRecord::Base
 
   # Notify admin if server has no storage attached or no IPs
   def notify_fault(no_disk, no_ip)
+    add_remove_tags_by_hash(no_disk: no_disk, no_ip: no_ip)
     return unless no_disk || no_ip
     days_since_creation = ((Time.now - created_at) / 1.day).floor
     last_warning_threshold = case fault_reported_at

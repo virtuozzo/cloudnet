@@ -147,6 +147,7 @@ describe Server do
         expect(server.fault_reported_at).to be
         expect(server.activities.count).to eq 1
         expect(server.activities.first.parameters).to eq :no_disk=>true, :no_ip=>false
+        expect(server.tag_labels).to eq ['no_disk']
       end
 
       it "notifies when no ip" do
@@ -156,6 +157,7 @@ describe Server do
         expect(server.fault_reported_at).to be
         expect(server.activities.count).to eq 1
         expect(server.activities.first.parameters).to eq :no_disk=>false, :no_ip=>true
+        expect(server.tag_labels).to eq ['no_ip']
       end
 
       it "notifies when no storage and no ip" do
@@ -165,6 +167,7 @@ describe Server do
         expect(server.fault_reported_at).to be
         expect(server.activities.count).to eq 1
         expect(server.activities.first.parameters).to eq :no_disk=>true, :no_ip=>true
+        expect(server.tag_labels).to include('no_disk', 'no_ip')
       end
 
       it 'doesnt notify when storage and ip exist' do
@@ -222,6 +225,15 @@ describe Server do
         server.notify_fault(true, true)
         expect(server.fault_reported_at).not_to be
         expect(server.activities).to be_empty
+      end
+
+      it 'sets and removes tags' do
+        server.notify_fault(true, true)
+        expect(server.tag_labels).to include('no_disk', 'no_ip')
+        server.notify_fault(false, true)
+        expect(server.tag_labels).to include('no_ip')
+        server.notify_fault(false, false)
+        expect(server.tag_labels).to be_empty
       end
     end
   end
