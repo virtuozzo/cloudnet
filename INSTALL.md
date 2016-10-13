@@ -68,6 +68,12 @@ To check the status of the containers, run `$ docker-compose ps`
 
 **Updating**
 
+Pull latest changes from Github repo:
+
+`$ git pull origin`
+
+Check for any new or updated entries in dotenv.sample file and add or make changes as necessary to your .env.docker environment file. It is important that your .env.docker file contains all entries from the sample env file.
+
 Pull the updated image from Docker Hub:
 
 `$ docker pull onapp/cloudnet`
