@@ -96,6 +96,12 @@ This will start two new containers with the updated image, cloudnet_cloudnet-app
 
 At this point, you will have two new containers based on the newer image. If there was a problem and you would like to roll-back to the older containers, you could simply start the stopped containers and stop the newer ones.
 
-Once you have made sure everything is working correctly, you could remove the older containers.
+Once you have made sure everything is working correctly, you may remove the older containers.
 
 `$ docker-compose rm cloudnet-app`
+
+Re-create cron and worker containers from the updated image.
+
+`$ docker-compose up -d cloudnet-cron`
+
+`$ docker-compose up -d cloudnet-worker`
