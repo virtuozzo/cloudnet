@@ -96,6 +96,6 @@ every '0 1 1 * *' do
 end
 
 # Email monthly cost analysis reports
-every '0 2 5 * *' do
+every '0 0 1 * *' do
   runner 'SendAdminFinancials.perform_in(2.minutes, :cost_analysis)'
 end
