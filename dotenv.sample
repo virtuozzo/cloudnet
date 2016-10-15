@@ -2,6 +2,10 @@
 
 ## PRE-CONFIGURED
 
+# Environments
+RACK_ENV=production
+RAILS_ENV=production
+
 # nginx vhosts
 VIRTUAL_HOST=cloudnet-app
 CERT_NAME=server
