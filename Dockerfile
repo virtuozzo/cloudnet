@@ -15,9 +15,12 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/
 
 WORKDIR /app
-ADD . /app
 
+ADD Gemfile /app
+ADD Gemfile.lock /app
 RUN bundle install --without development test
+
+ADD . /app
 
 # A bit of a hack to get assets to compile without the usual env vars. There doesn't seem
 # to be a way to disable the symmetric-encryption gem, so we just give it an arbitrary key.

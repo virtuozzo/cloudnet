@@ -68,6 +68,12 @@ To check the status of the containers, run `$ docker-compose ps`
 
 **Updating**
 
+Pull latest changes from Github repo:
+
+`$ git pull origin`
+
+Check for any new or updated entries in dotenv.sample file and add or make changes as necessary to your .env.docker environment file. It is important that your .env.docker file contains all entries from the sample env file.
+
 Pull the updated image from Docker Hub:
 
 `$ docker pull onapp/cloudnet`
@@ -90,6 +96,12 @@ This will start two new containers with the updated image, cloudnet_cloudnet-app
 
 At this point, you will have two new containers based on the newer image. If there was a problem and you would like to roll-back to the older containers, you could simply start the stopped containers and stop the newer ones.
 
-Once you have made sure everything is working correctly, you could remove the older containers.
+Once you have made sure everything is working correctly, you may remove the older containers.
 
 `$ docker-compose rm cloudnet-app`
+
+Re-create cron and worker containers from the updated image.
+
+`$ docker-compose up -d cloudnet-cron`
+
+`$ docker-compose up -d cloudnet-worker`

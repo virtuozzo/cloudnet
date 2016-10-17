@@ -385,6 +385,24 @@ ActiveAdmin.register User do
     flash[:notice] = 'User has been unsuspended'
     redirect_to admin_user_path(id: user.id)
   end
+  
+  member_action :disable_api, method: :post do
+    user = User.find(params[:id])
+    user.update_attribute(:api_enabled, false)
+    user.create_activity(:disable_api, owner: user, params: { admin: current_user.id })
+
+    flash[:notice] = 'API has been disabled'
+    redirect_to admin_user_path(id: user.id)
+  end
+  
+  member_action :enable_api, method: :post do
+    user = User.find(params[:id])
+    user.update_attribute(:api_enabled, true)
+    user.create_activity(:enable_api, owner: user, params: { admin: current_user.id })
+
+    flash[:notice] = 'API has been enabled'
+    redirect_to admin_user_path(id: user.id)
+  end
 
   member_action :disable_two_factor, method: :post do
     user = User.find(params[:id])
@@ -420,6 +438,14 @@ ActiveAdmin.register User do
 
   action_item :edit, only: :show do
     link_to 'Disable Two Factor Auth', disable_two_factor_admin_user_path(user), method: :post if user.otp_enabled?
+  end
+  
+  action_item :edit, only: :show do
+    link_to('Disable API', disable_api_admin_user_path(user), method: :post) if user.api_enabled?
+  end
+
+  action_item :edit, only: :show do
+    link_to('Enable API', enable_api_admin_user_path(user), method: :post) unless user.api_enabled?
   end
 
   action_item :edit, only: :index do
