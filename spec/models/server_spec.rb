@@ -182,13 +182,14 @@ describe Server do
           and_return(double(deliver_now: true)).once
 
         server.notify_fault(true, true)
-        report_time = server.fault_reported_at
+        report_time = server.reload.fault_reported_at
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to eq report_time
 
         # pass less time than REPORT_FAULTY_VM_EVERY
         time_reported = Time.zone.now - Server::REPORT_FAULTY_VM_EVERY + 1.hour
         server.update_attributes fault_reported_at: time_reported
+        time_reported = server.reload.fault_reported_at # postgress time resolution issue
         expect(server).not_to receive(:update_attribute)
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to eq time_reported
@@ -203,14 +204,14 @@ describe Server do
 
         server.notify_fault(true, true)
         expect(server.fault_reported_at).to be
-        report_time_1 = server.fault_reported_at
 
         # simulating last notification sent more than REPORT_FAULTY_VM_EVERY ago
-        time_pass = Server::REPORT_FAULTY_VM_EVERY
-        server.update_attributes fault_reported_at: Time.zone.now - (time_pass + 1.hour)
+        report_time_1 = Time.zone.now - (Server::REPORT_FAULTY_VM_EVERY + 1.hour)
+        server.update_attributes fault_reported_at: report_time_1
+        report_time_1 = server.reload.fault_reported_at # postgress time resolution issue
         server.notify_fault(true, true)
         expect(server.fault_reported_at).not_to eq report_time_1
-        report_time_2 = server.fault_reported_at
+        report_time_2 = server.reload.fault_reported_at
 
         # no more notifications before next REPORT_FAULTY_VM_EVERY
         server.notify_fault(true, true)
