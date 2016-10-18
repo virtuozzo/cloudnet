@@ -2,7 +2,7 @@ require 'vcr'
 
 # Use the .env file to compile the list of sensitive data that should not be recorded in
 # cassettes
-NOT_REPLACE = %w(ONAPP_ROLE)
+NOT_REPLACE = %w(ONAPP_ROLE ONAPP_BILLING_PLAN_ID SIFT_USER_VALIDATE_ACTION_ID SIFT_USER_APPROVE_ACTION_ID ONAPP_API_ALLOW_INSECURE COVERAGE SMTP_SSL_VERIFY)
 def sensitive_strings
   dotenv_path = "#{Rails.root}/.env"
   # It's not a big deal if there isn't a .env file when playing back cassettes, it's only when
