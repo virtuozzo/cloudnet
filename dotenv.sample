@@ -134,6 +134,10 @@ HUBSPOT_ID=
 # Segment.io custom analytics
 ANALYTICS_KEY=
 
+# AdRoll Pixel
+ADROLL_ADV_ID=
+ADROLL_PIX_ID=
+
 # New Relic
 NEW_RELIC_KEY=
 
