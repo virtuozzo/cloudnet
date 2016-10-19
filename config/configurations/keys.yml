@@ -21,6 +21,9 @@ defaults: &defaults
   nexmo:
     api_key: <%= ENV["NEXMO_API_KEY"] %>
     secret: <%= ENV["NEXMO_API_SECRET"] %>
+  adroll:
+    adv_id: <%= ENV["ADROLL_ADV_ID"] %>
+    pix_id: <%= ENV["ADROLL_PIX_ID"] %>
 
 development:
   <<: *defaults
