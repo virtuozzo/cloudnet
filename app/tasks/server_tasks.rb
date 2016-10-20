@@ -61,7 +61,7 @@ class ServerTasks < BaseTasks
 
     prepare_invoice(server, old_server_specs) if old_server_specs
     server.notify_fault(disk_size <= 1, info['ip_addresses'].blank?)
-    
+
     # For backwards compatibility sake, check if location supports multiple IPs. If it does, then go ahead and schedule a fetch, otherwise extract IP address from server info.
     if server.supports_multiple_ips?
       ip_address_task = IpAddressTasks.new
@@ -214,6 +214,20 @@ class ServerTasks < BaseTasks
     old_server_specs.create_credit_note_for_time_remaining
     server.charge_wallet
     server.charging_paperwork
+    billing_activity(server, old_server_specs)
+    AdminMailer.notify_automatic_invoice(server, old_server_specs).deliver_now
+  end
+
+  def billing_activity(server, old_server_specs)
+    server.create_activity :billing_for_onapp_change, owner: server.user,
+      params: {
+        old_disk_size: old_server_specs.disk_size,
+        old_memory: old_server_specs.memory,
+        old_cpus: old_server_specs.cpus,
+        new_disk_size: server.disk_size,
+        new_memory: server.memory,
+        new_cpus: server.cpus
+      }
   end
 
 end

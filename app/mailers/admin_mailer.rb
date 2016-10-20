@@ -35,7 +35,7 @@ class AdminMailer < ActionMailer::Base
     attachments[filename] = reporter.send(@report)
     mail(to: admin_user.email, subject: "#{ENV['BRAND_NAME']} Billing Reports")
   end
-  
+
   def cost_analysis(mailto = FINANCE_RECIPIENTS)
     time = Time.now
     @date_name = time.strftime("#{ActiveSupport::Inflector.ordinalize(time.day)} %B %Y")
@@ -107,6 +107,15 @@ class AdminMailer < ActionMailer::Base
     mail(
       to: ADMIN_RECIPIENTS,
       subject: "#{ENV['BRAND_NAME']}: Faulty server for user #{server.user.full_name}"
+    )
+  end
+
+  def notify_automatic_invoice(server, old_server_specs)
+    @server, @old_server_specs = server, old_server_specs
+    @link_to_onapp_server = "#{ENV['ONAPP_CP']}/virtual_machines/#{server.identifier}"
+    mail(
+      to: ADMIN_RECIPIENTS,
+      subject: "#{ENV['BRAND_NAME']}: VM parameters discrepancy - automatic billing for user #{server.user.full_name}"
     )
   end
 end
