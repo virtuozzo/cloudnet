@@ -222,11 +222,11 @@ RSpec.describe AdminMailer, :type => :mailer do
       it "renders the body" do
         expect(response).to match("Server automatic billing.")
         expect(response).to match(CGI.escapeHTML(server.user.full_name))
-        expect(response).to match("Old server parameters:")
+        expect(response).to match("<p>Old server parameters on #{ENV['BRAND_NAME']}:</p>")
         expect(response).to match("cpus: #{old_server_specs.cpus}")
         expect(response).to match("memory: #{old_server_specs.memory}")
         expect(response).to match("disk size: #{old_server_specs.disk_size}")
-        expect(response).to match("New server parameters:")
+        expect(response).to match(/New server parameters \(got from OnApp\):/)
         expect(response).to match("cpus: #{server.cpus}")
         expect(response).to match("memory: #{server.memory}")
         expect(response).to match("disk size: #{server.disk_size}")

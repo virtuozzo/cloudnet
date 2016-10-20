@@ -44,7 +44,7 @@ describe ServerTasks do
               'memory' => server.memory, 'total_disk_size' => server.disk_size } }
     before :each do
       allow_any_instance_of(Squall::VirtualMachine).to receive(:show).and_return(info)
-      expect(AdminMailer).to receive(:notify_automatic_invoice).with(server).
+      expect(AdminMailer).to receive(:notify_automatic_invoice).with(server, instance_of(Server)).
         and_return(double(deliver_now: true))
       FactoryGirl.create :payment_receipt, account: account
     end
