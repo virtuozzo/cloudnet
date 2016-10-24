@@ -257,8 +257,10 @@ class Server < ActiveRecord::Base
 
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
-  rescue Exception => e
+  rescue => e
     ErrorLogging.new.track_exception(e, extra: { source: 'Server#refresh_usage', server_id: id })
+    # raise error - for not invoicing when user suspended at onapp or server does not exist
+    raise e if e.is_a?(Faraday::ClientError) && e.to_s =~ /[401,404]/
   end
 
   def inform_if_bandwidth_exceeded
