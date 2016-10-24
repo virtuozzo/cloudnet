@@ -257,6 +257,8 @@ class Server < ActiveRecord::Base
 
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
+  rescue Exception => e
+    ErrorLogging.new.track_exception(e, extra: { source: 'Server#refresh_usage', server_id: id })
   end
 
   def inform_if_bandwidth_exceeded
