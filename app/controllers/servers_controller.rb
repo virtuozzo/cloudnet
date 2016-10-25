@@ -176,7 +176,7 @@ class ServersController < ServerCommonController
   end
 
   def calculate_credit
-    @server.refresh_usage
+    @server.refresh_usage rescue nil # always prepare data
     credit = @server.generate_credit_item(CreditNote.hours_till_next_invoice(current_user.account))
     paid_bandwidth = Billing::BillingBandwidth.new(@server).bandwidth_usage
     badwidth_price = @server.location.price_bw
