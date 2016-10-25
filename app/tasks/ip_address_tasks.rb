@@ -24,11 +24,11 @@ class IpAddressTasks < BaseTasks
         gateway: ip_attrs['gateway'].to_s,
         primary: primary
       )
-      Rails.cache.delete([Server::IP_ADDRESS_ADDED_CACHE, server.id]) if server_ip.new_record?
+      server.ip_requested = server.ip_requested - 1 if server_ip.new_record?
       server_ip.save
     end
     # Finally, remove any non-existing IP addresses
-    # server.server_ip_addresses.where(["identifier NOT IN (?)", ip_addresses.map {|ip| ip["id"].to_s}]).map(&:destroy)
+    server.server_ip_addresses.where(["identifier NOT IN (?)", ip_addresses.map {|ip| ip["id"].to_s}]).map(&:destroy)
   end
   
   def assign_ip(server, squall)

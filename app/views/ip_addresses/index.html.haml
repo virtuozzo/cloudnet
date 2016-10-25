@@ -35,7 +35,7 @@
               %div{data: {"ng-if" => "ip.primary != true"}}
                 = link_to "Remove", "/servers/{{ #{@server.id} }}/ip_addresses/{{ ip.id }}", method: :delete, data: { "confirm" => "Are you sure you want to remove the IP address {{ ip.address }} ?" }
                 
-          - if Rails.cache.read([Server::IP_ADDRESS_ADDED_CACHE, @server.id])
+          - if @server.ip_requested > 0
             %tr{data: {"ng-hide" => "addedNewIp()"}}
               %td{colspan: "6"}= "Loading..."
           - else
