@@ -32,7 +32,7 @@ $ ->
 
         </div>
       </div>
-      """
+      """ if template
   )
 
   statsGraph = () ->
@@ -108,7 +108,7 @@ $ ->
     graph.render()
 
   # Add total to center of pies
-  addTotal = (statistic, key, context) ->
+  addTotal = (statistic, key, context, showTip = true) ->
     width = $jgChart.width()
     total = context.usage
     unit  = context.unit
@@ -121,7 +121,7 @@ $ ->
       .on("click", (d) ->
         url = "#{window.location.protocol}//#{window.location.host}/servers/#{d.data.id}"
         $(window.location).attr('href', url)
-      )
+      ) if showTip
     pie.append('text')
       .classed({'total-unit': true})
       .attr("dy", ".35em")
@@ -148,13 +148,22 @@ $ ->
       _.each statistic, (split) ->
         split.unit = context.unit
         return
+      
+      if statistic.length == 0
+        showTip = false
+        totalUsage = {}
+        totalUsage[key] = totalUsage['usage'] = stats.stats[key].usage
+        totalUsage['name'] = "Total #{key.replace(/_/g, ' ')}"
+        svgData = [totalUsage]
+      else
+        svgData = statistic
 
-      svg.datum(statistic)
+      svg.datum(svgData)
       .transition().duration(1200)
       .call(chart)
 
       nv.utils.windowResize(chart.update)
-      addTotal(statistic, key, context)
+      addTotal(statistic, key, context, showTip)
       return chart
 
   addTickets = (ticket) ->
@@ -198,7 +207,7 @@ $ ->
 
   _.each keys, (key) ->
     split = stats.stats[key].split
-    if split.length == 0
+    if split.length == 0 && stats.stats[key].usage == 0
       html =
         """
           <div class="no-data">

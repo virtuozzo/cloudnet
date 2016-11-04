@@ -10,11 +10,12 @@ class DashboardStats
     }
 
     servers = user.servers
+    include_split = servers.size <= 10
     servers.find_each do |server|
-      add_server_stat(stats[:memory], server, :memory)
-      add_server_stat(stats[:cpus], server, :cpus)
-      add_server_stat(stats[:disk_size], server, :disk_size)
-      add_server_stat(stats[:bandwidth], server, :bandwidth)
+      add_server_stat(stats[:memory], server, :memory, include_split)
+      add_server_stat(stats[:cpus], server, :cpus, include_split)
+      add_server_stat(stats[:disk_size], server, :disk_size, include_split)
+      add_server_stat(stats[:bandwidth], server, :bandwidth, include_split)
       add_cpu_stats(stats, server)
     end
 
@@ -44,10 +45,10 @@ class DashboardStats
 
   private
 
-  def self.add_server_stat(hash, server, stat)
+  def self.add_server_stat(hash, server, stat, include_split)
     usage = server.send(stat)
     hash[:usage] += usage
-    hash[:split] << server
+    hash[:split] << server if include_split
   end
 
   def self.add_cpu_stats(stats, server)
