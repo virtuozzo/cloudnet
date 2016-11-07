@@ -52,6 +52,6 @@ class DashboardStats
   end
 
   def self.add_cpu_stats(stats, server)
-    stats[:cpu_stats] << { id: server.id, name: server.name, cpu_usages: ServerUsage.cpu_usages(server) }
+    stats[:cpu_stats] << { id: server.id, name: server.name, cpu_usages: ServerUsage.cpu_usages(server, 30) }
   end
 end
