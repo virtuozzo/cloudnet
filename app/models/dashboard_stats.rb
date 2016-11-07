@@ -9,13 +9,15 @@ class DashboardStats
       cpu_stats: []
     }
 
-    servers = user.servers
+    servers = user.servers.order(id: :asc)
     include_split = servers.size <= 10
     servers.find_each do |server|
       add_server_stat(stats[:memory], server, :memory, include_split)
       add_server_stat(stats[:cpus], server, :cpus, include_split)
       add_server_stat(stats[:disk_size], server, :disk_size, include_split)
       add_server_stat(stats[:bandwidth], server, :bandwidth, include_split)
+    end
+    servers.last(10).each do |server|
       add_cpu_stats(stats, server)
     end
 
