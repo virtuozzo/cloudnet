@@ -30,7 +30,7 @@ ActiveAdmin.register User do
   filter :otp_mandatory
   filter :status
   filter :unconfirmed_email
-  filter :servers
+  filter :servers_name, as: :string, label: 'Server Name'
   filter :keys
 
   filter :current_sign_in_ip
@@ -46,6 +46,8 @@ ActiveAdmin.register User do
   filter :confirmed_at
   filter :current_sign_in_at
   filter :last_sign_in_at
+  
+  remove_filter :keys
 
   index do
     column :id

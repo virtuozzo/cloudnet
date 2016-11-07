@@ -22,8 +22,11 @@ ActiveAdmin.register Server do
   filter :identifier, label: 'Onapp identifier'
   filter :name
   filter :hostname
-  filter :unscoped_location, label: "Location"
-  filter :unscoped_user, label: "User"
+  filter :location, collection: proc { 
+    selected_location = params[:q].blank? ? nil : params[:q][:location_id_eq]
+    grouped_options_for_select([["Active", false], ["Hidden", true]].collect { |l| [l[0], Location.with_deleted.order('provider ASC').where(hidden: l[1]).load.collect { |l| [l.provider_label, l.id] } ] }, selected_location)
+  }
+  filter :user_full_name, as: :string, label: 'User Name'
 
   filter :state
   filter :built

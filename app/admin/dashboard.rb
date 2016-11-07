@@ -115,9 +115,9 @@ ActiveAdmin.register_page 'Dashboard' do
       column do
         panel 'Servers By Location/Provider' do
           table do
-            Location.all.map do |location|
+            Location.all.order('provider ASC').map do |location|
               tr do
-                td link_to location.to_s, admin_location_path(location)
+                td link_to location.provider_label, admin_location_path(location)
                 td location.servers.count
               end
             end
