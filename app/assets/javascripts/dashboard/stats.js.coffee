@@ -77,14 +77,24 @@ $ ->
     colours = {}
     $('.nv-legend-text').each () ->
       colours[$(this).text()] = $(this).prev('circle').css('fill')
-
+    
+    randomColor = (i) ->
+      colors = d3.scale.category20().range()
+      colors[i % colors.length-1]
+    
+    colourSelector = (server) ->
+      if @servers.length > Object.keys(colours).length
+        return randomColor(server.id)
+      else
+        return colours[server.name]
+    
     # Create multiple charts, one for each server, to be included using the compose() method
     lines = []
     _.each @servers, (server) ->
       lines.push({
         name: server.name,
         yData: (datapoint) -> datapoint[server.name],
-        colour: colours[server.name]
+        colour: colourSelector(server)
       })
 
     # Sum all the servers usages for a given date
