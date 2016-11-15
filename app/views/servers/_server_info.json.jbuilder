@@ -10,8 +10,7 @@ json.extract!(
   :root_password,
   :cpus,
   :disk_size,
-  :bandwidth,
-  :ip_addresses
+  :bandwidth
 )
 
 json.created_at server.created_at.iso8601

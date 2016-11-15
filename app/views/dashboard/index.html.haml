@@ -1,9 +1,10 @@
 - breadcrumb :dashboard
 - title "Dashboard"
 
-%script
-  - r = render partial: 'stats.json', formats: [:json], locals: { stats: @stats }
-  = raw "var stats = #{r}" 
+- cache(cache_key_for_dashboard('views'), expires_in: 12.hours) do
+  %script
+    - r = render partial: 'stats.json', formats: [:json], locals: { stats: @stats }
+    = raw "var stats = #{r}" 
 
 - if current_user && current_user.trial_credit_eligible?
   %div.alert.alert-info
