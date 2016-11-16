@@ -42,7 +42,8 @@ RSpec.describe IpAddressesController, :type => :controller do
           expect(response).to redirect_to(server_ip_addresses_path(@server))
           expect(flash[:notice]).to eq('IP address has been requested and will be added shortly')
           @server.reload
-          expect(@server.ip_addresses).to eq(2)
+          expect(@server.ip_requested).to eq(1)
+          expect(@server.ip_addresses).to eq(3)
           assert_equal 1, CreateSiftEvent.jobs.size
         end
       end

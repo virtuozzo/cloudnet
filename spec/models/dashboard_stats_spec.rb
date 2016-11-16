@@ -2,9 +2,10 @@ require 'rails_helper'
 
 describe DashboardStats do
   let (:user) { FactoryGirl.create(:user) }
+  let (:servers) { user.servers }
 
   it 'should have the basic elemental structure' do
-    stats = DashboardStats.gather_stats(user)
+    stats = DashboardStats.gather_stats(user, servers)
 
     expect(stats.key?(:memory)).to be true
     expect(stats.key?(:cpus)).to be true
@@ -14,7 +15,7 @@ describe DashboardStats do
   end
 
   it 'should have zero totals and elements initially' do
-    stats = DashboardStats.gather_stats(user)
+    stats = DashboardStats.gather_stats(user, servers)
 
     %w(memory cpus disk_size bandwidth).each do |e|
       expect(stats[e.to_sym][:usage]).to eq(0)
@@ -26,7 +27,7 @@ describe DashboardStats do
 
   it 'should respond to a single element added in servers' do
     server = FactoryGirl.create(:server, user: user, memory: 256, cpus: 8, disk_size: 20, bandwidth: 1000)
-    stats = DashboardStats.gather_stats(user)
+    stats = DashboardStats.gather_stats(user, servers)
 
     expect(stats[:memory][:usage]).to     eq(256)
     expect(stats[:cpus][:usage]).to       eq(8)
@@ -44,7 +45,7 @@ describe DashboardStats do
     server2 = FactoryGirl.create(:server, user: user, memory: 2048, cpus: 1, disk_size: 20, bandwidth: 3000)
     server3 = FactoryGirl.create(:server, user: user, memory: 2048, cpus: 5, disk_size: 25, bandwidth: 5000)
     server4 = FactoryGirl.create(:server, memory: 2048, cpus: 5, disk_size: 25, bandwidth: 5000) # This one shouldn't be included because it's a different user
-    stats = DashboardStats.gather_stats(user)
+    stats = DashboardStats.gather_stats(user, servers)
 
     expect(stats[:memory][:usage]).to     eq(5120)
     expect(stats[:cpus][:usage]).to       eq(14)
@@ -65,7 +66,7 @@ describe DashboardStats do
 
   it "should have a total of zero monthly costs if user doesn't have any" do
     expect(user.servers.count).to eq(0)
-    stats = DashboardStats.gather_costs(user)
+    stats = DashboardStats.gather_costs(user, servers)
 
     expect(stats[:memory][:monthly]).to eq(0)
     expect(stats[:cpus][:monthly]).to eq(0)
@@ -77,7 +78,7 @@ describe DashboardStats do
     s1 = FactoryGirl.create(:server, user: user, memory: 1024, cpus: 8, disk_size: 10, bandwidth: 1000)
     s2 = FactoryGirl.create(:server, user: user, memory: 2048, cpus: 1, disk_size: 20, bandwidth: 3000)
     s3 = FactoryGirl.create(:server, user: user, memory: 2048, cpus: 5, disk_size: 25, bandwidth: 5000)
-    stats = DashboardStats.gather_costs(user)
+    stats = DashboardStats.gather_costs(user, servers)
 
     hours = Account::HOURS_MAX
     expect(stats[:memory][:monthly]).to eq([s1, s2, s3].sum { |s| s.ram_invoice_item(hours)[:net_cost] })

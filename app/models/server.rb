@@ -47,7 +47,7 @@ class Server < ActiveRecord::Base
   TYPE_PREPAID  = 'prepaid'
   TYPE_PAYG     = 'payg'
 
-  IP_ADDRESS_ADDED_CACHE = "ip_address_added_cache"
+  NEW_IP_REQUESTED_CACHE = "new_ip_requested_cache"
   BACKUP_CREATED_CACHE = "backup_created_cache"
 
   def self.provisioner_roles
@@ -88,6 +88,23 @@ class Server < ActiveRecord::Base
 
   def to_s
     "#{name}, #{hostname} (Belongs to: #{user})"
+  end
+  
+  def ip_requested
+    ip_requested_cache = Rails.cache.read([Server::NEW_IP_REQUESTED_CACHE, id])
+    ip_requested_cache.nil? ? 0 : ip_requested_cache
+  end
+  
+  def ip_requested=(count)
+    if count > 0
+      Rails.cache.write([Server::NEW_IP_REQUESTED_CACHE, id], count)
+    else
+      Rails.cache.delete([Server::NEW_IP_REQUESTED_CACHE, id])
+    end
+  end
+  
+  def ip_addresses
+    server_ip_addresses.count + ip_requested
   end
 
   def primary_ip_address
@@ -144,6 +161,7 @@ class Server < ActiveRecord::Base
 
   # Notify admin if server has no storage attached or no IPs
   def notify_fault(no_disk, no_ip)
+    add_remove_tags_by_hash(no_disk: no_disk, no_ip: no_ip)
     return unless no_disk || no_ip
     days_since_creation = ((Time.now - created_at) / 1.day).floor
     last_warning_threshold = case fault_reported_at
@@ -256,6 +274,10 @@ class Server < ActiveRecord::Base
 
   def refresh_usage
     RefreshServerUsages.new.refresh_server_usages(self)
+  rescue => e
+    ErrorLogging.new.track_exception(e, extra: { source: 'Server#refresh_usage', server_id: id })
+    # raise error - for not invoicing when user suspended at onapp or server does not exist
+    raise e if e.is_a?(Faraday::ClientError) && e.to_s =~ /[401,404]/
   end
 
   def inform_if_bandwidth_exceeded

@@ -32,6 +32,10 @@ class Location < ActiveRecord::Base
   def to_s
     "#{country_name} (#{country}), #{city}, #{provider}"
   end
+  
+  def provider_label
+    "#{provider} (#{city}), #{country}, #{country_name}"
+  end
 
   def hourly_price(memory = 512, cpu = 1, disk = 20)
     (memory * price_memory) + (cpu * price_cpu) + (disk * price_disk)

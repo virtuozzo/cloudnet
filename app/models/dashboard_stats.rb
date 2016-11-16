@@ -1,5 +1,5 @@
 class DashboardStats
-  def self.gather_stats(user)
+  def self.gather_stats(user, servers)
     stats = {
       memory:    { usage: 0, split: [], unit: 'MB' },
       cpus:      { usage: 0, split: [], unit: 'Cores' },
@@ -9,19 +9,21 @@ class DashboardStats
       cpu_stats: []
     }
 
-    servers = user.servers
-    servers.find_each do |server|
-      add_server_stat(stats[:memory], server, :memory)
-      add_server_stat(stats[:cpus], server, :cpus)
-      add_server_stat(stats[:disk_size], server, :disk_size)
-      add_server_stat(stats[:bandwidth], server, :bandwidth)
+    include_split = servers.size <= 10
+    servers.each do |server|
+      add_server_stat(stats[:memory], server, :memory, include_split)
+      add_server_stat(stats[:cpus], server, :cpus, include_split)
+      add_server_stat(stats[:disk_size], server, :disk_size, include_split)
+      add_server_stat(stats[:bandwidth], server, :bandwidth, include_split)
+    end
+    servers.last(10).each do |server|
       add_cpu_stats(stats, server)
     end
 
     stats
   end
 
-  def self.gather_costs(user)
+  def self.gather_costs(user, servers)
     hours = Account::HOURS_MAX
 
     costs = {
@@ -31,8 +33,7 @@ class DashboardStats
       bandwidth: { monthly: 0 }
     }
 
-    servers = user.servers
-    servers.find_each do |server|
+    servers.each do |server|
       costs[:memory][:monthly]    += server.ram_invoice_item(hours)[:net_cost]
       costs[:cpus][:monthly]      += server.cpu_invoice_item(hours)[:net_cost]
       costs[:disk_size][:monthly] += server.disk_invoice_item(hours)[:net_cost]
@@ -44,13 +45,13 @@ class DashboardStats
 
   private
 
-  def self.add_server_stat(hash, server, stat)
+  def self.add_server_stat(hash, server, stat, include_split)
     usage = server.send(stat)
     hash[:usage] += usage
-    hash[:split] << server
+    hash[:split] << server if include_split
   end
 
   def self.add_cpu_stats(stats, server)
-    stats[:cpu_stats] << { id: server.id, name: server.name, cpu_usages: ServerUsage.cpu_usages(server) }
+    stats[:cpu_stats] << { id: server.id, name: server.name, cpu_usages: ServerUsage.cpu_usages(server, 30) }
   end
 end

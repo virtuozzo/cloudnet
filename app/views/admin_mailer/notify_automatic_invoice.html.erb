@@ -1,0 +1,44 @@
+<p>Server automatic billing warning.</p>
+
+<p>The server of the <%= link_to @server.user.full_name, admin_user_url(@server.user) %> has had different parameters at OnApp and Cloud.net.
+That situation is now corrected and new invoice was generated.
+</p>
+
+<p>Old server parameters on <%= ENV['BRAND_NAME'] %>:</p>
+<ul>
+  <li>
+    cpus: <%= @old_server_specs.cpus %>
+  </li>
+  <li>
+    memory: <%= @old_server_specs.memory %>
+  </li>
+  <li>
+    disk size: <%= @old_server_specs.disk_size %>
+  </li>
+</ul>
+<p>New server parameters (got from OnApp):</p>
+<ul>
+  <li>
+    cpus: <%= @server.cpus %>
+  </li>
+  <li>
+    memory: <%= @server.memory %>
+  </li>
+  <li>
+    disk size: <%= @server.disk_size %>
+  </li>
+</ul>
+
+<p> Server links: </p>
+<ul>
+  <li>
+    Server on <%= ENV['BRAND_NAME'] %> admin: <%= link_to @server.hostname, admin_server_url(@server) %>
+  </li>
+  <li>
+    Server on OnApp: <a href="<%= @link_to_onapp_server %>"><%= @link_to_onapp_server %></a>
+  </li>
+</ul>
+
+<p>Thanks,</p>
+
+<p><%= ENV['BRAND_NAME'] %> Team</p>

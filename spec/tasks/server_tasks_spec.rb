@@ -44,6 +44,8 @@ describe ServerTasks do
               'memory' => server.memory, 'total_disk_size' => server.disk_size } }
     before :each do
       allow_any_instance_of(Squall::VirtualMachine).to receive(:show).and_return(info)
+      expect(AdminMailer).to receive(:notify_automatic_invoice).with(server, instance_of(Server)).
+        and_return(double(deliver_now: true))
       FactoryGirl.create :payment_receipt, account: account
     end
 
@@ -52,6 +54,8 @@ describe ServerTasks do
       task.perform(:refresh_server, server.user.id, server.id)
       expect(account.invoices.count).to eq 1
       expect(account.credit_notes.count).to eq 1
+      a_params = server.activities.first[:parameters]
+      expect(a_params[:old_memory] < a_params[:new_memory]).to be_truthy
     end
 
     it 'creates credit_note and invoice if cpu changed' do
@@ -59,6 +63,8 @@ describe ServerTasks do
       task.perform(:refresh_server, server.user.id, server.id)
       expect(account.invoices.count).to eq 1
       expect(account.credit_notes.count).to eq 1
+      a_params = server.activities.first[:parameters]
+      expect(a_params[:old_cpus] < a_params[:new_cpus]).to be_truthy
     end
 
     it 'creates credit_note and invoice if disk_size changed' do
@@ -66,6 +72,8 @@ describe ServerTasks do
       task.perform(:refresh_server, server.user.id, server.id)
       expect(account.invoices.count).to eq 1
       expect(account.credit_notes.count).to eq 1
+      a_params = server.activities.first[:parameters]
+      expect(a_params[:old_disk_size] < a_params[:new_disk_size]).to be_truthy
     end
   end
 

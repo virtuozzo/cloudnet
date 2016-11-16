@@ -179,13 +179,59 @@ RSpec.describe AdminMailer, :type => :mailer do
       end
 
       it "renders the body" do
-        onapp_link = assigns(:link_to_onapp_server)
         expect(response).to match("Server issues warning.")
         expect(response).to match(CGI.escapeHTML(server.user.full_name))
         expect(response).to match("storage attached")
         expect(response).to match("and no ip address")
         expect(response).to match(admin_server_url(server))
-        expect(response).to match(onapp_link)
+        expect(response).to match(assigns(:link_to_onapp_server))
+      end
+    end
+  end
+
+  describe 'notify automatic invoice' do
+    let(:server) { FactoryGirl.create(:server) }
+    let(:old_server_specs) { Server.new server.as_json }
+    let(:mail) { AdminMailer.notify_automatic_invoice(server, old_server_specs) }
+
+    it "fills mailer queue" do
+      mail.deliver_now
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("#{ENV['BRAND_NAME']}: VM parameters discrepancy - automatic billing for user #{server.user.full_name}")
+      expect(mail.to).to eq(ENV['MAILER_ADMIN_RECIPIENTS'].delete(' ').split(","))
+      expect(mail.from).to eq([from.address])
+    end
+
+    context "rendering" do
+      before(:each) do
+        old_server_specs.cpus = server.cpus + 1
+        old_server_specs.memory = server.memory + 100
+        old_server_specs.disk_size = server.disk_size + 10
+        send_mail :notify_automatic_invoice, server, old_server_specs
+      end
+
+      it "assigns variables" do
+        expect(assigns(:server)).to eq server
+        expect(assigns(:link_to_onapp_server)).to be
+        expect(assigns(:old_server_specs)).to eq old_server_specs
+      end
+
+      it "renders the body" do
+        expect(response).to match("Server automatic billing.")
+        expect(response).to match(CGI.escapeHTML(server.user.full_name))
+        expect(response).to match("<p>Old server parameters on #{ENV['BRAND_NAME']}:</p>")
+        expect(response).to match("cpus: #{old_server_specs.cpus}")
+        expect(response).to match("memory: #{old_server_specs.memory}")
+        expect(response).to match("disk size: #{old_server_specs.disk_size}")
+        expect(response).to match(/New server parameters \(got from OnApp\):/)
+        expect(response).to match("cpus: #{server.cpus}")
+        expect(response).to match("memory: #{server.memory}")
+        expect(response).to match("disk size: #{server.disk_size}")
+        expect(response).to match(admin_server_url(server))
+        expect(response).to match(assigns(:link_to_onapp_server))
       end
     end
   end

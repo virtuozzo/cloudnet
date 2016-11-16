@@ -20,7 +20,7 @@ ActiveAdmin.register Location do
     end
   end
 
-  filter :servers
+  filter :servers_name, as: :string, label: 'Server Name'
   filter :region
   filter :certificates
   filter :provider
@@ -170,7 +170,7 @@ ActiveAdmin.register Location do
       end
       
       def pingdom_servers_raw
-        UptimeTasks.new.perform(:pingdom_servers)
+        UptimeTasks.new.perform(:pingdom_servers).sort
       end
 
       def update_selected(options)

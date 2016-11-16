@@ -3,6 +3,8 @@ ActiveAdmin.register Coupon do
 
   permit_params :coupon_code, :duration_months, :percentage, :active, :expiry_date
   
+  remove_filter :accounts, :invoices, :credit_notes
+  
   index do
     column :id
     column :coupon_code

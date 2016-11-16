@@ -1,6 +1,11 @@
 ActiveAdmin.register Ticket do
   actions :all, except: [:new, :edit, :destroy]
   permit_params :status
+  
+  preserve_default_filters!
+  filter :user_full_name, as: :string, label: 'User Name'
+  filter :server_name, as: :string, label: 'Server Name'
+  remove_filter :activities, :ticket_replies, :user, :server
 
   sidebar :control_panel_links do
     ul do

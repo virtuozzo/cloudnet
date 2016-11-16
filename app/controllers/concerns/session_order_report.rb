@@ -6,8 +6,8 @@ module SessionOrderReport
     #@server_params =  Rack::Utils.parse_nested_query(
     #                     URI::parse(session[:user_return_to]).query).symbolize_keys
     @server_params = session[:server_wizard_params] || {}
-    @location = Location.find(@server_params[:location_id])
-    set_price
+    @location = Location.find(@server_params[:location_id]) unless @server_params.blank?
+    set_price if @location
   end
   
   def set_price

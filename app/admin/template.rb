@@ -3,6 +3,14 @@ ActiveAdmin.register Template do
   actions :all, except: [:new, :destroy]
 
   permit_params :os_type, :os_distro, :identifier, :name, :min_memory, :min_disk, :hidden, :hourly_cost
+  
+  preserve_default_filters!
+  filter :location, collection: proc { 
+    selected_location = params[:q].blank? ? nil : params[:q][:location_id_eq]
+    grouped_options_for_select([["Active", false], ["Hidden", true]].collect { |l| [l[0], Location.with_deleted.order('provider ASC').where(hidden: l[1]).load.collect { |l| [l.provider_label, l.id] } ] }, selected_location) 
+  }
+  filter :servers_name, as: :string, label: 'Server Name'
+  remove_filter :servers
 
   sidebar :control_panel_links do
     ul do

@@ -4,7 +4,7 @@ json.stats do
       json.usage stats[item][:usage]
       json.split do
         json.array! stats[item][:split].each do |server|
-          json.partial! 'servers/server', server: server
+          json.partial! 'servers/server_info', server: server
           json.usage server.send(item)
         end
       end
