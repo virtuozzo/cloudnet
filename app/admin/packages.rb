@@ -7,6 +7,18 @@ ActiveAdmin.register Package do
     grouped_options_for_select([["Active", false], ["Hidden", true]].collect { |l| [l[0], Location.with_deleted.order('provider ASC').where(hidden: l[1]).load.collect { |l| [l.provider_label, l.id] } ] }, selected_location)
   }
   
+  index do
+    column :id
+    column :location
+    column :memory
+    column :cpus
+    column :disk_size
+    column :ip_addresses
+    column :created_at
+    column :updated_at
+    actions
+  end
+  
   form do |f|
     f.semantic_errors *f.object.errors.keys
     
