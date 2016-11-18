@@ -33,9 +33,9 @@
       = @wizard_object.errors.full_messages.join(', ')
   = f.hidden_field :current_step, value: @wizard_object.current_step
   = render partial: 'servers/location', locals: {f: f}
-  = render partial: 'servers/resources', locals: {f: f}
-  = render partial: 'servers/template', locals: {f: f}
   = render partial: 'servers/details', locals: {f: f}
+  = render partial: 'servers/template', locals: {f: f}
+  = render partial: 'servers/resources', locals: {f: f}
 
 = hidden_field_tag :hourly
 = hidden_field_tag :monthly

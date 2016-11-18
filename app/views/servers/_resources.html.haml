@@ -1,24 +1,44 @@
 - is_budget_vps = @server && @wizard_object.location && @wizard_object.location.budget_vps
 .jg-widget-content.resource-tabs{data: {params: "{#{@wizard_object.string_wizard_params}}"}}
   .jg-widget-header.pure-g.jg-form-withTabs.clearfix
-    %h2.jg-icon.icon-cloud.pure-u= @server ? "Select Resources" : "Select Package"
+    %h2.jg-icon.icon-cloud.pure-u Select Resources
     - if is_budget_vps
       %em.pure-u-1.alert.alert-warning.edit-server-warning Editing VPS server resources is not currently supported at this location
   .jg-widget-body
-    - if @server
-      %span{:class => ("hidden" if is_budget_vps)}
-        %ul#resourceTabs.nav.nav-tabs
-          %li{:class => (activate_slider_tab ? nil : 'active')}
-            %a{href: '#packages', data: {'toggle' => 'tab'}} Packages
-          - unless @wizard_object.location && @wizard_object.location.budget_vps
-            %li{:class => ("active" if activate_slider_tab)}
-              %a{href: '#chooseyourown', data: {'toggle' => 'tab'}}
-                = @server ? "Update resources" : "Choose your own"
-        .tab-content
-          #packages.tab-pane.fade.in{:class => ('active' unless activate_slider_tab)}
-            #location-packages= render partial: "servers/packages", locals: {f: f}
-          #chooseyourown.tab-pane.fade.in{:class => ('active' if activate_slider_tab)}
-            = render partial: "servers/sliders", locals: {f: f}
-    - else
-      #location-packages= render partial: "servers/packages", locals: {f: f}
-      #location-sliders{class: 'hidden'}= render partial: "servers/sliders", locals: {f: f}
+    %span{:class => ("hidden" if is_budget_vps)}
+      %ul#resourceTabs.nav.nav-tabs
+        %li.packages-tab{:class => (activate_slider_tab ? nil : 'active')}
+          %a{href: '#packages', data: {'toggle' => 'tab'}} Packages
+        -# if @wizard_object.location && !@wizard_object.location.budget_vps
+        %li.slider-tab{:class => ("active" if activate_slider_tab)}
+          %a{href: '#chooseyourown', data: {'toggle' => 'tab'}}
+            = @server ? "Update resources" : "Choose your own"
+      .tab-content
+        #packages.tab-pane.fade.in{:class => ('active' unless activate_slider_tab)}
+          #location-packages= render partial: "servers/packages", locals: {f: f}
+        #chooseyourown.tab-pane.fade.in{:class => ('active' if activate_slider_tab)}
+          = render partial: "servers/sliders", locals: {f: f}
+    
+    .jg-widget-footer.actions.clearfix
+      .resources-total.pure-g.no-costs
+        .resources-cost.clearfix
+          %span.pure-u
+            Total Cost:
+          %span.total-cost.pure-u
+            %b#hourly-price $0.000000
+            per hour,
+            %b#monthly-price $0.00
+            per month.
+            - if current_user
+              Today you will be charged
+              %b.bs-tooltip#today-price{"data-toggle" => "tooltip", "data-placement" => "top", "title" => "You currently have #{current_user.account.hours_till_next_invoice} hours remaining in this billing cycle (next billing date is #{current_user.account.next_invoice_date.to_date.to_formatted_s(:long)} at 1:00am GMT)"} $0.00
+              - if @server && !@server.new_record?
+                (includes reimbursement for old server)
+          %span.pure-u
+            (Coupon Discounts & EU VAT are added on the final step if applicable)
+
+      %ul.jg-widget-controls
+        - if @server
+          %li= f.button @wizard_object.last_step? ? "Update Server" : "Update Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}
+        - else
+          %li= f.button @wizard_object.last_step? ? "Create Server" : "Create Server", {class: 'btn jg-submit-button', id: "server_wizard_next_step"}

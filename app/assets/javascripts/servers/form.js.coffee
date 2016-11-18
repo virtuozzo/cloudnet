@@ -37,6 +37,11 @@ $ ->
   setDate()
   timeTillNextMonth()
   
+  $('#resourceTabs a').click (e) ->
+    e.preventDefault()
+    $(this).tab('show')
+    $(this).parent('li').addClass('active')
+  
   $('#templateTabs a').click (e) ->
     e.preventDefault()
     $(this).tab('show')
@@ -111,7 +116,7 @@ $ ->
 
     $("#inclusive-bandwidth").html "#{bandwidth.toFixed(1)} GB"
 
-  setPrices = ->    
+  setPrices = ->
     hourly_price = 0
     hourly_price += $memory.val() * selected_location.prices.price_memory
     hourly_price += $cpus.val() * selected_location.prices.price_cpu
@@ -134,6 +139,10 @@ $ ->
     else
       today_price = hourly_price * hours_remaining
     
+    $(".memory-slider .price").html selected_location.prices.price_memory
+    $(".cpu-slider .price").html selected_location.prices.price_cpu
+    $(".disk-slider .price").html selected_location.prices.price_disk
+    
     $("#hourly-price").html formatCurrency(hourly_price)
     $("#monthly-price").html formatCurrency(monthly_price, 2)
     $("#today-price").html formatCurrency(today_price, 2)
@@ -143,6 +152,7 @@ $ ->
     
     setBandwidth()
     setPrices()
+    hideSlider()
 
     resources =
       memory:
@@ -159,6 +169,13 @@ $ ->
     _.each keys, (key) ->
       $resourcesSummary.find("b.resources-#{key}").text("#{resources[key].amount} #{resources[key].unit},")
 
+  hideSlider = ->
+    if selected_location.budget_vps
+      $('#resourceTabs li.packages-tab a').trigger('click')
+      $('#resourceTabs li.slider-tab').hide()
+    else
+      $('#resourceTabs li.slider-tab').show()
+  
   setTemplateName = (template) ->
     $resourcesSummary.find('h4').removeClass (index, css) ->
       (css.match(/\bos-\S+/g) or []).join " "
