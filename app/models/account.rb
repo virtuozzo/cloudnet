@@ -162,7 +162,7 @@ class Account < ActiveRecord::Base
   end
   
   def max_minfraud_score
-    billing_cards.map{|card| card.fraud_score.round(2).to_f unless card.fraud_score.nil?}.max
+    billing_cards.map{|card| card.fraud_score.round(2).to_f unless card.fraud_score.nil?}.compact.max
   end
 
   private
