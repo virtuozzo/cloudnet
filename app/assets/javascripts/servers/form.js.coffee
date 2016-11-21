@@ -139,9 +139,9 @@ $ ->
     else
       today_price = hourly_price * hours_remaining
     
-    $(".memory-slider .price").html selected_location.prices.price_memory
-    $(".cpu-slider .price").html selected_location.prices.price_cpu
-    $(".disk-slider .price").html selected_location.prices.price_disk
+    $("#memory-price").html formatCurrency(($memory.val() * selected_location.prices.price_memory * 672).toFixed(2), 2)
+    $("#cpu-price").html formatCurrency(($cpus.val() * selected_location.prices.price_cpu * 672).toFixed(2), 2)
+    $("#disk-price").html formatCurrency(($disk.val() * selected_location.prices.price_disk * 672).toFixed(2), 2)
     
     $("#hourly-price").html formatCurrency(hourly_price)
     $("#monthly-price").html formatCurrency(monthly_price, 2)
@@ -188,7 +188,7 @@ $ ->
       template = provisionerTemplates['linux-docker'][0]
     @selectedTemplate = template
     $("#template-hourly-price").html formatCurrency(template.hourly_cost)
-    $("#template-monthly-price").html formatCurrency(template.hourly_cost * max_hours)
+    $("#template-monthly-price").html formatCurrency(template.hourly_cost * max_hours, 2)
 
   updateSliderRange = (options) ->
     if options?.max isnt null and options?.min isnt null

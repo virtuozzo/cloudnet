@@ -5,8 +5,8 @@
         .resource-unit
           = f.label :memory, {class: 'pure-u-1 jg-mandatory'}
           %span.total-resource-cost
-            %b.price
-            = " / MB / hour"
+            %b#memory-price $0.00
+            = " per month"
       .pure-u-1.pure-u-md-3-5
         #memory-slider.wizard-slider
       .pure-u-1.pure-u-md-1-5
@@ -19,8 +19,8 @@
         .resource-unit
           = f.label :cpus, 'CPUs', {class: 'pure-u-1 jg-mandatory'}
           %span.total-resource-cost
-            %b.price
-            = " / Core / hour"
+            %b#cpu-price $0.00
+            = " per month"
       .pure-u-1.pure-u-md-3-5
         #cpus-slider.wizard-slider
       .pure-u-1.pure-u-md-1-5
@@ -34,8 +34,8 @@
         .resource-unit
           = f.label :disk_size, {class: 'pure-u-1 jg-mandatory'}
           %span.total-resource-cost
-            %b.price
-            = " / GB / hour"
+            %b#disk-price $0.00
+            = " per month"
       .pure-u-1.pure-u-md-3-5
         #disk_size-slider.wizard-slider
       .pure-u-1.pure-u-md-1-5
