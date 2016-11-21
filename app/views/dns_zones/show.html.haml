@@ -26,7 +26,7 @@
       $(this).find('.jg-back-button').first().attr('disabled','disabled');
       $(this).find('.jg-submit-button').first().attr('disabled','disabled');
     ).on("ajax:success", (e, data, status, xhr) ->
-      window.location.reload()
+      document.location.reload(true)
     ).on "ajax:error", (e, xhr, status, error) ->
       errors = xhr.responseJSON.errors
       error  = []
