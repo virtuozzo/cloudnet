@@ -24,6 +24,8 @@ defaults: &defaults
   adroll:
     adv_id: <%= ENV["ADROLL_ADV_ID"] %>
     pix_id: <%= ENV["ADROLL_PIX_ID"] %>
+  elevio:
+    account_id: <%= ENV["ELEVIO_ACCOUNT_ID"] %>
 
 development:
   <<: *defaults
