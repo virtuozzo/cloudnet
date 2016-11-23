@@ -133,4 +133,12 @@ module ApplicationHelper
     value ? "Pass" : "Fail"
   end
   
+  def intercom_user_hash
+    OpenSSL::HMAC.hexdigest('sha256', KEYS[:intercom][:secret_key], current_user.id.to_s)
+  end
+  
+  def just_logged_out?
+    params[:logout] == "1"
+  end
+  
 end

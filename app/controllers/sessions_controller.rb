@@ -11,10 +11,17 @@ class SessionsController < Devise::SessionsController
   def destroy
     properties = { "$user_id" => current_user.id, "$session_id" => anonymous_id }
     create_sift_event "$logout", properties
+    delete_intercom_cookies
     super
   end
 
   private
+  
+  def delete_intercom_cookies
+    return if KEYS[:intercom][:app_id].blank?
+    cookies.delete "intercom-id-#{KEYS[:intercom][:app_id]}"
+    cookies.delete "intercom-session-#{KEYS[:intercom][:app_id]}"
+  end
 
   def analytics_info
     Analytics.track(current_user, event_details, anonymous_id, request)

@@ -110,4 +110,8 @@ class ApplicationController < ActionController::Base
     MONITOR_SERV.any? {|serv| /#{serv}/i =~ request.user_agent}
   end
   
+  def after_sign_out_path_for(resource_or_scope)
+    root_path(logout: 1)
+  end
+  
 end

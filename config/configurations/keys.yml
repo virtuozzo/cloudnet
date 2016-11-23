@@ -26,6 +26,9 @@ defaults: &defaults
     pix_id: <%= ENV["ADROLL_PIX_ID"] %>
   elevio:
     account_id: <%= ENV["ELEVIO_ACCOUNT_ID"] %>
+  intercom:
+    app_id: <%= ENV["INTERCOM_APP_ID"] %>
+    secret_key: <%= ENV["INTERCOM_SECRET_KEY"] %>
 
 development:
   <<: *defaults
