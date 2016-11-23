@@ -19,8 +19,8 @@ class SessionsController < Devise::SessionsController
   
   def delete_intercom_cookies
     return if KEYS[:intercom][:app_id].blank?
-    cookies.delete "intercom-id-#{KEYS[:intercom][:app_id]}"
-    cookies.delete "intercom-session-#{KEYS[:intercom][:app_id]}"
+    cookies.delete "intercom-id-#{KEYS[:intercom][:app_id]}", domain: :all
+    cookies.delete "intercom-session-#{KEYS[:intercom][:app_id]}", domain: :all
   end
 
   def analytics_info
