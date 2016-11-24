@@ -13,7 +13,7 @@ module BuildChecker
     end
 
     class TaggedLogger < SimpleDelegator
-      TAG = 'Build Checker'
+      TAG ||= 'Build Checker'
       TAGGED_METHODS ||= %i(debug info warn error fatal unknown).freeze
 
       TAGGED_METHODS.each do |method|
