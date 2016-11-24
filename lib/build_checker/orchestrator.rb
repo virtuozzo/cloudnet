@@ -6,7 +6,7 @@ module BuildChecker
 
     Signal.trap("HUP") { exit }
     at_exit do
-      System.clear(PID_KEY)
+      BuildChecker.clear_pid!
       ActiveRecord::Base.clear_active_connections!
       exit! if @@threads.blank?
       @@threads.each {|thr| thr.exit }
@@ -49,7 +49,7 @@ module BuildChecker
     end
 
     def vm_monitor_start
-      Thread.new { Monitor::BuildMonitor.run }
+      Thread.new { BuildChecker::Monitor::BuildMonitor.run }
     end
 
     def cleaner_start

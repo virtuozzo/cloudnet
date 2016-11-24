@@ -13,4 +13,8 @@ module BuildChecker
   def self.pid
     System.get(PID_KEY).to_i
   end
+
+  def self.clear_pid!
+    System.clear(PID_KEY)
+  end
 end
