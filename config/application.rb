@@ -53,7 +53,7 @@ module CloudNet
     config.generators do |g|
       g.test_framework :rspec
     end
-    
+
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
@@ -61,7 +61,7 @@ module CloudNet
       end
     end
     config.middleware.insert_before 0, 'Rack::Attack'
-    
+
     config.after_initialize do
       require 'devise_otp_redirect_patch'
     end

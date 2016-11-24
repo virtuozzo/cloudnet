@@ -12,7 +12,7 @@ class UserTasks < BaseTasks
   def self.total_unbilled_revenue
     User.all.to_a.sum {|u| u.try(:account).try(:used_payg_balance).to_f}
   end
-  
+
   private
 
   def create(user, squall)
@@ -26,12 +26,12 @@ class UserTasks < BaseTasks
       onapp_password: acc[:password],
       status: :active
     )
-    
+
     # Create a Sift Science account for user
     user.create_sift_account
     user.create_sift_login_event
   end
-  
+
   def update_billing_plan(user, squall)
     params = { billing_plan_id: ONAPP_CP[:billing_plan] }
     squall.edit(user.onapp_id, params)
