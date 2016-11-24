@@ -1,6 +1,7 @@
 class Template < ActiveRecord::Base
   belongs_to :location
   has_many :servers
+  has_many :build_checker_data, class_name: BuildChecker::Data::BuildCheckerDatum, dependent: :destroy
 
   validates :identifier, :os_type, :onapp_os_distro, :os_distro, :name, :location, presence: true
 
