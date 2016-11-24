@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013130118) do
+ActiveRecord::Schema.define(version: 20161122154442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,33 @@ ActiveRecord::Schema.define(version: 20161013130118) do
     t.boolean  "primary",                     default: false
     t.boolean  "fraud_safe",                  default: false
   end
+
+  create_table "build_checker_data", force: :cascade do |t|
+    t.integer  "template_id",                  null: false
+    t.integer  "location_id",                  null: false
+    t.datetime "start_after"
+    t.datetime "build_start"
+    t.datetime "build_end"
+    t.integer  "build_result",     default: 0, null: false
+    t.boolean  "scheduled"
+    t.integer  "state",            default: 0, null: false
+    t.datetime "delete_queued_at"
+    t.datetime "deleted_at"
+    t.string   "onapp_identifier"
+    t.datetime "notified_at"
+    t.string   "error"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "build_checker_data", ["build_result"], name: "index_build_checker_data_on_build_result", using: :btree
+  add_index "build_checker_data", ["deleted_at"], name: "index_build_checker_data_on_deleted_at", using: :btree
+  add_index "build_checker_data", ["location_id"], name: "index_build_checker_data_on_location_id", using: :btree
+  add_index "build_checker_data", ["scheduled", "start_after"], name: "index_build_checker_data_on_scheduled_and_start_after", where: "(scheduled IS TRUE)", using: :btree
+  add_index "build_checker_data", ["scheduled"], name: "index_build_checker_data_on_scheduled", where: "(scheduled IS TRUE)", using: :btree
+  add_index "build_checker_data", ["state"], name: "index_build_checker_data_on_state", using: :btree
+  add_index "build_checker_data", ["template_id", "scheduled"], name: "index_build_checker_data_on_template_id_and_scheduled", unique: true, using: :btree
+  add_index "build_checker_data", ["template_id"], name: "index_build_checker_data_on_template_id", using: :btree
 
   create_table "certificates", force: :cascade do |t|
     t.string   "name"
@@ -513,6 +540,15 @@ ActiveRecord::Schema.define(version: 20161013130118) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
+  create_table "systems", force: :cascade do |t|
+    t.string   "key",        null: false
+    t.string   "value",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "systems", ["key"], name: "index_systems_on_key", unique: true, using: :btree
+
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -544,8 +580,10 @@ ActiveRecord::Schema.define(version: 20161013130118) do
     t.integer  "min_disk",                    default: 0
     t.boolean  "hidden",                      default: false
     t.string   "os_distro",       limit: 255
+    t.boolean  "build_checker",               default: false, null: false
   end
 
+  add_index "templates", ["build_checker", "location_id"], name: "index_templates_on_build_checker_and_location_id", where: "(build_checker IS TRUE)", using: :btree
   add_index "templates", ["identifier"], name: "index_templates_on_identifier", using: :btree
   add_index "templates", ["location_id"], name: "index_templates_on_location_id", using: :btree
 
@@ -671,6 +709,8 @@ ActiveRecord::Schema.define(version: 20161013130118) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "api_keys", "users"
+  add_foreign_key "build_checker_data", "locations"
+  add_foreign_key "build_checker_data", "templates"
   add_foreign_key "indices", "locations"
   add_foreign_key "keys", "users"
   add_foreign_key "locations", "regions"
