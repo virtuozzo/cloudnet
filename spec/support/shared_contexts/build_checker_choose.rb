@@ -16,7 +16,7 @@ shared_context :chooser_data do
     @started.each { |bcd| bcd.template.update_attribute(:build_checker, true) }
 
     @recent_check = FactoryGirl.create(:build_checker_datum, template_id: @started.first.template_id, start_after: Time.now - 1.hour)
-    @recent_check_time = @recent_check.start_after
+    @recent_check_time = @recent_check.reload.start_after
 
     @same_loc_template = FactoryGirl.create(:template, location_id: @started.first.location_id, build_checker: true)
     FactoryGirl.create(:build_checker_datum, template_id: @same_loc_template.id, start_after: Time.now - 6.hours)
