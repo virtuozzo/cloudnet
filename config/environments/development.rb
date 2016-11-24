@@ -11,6 +11,7 @@ CloudNet::Application.configure do
 
   #eager load negative balance protection
   Dir[Rails.root.join('app/services/negative_balance_protection/**/*.rb')].each { |file| load file }
+  Dir[Rails.root.join('lib/build_checker/**/*.rb')].each { |file| load file }
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -49,7 +50,7 @@ CloudNet::Application.configure do
     authentication: ENV['SMTP_AUTH_METHOD'],
     domain: 'cloud.net'
   }
-  
+
   config.action_mailer.smtp_settings.merge!({ openssl_verify_mode: ENV['SMTP_SSL_VERIFY'] }) unless ENV['SMTP_SSL_VERIFY'].blank?
 
   # Print deprecation notices to the Rails logger.
