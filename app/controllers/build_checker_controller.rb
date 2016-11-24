@@ -18,12 +18,15 @@ class BuildCheckerController < ApplicationController
 
   def stop
     if BuildChecker.running?
-      Process.kill('HUP', BuildChecker.pid) rescue BuildChecker.clear_pid!
+      Process.kill('HUP', BuildChecker.pid)
       flash[:notice] = 'Build checker stopped'
     else
       flash[:warning] = 'Build checker is not running'
     end
-    redirect_to admin_build_checkers_path
+    rescue
+      flash[:error] = 'wrong server'
+    ensure
+      redirect_to admin_build_checkers_path
   end
 
   private

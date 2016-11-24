@@ -2,6 +2,10 @@ task run_build_checker: :environment do
   BuildChecker::Orchestrator.run
 end
 
+task stop_build_checker: :environment do
+  Process.kill('HUP', BuildChecker.pid) rescue nil
+end
+
 task create_build_checker_user: :environment do
   worker_size = Sidekiq::ProcessSet.new.size rescue 0
   fail 'Sidekiq not active.' if worker_size == 0
