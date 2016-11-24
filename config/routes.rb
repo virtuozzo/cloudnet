@@ -1,12 +1,12 @@
 require 'sidekiq/web'
 
 CloudNet::Application.routes.draw do
-  
+
   constraints subdomain: /^api/ do
     mount GrapeSwaggerRails::Engine => '/docs'
     mount API => '/'
   end
-  
+
   mount PostgresqlLoStreamer::Engine => "/certificate_avatar"
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   mount JasmineFixtureServer => '/spec/javascripts/fixtures' if defined?(Jasmine::Jquery::Rails::Engine)
@@ -34,7 +34,7 @@ CloudNet::Application.routes.draw do
   unauthenticated do
     root 'public#main'
   end
-  
+
   get 'servers/create', to: 'server_wizards#new'
   resources :server_wizards, only: [:new, :create], path: 'servers/create'
   get 'servers/create/payment_step', to: 'server_wizards#payment_step'
@@ -76,7 +76,7 @@ CloudNet::Application.routes.draw do
         post :restore
       end
     end
-    
+
     resources :ip_addresses
   end
 
@@ -128,15 +128,15 @@ CloudNet::Application.routes.draw do
 
   post 'login_as', to: 'login_as#new'
   delete 'login_as', to: 'login_as#destroy'
-  
+
   resources :keys
-  
+
   resources :api_keys do
     member do
       post :toggle_active
     end
   end
-  
+
   namespace :inapi, defaults: {format: :json} do
     namespace :v1 do
       resources :server_search, only: [:index, :create]
@@ -144,7 +144,7 @@ CloudNet::Application.routes.draw do
       get '/environment', to: 'base#environment'
     end
   end
-  
+
   resources :phone_numbers, only: [:create] do
     collection do
       post :verify
@@ -152,7 +152,10 @@ CloudNet::Application.routes.draw do
       post :reset
     end
   end
-  
+
+  post 'build_checker', to: 'build_checker#start'
+  delete 'build_checker', to: 'build_checker#stop'
+
   # Add Sidekiq only if we are an admin and have authenticated as such
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'

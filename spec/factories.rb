@@ -296,6 +296,14 @@ FactoryGirl.define do
   factory :user_server_count do
   end
 
+  factory :build_checker_datum, class: BuildChecker::Data::BuildCheckerDatum do
+    template
+    start_after { Time.now + rand(1..10).hour }
+    after(:build) do |bcd|
+      bcd.location_id = bcd.template.location.id
+    end
+  end
+
   factory :tag do
     sequence(:label) { |n| "tag label #{n}"}
   end
