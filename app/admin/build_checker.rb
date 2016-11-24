@@ -9,6 +9,8 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
     link_to 'Stop build checker', build_checker_path, method: :delete
   end
 
+  remove_filter :template, :error, :created_at, :updated_at
+
   index do
     panel "Build checker daemon status" do
       ul do
