@@ -5,7 +5,6 @@ module BuildChecker
     class QueueBuilder
       include BuildChecker::Data
       include BuildChecker::Logger
-      include BuildChecker::Chooser
       MAX_QUEUE_SIZE = 5
       at_exit do
         #exit! unless BuildChecker.running?
@@ -50,7 +49,7 @@ module BuildChecker
       end
 
       def template_chooser
-        @template_chooser ||= TemplateChooser.config do |chooser|
+        @template_chooser ||= BuildChecker::Chooser::TemplateChooser.config do |chooser|
           chooser.time_gap_for_same_template = 5.hours
           chooser.time_gap_for_same_location = 10.seconds
         end
