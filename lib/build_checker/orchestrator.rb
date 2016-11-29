@@ -6,7 +6,7 @@ module BuildChecker
 
     Signal.trap("HUP") { exit }
     at_exit do
-      BuildChecker.clear_pid!
+      BuildChecker.clear_pid! if BuildChecker.pid == Process.pid
       ActiveRecord::Base.clear_active_connections!
       exit! if @@threads.blank?
       @@threads.each {|thr| thr.exit }
@@ -22,7 +22,7 @@ module BuildChecker
     def initialize
       ActiveRecord::Base.clear_active_connections! and exit! if running?
       return if build_checker_user_exists?
-      logger.error "You must create build_checker user before. Use: rake create_build_checker_user"
+      logger.error "You must create build_checker user before. Use: rake build_checker:create_user"
       exit
     end
 

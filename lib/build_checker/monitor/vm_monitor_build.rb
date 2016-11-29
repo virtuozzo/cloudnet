@@ -7,8 +7,8 @@ module BuildChecker
       def perform(task_id, user_id)
         super
       rescue Faraday::Error::ClientError, StandardError => e
-        finish_task_error(:operation_error, exception: e)
         log_error(e)
+        finish_task_error(:operation_error, exception: e)
       end
 
       def verify_vm_status

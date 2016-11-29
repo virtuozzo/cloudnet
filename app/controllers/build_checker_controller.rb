@@ -18,7 +18,9 @@ class BuildCheckerController < ApplicationController
 
   def stop
     if BuildChecker.running?
-      Process.kill('HUP', BuildChecker.pid)
+      # Using capistrano for daemon stop broadcast.
+      # We do not know the server, where build checker is running
+      `bundle exec cap staging build_checker:stop`
       flash[:notice] = 'Build checker stopped'
     else
       flash[:warning] = 'Build checker is not running'
@@ -32,7 +34,7 @@ class BuildCheckerController < ApplicationController
   private
     def start_build_checker
       ActiveRecord::Base.connection.disconnect!
-      pid = fork { BuildChecker::Orchestrator.run }
+      pid = fork { Process.daemon(false, true); BuildChecker::Orchestrator.run }
       Process.detach(pid)
       ActiveRecord::Base.establish_connection(
         Rails.application.config.database_configuration[Rails.env]

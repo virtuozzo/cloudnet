@@ -12,8 +12,8 @@ module BuildChecker
           # VM properly removed at OnApp
           finish_task_success
         else
-          finish_task_error(:operation_error, exception: e)
           log_error(e)
+          finish_task_error(:operation_error, exception: e)
         end
       end
 

@@ -55,12 +55,12 @@ namespace :deploy do
   end
 
   desc "Restart Puma via Puma Jungle"
-  task :restart do 
+  task :restart do
     invoke 'puma:phased-restart'
   end
 
   desc "Configure and start Monit for Puma and Sidekiq"
-  task :configure_monit do 
+  task :configure_monit do
     invoke 'puma:monit:monitor'
     invoke 'sidekiq:monit:monitor'
   end
@@ -110,6 +110,19 @@ namespace :maintenance do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'maintenance:end'
+        end
+      end
+    end
+  end
+end
+
+namespace :build_checker do
+  desc 'Stop build checker daemon'
+  task :stop do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'build_checker:stop'
         end
       end
     end

@@ -84,7 +84,6 @@ module BuildChecker
       end
 
       def log_error(error)
-        logger.error "ERROR: #{error.message}"
         ErrorLogging.new.track_exception(
           error,
           extra: {
@@ -96,6 +95,7 @@ module BuildChecker
             response: error.try(:response)
           }
         )
+        logger.error "ERROR: #{error.message}"
       end
     end
   end

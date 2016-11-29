@@ -12,8 +12,8 @@ module BuildChecker
         delete_vm
         update_task_to_monitor
       rescue Faraday::Error::ClientError, StandardError => e
-        update_error_task(e)
         log_error(e)
+        update_error_task(e)
       end
 
       def delete_vm
@@ -51,7 +51,6 @@ module BuildChecker
       end
 
       def log_error(error)
-        logger.error "ERROR: #{error.message}"
         ErrorLogging.new.track_exception(
           error,
           extra: {
@@ -63,6 +62,7 @@ module BuildChecker
             response: error.try(:response)
           }
         )
+        logger.error "ERROR: #{error.message}"
       end
     end
   end
