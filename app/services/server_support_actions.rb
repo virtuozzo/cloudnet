@@ -21,6 +21,12 @@ class ServerSupportActions < Struct.new(:user)
   end
 
   def update_edited_server(server, params, edit_wizard)
+    unless server.disk_size == edit_wizard.disk_size
+      # 1 GB used for swap
+      # TODO: check for Windows
+      params["disk_size"] = (params["disk_size"].to_i + 1).to_s
+      edit_wizard.disk_size += 1
+    end
     server.edit(params)
     server.update_attribute(:bandwidth, edit_wizard.bandwidth)
   end
@@ -35,7 +41,7 @@ class ServerSupportActions < Struct.new(:user)
     ServerTasks.new.perform(task, user.id, server_id)
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server_id, user.id) if monitor
   end
-  
+
   def default_params(params, ip)
     { location_id: Template.find(params[:template_id]).location.id,
       name: auto_server_name,

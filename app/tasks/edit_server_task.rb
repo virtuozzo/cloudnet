@@ -105,12 +105,12 @@ class EditServerTask
     end
 
     def disk_options
-      {disk_size: @server.disk_size}
+      {disk_size: @server.disk_size - 1}
     end
 
     def template_options
       {
-        template_id: Template.find(@template_id).identifier,
+        template_id: template.identifier,
         required_startup: 1
       }
     end
@@ -121,6 +121,10 @@ class EditServerTask
         cpus: @server.cpus,
         memory: @server.memory
       }
+    end
+
+    def template
+      @template ||= Template.find(@template_id)
     end
 
     def squall_params
