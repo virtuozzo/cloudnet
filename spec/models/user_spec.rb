@@ -78,7 +78,7 @@ describe User do
   end
   
   it 'should not be eligible for trial credit' do
-    FactoryGirl.create(:billing_card, account: user.account)
+    FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true)
     expect(user.trial_credit_eligible?).to eq(false)
   end
   

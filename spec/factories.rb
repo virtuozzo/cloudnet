@@ -232,6 +232,7 @@ FactoryGirl.define do
     cardholder 'Mr John Smith'
     association :account, factory: [:account, :with_user]
     processor_token 'abcd-1234567'
+    fraud_verified false
   end
 
   factory :coupon do
