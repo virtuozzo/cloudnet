@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
   end
 
   def trial_credit_eligible?
-    account.billing_cards.with_deleted.count == 0
+    account.billing_cards.with_deleted.processable.count == 0
   end
 
   def after_database_authentication
