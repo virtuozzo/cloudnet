@@ -34,7 +34,11 @@ class BuildCheckerController < ApplicationController
   private
     def start_build_checker
       ActiveRecord::Base.connection.disconnect!
-      pid = fork { Process.daemon(false, true); BuildChecker::Orchestrator.run }
+      pid = fork do
+        Process.daemon(false, true)
+        Process.setproctitle('build checker 1.0.0')
+        BuildChecker::Orchestrator.run
+      end
       Process.detach(pid)
       ActiveRecord::Base.establish_connection(
         Rails.application.config.database_configuration[Rails.env]
