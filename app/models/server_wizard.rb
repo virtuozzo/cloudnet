@@ -385,17 +385,19 @@ class ServerWizard
     template = self.template
     min_resources = minimum_resources
     return false if template.nil?
+    min_memory = [template.min_memory, min_resources[:memory]].max
+    min_disk_size = [template.min_disk, min_resources[:disk_size]].max
 
-    if memory.to_i < template.min_memory
-      errors.add(:memory, "is not enough for the template selected. The template needs a minimum of #{template.min_memory} MB")
+    if memory.to_i < min_memory
+      errors.add(:memory, "needs a minimum of #{min_memory} MB")
     end
 
-    if disk_size.to_i < template.min_disk
-      errors.add(:disk_size, "is not enough for the template selected. The template needs a minimum of #{template.min_disk} GB")
+    if disk_size.to_i < min_disk_size
+      errors.add(:disk_size, "needs a minimum of #{min_disk_size} GB")
     end
 
     if cpus.to_i < min_resources[:cpus]
-      errors.add(:cpus, "need a minimum of #{min_resources[:cpus]} CPU Core(s)")
+      errors.add(:cpus, "needs a minimum of #{min_resources[:cpus]} CPU Core(s)")
     end
   end
 
@@ -421,7 +423,7 @@ class ServerWizard
   end
 
   def minimum_resources
-    { memory: 128, cpus: 1, disk_size: 6 }
+    { memory: 512, cpus: 1, disk_size: 20 }
   end
 
   def remaining_server_resources

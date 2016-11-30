@@ -261,16 +261,19 @@ $ ->
   upperCase = (string) -> return string.charAt(0).toUpperCase() + string.slice(1)
 
   updateSliderLimits = (data) ->
+    min_memory = Math.max data.min_memory, memory.min
+    min_disk_size = Math.max data.min_disk, disk_size.min
+    
     updateSliderIfSmaller(cpus, 1)
 
     updateSliderIfSmaller
-      min: data.min_memory
+      min: min_memory
       max: memory.max
       field: "memory"
       , data.min_memory
 
     updateSliderIfSmaller
-      min: data.min_disk
+      min: min_disk_size
       max: disk_size.max
       field: "disk_size"
       , data.min_disk

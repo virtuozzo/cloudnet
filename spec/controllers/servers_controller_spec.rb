@@ -135,7 +135,7 @@ describe ServersController do
               user: @current_user,
               cpus: 1,
               memory: 1024,
-              disk_size: 10
+              disk_size: 20
             )
             
             @old_server_params = {"cpus"=>@server.cpus, 
@@ -149,7 +149,7 @@ describe ServersController do
               user: @current_user,
               cpus: 3,
               memory: 1512,
-              disk_size: 10
+              disk_size: 20
             )
             
             @payment_receipts = FactoryGirl.create_list(:payment_receipt, 2, account: @current_user.account)
