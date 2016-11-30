@@ -79,7 +79,7 @@ FactoryGirl.define do
   factory :package do
     memory 512
     cpus 1
-    disk_size 10
+    disk_size 20
     ip_addresses 1
     location
     factory :pack0
@@ -138,7 +138,7 @@ FactoryGirl.define do
     hostname 'server.com'
     memory 1024
     cpus 2
-    disk_size 10
+    disk_size 20
     association :user, factory: :user_onapp
     association :location, factory: :location
 

@@ -99,8 +99,8 @@ describe ServerWizard do
   end
   
   it 'should prepare cpu/disk/memory values form params' do
-    res1 = {cpus: 2, memory: 1024, disk_size: 10}
-    res2 = {cpus: 0, memory: 0, disk_size: 10}
+    res1 = {cpus: 2, memory: 1024, disk_size: 20}
+    res2 = {cpus: 0, memory: 0, disk_size: 20}
     expect(server_wizard.send(:wizard_params)).to eq res1
     server_wizard.memory = nil
     server_wizard.cpus = 0
@@ -133,10 +133,10 @@ describe ServerWizard do
     end
 
     it 'should detect over provisioning of disk' do
-      allow(server_wizard.user).to receive_messages(storage_max: 10)
+      allow(server_wizard.user).to receive_messages(storage_max: 20)
       expect(server_wizard.user.servers.count).to eq(0)
 
-      server_wizard.disk_size = 10
+      server_wizard.disk_size = 20
       expect(server_wizard).to be_valid
       server_wizard.disk_size = 50
       expect(server_wizard).not_to be_valid
