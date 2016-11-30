@@ -160,7 +160,7 @@ class ServerWizard
 
   # Returns Server object for type = :create and true for :edit
   def create_or_edit_server(type = :create)
-    if type == :edit
+    if type == :edit && server_changed?
       # Issue a credit note for the server's old specs for the time remaining during this
       # invoicable month. We will then charge them for the newly resized server as if it were
       # new.
@@ -177,7 +177,7 @@ class ServerWizard
     else
       # Edit the server through the Onapp API
       request_server_edit
-      charging_paperwork
+      charging_paperwork if server_changed?
       true
     end
   rescue WizardError
