@@ -127,4 +127,15 @@ namespace :build_checker do
       end
     end
   end
+
+  desc 'Start build checker daemon'
+  task :start do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'build_checker:start'
+        end
+      end
+    end
+  end
 end

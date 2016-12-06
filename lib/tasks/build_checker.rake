@@ -15,6 +15,12 @@ namespace :build_checker do
     end
   end
 
+  desc 'start build checker'
+  task start: :environment do
+    Process.daemon(false, true)
+    BuildChecker::Orchestrator.run
+  end
+
   desc 'creates build checker user'
   task create_user: :environment do
     worker_size = Sidekiq::ProcessSet.new.size rescue 0

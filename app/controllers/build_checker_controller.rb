@@ -3,18 +3,21 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.running?
       flash[:warning] = 'Build checker already running'
     else
-      start_build_checker
-      sleep 2 # Time for forked process to fail
-      pid = BuildChecker.pid
-      gid = -1
+      unless Rails.env == 'development'
+        start_remote_build_checker
+      else
+        ActiveRecord::Base.connection.disconnect!
+        pid = fork do
+          Process.daemon
+          Process.setproctitle('build checker 1.0.0')
+          BuildChecker::Orchestrator.run
+        end
+        Process.detach(pid)
+        ActiveRecord::Base.establish_connection(
+          Rails.application.config.database_configuration[Rails.env]
+        )
 
-      if pid > 0
-        gid = Process.getpgid(pid) rescue -1
-      end
-
-      case gid
-      when -1 then flash[:error] ='Unable to start build checker. Please check logs.'
-      else flash[:notice] = 'Build checker started'
+        flash[:notice] = 'Build checker started'
       end
     end
 
@@ -39,18 +42,19 @@ class BuildCheckerController < ApplicationController
   end
 
   private
-    def start_build_checker
-      ActiveRecord::Base.connection.disconnect!
-      pid = fork do
-        Process.daemon(false, true)
-        Process.setproctitle('build checker 1.0.0')
-        BuildChecker::Orchestrator.run
+    def start_remote_build_checker
+      host = case Rails.env
+      when 'staging' then ENV['STAGING_SERVER1_IP']
+      when 'production' then ENV['PROD_SERVER1_IP']
+      when 'development' then ''
       end
-      Process.detach(pid)
-      ActiveRecord::Base.establish_connection(
-        Rails.application.config.database_configuration[Rails.env]
-      )
-      pid
+
+      result = system("bundle exec cap #{Rails.env} build_checker:start HOSTS=#{host}")
+      if result
+        flash[:notice] = 'Build checker started'
+      else
+        flash[:error] = 'Not able to start build checker. Please refer to logs'
+      end
     end
 
     def stop_remote_build_checker
