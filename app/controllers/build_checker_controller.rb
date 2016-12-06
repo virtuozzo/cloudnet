@@ -3,10 +3,15 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.running?
       flash[:warning] = 'Build checker already running'
     else
-      pid = start_build_checker
+      start_build_checker
       sleep 2 # Time for forked process to fail
+      pid = BuildChecker.pid
+      gid = -1
 
-      gid = Process.getpgid(pid) rescue -1
+      if pid > 0
+        gid = Process.getpgid(pid) rescue -1
+      end
+
       case gid
       when -1 then flash[:error] ='Unable to start build checker. Please check logs.'
       else flash[:notice] = 'Build checker started'
@@ -20,8 +25,12 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.running?
       # Using capistrano for daemon stop broadcast.
       # We do not know the server, where build checker is running
-      `bundle exec cap staging build_checker:stop`
-      flash[:notice] = 'Build checker stopped'
+      unless Rails.env == 'development'
+        stop_remote_build_checker
+      else
+        Process.kill('HUP', BuildChecker.pid)
+        flash[:notice] = 'Build checker stopped'
+      end
     else
       flash[:warning] = 'Build checker is not running'
     end
@@ -44,5 +53,14 @@ class BuildCheckerController < ApplicationController
         Rails.application.config.database_configuration[Rails.env]
       )
       pid
+    end
+
+    def stop_remote_build_checker
+      result = system("bundle exec cap #{Rails.env} build_checker:stop")
+      if result
+        flash[:notice] = 'Build checker stopped'
+      else
+        flash[:error] = 'Not able to execute stop command. Please refer to logs'
+      end
     end
 end

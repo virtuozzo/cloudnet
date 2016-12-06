@@ -119,7 +119,7 @@ end
 namespace :build_checker do
   desc 'Stop build checker daemon'
   task :stop do
-    on roles(:app), in: :sequence, wait: 5 do
+    on roles(:app) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'build_checker:stop'

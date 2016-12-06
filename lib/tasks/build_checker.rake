@@ -8,7 +8,8 @@ namespace :build_checker do
   desc 'stop build checker'
   task stop: :environment do
     begin
-      Process.kill('HUP', BuildChecker.pid)
+      pid = BuildChecker.pid
+      Process.kill('HUP', BuildChecker.pid) if pid > 0
     rescue Exception
       nil
     end
