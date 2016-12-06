@@ -23,8 +23,6 @@ class BuildCheckerController < ApplicationController
 
   def stop
     if BuildChecker.running?
-      # Using capistrano for daemon stop broadcast.
-      # We do not know the server, where build checker is running
       unless Rails.env == 'development'
         stop_remote_build_checker
       else
@@ -56,6 +54,8 @@ class BuildCheckerController < ApplicationController
     end
 
     def stop_remote_build_checker
+      # Using capistrano for daemon stop broadcast.
+      # We do not know the server, where build checker is running
       result = system("bundle exec cap #{Rails.env} build_checker:stop")
       if result
         flash[:notice] = 'Build checker stopped'

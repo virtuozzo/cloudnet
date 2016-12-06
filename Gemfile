@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'dotenv-rails'
 gem 'foreman', require: false
 
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.7'
 gem 'activerecord-session_store'
 
 gem 'haml-rails', '~> 0.5.3'
