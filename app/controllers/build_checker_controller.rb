@@ -20,14 +20,26 @@ class BuildCheckerController < ApplicationController
   end
 
   private
+  # FIXME: redirect_to is not performed correctly.
+  # FIXME: when using capistrano, STDOUT is redirected
     def start_remote_build_checker
-      result = system("bundle exec cap #{Rails.env} build_checker:start HOSTS=#{host_address}")
-
-      if result
-        flash[:notice] = 'Build checker started'
-      else
-        flash[:error] = 'Not able to start build checker. Please refer to logs'
+      ActiveRecord::Base.connection.disconnect!
+      pid = fork do
+        Process.daemon(false, true)
+        BuildChecker::Orchestrator.run
       end
+      Process.detach(pid)
+      ActiveRecord::Base.establish_connection(
+        Rails.application.config.database_configuration[Rails.env]
+      )
+      flash[:notice] = 'Build checker started'
+      # result = system("bundle exec cap #{Rails.env} build_checker:start HOSTS=#{host_address}")
+      #
+      # if result
+      #   flash[:notice] = 'Build checker started'
+      # else
+      #   flash[:error] = 'Not able to start build checker. Please refer to logs'
+      # end
     end
 
     def host_address
@@ -63,7 +75,7 @@ class BuildCheckerController < ApplicationController
     end
 
     def stop_local_build_checker
-      Process.kill('HUP', BuildChecker.pid)
+      Process.kill('INT', BuildChecker.pid)
     rescue Errno::ESRCH
       BuildChecker.clear_pid!
     ensure
