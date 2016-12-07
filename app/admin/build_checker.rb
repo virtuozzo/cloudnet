@@ -1,5 +1,5 @@
 ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" do
-  actions :all, :except => [:destroy, :edit, :new]
+  actions :all, :except => [:edit, :new]
 
   action_item :start do
     link_to 'Start build checker', build_checker_path, method: :post

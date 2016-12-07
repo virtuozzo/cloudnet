@@ -3,22 +3,7 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.running?
       flash[:warning] = 'Build checker already running'
     else
-      unless Rails.env == 'development'
-        start_remote_build_checker
-      else
-        ActiveRecord::Base.connection.disconnect!
-        pid = fork do
-          Process.daemon
-          Process.setproctitle('build checker 1.0.0')
-          BuildChecker::Orchestrator.run
-        end
-        Process.detach(pid)
-        ActiveRecord::Base.establish_connection(
-          Rails.application.config.database_configuration[Rails.env]
-        )
-
-        flash[:notice] = 'Build checker started'
-      end
+      Rails.env == 'development' ? start_local_build_checker : start_remote_build_checker
     end
 
     redirect_to admin_build_checkers_path
@@ -26,30 +11,18 @@ class BuildCheckerController < ApplicationController
 
   def stop
     if BuildChecker.running?
-      unless Rails.env == 'development'
-        stop_remote_build_checker
-      else
-        Process.kill('HUP', BuildChecker.pid)
-        flash[:notice] = 'Build checker stopped'
-      end
+      Rails.env == 'development' ? stop_local_build_checker : stop_remote_build_checker
     else
       flash[:warning] = 'Build checker is not running'
     end
-    rescue
-      flash[:error] = 'wrong server'
-    ensure
-      redirect_to admin_build_checkers_path
+
+    redirect_to admin_build_checkers_path
   end
 
   private
     def start_remote_build_checker
-      host = case Rails.env
-      when 'staging' then ENV['STAGING_SERVER1_IP']
-      when 'production' then ENV['PROD_SERVER1_IP']
-      when 'development' then ''
-      end
+      result = system("bundle exec cap #{Rails.env} build_checker:start HOSTS=#{host_address}")
 
-      result = system("bundle exec cap #{Rails.env} build_checker:start HOSTS=#{host}")
       if result
         flash[:notice] = 'Build checker started'
       else
@@ -57,14 +30,43 @@ class BuildCheckerController < ApplicationController
       end
     end
 
+    def host_address
+      case Rails.env
+      when 'staging' then ENV['STAGING_SERVER1_IP']
+      when 'production' then ENV['PROD_SERVER1_IP']
+      else ''
+      end
+    end
+
+    def start_local_build_checker
+      ActiveRecord::Base.connection.disconnect!
+      # to quit when development server quits
+      pid = fork do
+        BuildChecker::Orchestrator.run
+      end
+      Process.detach(pid)
+      ActiveRecord::Base.establish_connection(
+        Rails.application.config.database_configuration[Rails.env]
+      )
+      flash[:notice] = 'Build checker started'
+    end
+
     def stop_remote_build_checker
       # Using capistrano for daemon stop broadcast.
-      # We do not know the server, where build checker is running
       result = system("bundle exec cap #{Rails.env} build_checker:stop")
+
       if result
         flash[:notice] = 'Build checker stopped'
       else
         flash[:error] = 'Not able to execute stop command. Please refer to logs'
       end
+    end
+
+    def stop_local_build_checker
+      Process.kill('HUP', BuildChecker.pid)
+    rescue Errno::ESRCH
+      BuildChecker.clear_pid!
+    ensure
+      flash[:notice] = 'Build checker stopped'
     end
 end
