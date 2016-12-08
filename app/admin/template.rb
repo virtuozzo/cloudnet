@@ -25,7 +25,7 @@ ActiveAdmin.register Template do
     redirect_to admin_templates_path
   end
 
-  batch_action :remove_for_build_checker, priority: 2 do |ids|
+  batch_action :remove_from_build_checker, priority: 2 do |ids|
     ids.each { |id| Template.find(id).update_attribute(:build_checker, false) }
     redirect_to admin_templates_path
   end

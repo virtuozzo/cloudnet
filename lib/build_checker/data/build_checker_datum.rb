@@ -7,7 +7,8 @@ module BuildChecker
       validates :template, :location, presence: true
       validate :proper_location_id
       after_create :check_data_size
-      MAX_DATA_PER_TEMPLATE = 30
+      MAX_SUCCESS_DATA_PER_TEMPLATE = 30
+      MAX_FAILED_DATA_PER_TEMPLATE = 30
 
       enum state: {
         scheduled:  0, # default
@@ -37,7 +38,8 @@ module BuildChecker
 
       private
         def check_data_size
-          remove_old_data if data_number_exceeded?
+          remove_old_success_data if success_data_number_exceeded?
+          remove_old_failed_data  if failed_data_number_exceeded?
         end
 
         def proper_location_id
@@ -46,20 +48,42 @@ module BuildChecker
           end
         end
 
-        def remove_old_data
-          self.class.where(template_id: self.template_id).order(:created_at)
-              .limit(number_of_records - MAX_DATA_PER_TEMPLATE)
+        def remove_old_success_data
+          remove_old_data(:success, MAX_SUCCESS_DATA_PER_TEMPLATE)
+        end
+
+        def remove_old_failed_data
+          remove_old_data(:failed, MAX_FAILED_DATA_PER_TEMPLATE)
+        end
+
+        def remove_old_data(result, max_number)
+          self.class.where(search_query(result)).order(:created_at)
+              .limit(number_of_records(result) - max_number)
               .destroy_all
         end
 
-        def data_number_exceeded?
-          number_of_records > MAX_DATA_PER_TEMPLATE
+        def success_data_number_exceeded?
+          data_number_exceeded?(:success, MAX_SUCCESS_DATA_PER_TEMPLATE)
         end
 
-        def number_of_records
-          self.class.where(template_id: self.template_id).count
+        def failed_data_number_exceeded?
+          data_number_exceeded?(:failed, MAX_FAILED_DATA_PER_TEMPLATE)
         end
 
+        def data_number_exceeded?(result, max_number)
+          number_of_records(result) > max_number
+        end
+
+        def number_of_records(result)
+          self.class.where(search_query(result)).count
+        end
+
+        def search_query(result)
+          {
+            template_id: self.template_id,
+            build_result: BuildCheckerDatum.build_results[result.to_s]
+          }
+        end
     end
   end
 end
