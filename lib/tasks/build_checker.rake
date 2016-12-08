@@ -1,7 +1,9 @@
 namespace :build_checker do
   desc 'start build checker'
   task start: :environment do
-    Rails.logger = ActiveSupport::TaggedLogging.new(Logger.new('log/build_checker.log'))
+    logger = Logger.new('log/build_checker.log')
+    logger.level = Logger::DEBUG
+    Rails.logger = ActiveSupport::TaggedLogging.new(logger)
     Process.daemon
     BuildChecker::Orchestrator.run
   end
