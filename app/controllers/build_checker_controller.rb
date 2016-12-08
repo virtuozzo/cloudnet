@@ -30,14 +30,6 @@ class BuildCheckerController < ApplicationController
       end
     end
 
-    def host_address
-      case Rails.env
-      when 'staging' then ENV['STAGING_SERVER1_IP']
-      when 'production' then ENV['PROD_SERVER1_IP']
-      else ''
-      end
-    end
-
     def start_local_build_checker
       ActiveRecord::Base.connection.disconnect!
       # to quit when development server quits
