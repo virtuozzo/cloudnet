@@ -1,6 +1,7 @@
 namespace :build_checker do
   desc 'start build checker'
   task start: :environment do
+    Rails.logger = ActiveSupport::TaggedLogging.new(Logger.new('log/build_checker.log'))
     Process.daemon
     BuildChecker::Orchestrator.run
   end
@@ -9,7 +10,7 @@ namespace :build_checker do
   task stop: :environment do
     begin
       pid = BuildChecker.pid
-      Process.kill('HUP', BuildChecker.pid) if pid > 0
+      Process.kill('INT', BuildChecker.pid) if pid > 0
     rescue Exception
       nil
     end

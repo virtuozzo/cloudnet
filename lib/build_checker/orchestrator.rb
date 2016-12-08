@@ -4,7 +4,7 @@ module BuildChecker
     include BuildChecker::Logger
     @@threads = []
 
-    Signal.trap("HUP") { exit }
+    Signal.trap("INT") { exit }
     at_exit do
       BuildChecker.clear_pid! if BuildChecker.pid == Process.pid
       ActiveRecord::Base.clear_active_connections!
