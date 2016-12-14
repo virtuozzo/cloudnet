@@ -36,10 +36,10 @@ class BackupsController < ApplicationController
 
   def destroy
     BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
+    RefreshServerBackups.perform_in(RefreshServerBackups::POLL_INTERVAL.seconds, current_user.id, @server.id)
     Analytics.track(current_user, event: 'Deleted a backup', properties: { server_id: @server.id })
     create_sift_event :destroy_backup, @server.sift_server_properties
-    @backup.destroy!
-    redirect_to server_backups_path, notice: 'Backup has been deleted'
+    redirect_to server_backups_path, notice: 'Backup will be deleted shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Destroy' })
     flash.now[:alert] = 'Could not schedule backup destroy. Please try again later'

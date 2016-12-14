@@ -69,7 +69,7 @@ RSpec.describe BackupsController, :type => :controller do
 
         expect(@backup_tasks).to have_received(:perform)
         expect(response).to redirect_to(server_backups_path(server))
-        expect(flash[:notice]).to eq('Backup has been deleted')
+        expect(flash[:notice]).to eq('Backup will be deleted shortly')
         assert_equal 1, CreateSiftEvent.jobs.size
       end
     end
