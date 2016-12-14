@@ -3,7 +3,7 @@ class RefreshServerBackups
   include Sidekiq::Worker
 
   def perform(user_id, server_id)
-    new_backup_created = DiskTasks.new.perform(:refresh_backups, user_id, server_id)
+    new_backup_created = ServerTasks.new.perform(:refresh_backups, user_id, server_id)
     
     if new_backup_created
       Rails.cache.delete([Server::BACKUP_CREATED_CACHE, server_id])
