@@ -31,9 +31,9 @@ class ServerTasks < BaseTasks
         min_memory_size:    backup['min_memory_size'],
         backup_size:        backup['backup_size']
       }
-      server_backup = server.server_backups.where(identifier: backup['identifier']).first
-      if server_backup
-        server_backup.update(backup_attrs)
+      existing_backup = server.server_backups.with_deleted.where(identifier: backup['identifier']).first
+      if existing_backup
+        existing_backup.update(backup_attrs)
       else
         new_backup = server.server_backups.create(backup_attrs)
         MonitorBackup.perform_in(MonitorBackup::POLL_INTERVAL.seconds, server.id, new_backup.id, server.user_id)
@@ -41,7 +41,7 @@ class ServerTasks < BaseTasks
       end
     end
     # Destroy backup objects that do not exist at Onapp
-    server.server_backups.where(["identifier NOT IN (?)", backups.map {|b| b["identifier"]}]).map(&:destroy)
+    server.server_backups.where(["identifier NOT IN (?)", backups.map {|b| b["backup"]["identifier"]}]).map(&:destroy)
     new_backup_created
   end
 
