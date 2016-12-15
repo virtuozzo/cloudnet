@@ -15,9 +15,11 @@ class ServerTasks < BaseTasks
   
   # Fetch backups from Onapp and insert them into the database
   def refresh_backups(server, squall)
-    backups   = squall.backups(server.identifier)
+    remote_backups   = squall.backups(server.identifier)
     new_backup_created = false
-    backups.each do |backup|
+    
+    # Create or update backup objects
+    remote_backups.each do |backup|
       backup = backup["backup"]
       backup_attrs = {
         backup_id:          backup['id'],
@@ -40,9 +42,13 @@ class ServerTasks < BaseTasks
         new_backup_created = true
       end
     end
+    
     # Destroy backup objects that do not exist at Onapp
-    server.server_backups.where(["identifier NOT IN (?)", backups.map {|b| b["backup"]["identifier"]}]).map(&:destroy)
-    new_backup_created
+    remote_backup_identifiers = remote_backups.map { |b| b["backup"]["identifier"] }
+    zombie_backups = server.server_backups.select { |bkp| !remote_backup_identifiers.include?(bkp.identifier) }
+    zombie_backups.map(&:destroy)
+    
+    return new_backup_created
   end
 
   def show(server, squall)

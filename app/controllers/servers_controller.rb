@@ -192,7 +192,7 @@ class ServersController < ServerCommonController
     redirect_to :back, notice: 'Network rebuild has been scheduled'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Servers#rebuild_network' })
-    flash.now[:alert] = 'Could not rebuild network. Please try again later'
+    flash[:alert] = 'Could not rebuild network. Please try again later'
     redirect_to :back
   end
 
@@ -203,7 +203,7 @@ class ServersController < ServerCommonController
     redirect_to :back, notice: 'Password has been reset'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Servers#reset_root_password' })
-    flash.now[:alert] = 'Could not reset root password. Please try again later'
+    flash[:alert] = 'Could not reset root password. Please try again later'
     redirect_to :back
   end
 
