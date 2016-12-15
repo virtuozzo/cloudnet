@@ -28,7 +28,7 @@ class IpAddressesController < ApplicationController
     end
   rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Create' })
-    flash.now[:alert] = 'Could not create IP address. Please try again later'
+    flash[:alert] = 'Could not create IP address. Please try again later'
     redirect_to server_ip_addresses_path(@server)
   end
   
@@ -42,7 +42,7 @@ class IpAddressesController < ApplicationController
     redirect_to server_ip_addresses_path(@server), notice: 'IP address has been removed'
   rescue StandardError => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'IpAddresses#Destroy' })
-    flash.now[:alert] = 'Could not remove IP address. Please try again later'
+    flash[:alert] = 'Could not remove IP address. Please try again later'
     redirect_to server_ip_addresses_path(@server)
   end
   

@@ -30,19 +30,20 @@ class BackupsController < ApplicationController
     redirect_to server_path(@server), notice: 'Backup restore will occur shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Restore' })
-    flash.now[:alert] = 'Could not schedule backup restore. Please try again later'
+    flash[:alert] = 'Could not schedule backup restore. Please try again later'
     redirect_to server_backups_path
   end
 
   def destroy
     BackupTasks.new.perform(:delete_backup, current_user.id, @server.id, @backup.id)
-    RefreshServerBackups.perform_in(RefreshServerBackups::POLL_INTERVAL.seconds, current_user.id, @server.id)
     Analytics.track(current_user, event: 'Deleted a backup', properties: { server_id: @server.id })
     create_sift_event :destroy_backup, @server.sift_server_properties
-    redirect_to server_backups_path, notice: 'Backup will be deleted shortly'
+    flash[:notice] = 'Backup will be deleted shortly'
   rescue Exception => e
     ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'Backups#Destroy' })
-    flash.now[:alert] = 'Could not schedule backup destroy. Please try again later'
+    flash[:alert] = 'Could not schedule backup destroy. Please try again later'
+  ensure
+    RefreshServerBackups.perform_in(RefreshServerBackups::POLL_INTERVAL.seconds, current_user.id, @server.id)
     redirect_to server_backups_path
   end
 
