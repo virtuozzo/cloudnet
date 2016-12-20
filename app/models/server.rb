@@ -27,6 +27,8 @@ class Server < ActiveRecord::Base
   has_many :server_hourly_transactions, dependent: :destroy
   has_many :server_ip_addresses, dependent: :destroy
   has_many :unscoped_server_ip_addresses, -> { unscope(where: :deleted_at) }, foreign_key: :server_id, class_name: "ServerIpAddress"
+  has_many :server_addons
+  has_many :addons, through: :server_addons
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
@@ -183,7 +185,7 @@ class Server < ActiveRecord::Base
   # `resources` hash, new resources for server
   def edit(resources, store = true)
     resources.stringify_keys!
-    editable_properties = %w(name cpus memory disk_size template_id)
+    editable_properties = %w(name cpus memory disk_size template_id addon_ids)
     updates = {}
     editable_properties.each do |field|
       updates[field] = resources[field] if resources.key? field

@@ -33,7 +33,8 @@ class ServersController < ServerCommonController
         cpus: @server.cpus,
         disk_size: @server.disk_size,
         provisioner_role: @server.provisioner_role,
-        current_step: 1
+        current_step: 1,
+        addons: @server.addons
       }
     end
     process_server_wizard
@@ -42,6 +43,7 @@ class ServersController < ServerCommonController
     @wizard_object.existing_server_id = @server.id
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
+    @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
 
     if @wizard.save
       log_activity :edit

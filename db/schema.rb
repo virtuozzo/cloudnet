@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161122154442) do
+ActiveRecord::Schema.define(version: 20161216125638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,17 @@ ActiveRecord::Schema.define(version: 20161122154442) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+  create_table "addons", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.decimal  "price",           default: 0.0
+    t.string   "task"
+    t.boolean  "hidden",          default: false
+    t.boolean  "request_support", default: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "title",                        null: false
@@ -386,6 +397,16 @@ ActiveRecord::Schema.define(version: 20161122154442) do
   end
 
   add_index "risky_ip_addresses", ["account_id"], name: "index_risky_ip_addresses_on_account_id", using: :btree
+
+  create_table "server_addons", force: :cascade do |t|
+    t.integer  "addon_id"
+    t.integer  "server_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "server_addons", ["addon_id"], name: "index_server_addons_on_addon_id", using: :btree
+  add_index "server_addons", ["server_id"], name: "index_server_addons_on_server_id", using: :btree
 
   create_table "server_backups", force: :cascade do |t|
     t.boolean  "built",                       default: false
@@ -714,6 +735,8 @@ ActiveRecord::Schema.define(version: 20161122154442) do
   add_foreign_key "indices", "locations"
   add_foreign_key "keys", "users"
   add_foreign_key "locations", "regions"
+  add_foreign_key "server_addons", "addons"
+  add_foreign_key "server_addons", "servers"
   add_foreign_key "server_ip_addresses", "servers"
   add_foreign_key "uptimes", "locations"
   add_foreign_key "user_server_counts", "users"

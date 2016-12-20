@@ -688,3 +688,26 @@ Hides the menu at `48em`, but modify this based on your app's needs.
 body #payg-add-card .modal-dialog {
     width: 750px;
 }
+
+#magic-checkbox-collection {
+  padding-top: 15px;
+}
+
+#magic-checkbox-collection input { 
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+}
+
+#magic-checkbox-collection label { 
+  display: block;
+  padding-left: 45px;
+  text-indent: -15px;
+  font-size: 0.9em;
+  line-height: inherit;
+}
+
+#magic-checkbox-collection .magic-checkbox-item {
+    padding-left: 10px;
+}

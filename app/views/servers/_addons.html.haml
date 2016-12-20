@@ -1,0 +1,11 @@
+.jg-widget-content
+  .jg-widget-header.pure-g.clearfix
+    %h2.jg-icon.icon-cloud.pure-u Select Add-ons
+  .jg-widget-body
+    .jg-widget-form.pure-u-1.clearfix
+      .form-group.jg-inline.pure-u-1.pure-g
+        #magic-checkbox-collection
+          - Addon.available.each do |addon|
+            .form-group.pure-u-md-1-4.magic-checkbox-item
+              = check_box_tag :addon_ids, addon.id, @wizard_object.addons.include?(addon), name: 'server_wizard[addon_ids][]', id: "addon_ids_#{addon.id}", class: 'magic-checkbox'
+              = label_tag "addon_ids_#{addon.id}", addon.name, "class" => "bs-tooltip", "data-toggle" => "tooltip", "data-placement" => "top", "title" => addon.description

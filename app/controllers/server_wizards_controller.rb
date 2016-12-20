@@ -10,6 +10,7 @@ class ServerWizardsController < ServerCommonController
     @wizard_object.user = current_user
     @wizard_object.current_step = 2 #if location_id_in_params?
     @wizard_object.ip_addresses = 1
+    @wizard_object.addons = []
     @packages = @wizard_object.packages
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
