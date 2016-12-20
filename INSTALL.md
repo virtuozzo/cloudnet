@@ -27,7 +27,7 @@ This is a quick step-by-step guide to install Cloud.net on a server using Docker
   
   Values for keys under PRE-CONFIGURED can be left as such unless you have made changes to how docker has been composed. You will need to enter values for all the keys under REQUIRED except SYMMETRIC_ENCRYPTION_KEY, DEVISE_SECRET_KEY, COOKIES_SECRET_BASE and ONAPP_ROLE which are explained in the next step.
     
-5. Temporarily add `RAILS_ENV=test` at top of .env.docker and run the following commands
+5. Temporarily set `RAILS_ENV=test` under 'Environments' section in .env.docker and run the following commands
 
   ONAPP_ROLE is the OnApp user role that grants restricted permissions to Cloud.net users. Run the following command to create it.
 
@@ -43,7 +43,7 @@ This is a quick step-by-step guide to install Cloud.net on a server using Docker
 
   `$ docker-compose run --no-deps --rm cloudnet-app rake secret`
 
-  Now remove RAILS_ENV=test from .env.docker
+  Now set value of RAILS_ENV env variable back to 'production' in .env.docker
 
 6. Run the following commands to create and setup the database
 
