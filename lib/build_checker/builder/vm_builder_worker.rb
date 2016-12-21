@@ -45,7 +45,7 @@ module BuildChecker
 
       def update_error_task(e)
         mes = {:create => e.message}
-        if e.respond_to?(:response)
+        if e.respond_to?(:response) && e.response
           mes.merge!({:create_response => JSON.parse(e.response[:body])})
         end
 
