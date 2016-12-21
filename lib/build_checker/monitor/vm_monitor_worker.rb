@@ -64,7 +64,7 @@ module BuildChecker
         op = @task.delete_queued_at.nil? ? :build : :delete
         e = @task.error || "{}"
         mes = {op => error}
-        if exception.respond_to?(:response) && e.response
+        if exception.respond_to?(:response) && exception.response
           mes.merge!(Hash[(op.to_s + '_response'), JSON.parse(exception.response[:body])])
         end
 
