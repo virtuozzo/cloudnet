@@ -109,7 +109,7 @@ group :development, :test do
   gem 'guard-livereload', require: false
   gem 'guard-sidekiq'
   gem 'guard-rspec', require: false
-  gem 'rb-readline'
+  gem 'rb-readline', git: 'https://github.com/ConnorAtherton/rb-readline'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'spring'

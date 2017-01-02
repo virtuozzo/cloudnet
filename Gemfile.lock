@@ -25,6 +25,12 @@ GIT
       sort_alphabetical (~> 1.0)
 
 GIT
+  remote: https://github.com/ConnorAtherton/rb-readline
+  revision: 323fed5a7061b9caad130234e531c9d2a8a3da4b
+  specs:
+    rb-readline (0.5.4)
+
+GIT
   remote: https://github.com/OnApp/squall
   revision: c060541b355121f8f974d832a81eefdbeac689c7
   specs:
@@ -495,7 +501,6 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rb-readline (0.5.2)
     rdoc (4.2.0)
       json (~> 1.4)
     redcarpet (3.1.2)
@@ -756,7 +761,7 @@ DEPENDENCIES
   rails (= 4.2.7)
   rails_12factor
   rails_best_practices
-  rb-readline
+  rb-readline!
   redcarpet (~> 3.1.1)
   responders (~> 2.0)
   roar-rails
