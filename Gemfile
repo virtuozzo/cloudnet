@@ -161,3 +161,6 @@ end
 group :staging do
   gem 'rails_12factor'
 end
+
+# Dependencies
+gem 'thor', '0.19.1'
