@@ -46,7 +46,7 @@ describe DisputeHandler, :vcr do
    
     it 'should get list of disputes from Stripe and shutdown servers' do      
       VCR.use_cassette "DisputeHandler/stripe_calls" do
-        Timecop.freeze Time.zone.now.change(day: 10, month: 4, hour: 10) do
+        Timecop.freeze Time.zone.now.change(day: 10, month: 4, hour: 10, year: 2016) do
           dispute_handler.perform
         end
         expect(@server_tasks).to have_received(:perform).with(:shutdown, @user.id, @server1.id)
