@@ -158,7 +158,7 @@ class Server < ActiveRecord::Base
         NotifyUsersMailer.notify_stuck_state(user, self).deliver_now
       end
     end
-    update_attributes(stuck: detected_stuck) if detected_stuck != stuck
+    update_attribute :stuck, detected_stuck if detected_stuck != stuck
   end
 
   # Notify admin if server has no storage attached or no IPs

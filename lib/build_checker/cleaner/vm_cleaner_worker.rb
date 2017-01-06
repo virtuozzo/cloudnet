@@ -31,7 +31,7 @@ module BuildChecker
       def update_error_task(e)
         task_error = @task.error || "{}"
         mes = {:queue_delete => e.message}
-        if e.respond_to?(:response)
+        if e.respond_to?(:response) && e.response
           mes.merge!({:queue_delete_response => JSON.parse(e.response[:body])})
         end
 
