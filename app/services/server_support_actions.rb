@@ -16,6 +16,7 @@ class ServerSupportActions < Struct.new(:user)
     edit_wizard.card = user.account.billing_cards.first
     edit_wizard.user = user
     edit_wizard.ip_addresses = edited_server.ip_addresses
+    edit_wizard.addons = edited_server.addons
     edit_wizard.hostname = edited_server.hostname
     edit_wizard
   end

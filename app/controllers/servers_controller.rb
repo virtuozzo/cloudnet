@@ -44,6 +44,7 @@ class ServersController < ServerCommonController
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
     @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
+    @wizard_object.addons = @server.addons
 
     if @wizard.save
       log_activity :edit

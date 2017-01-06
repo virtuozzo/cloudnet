@@ -12,12 +12,14 @@ module Billing
       template = template_invoice_item(hours)
       bwf   = bandwidth_free_invoice_item(hours)
       bwp   = bandwidth_paid_invoice_item(reason) if reason
+      adds = addons_invoice_items(hours)
 
-      net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost]
+      net_cost = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost] + adds.map { |a| a[:net_cost] }.sum
       net_cost += reason ? bwp[:net_cost] : 0
 
       description = "Server: #{name} (Hostname: #{hostname})"
       metadata = reason ? [ram, cpu, disk, bwf, bwp, ip, template] : [ram, cpu, disk, bwf, ip, template]
+      adds.map {|addon| metadata << addon }
       { description: description, net_cost: net_cost, metadata: metadata, source: self }
     end
 
@@ -42,8 +44,9 @@ module Billing
       disk = disk_invoice_item(1)
       ip = ip_invoice_item(1)
       template = template_invoice_item(1)
+      addons = addons_invoice_items(1)
 
-      hourly = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost]
+      hourly = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost] + addons.map { |a| a[:net_cost] }.sum
     end
 
     def monthly_cost
@@ -112,6 +115,25 @@ module Billing
         hours: bandwidth_usage[:hours],
         description: billable_bandwidth_description(bandwidth_usage),
         net_cost: location.price_bw * bandwidth_usage[:billable] # price in milicents / MB
+      }
+    end
+    
+    def addons_invoice_items(hours)
+      invoice_items = []
+      addons.each do |addon|
+        invoice_items << addons_invoice_item(addon, hours)
+      end
+      return invoice_items
+    end
+    
+    def addons_invoice_item(addon, hours)
+      {
+        name: 'Add-ons',
+        unit_cost: addon.price,
+        units: 1,
+        hours: hours,
+        description: "#{addon.name} for #{hours} hours",
+        net_cost: addon.price * hours
       }
     end
 
