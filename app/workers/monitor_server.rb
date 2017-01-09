@@ -12,6 +12,8 @@ class MonitorServer
     manager.perform(:refresh_events, user_id, server_id)
 
     pending_events = server.server_events.where.not(status: [:complete, :cancelled, :failed])
+    # do not consider old pending events - that creates never ending monitoring tasks
+    pending_events = pending_events.select {|e| e.transaction_created > (Time.now - 3.days)}
 
     if still_monitor? || has_no_ip_address? || pending_events.size > 0
       MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, server_id, user_id, docker_provision)
