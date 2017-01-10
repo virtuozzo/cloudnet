@@ -44,14 +44,15 @@ class ServersController < ServerCommonController
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
     @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
-    @wizard_object.addons = @server.addons
 
     if @wizard.save
       log_activity :edit
       actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
+      old_server_specs.addon_ids = @server.addon_ids
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
+      edit_wizard.addons = @server.addons
       result = actions.schedule_edit(edit_wizard, old_server_specs)
       if result.build_errors.length == 0
         flash[:info] = 'Server scheduled for update'

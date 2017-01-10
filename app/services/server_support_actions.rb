@@ -12,11 +12,11 @@ class ServerSupportActions < Struct.new(:user)
     # orginally designed to do, ie; building servers from scratch.
     server_hash = server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
     edit_wizard = ServerWizard.new server_hash
+    edit_wizard.addon_ids = params["addon_ids"]
     edit_wizard.existing_server_id = edited_server.id
     edit_wizard.card = user.account.billing_cards.first
     edit_wizard.user = user
     edit_wizard.ip_addresses = edited_server.ip_addresses
-    edit_wizard.addons = edited_server.addons
     edit_wizard.hostname = edited_server.hostname
     edit_wizard
   end

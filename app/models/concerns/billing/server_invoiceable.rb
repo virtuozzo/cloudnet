@@ -128,7 +128,7 @@ module Billing
     
     def addons_invoice_item(addon, hours)
       {
-        name: 'Add-ons',
+        name: 'Add-on',
         unit_cost: addon.price,
         units: 1,
         hours: hours,
