@@ -8,14 +8,14 @@
 
 class AutoTopup
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform
     return unless PAYMENTS[:stripe][:api_key].present?
     Account.where(auto_topup: true).find_each do |account|
       user = account.user
-      next unless user.servers.count > 0 && 
-                  account.billing_cards.processable.count > 0 && 
+      next unless user.servers.count > 0 &&
+                  account.billing_cards.processable.count > 0 &&
                   account.wallet_balance < 200_000
       next if account.coupon && account.coupon.percentage == 100
       next unless account.fraud_safe?
@@ -33,12 +33,12 @@ class AutoTopup
       end
     end
   end
-  
+
   def perform_topup(account)
     task = PaygTopupCardTask.new(account, Payg::VALID_TOP_UP_AMOUNTS.min)
     task.process
   end
-  
+
   def charge_unpaid_invoices(account)
     unpaid_invoices = account.invoices.not_paid
     ChargeInvoicesTask.new(account.user, unpaid_invoices).process unless unpaid_invoices.empty?

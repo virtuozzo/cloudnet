@@ -404,7 +404,7 @@ GEM
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
-    mock_redis (0.14.0)
+    mock_redis (0.17.1)
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
