@@ -12,6 +12,7 @@ class MonitorServer
     manager.perform(:refresh_events, user_id, server_id)
 
     pending_events = server.server_events.where.not(status: [:complete, :cancelled, :failed])
+
     # do not consider old pending events - that might create never ending monitoring tasks
     pending_events = pending_events.select {|e| e.transaction_created > (Time.now - 1.days)}
 
