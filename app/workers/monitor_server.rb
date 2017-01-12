@@ -8,7 +8,9 @@ class MonitorServer
     return if Server.find_by_id(server_id).nil?
 
     manager = ServerTasks.new
-    @server  = manager.perform(:refresh_server, user_id, server_id, docker_provision)
+    provisioning_status = docker_provision ? :provisioning : false
+
+    @server  = manager.perform(:refresh_server, user_id, server_id, provisioning_status, :monitoring)
     manager.perform(:refresh_events, user_id, server_id)
 
     pending_events = server.server_events.where.not(status: [:complete, :cancelled, :failed])

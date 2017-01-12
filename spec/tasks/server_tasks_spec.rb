@@ -44,36 +44,76 @@ describe ServerTasks do
               'memory' => server.memory, 'total_disk_size' => server.disk_size } }
     before :each do
       allow_any_instance_of(Squall::VirtualMachine).to receive(:show).and_return(info)
-      expect(AdminMailer).to receive(:notify_automatic_invoice).with(server, instance_of(Server)).
-        and_return(double(deliver_now: true))
       FactoryGirl.create :payment_receipt, account: account
     end
 
-    it 'creates credit_note and invoice if memory changed' do
-      info['memory'] = server.memory + 1
-      task.perform(:refresh_server, server.user.id, server.id)
-      expect(account.invoices.count).to eq 1
-      expect(account.credit_notes.count).to eq 1
-      a_params = server.activities.first[:parameters]
-      expect(a_params[:old_memory] < a_params[:new_memory]).to be_truthy
+    context 'refresh server with billing change' do
+      before :each do
+        expect(AdminMailer).to receive(:notify_automatic_invoice).with(server, instance_of(Server)).
+          and_return(double(deliver_now: true))
+      end
+
+      it 'creates credit_note and invoice if memory changed' do
+        info['memory'] = server.memory + 1
+        task.perform(:refresh_server, server.user.id, server.id)
+        expect(account.invoices.count).to eq 1
+        expect(account.credit_notes.count).to eq 1
+        a_params = server.activities.first[:parameters]
+        expect(a_params[:old_memory] < a_params[:new_memory]).to be_truthy
+      end
+
+      it 'creates credit_note and invoice if cpu changed' do
+        info['cpus'] = server.cpus + 1
+        task.perform(:refresh_server, server.user.id, server.id)
+        expect(account.invoices.count).to eq 1
+        expect(account.credit_notes.count).to eq 1
+        a_params = server.activities.first[:parameters]
+        expect(a_params[:old_cpus] < a_params[:new_cpus]).to be_truthy
+      end
+
+      it 'creates credit_note and invoice if disk_size changed' do
+        info['total_disk_size'] = server.disk_size + 1
+        task.perform(:refresh_server, server.user.id, server.id)
+        expect(account.invoices.count).to eq 1
+        expect(account.credit_notes.count).to eq 1
+        a_params = server.activities.first[:parameters]
+        expect(a_params[:old_disk_size] < a_params[:new_disk_size]).to be_truthy
+      end
+
+      it 'creates credit_note and invoice if server in edit but force update' do
+        server.update(no_refresh: true)
+        info['total_disk_size'] = server.disk_size + 1
+        task.perform(:refresh_server, server.user.id, server.id, :force_update)
+        expect(account.invoices.count).to eq 1
+        expect(account.credit_notes.count).to eq 1
+        a_params = server.activities.first[:parameters]
+        expect(a_params[:old_disk_size] < a_params[:new_disk_size]).to be_truthy
+      end
     end
 
-    it 'creates credit_note and invoice if cpu changed' do
-      info['cpus'] = server.cpus + 1
-      task.perform(:refresh_server, server.user.id, server.id)
-      expect(account.invoices.count).to eq 1
-      expect(account.credit_notes.count).to eq 1
-      a_params = server.activities.first[:parameters]
-      expect(a_params[:old_cpus] < a_params[:new_cpus]).to be_truthy
-    end
+    context 'refresh server with no billing change' do
+      before :each do
+        expect(AdminMailer).not_to receive(:notify_automatic_invoice)
+      end
 
-    it 'creates credit_note and invoice if disk_size changed' do
-      info['total_disk_size'] = server.disk_size + 1
-      task.perform(:refresh_server, server.user.id, server.id)
-      expect(account.invoices.count).to eq 1
-      expect(account.credit_notes.count).to eq 1
-      a_params = server.activities.first[:parameters]
-      expect(a_params[:old_disk_size] < a_params[:new_disk_size]).to be_truthy
+      it 'does not create credit_note and invoice if :monitoring task' do
+        info['total_disk_size'] = server.disk_size + 1
+        task.perform(:refresh_server, server.user.id, server.id, false, :monitoring)
+        expect(account.invoices.count).to eq 0
+        expect(account.credit_notes.count).to eq 0
+        expect(server.activities).to be_empty
+        server.reload
+        expect(server.disk_size).to eq info['total_disk_size']
+      end
+
+      it 'does not create credit_note and invoice if server in edit' do
+        server.update(no_refresh: true)
+        info['total_disk_size'] = server.disk_size + 1
+        task.perform(:refresh_server, server.user.id, server.id)
+        expect(account.invoices.count).to eq 0
+        expect(account.credit_notes.count).to eq 0
+        expect(server.activities).to be_empty
+      end
     end
   end
 

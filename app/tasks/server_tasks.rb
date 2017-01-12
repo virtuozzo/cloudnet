@@ -57,7 +57,9 @@ class ServerTasks < BaseTasks
 
   def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
-    docker_provision = args[0] == true ? :provisioning : nil
+    docker_provision = (args[0] == :provisioning) ? :provisioning : nil
+    force_update = (args[0] == :force_update) ? true : false
+    monitoring = (args[1] == :monitoring) ? true : false
     # Don't update our state if our server is locked
     new_state = server.state
     if info['locked'] == false
@@ -82,11 +84,11 @@ class ServerTasks < BaseTasks
     end
 
     server.detect_stuck_state
-    old_server_specs = Server.new server.as_json if billing_params_changed?(server, info)
+    old_server_specs = Server.new server.as_json if !monitoring && billing_params_changed?(server, info, force_update)
 
     disk_size = info['total_disk_size'].to_i
 
-    unless server.no_refresh
+    if (!server.no_refresh || force_update)
       server.update(
         built:                  info['built'],
         suspended:              info['suspended'],
@@ -245,11 +247,11 @@ class ServerTasks < BaseTasks
   # If that is not the case - most probably the 'edit' operation failed
   # In that case we need to update billing (credit_note + invoice)
   # It is important that server is not refreshed during 'edit' operation - no_refresh: true
-  def billing_params_changed?(server, info)
+  def billing_params_changed?(server, info, force_update)
     # Do not process if server is being created
     return false if info['locked'] == true || info['built'] == false
     # Do not proceed if server is being edited
-    return false if server.no_refresh
+    return false if server.no_refresh && !force_update
 
     disk_size = info['total_disk_size'].to_i
 
