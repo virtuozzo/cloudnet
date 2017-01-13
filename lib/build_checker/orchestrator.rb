@@ -6,6 +6,7 @@ module BuildChecker
 
     Signal.trap("INT") { exit }
     at_exit do
+      exit!(true) unless ActiveRecord::Base.connected?
       BuildChecker.clear_pid! if BuildChecker.pid == Process.pid
       ActiveRecord::Base.clear_active_connections!
       exit! if @@threads.blank?
