@@ -17,7 +17,7 @@
           - unless defined?(wizard)
             %p.auto-topup-info
               - if has_stripe?
-                ="If you have Auto Top-up enabled, we will automatically top-up your account with $#{Payg::VALID_TOP_UP_AMOUNTS.min} when your Wallet balance goes below $2, provided you have active servers and atleast one billing card added to your account."
+                ="If you have Auto Top-up enabled, we will automatically top-up your account with $#{Payg::MIN_AUTO_TOP_UP_AMOUNT} when your Wallet balance goes below $2, provided you have active servers and atleast one billing card added to your account."
               - else
                 Wallet balance will be used against any invoices that are generated subsequently. You may top-up your Wallet using PayPal by clicking on the "Add Funds" button below. 
 

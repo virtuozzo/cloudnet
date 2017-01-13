@@ -26,7 +26,7 @@ describe AutoTopup do
     
     AutoTopup.drain
     @account.reload
-    expect(@account.wallet_balance).to eq((Payg::VALID_TOP_UP_AMOUNTS.min * Invoice::MILLICENTS_IN_DOLLAR).to_i + 100_000)
+    expect(@account.wallet_balance).to eq((Payg::MIN_AUTO_TOP_UP_AMOUNT * Invoice::MILLICENTS_IN_DOLLAR).to_i + 100_000)
   end
   
   it 'should not topup Wallet because account is not fraud safe' do
