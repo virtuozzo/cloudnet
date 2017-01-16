@@ -8,16 +8,16 @@ class ServerTasks < BaseTasks
   end
 
   private
-  
+
   def request_backup(server, squall)
     squall.request_backup(server.identifier)
   end
-  
+
   # Fetch backups from Onapp and insert them into the database
   def refresh_backups(server, squall)
     remote_backups   = squall.backups(server.identifier)
     new_backup_created = false
-    
+
     # Create or update backup objects
     remote_backups.each do |backup|
       backup = backup["backup"]
@@ -42,12 +42,12 @@ class ServerTasks < BaseTasks
         new_backup_created = true
       end
     end
-    
+
     # Destroy backup objects that do not exist at Onapp
     remote_backup_identifiers = remote_backups.map { |b| b["backup"]["identifier"] }
     zombie_backups = server.server_backups.select { |bkp| !remote_backup_identifiers.include?(bkp.identifier) }
     zombie_backups.map(&:destroy)
-    
+
     return new_backup_created
   end
 
@@ -57,7 +57,9 @@ class ServerTasks < BaseTasks
 
   def refresh_server(server, squall, *args)
     info = squall.show(server.identifier)
-    docker_provision = args[0] == true ? :provisioning : nil
+    docker_provision = (args[0] == :provisioning) ? :provisioning : nil
+    force_update = (args[0] == :force_update) ? true : false
+    monitoring = (args[1] == :monitoring) ? true : false
     # Don't update our state if our server is locked
     new_state = server.state
     if info['locked'] == false
@@ -82,24 +84,26 @@ class ServerTasks < BaseTasks
     end
 
     server.detect_stuck_state
-    old_server_specs = Server.new server.as_json if billing_params_changed?(server, info)
+    old_server_specs = Server.new server.as_json if !monitoring && billing_params_changed?(server, info, force_update)
 
     disk_size = info['total_disk_size'].to_i
 
-    server.update(
-      built:                  info['built'],
-      suspended:              info['suspended'],
-      locked:                 info['locked'],
-      remote_access_password: info['remote_access_password'],
-      root_password:          info['initial_root_password'],
-      hypervisor_id:          info['hypervisor_id'],
-      cpus:                   info['cpus'],
-      memory:                 info['memory'],
-      disk_size:              disk_size > 1 ? disk_size.to_s : server.disk_size,
-      os:                     info['operating_system'],
-      state:                  state,
-      template_id:            onapp_template ? onapp_template.id : server.template_id
-    )
+    if (!server.no_refresh || force_update)
+      server.update(
+        built:                  info['built'],
+        suspended:              info['suspended'],
+        locked:                 info['locked'],
+        remote_access_password: info['remote_access_password'],
+        root_password:          info['initial_root_password'],
+        hypervisor_id:          info['hypervisor_id'],
+        cpus:                   info['cpus'],
+        memory:                 info['memory'],
+        disk_size:              disk_size > 1 ? disk_size.to_s : server.disk_size,
+        os:                     info['operating_system'],
+        state:                  state,
+        template_id:            onapp_template ? onapp_template.id : server.template_id
+      )
+    end
 
     prepare_invoice(server, old_server_specs) if old_server_specs
     server.notify_fault(disk_size <= 1, info['ip_addresses'].blank?)
@@ -116,7 +120,7 @@ class ServerTasks < BaseTasks
   end
 
   def refresh_events(server, squall)
-    transactions = squall.transactions(server.identifier, 100)
+    transactions = squall.transactions(server.identifier, 200)
 
     last_event = ServerEvent.select('reference').order('reference DESC').limit(1)
     last_ref   = (last_event.first.reference if last_event.size >= 1) || -1
@@ -243,9 +247,12 @@ class ServerTasks < BaseTasks
   # If that is not the case - most probably the 'edit' operation failed
   # In that case we need to update billing (credit_note + invoice)
   # It is important that server is not refreshed during 'edit' operation - no_refresh: true
-  def billing_params_changed?(server, info)
+  def billing_params_changed?(server, info, force_update)
     # Do not process if server is being created
     return false if info['locked'] == true || info['built'] == false
+    # Do not proceed if server is being edited
+    return false if server.no_refresh && !force_update
+
     disk_size = info['total_disk_size'].to_i
 
     # For unknown reason the storage can be faulty and not attached to VM

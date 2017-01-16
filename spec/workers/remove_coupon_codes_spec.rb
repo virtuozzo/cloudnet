@@ -4,18 +4,18 @@ describe RemoveCouponCodes do
   context "enqueing jobs" do
     before(:each) do
       Sidekiq::Testing.fake!
+      Sidekiq::Worker.clear_all
     end
-    it "should enque one job" do
+    it "should enque job" do
       expect {
-        RemoveCouponCodes.perform_async
         RemoveCouponCodes.perform_async
       }.to change(RemoveCouponCodes.jobs, :size).by(1)
     end
   end
-  
-  context "performing task" do 
+
+  context "performing task" do
     let(:user) {  FactoryGirl.build(:user) }
-    
+
     before(:each) do
       Timecop.freeze(7.month.ago) do
         user.servers << FactoryGirl.build(:server, memory: 512)
@@ -23,14 +23,14 @@ describe RemoveCouponCodes do
         user.account.coupon = FactoryGirl.create(:coupon)
       end
     end
-    
+
     it "removes coupon" do
       expect(user.account.coupon).to be
       subject.perform
       user.reload
       expect(user.account.coupon).to be_nil
     end
-    
+
     it 'recalculates forecasted_revenue' do
       expect(user.forecasted_revenue).to eq 83919360
       subject.perform

@@ -122,6 +122,7 @@ module Routes::V1
           actions = ServerSupportActions.new(current_user)
           edit_wizard = actions.prepare_edit(server, requested_params)
           begin
+            raise CreateError if server.no_refresh
             raise CreateError unless edit_wizard.valid?
             actions.update_edited_server(server, requested_params, edit_wizard)
             result = actions.schedule_edit(edit_wizard, old_server_specs)
@@ -130,6 +131,7 @@ module Routes::V1
             present server, with: ServerRepresenter
           rescue CreateError
             error = {}
+            error.merge!(edit: "Server edit in progress. Wait until status is 'on'") if server.no_refresh
             error.merge! build: result.build_errors if result && result.build_errors.any?
             error.merge! edit_wizard.errors.messages.each_with_object({}) { |e, m| m[e[0]] = e[1] }
             msg = { "error" => error }

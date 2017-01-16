@@ -28,6 +28,7 @@ class ServerSupportActions < Struct.new(:user)
       params["disk_size"] = (params["disk_size"].to_i + 1).to_s
       edit_wizard.disk_size += 1
     end
+    server.no_auto_refresh!
     server.edit(params)
     server.update_attribute(:bandwidth, edit_wizard.bandwidth)
   end

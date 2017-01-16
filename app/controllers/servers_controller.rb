@@ -1,6 +1,7 @@
 class ServersController < ServerCommonController
   before_action :set_server, except: [:index, :new, :create]
   before_action :check_server_state, only: [:rebuild_network, :reset_root_password]
+  class EditInProgressError < StandardError; end
 
   def index
     @servers = current_user.servers.order(id: :asc)
@@ -45,7 +46,7 @@ class ServersController < ServerCommonController
     @packages = @wizard_object.packages
     @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
 
-    if @wizard.save
+    if @server.no_refresh == false && @wizard.save
       log_activity :edit
       actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
@@ -66,11 +67,13 @@ class ServersController < ServerCommonController
       flash.now[:warning] = 'Please top up your Wallet to upgrade your server'
       step3
     else
+      raise EditInProgressError if @server.no_refresh
       step2
       #FIXME: Not allowing to rebuild into Windows until onapp core team fix the problem
       @templates.reject! {|k,v| k.split("-")[0] == "windows"}
     end
     render 'server_wizards/edit'
+
   rescue Faraday::Error::ClientError => e
     ErrorLogging.new.track_exception(
       e,
@@ -82,6 +85,10 @@ class ServersController < ServerCommonController
     )
     flash[:warning] = 'Could not schedule update of server. Please try again later'
     redirect_to :back
+
+  rescue EditInProgressError
+    flash[:warning] = "Server edit in progress. Wait until status is 'on'"
+    redirect_to @server
   end
 
   def console

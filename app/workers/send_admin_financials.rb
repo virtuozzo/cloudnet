@@ -1,6 +1,6 @@
 class SendAdminFinancials
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform(type, *args)
     send(type.to_sym, *args)
@@ -38,14 +38,14 @@ class SendAdminFinancials
 
     AdminMailer.monthly_csv(start_date, end_date).deliver_now
   end
-  
+
   def periodic_csv(start_date, end_date, report, admin_id)
     start_date = Date.strptime start_date, '%Y-%m-%d'
     end_date   = Date.strptime end_date, '%Y-%m-%d'
-    
+
     AdminMailer.periodic_csv(start_date, end_date, report, admin_id).deliver_now
   end
-  
+
   # List of all servers and their market cost vs selling price
   def cost_analysis
     AdminMailer.cost_analysis.deliver_now

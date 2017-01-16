@@ -1,5 +1,6 @@
 class Payg
-  VALID_TOP_UP_AMOUNTS = [25, 50, 100, 500, 1000]
+  VALID_TOP_UP_AMOUNTS = [10, 25, 50, 100, 500, 1000]
+  MIN_AUTO_TOP_UP_AMOUNT = 25
   CENTS_IN_DOLLAR = 100
 
   # This is used in the summary section of a PAYG invoice. Over a month a server may be billed
