@@ -35,7 +35,7 @@ class ServersController < ServerCommonController
         disk_size: @server.disk_size,
         provisioner_role: @server.provisioner_role,
         current_step: 1,
-        addons: @server.addons
+        addon_ids: @server.addons.pluck(:id)
       }
     end
     process_server_wizard
@@ -44,7 +44,7 @@ class ServersController < ServerCommonController
     @wizard_object.existing_server_id = @server.id
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
-    @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
+    @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard] && params[:server_wizard][:addon_ids].blank?
 
     if @server.no_refresh == false && @wizard.save
       log_activity :edit
@@ -53,7 +53,6 @@ class ServersController < ServerCommonController
       old_server_specs.addon_ids = @server.addon_ids
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
-      edit_wizard.addons = @server.addons
       result = actions.schedule_edit(edit_wizard, old_server_specs)
       if result.build_errors.length == 0
         flash[:info] = 'Server scheduled for update'

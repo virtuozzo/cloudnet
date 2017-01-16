@@ -44,9 +44,9 @@ module Billing
       disk = disk_invoice_item(1)
       ip = ip_invoice_item(1)
       template = template_invoice_item(1)
-      addons = addons_invoice_items(1)
+      adds = addons_invoice_items(1)
 
-      hourly = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost] + addons.map { |a| a[:net_cost] }.sum
+      hourly = ram[:net_cost] + cpu[:net_cost] + disk[:net_cost] + ip[:net_cost] + template[:net_cost] + adds.map { |a| a[:net_cost] }.sum
     end
 
     def monthly_cost
@@ -120,8 +120,10 @@ module Billing
     
     def addons_invoice_items(hours)
       invoice_items = []
-      addons.each do |addon|
-        invoice_items << addons_invoice_item(addon, hours)
+      unless addons.nil?
+        addons.each do |addon|
+          invoice_items << addons_invoice_item(addon, hours)
+        end
       end
       return invoice_items
     end

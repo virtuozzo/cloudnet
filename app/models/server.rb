@@ -27,7 +27,7 @@ class Server < ActiveRecord::Base
   has_many :server_hourly_transactions, dependent: :destroy
   has_many :server_ip_addresses, dependent: :destroy
   has_many :unscoped_server_ip_addresses, -> { unscope(where: :deleted_at) }, foreign_key: :server_id, class_name: "ServerIpAddress"
-  has_many :server_addons
+  has_many :server_addons, dependent: :destroy
   has_many :addons, through: :server_addons
 
   validates :identifier, :hostname, :name, :user, presence: true
