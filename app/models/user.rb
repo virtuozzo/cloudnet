@@ -184,6 +184,12 @@ class User < ActiveRecord::Base
       CSV.read("#{Rails.root}/db/disposable_email_domains.csv").flatten
     end
   end
+  
+  def cache_key_for_servers
+    server_count = servers.size
+    server_max_updated_at = servers.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "#{id}/servers/all-#{server_count}-#{server_max_updated_at}"
+  end
 
   protected
 
