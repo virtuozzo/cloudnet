@@ -34,6 +34,7 @@ module BuildChecker
     end
 
     def prepare_threads
+      @@threads << stucked_tasks_monitor_start
       @@threads << queue_builder_start
       @@threads << build_processor_start
       @@threads << vm_monitor_start
@@ -55,6 +56,10 @@ module BuildChecker
 
     def cleaner_start
       Thread.new { Cleaner::CleanProcessor.run }
+    end
+
+    def stucked_tasks_monitor_start
+      Thread.new { BuildChecker::Monitor::StuckedTasksMonitor.run }
     end
 
     def running!

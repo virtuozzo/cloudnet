@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161122154442) do
+ActiveRecord::Schema.define(version: 20161221131421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 20161122154442) do
     t.string   "error"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.integer  "failed_in_build",  default: 0
   end
 
   add_index "build_checker_data", ["build_result"], name: "index_build_checker_data_on_build_result", using: :btree
