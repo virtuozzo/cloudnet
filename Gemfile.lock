@@ -787,7 +787,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-raven!
   sequenced (~> 1.6.0)
-  sidekiq (~> 3.2)
+  sidekiq
   sidekiq-unique-jobs
   sift (= 1.1.7.3)
   simplecov
