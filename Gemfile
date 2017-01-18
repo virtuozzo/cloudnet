@@ -31,7 +31,8 @@ gem 'devise-otp'
 gem 'angularjs-rails', '~> 1.3.15'
 gem 'underscore-rails', '~> 1.8.2'
 
-gem 'sidekiq'
+gem 'sidekiq', '~> 4.2'
+gem 'redis-namespace'
 gem 'sinatra', '>= 1.4.5', require: false
 gem 'sidekiq-unique-jobs'
 
