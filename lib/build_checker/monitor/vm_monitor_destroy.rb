@@ -34,8 +34,9 @@ module BuildChecker
       end
 
       def finish_task_success
+        build_result = @task.build.result == "failed" ? :failed : :success
         @task.update(
-          build_result: :success,
+          build_result: build_result,
           deleted_at: Time.now,
           state: :finished
         )
