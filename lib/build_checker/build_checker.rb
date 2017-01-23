@@ -4,7 +4,7 @@ module BuildChecker
   STATUS_KEY = 'build_checker_status' # running, stopped, stopping
 
   def self.running?
-    (status.empty? || status == "stopped") && pid.empty? ? false : true
+    (status.empty? || status == "stopped") && pid == 0 ? false : true
   end
 
   def self.stopped?
