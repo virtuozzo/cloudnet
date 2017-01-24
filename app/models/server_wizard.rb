@@ -160,7 +160,7 @@ class ServerWizard
 
   # Returns Server object for type = :create and true for :edit
   def create_or_edit_server(type = :create)
-    if type == :edit && server_changed?
+    if type == :edit && (server_changed? || ip_addresses_changed?)
       # Issue a credit note for the server's old specs for the time remaining during this
       # invoicable month. We will then charge them for the newly resized server as if it were
       # new.
@@ -177,7 +177,7 @@ class ServerWizard
     else
       # Edit the server through the Onapp API
       request_server_edit
-      charging_paperwork if server_changed?
+      charging_paperwork if (server_changed? || ip_addresses_changed?)
       true
     end
   rescue WizardError
@@ -268,6 +268,10 @@ class ServerWizard
 
   def server_changed?
     cpu_mem_changes || template_reload || disk_resize
+  end
+
+  def ip_addresses_changed?
+    @old_server_specs.ip_addresses != ip_addresses
   end
 
   def persisted?
