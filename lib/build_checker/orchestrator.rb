@@ -15,7 +15,6 @@ module BuildChecker
         exit!
       end
       finish_builds
-
       ActiveRecord::Base.clear_active_connections!
       logger.info "Build Checker stopped"
     end
