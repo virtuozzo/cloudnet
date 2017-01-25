@@ -31,6 +31,7 @@ module SiftProperties
     properties.merge! "$payment_methods" => cards
     properties.merge! "$billing_address" => primary_card.sift_billing_address_properties unless primary_card.nil?
     properties.merge! "email_confirmed_status" => (confirmed? ? "$confirmed" : "$pending")
+    properties.merge! "tags" => tag_labels.join(', ')
   rescue StandardError
     nil
   end
