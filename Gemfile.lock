@@ -361,6 +361,8 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    intercom (3.5.10)
+      json (>= 1.8)
     iso_country_codes (0.4.4)
     jasmine-core (2.3.0)
     jasmine-jquery-rails (2.0.3)
@@ -745,6 +747,7 @@ DEPENDENCIES
   guard-rspec
   guard-sidekiq
   haml-rails (~> 0.5.3)
+  intercom (~> 3.5.10)
   iso_country_codes (~> 0.4.4)
   jasmine-jquery-rails
   jasmine-rails
