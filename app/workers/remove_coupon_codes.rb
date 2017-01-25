@@ -4,9 +4,7 @@ class RemoveCouponCodes
 
   def perform
     Account.where.not(coupon_id: nil).each do |account|
-      coupon = account.coupon
-
-      if coupon.present? && Time.now > (account.coupon_activated_at + coupon.duration_months.months)
+      if account.coupon.present? && Time.now > account.coupon_expires_at
         account.update(coupon: nil)
         account.user.update_forecasted_revenue
       end
