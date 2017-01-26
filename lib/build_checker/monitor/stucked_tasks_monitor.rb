@@ -33,7 +33,15 @@ module BuildChecker
       def detect_stucked_tasks
         tasks_to_check.each do |task|
           time_passed = (Time.now - task.updated_at).to_f
-          finish_task_error(task) if (time_passed / STUCK_TIME) > 1
+          task_to_actionable_state(task) if (time_passed / STUCK_TIME) > 1
+        end
+      end
+
+      def task_to_actionable_state(task)
+        case task.state
+        when 'building' then finish_task_error(task)
+        when 'monitoring' then task.update_attribute(:state, :to_monitor)
+        when 'cleaning' then task.update_attribute(:state, :to_clean)
         end
       end
 
