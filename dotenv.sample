@@ -92,6 +92,7 @@ MAILER_ADMIN_DEFAULT_FROM='Cloud.net Admin <admin@website.com>'
 MAILER_NOTIFICATIONS_DEFAULT_FROM='Cloud.net Notifications <notifications@website.com>'
 MAILER_DEFAULT_WELCOME='Cloud.net <welcome@website.com>'
 MAILER_BILLING='billing@website.com'
+MAILER_CONTACT_MAIN='contact@website.com'
 
 # Appears at the top of PDFs for invoices, credit notes, etc
 PDF_HEADER="Company name\nAddress line 1\nVAT number\netc"
