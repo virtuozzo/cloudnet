@@ -18,6 +18,7 @@ ActiveAdmin.register User do
   filter :email
   filter :full_name
   filter :onapp_user
+  filter :account_whitelisted_eq, as: :select, label: 'Whitelisted'
   filter :tags, as: :check_boxes, collection: proc { Tag.for(User) }
 
   filter :notif_delivered
@@ -63,6 +64,9 @@ ActiveAdmin.register User do
     end
     column :admin
     column :suspended
+    column :whitelisted do |user|
+      status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?))
+    end
     column "Servers #" do |user|
       user.servers.count
     end
@@ -89,6 +93,9 @@ ActiveAdmin.register User do
     panel "Fraud Details" do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
+        row :whitelisted do |user|
+          status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?)) unless user.account.nil?
+        end
         row :minfraud_score do |user|
           user.account.max_minfraud_score unless user.account.nil?
         end
@@ -405,6 +412,24 @@ ActiveAdmin.register User do
     flash[:notice] = 'API has been enabled'
     redirect_to admin_user_path(id: user.id)
   end
+  
+  member_action :add_whitelist, method: :post do
+    user = User.find(params[:id])
+    user.account.update_attribute(:whitelisted, true)
+    user.create_activity(:add_whitelist, owner: user, params: { admin: current_user.id })
+
+    flash[:notice] = 'User has been whitelisted'
+    redirect_to admin_user_path(id: user.id)
+  end
+  
+  member_action :remove_whitelist, method: :post do
+    user = User.find(params[:id])
+    user.account.update_attribute(:whitelisted, false)
+    user.create_activity(:remove_whitelist, owner: user, params: { admin: current_user.id })
+
+    flash[:notice] = 'User has been removed from whitelist'
+    redirect_to admin_user_path(id: user.id)
+  end
 
   member_action :disable_two_factor, method: :post do
     user = User.find(params[:id])
@@ -448,6 +473,14 @@ ActiveAdmin.register User do
 
   action_item :edit, only: :show do
     link_to('Enable API', enable_api_admin_user_path(user), method: :post) unless user.api_enabled?
+  end
+  
+  action_item :edit, only: :show do
+    link_to('Whitelist User', add_whitelist_admin_user_path(user), method: :post) unless user.account.whitelisted?
+  end
+
+  action_item :edit, only: :show do
+    link_to('Remove from Whitelist', remove_whitelist_admin_user_path(user), method: :post) if user.account.whitelisted?
   end
 
   action_item :edit, only: :index do

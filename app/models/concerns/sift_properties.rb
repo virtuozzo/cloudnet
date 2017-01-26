@@ -19,7 +19,8 @@ module SiftProperties
       "risky_card_attempts"           => account.risky_card_attempts,
       "is_admin"                      => admin,
       "suspended"                     => suspended,
-      "phone_verified"                => phone_verified?
+      "phone_verified"                => phone_verified?,
+      "whitelisted"                   => account.whitelisted?
     }
     time_ip = {
       "$time"                         => created_at.to_i,
