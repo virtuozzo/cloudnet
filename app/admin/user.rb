@@ -65,7 +65,7 @@ ActiveAdmin.register User do
     column :admin
     column :suspended
     column :whitelisted do |user|
-      status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?))
+      status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?)) rescue nil
     end
     column "Servers #" do |user|
       user.servers.count
