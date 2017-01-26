@@ -103,7 +103,7 @@ module BuildChecker
       BuildCheckerDatum.where.not(state: [
         BuildCheckerDatum.states["scheduled"],
         BuildCheckerDatum.states["finished"]
-        ]).size > 0
+        ]).count > 0
     end
 
     def self.set_status(status)
