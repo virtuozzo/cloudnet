@@ -7,8 +7,8 @@
     email: "<%= current_user.email %>",
     user_id: <%= current_user.id %>,
     created_at: <%= current_user.created_at.to_i %>,
-    user_hash: "<%= intercom_user_hash %>",
-    "location_hash": <% if intercom_location_hash.blank? %>null<% else %>"<%= intercom_location_hash %>"<% end %>
+    user_hash: "<%= current_user.intercom_user_hash %>",
+    "location_hash": <% if current_user.intercom_location_hash.blank? %>null<% else %>"<%= current_user.intercom_location_hash %>"<% end %>
   };
 <% else %>
   window.intercomSettings = {

@@ -133,16 +133,6 @@ module ApplicationHelper
     value ? "Pass" : "Fail"
   end
   
-  def intercom_user_hash
-    OpenSSL::HMAC.hexdigest('sha256', KEYS[:intercom][:secret_key], current_user.id.to_s)
-  end
-  
-  def intercom_location_hash
-    Rails.cache.fetch(["location_hash", current_user.cache_key_for_servers]) do
-      current_user.servers.with_deleted.map(&:location).uniq.map(&:short_label).join(', ')
-    end
-  end
-  
   def just_logged_out?
     params[:logout] == "1"
   end
