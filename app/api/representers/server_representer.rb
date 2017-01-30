@@ -1,7 +1,7 @@
 # Serialise server objects
 module ServerRepresenter
   include BaseRepresenter
-  
+
   property :id
   property :created_at
   property :updated_at
@@ -15,6 +15,7 @@ module ServerRepresenter
   property :root_password, as: :initial_root_password
   collection :server_ip_addresses, as: :ip_addresses, extend: IpAddressRepresenter
   property :template, extend: TemplateRepresenter
+  property :location_id, as: :datacenter_id
   collection :server_events, as: :transactions do
     property :transaction_updated
     property :action

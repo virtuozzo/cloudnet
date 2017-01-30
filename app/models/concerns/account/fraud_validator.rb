@@ -13,6 +13,7 @@ class Account < ActiveRecord::Base
     
     def fraud_validation_reason(ip = nil)
       return case
+        when whitelisted? ; 0
         when !minfraud_safe? ; 1
         when !safe_ip?(ip) ; 2
         when !permissible_card_attempts? ; 3

@@ -7,7 +7,7 @@ class NegativeBalanceChecker
   def perform
     User.find_each { |user| check_user(user) }
   end
-  
+
   def check_user(user)
     suspended = user.suspended
     user.update_attribute(:suspended, false) if suspended
@@ -23,7 +23,7 @@ class NegativeBalanceChecker
   ensure
     user.update_attribute(:suspended, true) if suspended
   end
-  
+
   def log_error(e, user)
     ErrorLogging.new.track_exception(
       e,

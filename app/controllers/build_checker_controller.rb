@@ -1,7 +1,7 @@
 class BuildCheckerController < ApplicationController
   def start
     if BuildChecker.running?
-      flash[:warning] = 'Build checker already running'
+      flash[:warning] = BuildChecker.stopping? ? 'Build checker is stopping' : 'Build checker already running'
     else
       Rails.env == 'development' ? start_local_build_checker : start_remote_build_checker
     end
@@ -10,10 +10,12 @@ class BuildCheckerController < ApplicationController
   end
 
   def stop
-    if BuildChecker.running?
-      Rails.env == 'development' ? stop_local_build_checker : stop_remote_build_checker
-    else
+    if BuildChecker.stopped?
       flash[:warning] = 'Build checker is not running'
+    elsif BuildChecker.stopping?
+      flash[:warning] = 'Build checker is stopping. Wait for finish all the tasks.'
+    else
+      Rails.env == 'development' ? stop_local_build_checker : stop_remote_build_checker
     end
 
     redirect_to admin_build_checkers_path
@@ -48,7 +50,7 @@ class BuildCheckerController < ApplicationController
       result = system("bundle exec cap #{Rails.env} build_checker:stop")
 
       if result
-        flash[:notice] = 'Build checker stopped'
+        flash[:notice] = 'Build checker stopping'
       else
         flash[:error] = 'Not able to execute stop command. Please refer to logs'
       end
@@ -58,7 +60,8 @@ class BuildCheckerController < ApplicationController
       Process.kill('INT', BuildChecker.pid)
     rescue Errno::ESRCH
       BuildChecker.clear_pid!
+      BuildChecker.status = :stopped
     ensure
-      flash[:notice] = 'Build checker stopped'
+      flash[:notice] = 'Build checker stopping'
     end
 end

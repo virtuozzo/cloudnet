@@ -164,6 +164,10 @@ class Account < ActiveRecord::Base
   def max_minfraud_score
     billing_cards.map{|card| card.fraud_score.round(2).to_f unless card.fraud_score.nil?}.compact.max
   end
+  
+  def coupon_expires_at
+    coupon_activated_at + coupon.duration_months.months
+  end
 
   private
 

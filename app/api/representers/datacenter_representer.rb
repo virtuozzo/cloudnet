@@ -3,7 +3,7 @@ module DatacenterRepresenter
   include BaseRepresenter
 
   property :id
-  property :created_at
+#  property :created_at
   property :updated_at
   property :provider
   property :country

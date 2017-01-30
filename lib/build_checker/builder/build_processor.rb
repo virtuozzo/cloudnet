@@ -5,7 +5,7 @@ module BuildChecker
       include BuildChecker::Data
       include BuildChecker::Logger
       MAX_CONCURRENT_TASKS = 2
-      VERIFY_EVERY = 10.seconds
+      VERIFY_EVERY = 15.seconds
       at_exit do
         ActiveRecord::Base.clear_active_connections!
         logger.info "Build Processor stopped"
@@ -38,7 +38,7 @@ module BuildChecker
           @task.state = :building
           @task.save!
         end
-        build_worker_start if @task.state = :building # in case of race condituion
+        build_worker_start if @task.state == "building" # in case of race condition
       end
 
       def build_worker_start

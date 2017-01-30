@@ -8,9 +8,13 @@ module BuildChecker
       sidekiq_options :retry => 2
 
       def perform(task_id, user_id)
+        set_variables(task_id, user_id)
+        verify_vm
+      end
+
+      def set_variables(task_id, user_id)
         @user = User.find(user_id)
         @task = BuildCheckerDatum.find(task_id)
-        verify_vm
       end
 
       def verify_vm

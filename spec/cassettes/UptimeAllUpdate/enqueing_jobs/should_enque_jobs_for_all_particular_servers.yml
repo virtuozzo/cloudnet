@@ -46,9 +46,9 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"checks":[{"id":1534660,"created":1426079477,"name":"Budget London
-        Softlayer","hostname":"budget-london.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429443920,"lasttesttime":1435842020,"lastresponsetime":18,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Softlayer","hostname":"budget-london.<%= ENV["HOST_DOMAIN"] %>","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429443920,"lasttesttime":1435842020,"lastresponsetime":18,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534663,"created":1426079529,"name":"Budget
-        Dallas Softlayer","hostname":"budget-dallas.cloud.net","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429666867,"lasttesttime":1435842682,"lastresponsetime":40,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
+        Dallas Softlayer","hostname":"budget-dallas.<%= ENV["HOST_DOMAIN"] %>","use_legacy_notifications":false,"resolution":15,"type":"ping","lasterrortime":1429666867,"lasttesttime":1435842682,"lastresponsetime":40,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534671,"created":1426079922,"name":"Jaguar
         PC - Atlanta, USA","hostname":"209.140.21.114","use_legacy_notifications":false,"resolution":15,"type":"tcp","lasttesttime":1435842386,"lastresponsetime":91,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1534667,"created":1426079706,"name":"Cloud4y
@@ -114,6 +114,5 @@ http_interactions:
         (Recommended)","acktimeout":0,"autoresolve":0},{"id":1639690,"created":1435057949,"name":"Yisp
         - Netherlands","hostname":"37.220.38.2","use_legacy_notifications":false,"resolution":15,"type":"ping","lasttesttime":1435842434,"lastresponsetime":15,"status":"up","probe_filters":[],"alert_policy":1874995,"alert_policy_name":"Normal
         (Recommended)","acktimeout":0,"autoresolve":0}],"counts":{"total":34,"limited":34,"filtered":34}}'
-    http_version: 
+    http_version:
   recorded_at: Thu, 02 Jul 2015 13:12:09 GMT
-recorded_with: VCR 2.9.3

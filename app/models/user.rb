@@ -184,6 +184,22 @@ class User < ActiveRecord::Base
       CSV.read("#{Rails.root}/db/disposable_email_domains.csv").flatten
     end
   end
+  
+  def cache_key_for_servers
+    server_count = servers.size
+    server_max_updated_at = servers.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "#{id}/servers/all-#{server_count}-#{server_max_updated_at}"
+  end
+  
+  def intercom_user_hash
+    OpenSSL::HMAC.hexdigest('sha256', KEYS[:intercom][:secret_key], id.to_s)
+  end
+  
+  def intercom_location_hash
+    Rails.cache.fetch(["location_hash", cache_key_for_servers]) do
+      servers.with_deleted.map(&:location).uniq.map(&:short_label).join(', ')
+    end
+  end
 
   protected
 

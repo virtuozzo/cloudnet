@@ -15,7 +15,7 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
     panel "Build checker daemon status" do
       ul do
         li "Server time: #{Time.now}"
-        li "Build Checker status: #{BuildChecker.running? ? 'Active' : 'Stopped'}"
+        li "Build Checker status: #{BuildChecker.running? ? (BuildChecker.stopping? ? 'Stopping' : 'Active') : 'Stopped'}"
         li "Number of templates for check: #{Template.where(build_checker: true).count}"
         li "Number of locations with templates for test: #{}"
       end

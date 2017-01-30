@@ -51,7 +51,7 @@ module BuildChecker
       def template_chooser
         @template_chooser ||= BuildChecker::Chooser::TemplateChooser.config do |chooser|
           chooser.time_gap_for_same_template = 5.hours
-          chooser.time_gap_for_same_location = 10.seconds
+          chooser.time_gap_for_same_location = 1.minute
         end
       end
 

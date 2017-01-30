@@ -2,16 +2,20 @@ module BuildChecker
   # start and stop all build checker services
   class Orchestrator
     include BuildChecker::Logger
-    @@threads = []
+    include BuildChecker::Data
+    @@threads = {}
 
     Signal.trap("INT") { exit }
     at_exit do
       exit!(true) unless ActiveRecord::Base.connected?
-      BuildChecker.clear_pid! if BuildChecker.pid == Process.pid
+      clear_pid
+      if @@threads.blank?
+        set_status(:stopped)
+        ActiveRecord::Base.clear_active_connections!
+        exit!
+      end
+      finish_builds
       ActiveRecord::Base.clear_active_connections!
-      exit! if @@threads.blank?
-      @@threads.each {|thr| thr.exit }
-      @@threads.each {|thr| thr.join }
       logger.info "Build Checker stopped"
     end
 
@@ -21,7 +25,7 @@ module BuildChecker
     end
 
     def initialize
-      ActiveRecord::Base.clear_active_connections! and exit! if running?
+      quick_exit! if running?
       return if build_checker_user_exists?
       logger.error "You must create build_checker user before. Use: rake build_checker:create_user"
       exit
@@ -34,10 +38,11 @@ module BuildChecker
     end
 
     def prepare_threads
-      @@threads << queue_builder_start
-      @@threads << build_processor_start
-      @@threads << vm_monitor_start
-      @@threads << cleaner_start
+      @@threads[:stucked] = stucked_tasks_monitor_start
+      @@threads[:queue]   = queue_builder_start
+      @@threads[:build]   = build_processor_start
+      @@threads[:monitor] = vm_monitor_start
+      @@threads[:cleaner] = cleaner_start
       sleep
     end
 
@@ -57,6 +62,10 @@ module BuildChecker
       Thread.new { Cleaner::CleanProcessor.run }
     end
 
+    def stucked_tasks_monitor_start
+      Thread.new { BuildChecker::Monitor::StuckedTasksMonitor.run }
+    end
+
     def running!
       BuildChecker.running!
     end
@@ -64,7 +73,6 @@ module BuildChecker
     def running?
       BuildChecker.running?
     end
-
 
     def quick_exit!
       ActiveRecord::Base.clear_active_connections!
@@ -75,6 +83,31 @@ module BuildChecker
       return false unless user = User.find_by(email: 'build_checker_fake_email')
       return false unless user.onapp_id # taken from OnApp create_user call
       true
+    end
+
+    def self.clear_pid
+      BuildChecker.clear_pid! if BuildChecker.pid == Process.pid
+    end
+
+    def self.finish_builds
+      set_status(:stopping)
+      @@threads[:queue].exit
+      @@threads[:queue].join
+      sleep 10 while tasks_to_finish?
+      @@threads.each {|_,thr| thr.exit }
+      @@threads.each {|_,thr| thr.join }
+      set_status(:stopped)
+    end
+
+    def self.tasks_to_finish?
+      BuildCheckerDatum.where.not(state: [
+        BuildCheckerDatum.states["scheduled"],
+        BuildCheckerDatum.states["finished"]
+        ]).count > 0
+    end
+
+    def self.set_status(status)
+      BuildChecker.status = status
     end
   end
 end

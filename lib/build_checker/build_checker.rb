@@ -1,13 +1,24 @@
 # Builds test VMs using all accessible templates
 module BuildChecker
   PID_KEY = 'build_checker_pid'
+  STATUS_KEY = 'build_checker_status' # running, stopped, stopping
 
   def self.running?
-    System.get(PID_KEY).present?
+    #(status.empty? || status == "stopped") && pid == 0 ? false : true
+    status == 'running' ||  status == 'stopping' ? true : false
+  end
+
+  def self.stopped?
+    status == "stopped"
+  end
+
+  def self.stopping?
+    status == "stopping"
   end
 
   def self.running!
     System.set(PID_KEY, Process.pid)
+    System.set(STATUS_KEY, :running)
   end
 
   def self.pid
@@ -16,5 +27,13 @@ module BuildChecker
 
   def self.clear_pid!
     System.clear(PID_KEY)
+  end
+
+  def self.status=(status)
+    System.set(STATUS_KEY, status)
+  end
+
+  def self.status
+    System.get(STATUS_KEY)
   end
 end

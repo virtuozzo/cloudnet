@@ -31,7 +31,8 @@ gem 'devise-otp'
 gem 'angularjs-rails', '~> 1.3.15'
 gem 'underscore-rails', '~> 1.8.2'
 
-gem 'sidekiq', '~> 3.2'
+gem 'sidekiq', '~> 4.2'
+gem 'redis-namespace'
 gem 'sinatra', '>= 1.4.5', require: false
 gem 'sidekiq-unique-jobs'
 
@@ -52,6 +53,7 @@ gem 'prawn-table'
 gem 'sequenced', '~> 1.6.0'
 gem 'paypal-express', '~> 0.6.0'
 gem 'sift', '1.1.7.3'
+gem 'intercom', '~> 3.5.10'
 
 # Zendesk Integration Dependencies
 gem 'zendesk_api', '~> 1.5.0'

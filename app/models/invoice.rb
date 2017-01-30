@@ -26,7 +26,7 @@ class Invoice < ActiveRecord::Base
   MILLICENTS_IN_DOLLAR = CENTS_IN_DOLLAR * 100.0
   MICROS_IN_DOLLAR     = MILLICENTS_IN_DOLLAR * 10.0
   MICROS_IN_MILLICENT  = 10.0
-  USD_GBP_RATE         = 0.588402
+  USD_GBP_RATE         = 0.8
   MIN_CHARGE_AMOUNT    = 100
 
   def self.generate_prepaid_invoice(invoiceables, account, hours = nil, reason = false)

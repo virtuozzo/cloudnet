@@ -57,8 +57,9 @@ class EditServerTask
     end
 
     def edit_state_off
+      # force refresh before other workers can perform update
+      ServerTasks.new.perform(:refresh_server, @user.id, @server.id, :force_update)
       @server.auto_refresh_on!
-      ServerTasks.new.perform(:refresh_server, @user.id, @server.id)
     end
 
     def increasing_disk_size?

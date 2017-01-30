@@ -3,7 +3,7 @@ module BuildChecker
   # The purpose is to monitor the status of built VMs
     class VmMonitorBuild < VmMonitorWorker
       BUILD_TIMEOUT = 30.minutes
-      # TODO: monitor delete when failed transactions from build
+
       def perform(task_id, user_id)
         super
       rescue Faraday::Error::ClientError, StandardError => e
