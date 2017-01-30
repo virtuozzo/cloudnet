@@ -20,7 +20,7 @@ module SiftProperties
       "is_admin"                      => admin,
       "suspended"                     => suspended,
       "phone_verified"                => phone_verified?,
-      "whitelisted"                   => account.whitelisted?
+      "whitelisted"                   => whitelisted?
     }
     time_ip = {
       "$time"                         => created_at.to_i,

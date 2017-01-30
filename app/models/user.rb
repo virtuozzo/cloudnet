@@ -200,6 +200,10 @@ class User < ActiveRecord::Base
       servers.with_deleted.map(&:location).uniq.map(&:short_label).join(', ')
     end
   end
+  
+  def whitelisted?
+    !account.nil? && account.whitelisted?
+  end
 
   protected
 

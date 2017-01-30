@@ -65,7 +65,7 @@ ActiveAdmin.register User do
     column :admin
     column :suspended
     column :whitelisted do |user|
-      status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?)) rescue nil
+      status_tag(user.whitelisted?, label: boolean_to_words(user.whitelisted?)) rescue nil
     end
     column "Servers #" do |user|
       user.servers.count
@@ -94,7 +94,7 @@ ActiveAdmin.register User do
       fraud_body = JSON.parse user.account.primary_billing_card.fraud_body rescue nil
       attributes_table_for user do
         row :whitelisted do |user|
-          status_tag(user.account.whitelisted?, label: boolean_to_words(user.account.whitelisted?)) unless user.account.nil?
+          status_tag(user.whitelisted?, label: boolean_to_words(user.whitelisted?)) unless user.account.nil?
         end
         row :minfraud_score do |user|
           user.account.max_minfraud_score unless user.account.nil?
@@ -476,11 +476,11 @@ ActiveAdmin.register User do
   end
   
   action_item :edit, only: :show do
-    link_to('Whitelist User', add_whitelist_admin_user_path(user), method: :post) unless user.account.whitelisted?
+    link_to('Whitelist User', add_whitelist_admin_user_path(user), method: :post) if !user.suspended? && !user.whitelisted?
   end
 
   action_item :edit, only: :show do
-    link_to('Remove from Whitelist', remove_whitelist_admin_user_path(user), method: :post) if user.account.whitelisted?
+    link_to('Remove from Whitelist', remove_whitelist_admin_user_path(user), method: :post) if !user.suspended? && user.whitelisted?
   end
 
   action_item :edit, only: :index do
