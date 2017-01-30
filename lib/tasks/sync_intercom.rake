@@ -3,7 +3,7 @@
 task sync_intercom: :environment do  
   intercom = Intercom::Client.new(token: ENV['INTERCOM_ACCESS_TOKEN'])
   
-  User.find_in_batches(batch_size: 2).with_index do |users, batch|
+  User.find_in_batches(batch_size: 100).with_index do |users, batch|
     begin
       puts "Processing batch #{batch}"
       items = []
