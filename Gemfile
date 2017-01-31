@@ -153,9 +153,9 @@ group :doc do
 end
 
 gem 'pg'
+gem 'dalli'
 
 group :production do
-  gem 'dalli'
   gem 'kgio'
   gem 'newrelic_rpm'
 end
