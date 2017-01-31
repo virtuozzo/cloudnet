@@ -8,8 +8,8 @@ class BandwidthChecker
   NOTIFICATION_USER_AFTER_EXCEEDED_GB = 20
 
   # admin notifications (verify potential fraud)
-  MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD = 4
-  NOTIFICATION_ADMIN_AFTER_EXCEEDED_GB = 50
+  MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD = 3
+  NOTIFICATION_ADMIN_AFTER_EXCEEDED_GB = 60
 
   attr_reader :server
 
@@ -57,9 +57,9 @@ class BandwidthChecker
     server.exceed_bw_admin_notif < MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD
   end
 
-  # 50 100
+  # 60 180 300
   def admin_notification_threshold
-    NOTIFICATION_ADMIN_AFTER_EXCEEDED_GB * 1024 * (server.exceed_bw_admin_notif + 1)
+    NOTIFICATION_ADMIN_AFTER_EXCEEDED_GB * 1024 * (server.exceed_bw_admin_notif * 2 + 1)
   end
 
   def inform_user
