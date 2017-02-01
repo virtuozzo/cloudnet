@@ -157,27 +157,33 @@ class ServerWizard
     @old_server_specs = old_server_specs
     create_or_edit_server(:edit)
   end
+  
+  def resources_changed?
+    server_changed? || ip_addresses_changed?
+  end
 
   # Returns Server object for type = :create and true for :edit
   def create_or_edit_server(type = :create)
-    if type == :edit && (server_changed? || ip_addresses_changed?)
+    if type == :edit && resources_changed?
       # Issue a credit note for the server's old specs for the time remaining during this
       # invoicable month. We will then charge them for the newly resized server as if it were
       # new.
       @credit_note_for_time_remaining = @old_server_specs.create_credit_note_for_time_remaining
     end
-    # Generate invoice, use credit notes if any, finally charge payment receipts
-    charge_wallet
 
     if type == :create
+      # Generate invoice, use credit notes if any, finally charge payment receipts
+      charge_wallet
       # Build the server through the Onapp API
       request_server_build
       charging_paperwork
       @newly_built_server
     else
+      # Generate invoice, use credit notes if any, finally charge payment receipts
+      charge_wallet if resources_changed?
       # Edit the server through the Onapp API
       request_server_edit
-      charging_paperwork if (server_changed? || ip_addresses_changed?)
+      charging_paperwork if resources_changed?
       true
     end
   rescue WizardError
