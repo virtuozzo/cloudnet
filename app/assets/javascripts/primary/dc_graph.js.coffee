@@ -158,5 +158,5 @@ class @DCGraph
       @activateDateTabs()
       @statsChart.render()
       @overviewChart.render()
-      @overviewChart.filter([moment(@endDate).subtract(7, 'days'), moment(@endDate)])
-      $("#{@selector} .jg-widget-controls li:eq(1)").addClass('current')
+      @overviewChart.filter([moment(@endDate).subtract(24, 'hours'), moment(@endDate)])
+      $("#{@selector} .jg-widget-controls li:eq(0)").addClass('current')

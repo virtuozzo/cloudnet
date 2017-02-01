@@ -22,6 +22,7 @@ module BuildChecker
 
       # TODO: handle error info when ip_address not set or disk_size
       def remote_server_ready?
+        !@remote_server['locked'] &&
         @remote_server['built'] &&
         @remote_server['booted'] &&
         @remote_server['ip_addresses'].present? &&
