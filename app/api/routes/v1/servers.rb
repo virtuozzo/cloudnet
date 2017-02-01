@@ -121,6 +121,7 @@ module Routes::V1
           requested_params = declared(params, include_missing: false).deep_symbolize_keys
           actions = ServerSupportActions.new(current_user)
           edit_wizard = actions.prepare_edit(server, requested_params)
+          edit_wizard.set_old_server_specs(old_server_specs)
           begin
             raise CreateError if server.no_refresh
             raise CreateError unless edit_wizard.valid?
