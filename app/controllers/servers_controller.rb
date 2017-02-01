@@ -49,6 +49,7 @@ class ServersController < ServerCommonController
       actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
+      edit_wizard.set_old_server_specs(old_server_specs)
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
       result = actions.schedule_edit(edit_wizard, old_server_specs)
       if result.build_errors.length == 0
