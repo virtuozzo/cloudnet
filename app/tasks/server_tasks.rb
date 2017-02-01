@@ -88,7 +88,7 @@ class ServerTasks < BaseTasks
 
     disk_size = info['total_disk_size'].to_i
 
-    if (!server.no_refresh || force_update)
+    if (!server.no_refresh || force_update || docker_provision)
       server.update(
         built:                  info['built'],
         suspended:              info['suspended'],
