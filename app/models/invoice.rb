@@ -92,7 +92,7 @@ class Invoice < ActiveRecord::Base
   def payg?
     invoice_type == Server::TYPE_PAYG.to_sym
   end
-  
+
   def create_sift_event
     CreateSiftEvent.perform_async("$create_order", sift_invoice_properties)
   rescue StandardError => e

@@ -9,15 +9,20 @@ module Billing
     end
 
     def bandwidth_usage
-      billable_free_MB(empty: last_invoice.blank?)
-    end
-
-    def billable_free_MB(empty: false)
-      zero = empty ? 0 : nil
+      zero =  last_invoice.blank? ? 0 : nil
       {
         billable: zero || billable_transfer_since_last_due_date_MB,
         free: zero || free_bandwidth_since_last_due_date_MB,
         hours: zero || hours_since_last_due_date
+      }
+    end
+
+    def bandwidth_info
+      zero =  last_invoice.blank? ? 0 : nil
+      {
+        used: zero || (data_transfer_since_last_due_date_MB / 1024.0).round(2),
+        accrued: zero || (free_bandwidth_since_last_due_date_MB / 1024.0).round(2),
+        forecasted: zero || forecasted_total_monthly_bandwidth_GB
       }
     end
 
@@ -45,6 +50,10 @@ module Billing
       end
     end
 
+    def forecasted_total_monthly_bandwidth_GB
+      ((free_bandwidth_since_last_due_date_MB + forecasted_free_bandwidth_MB) / 1024.0).round(2)
+    end
+
     def free_bandwidth_since_last_due_date_MB
       server.free_billing_bandwidth + free_bandwidth_since_last_invoice_MB
     end
@@ -53,12 +62,21 @@ module Billing
       (server.bandwidth.to_f * 1024 * hours_used_coefficient).round
     end
 
+    def forecasted_free_bandwidth_MB
+      (server.bandwidth.to_f * 1024 * hours_left_till_next_due_date.to_f / Account::HOURS_MAX).round
+    end
+
     def hours_used_coefficient
       hours_since_last_invoice.to_f / Account::HOURS_MAX
     end
 
     def last_due_date
       @last_due_date ||= account.past_invoice_due(time_for_check)
+    end
+
+    # number of hours left before next due date
+    def hours_left_till_next_due_date
+      Account::HOURS_MAX - hours_since_last_due_date
     end
 
     def hours_since_last_due_date

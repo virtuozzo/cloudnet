@@ -154,7 +154,7 @@ class ServerWizard
   end
 
   def edit_server(old_server_specs)
-    @old_server_specs = old_server_specs
+    set_old_server_specs(old_server_specs)
     create_or_edit_server(:edit)
   end
   
