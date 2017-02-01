@@ -18,8 +18,10 @@
     = raw "var provisionerTemplates = #{p}"
   - else
     - @provisioner_templates = nil
-  
+
   - r = @wizard_object.location ? (render partial: 'locations/location.json', formats: [:json], locals: { location: @wizard_object.location }) : []
+  = raw "var osType = '#{@wizard_object.os_type}'"
+  = raw "var templateId = #{@wizard_object.template_id ? @wizard_object.template_id : 'null'}"
   = raw "var selectedLocation = #{r}"
   = raw "var hours_remaining = #{Invoice.hours_till_next_invoice(current_user.try(:account))}"
   = raw "var max_hours = #{Account::HOURS_MAX}"
@@ -29,7 +31,7 @@
   - if @wizard_object.errors.any?
     %div.alert.alert-danger
       %a.close{href: "#", data: {dismiss: "alert"}} &times;
-      %strong Error: 
+      %strong Error:
       = @wizard_object.errors.full_messages.join(', ')
   = f.hidden_field :current_step, value: @wizard_object.current_step
   = render partial: 'servers/location', locals: {f: f}

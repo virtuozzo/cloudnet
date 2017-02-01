@@ -1,14 +1,14 @@
 scope = this
 
 $ ->
-  
+
   @selectedTemplate = null
   @hoursTill  = null
   @costings   =
     hourly:     0.0000
     monthly:    0.00
     thisMonth:  0.00
-  
+
   timeNow = ->
     date = moment().format()
 
@@ -36,21 +36,21 @@ $ ->
 
   setDate()
   timeTillNextMonth()
-  
+
   $('#resourceTabs a').click (e) ->
     e.preventDefault()
     $(this).tab('show')
     $(this).parent('li').addClass('active')
-  
+
   $('#templateTabs a').click (e) ->
     e.preventDefault()
     $(this).tab('show')
     $(this).parent('li').addClass('active')
-    
+
     $provisionerRole.select2('val', null)
     $distro.select2('val', null)
     $template.select2('val', null)
-  
+
   $costs            = $('span.total-cost')
   $boxes            = $('ul.package-boxes').find('> li')
   $distro           = $('#server_wizard_os_type') # The select boxes dropdown for distros
@@ -67,12 +67,12 @@ $ ->
   defaultPhoto      = "61344979"
   $locationField    = $('#server_wizard_location_id')
   $distroSelect     = []
-  
+
   if $.isEmptyObject(templatesJson)
     templates = []
   else
     templates = templatesJson
-  
+
   if $.isEmptyObject(selectedLocation)
     selected_location = []
   else
@@ -85,7 +85,7 @@ $ ->
       title: monthlyCostHtml()
 
   destroyMonthlyTooltip = -> $costs.tooltip('destroy')
-  
+
   removeBoxClass = ->
     $boxes.each -> $(this).removeClass('active')
 
@@ -138,18 +138,18 @@ $ ->
       today_price = (hourly_price - old_hourly_price) * hours_remaining
     else
       today_price = hourly_price * hours_remaining
-    
+
     $("#memory-price").html formatCurrency(($memory.val() * selected_location.prices.price_memory * 672).toFixed(2), 2)
     $("#cpu-price").html formatCurrency(($cpus.val() * selected_location.prices.price_cpu * 672).toFixed(2), 2)
     $("#disk-price").html formatCurrency(($disk.val() * selected_location.prices.price_disk * 672).toFixed(2), 2)
-    
+
     $("#hourly-price").html formatCurrency(hourly_price)
     $("#monthly-price").html formatCurrency(monthly_price, 2)
     $("#today-price").html formatCurrency(today_price, 2)
 
   setResources = ->
     return if $.isEmptyObject(selected_location)
-    
+
     setBandwidth()
     setPrices()
     hideSlider()
@@ -175,7 +175,7 @@ $ ->
       $('#resourceTabs li.slider-tab').hide()
     else
       $('#resourceTabs li.slider-tab').show()
-  
+
   setTemplateName = (template) ->
     $resourcesSummary.find('h4').removeClass (index, css) ->
       (css.match(/\bos-\S+/g) or []).join " "
@@ -263,7 +263,7 @@ $ ->
   updateSliderLimits = (data) ->
     min_memory = Math.max(data.min_memory, memory.min)
     min_disk_size = Math.max(data.min_disk, disk_size.min)
-    
+
     updateSliderIfSmaller(cpus, 1)
 
     updateSliderIfSmaller
@@ -304,8 +304,9 @@ $ ->
         distro: distro
 
       return obj
-  
+
   setDistroSelect(templates)
+
 
   distroFormat = (item) ->
       html = """
@@ -363,7 +364,7 @@ $ ->
     populateTemplateSelect(distro)
     # Ensure there is no template selected yet
     $templateId.val(-1)
-  
+
   populateDistros = ->
     $distro.select2
       placeholder: 'Select a distro'
@@ -392,6 +393,10 @@ $ ->
     $distro.select2 'val', distro_of_existing_server
     populateTemplateSelect distro_of_existing_server
     templateChosen server.template
+  else if osType
+    $distro.select2 'val', osType
+    populateTemplateSelect osType
+    $templateId.val(templateId) if templateId
   else
     # Show an empty and disabled template dropdown
     populateTemplateSelect()
@@ -404,7 +409,7 @@ $ ->
       data = $(this).data('package-values')
       setSliderPositions(data)
       $(this).addClass('active')
-  
+
   loadPackageBoxes()
 
   assignTemplateValue = (template) ->
@@ -433,6 +438,7 @@ $ ->
       selectedDistro = _.findWhere $distroSelect, id: $distro.val()
       if selectedDistro
         $distro.trigger jQuery.Event('change', added: selectedDistro)
+
 
   formatPriceElements = ->
     _.each $(".price"), (element) ->
@@ -476,7 +482,7 @@ $ ->
       activeTab = $(this).attr('href')
       $(this).parent().addClass 'active'
       $(activeTab).show()
-      
+
       if !server
         $provisionerRole.select2('val', null)
         $distro.select2('val', null)
@@ -486,7 +492,7 @@ $ ->
       $('#jg-tabs li:nth-child(2) a').click()
     else
       $('#jg-tabs li:first a').click()
-    
+
     if server
       if server.provisioner_role
         $("#server-distributions").hide()
@@ -495,7 +501,7 @@ $ ->
         $("#server-apps").hide()
 
   enableTemplateTabs()
-    
+
   #----------------------------------------------------
   # Functions for the 500px downloading and the MapBox
   # Pop up boxes
@@ -506,7 +512,7 @@ $ ->
   )
 
   generatePopupContent = (photo, data) ->
-    newContent = 
+    newContent =
       """
         <div class="location_header">
           <ul id="image_links" class="pure-g">
@@ -519,11 +525,11 @@ $ ->
             </li>
           </ul>
           <div class="title">#{photo.data.photo.name}</div>
-          
+
           <div class="map_location">
             #{photo.data.first.img}
           </div>
-        </div>    
+        </div>
         <div class="location_body">
           <div class="country_city">
             <img src='/assets/images/flags/flat/24/#{data.country}.png'/>
@@ -542,7 +548,7 @@ $ ->
 
   grabPhotoId = (ids) ->
     return defaultPhoto if ids == null
-    
+
     split = ids.split(',')
     return defaultPhoto if split.length == 0
     return split[Math.floor(Math.random()*split.length)];
@@ -559,7 +565,7 @@ $ ->
             deferred.resolve(city: city, data: cityPhotoObject(response.data.photo), marker: marker)
       else
         deferred.resolve(city: city, data: cityPhotoObject(response.data.photo), marker: marker)
-    
+
     return deferred.promise
 
   fetchPhotoByCity = (city, id, marker = {}) ->
@@ -583,10 +589,10 @@ $ ->
 
   generateRect = (lat, lng, r = 0.5) ->
     rect =
-      lat: 
+      lat:
         min: parseFloat(lat) - r
         max: parseFloat(lat) + r
-      lng: 
+      lng:
         min: parseFloat(lng) - r
         max: parseFloat(lng) + r
 
@@ -640,7 +646,7 @@ $ ->
       return marker.setIcon(L.icon(default_icon))
 
     return
-  
+
   setupMapBeta = ->
     geojson = new helpers.GeoJsonBuilder(locations, inactive_pin).generate()
     map = L.mapbox.map 'jg-map', mapbox_key,
@@ -662,7 +668,7 @@ $ ->
         d       = feature?.properties
         rect    = generateRect d.latitude, d.longitude
         city    = d.city
-        popupContent = 
+        popupContent =
             """
               <div class="location_body">
                 <div class="country_city">
@@ -682,7 +688,7 @@ $ ->
 
             newContent = generatePopupContent(photo, data)
             photo.marker.bindPopup(newContent)
-            
+
             unless $.isEmptyObject(selected_location)
               popUp(selected_location.id)
 
@@ -691,19 +697,19 @@ $ ->
           data   = marker.feature.properties
           newContent = generatePopupContent(photo, data)
           photo.marker.bindPopup(newContent)
-          
+
           unless $.isEmptyObject(selected_location)
             popUp(selected_location.id)
-        
+
         layer.options.riseOnHover = true
-        layer.options.title       = 
+        layer.options.title       =
           """
           [#{d.provider}, #{d.country}]
           """
         layer.setIcon(L.icon(feature.properties.icon))
 
         markers.push layer
-        
+
         layer.on 'click', (e) ->
           marker  =   e.target
           icon    =   marker.options.icon.options
@@ -715,32 +721,32 @@ $ ->
           return if data is null or undefined
           toggleMarkerPin icon, marker
           $locationField.select2("val", data.id).trigger("change")
-    
+
     map.on 'addlayer', (e) ->
       marker  = e.target
       data    =   marker?.feature?.properties
 
     clusters.addLayer(geoJsonLayer)
     map.addLayer(clusters)
-    
+
     popUp = (loc) ->
       geoJsonLayer.eachLayer (marker) ->
         if parseInt(marker?.feature?.properties.id) is parseInt(loc)
           id = marker._leaflet_id
-          clusters.zoomToShowLayer(marker, (e) -> 
+          clusters.zoomToShowLayer(marker, (e) ->
               map._layers[id].openPopup()
             )
           # marker.bounce({duration: 400, height: 10})
           resetMarkers(markers)
           toggleMarkerPin marker.options.icon.options, marker
-    
+
     $locationField.on 'change', (e) ->
       popUp($(this).select2('data').id)
-    
+
     # Disable scroll zoom handlers.
     map.touchZoom.disable()
     map.scrollWheelZoom.disable()
-    
+
     #map.featureLayer.setGeoJSON(geojson)
     return
 
@@ -760,7 +766,7 @@ $ ->
         when true then index
         when 'integer' then i
         else value[key]
-      
+
       i++
       return data
     return collection
@@ -771,7 +777,7 @@ $ ->
   #     <span class="jg-option-field">#{location.city}</span>
   #   """
   #   return html
-  #   
+  #
   # cities = _.select2Array locations, ['city', 'country'], key: 'id'
   # $locationField.select2
   #   placeholder:        'Select a location'
@@ -783,7 +789,7 @@ $ ->
 
   if !server
     setupMapBeta()
-  
+
   $locationField.on 'change', (e) ->
     $.ajax
       type: "GET",
@@ -802,14 +808,14 @@ $ ->
         setDistroSelect(templates)
         populateDistros()
         populateTemplateSelect()
-        
+
     $.ajax
       type: "GET",
       url: "/locations/#{this.value}/provisioner_templates",
       dataType: "JSON",
       success: (response) ->
         loadProvisionerRole(response)
-    
+
     $.ajax
       type: "GET",
       url: "/locations/#{this.value}/packages",
