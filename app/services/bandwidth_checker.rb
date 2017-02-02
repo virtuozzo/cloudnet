@@ -6,6 +6,7 @@ class BandwidthChecker
   MAX_USER_NOTIFICATIONS_IN_BILLING_PERIOD = 4
   GAP_BETWEEN_USER_NOTIFICATIONS_HOURS = 48
   NOTIFICATION_USER_AFTER_EXCEEDED_GB = 20
+  NOTIFICATION_THRESHOLD_OFFSET_GB = 5
 
   # admin notifications (verify potential fraud)
   MAX_ADMIN_NOTIFICATIONS_IN_BILLING_PERIOD = 3
@@ -42,9 +43,9 @@ class BandwidthChecker
     server.exceed_bw_user_notif < MAX_USER_NOTIFICATIONS_IN_BILLING_PERIOD
   end
 
-  # 0 20 40 60
+  # 5 25 45 65
   def user_notification_threshold
-    NOTIFICATION_USER_AFTER_EXCEEDED_GB * 1024 * server.exceed_bw_user_notif
+    NOTIFICATION_THRESHOLD_OFFSET_GB + NOTIFICATION_USER_AFTER_EXCEEDED_GB * 1024 * server.exceed_bw_user_notif
   end
 
   def admin_conditions_met?
