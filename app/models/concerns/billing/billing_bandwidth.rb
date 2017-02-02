@@ -75,7 +75,7 @@ module Billing
     end
 
     def hours_left_till_next_due_date
-      [account.hours_till_next_invoice - 1, 0].max
+      account.hours_till_next_invoice
     end
 
     def hours_since_last_due_date
