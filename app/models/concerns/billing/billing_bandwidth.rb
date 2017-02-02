@@ -74,9 +74,8 @@ module Billing
       @last_due_date ||= account.past_invoice_due(time_for_check)
     end
 
-    # number of hours left before next due date
     def hours_left_till_next_due_date
-      Account::HOURS_MAX - hours_since_last_due_date
+      [account.hours_till_next_invoice - 1, 0].max
     end
 
     def hours_since_last_due_date
