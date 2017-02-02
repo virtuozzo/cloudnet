@@ -123,7 +123,7 @@ module Billing
     end
 
     def ip_invoice_item(hours)
-      additional_ips = ip_addresses.to_i - 1
+      additional_ips = [ip_addresses.to_i, 1].max - 1
       {
         name: 'IP Address',
         unit_cost: location.price_ip_address,
