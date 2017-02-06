@@ -47,9 +47,9 @@ $ ->
     $(this).tab('show')
     $(this).parent('li').addClass('active')
 
-    $provisionerRole.select2('val', null)
-    $distro.select2('val', null)
-    $template.select2('val', null)
+    $provisionerRole.val([])
+    $distro.val([])
+    $template.val([])
 
   $costs            = $('span.total-cost')
   $boxes            = $('ul.package-boxes').find('> li')
@@ -349,22 +349,6 @@ $ ->
     .select2 'enable', enable
 
   # Populate the "Select a distro" dropdown
-  $distro.select2
-    placeholder: 'Select a distro'
-    data:
-      results:  _.sortBy $distroSelect, 'distro'
-    formatSelection: distroFormat
-    formatResult: distroFormat
-
-  # Once a distro has been chosen, populate the template dropdown with that distro's available
-  # templates.
-  .on 'change', (e) ->
-    data = e.added
-    distro = data.id
-    populateTemplateSelect(distro)
-    # Ensure there is no template selected yet
-    $templateId.val(-1)
-
   populateDistros = ->
     $distro.select2
       placeholder: 'Select a distro'
@@ -372,6 +356,18 @@ $ ->
         results:  _.sortBy $distroSelect, 'distro'
       formatSelection: distroFormat
       formatResult: distroFormat
+    # Once a distro has been chosen, populate the template dropdown with that distro's available templates.
+    .on 'change', (e) ->
+      data = e.added
+      distro = data.id
+      populateTemplateSelect(distro)
+      # Ensure there is no template selected yet
+      $template.val([])
+    
+    $template.val([])
+    $distro.val([])
+  
+  populateDistros()
 
   # Set template to Docker provisioner template
   loadProvisionerRole = (provisioner_templates) ->
@@ -383,7 +379,7 @@ $ ->
         $template.val template.id
       .select2 'enable', true
     else
-      $provisionerRole.select2 'val', null
+      $provisionerRole.val([])
       $provisionerRole.select2 'enable', false
 
   # Initialise the templates dropdown
@@ -484,9 +480,9 @@ $ ->
       $(activeTab).show()
 
       if !server
-        $provisionerRole.select2('val', null)
-        $distro.select2('val', null)
-        $template.select2('val', null)
+        $provisionerRole.val([])
+        $distro.val([])
+        $template.val([])
 
     if $('#server_wizard_provisioner_role').val() != ''
       $('#jg-tabs li:nth-child(2) a').click()
