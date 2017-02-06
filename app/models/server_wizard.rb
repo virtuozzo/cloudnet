@@ -87,7 +87,7 @@ class ServerWizard
   end
 
   def template
-    @template ||= Template.where(hidden: false, location_id: location_id).find_by_id(template_id) if location && template_id
+    @template ||= Template.where(location_id: location_id).find_by_id(template_id) if location && template_id
     @template
   end
 
