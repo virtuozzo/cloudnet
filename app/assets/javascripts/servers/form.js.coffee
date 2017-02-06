@@ -350,6 +350,9 @@ $ ->
 
   # Populate the "Select a distro" dropdown
   populateDistros = ->
+    $template.val([])
+    $distro.val([])
+    
     $distro.select2
       placeholder: 'Select a distro'
       data:
@@ -363,9 +366,6 @@ $ ->
       populateTemplateSelect(distro)
       # Ensure there is no template selected yet
       $template.val([])
-    
-    $template.val([])
-    $distro.val([])
   
   populateDistros()
 
