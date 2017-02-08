@@ -1,9 +1,9 @@
 class DockerProvisionerTasks
   attr_reader :server
   
-  def create(server_id, role)
+  def create(server_id, role, extra_vars = nil)
     @server = Server.find(server_id)
-    connection.post '/job', provisioner_data(role)
+    connection.post '/job', provisioner_data(role, extra_vars)
   end
 
   def status(job_id)
@@ -24,12 +24,13 @@ class DockerProvisionerTasks
   
   private
   
-    def provisioner_data(role)
+    def provisioner_data(role, extra_vars)
       {
         role: role || "ping",
         ip: ip_address,
         password: server.root_password,
-        username: "root"
+        username: "root",
+        extra_vars: extra_vars
       }
     end
   

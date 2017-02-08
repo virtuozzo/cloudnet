@@ -300,6 +300,10 @@ class Server < ActiveRecord::Base
     MonitorServer.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, user_id, docker_provision)
     DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
+  
+  def install_ssh_keys
+    InstallKeys.perform_in(MonitorServer::POLL_INTERVAL.seconds, id) if ENV['DOCKER_PROVISIONER'].present?
+  end
 
   def supports_rebuild?
     !(try(:os) == "windows" || try(:provisioner_role))
