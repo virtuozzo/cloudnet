@@ -299,8 +299,8 @@ class Server < ActiveRecord::Base
     DockerCreation.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, provisioner_role) if docker_provision
   end
   
-  def install_ssh_keys
-    InstallKeys.perform_in(MonitorServer::POLL_INTERVAL.seconds, id) if ENV['DOCKER_PROVISIONER'].present?
+  def install_ssh_keys(keys)
+    InstallKeys.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, keys)
   end
 
   def supports_rebuild?
