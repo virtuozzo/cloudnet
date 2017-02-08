@@ -19,7 +19,8 @@ module SiftProperties
       "risky_card_attempts"           => account.risky_card_attempts,
       "is_admin"                      => admin,
       "suspended"                     => suspended,
-      "phone_verified"                => phone_verified?
+      "phone_verified"                => phone_verified?,
+      "whitelisted"                   => whitelisted?
     }
     time_ip = {
       "$time"                         => created_at.to_i,
@@ -31,6 +32,7 @@ module SiftProperties
     properties.merge! "$payment_methods" => cards
     properties.merge! "$billing_address" => primary_card.sift_billing_address_properties unless primary_card.nil?
     properties.merge! "email_confirmed_status" => (confirmed? ? "$confirmed" : "$pending")
+    properties.merge! "tags" => tag_labels.join(', ')
   rescue StandardError
     nil
   end

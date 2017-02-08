@@ -88,7 +88,7 @@ class Account < ActiveRecord::Base
   def calculate_risky_card(result)
     update!(risky_cards_remaining: risky_cards_remaining - 1) if result == :rejected
   end
-  
+
   def risky_card_attempts
     RISKY_CARDS_ALLOWED - risky_cards_remaining
   end
@@ -138,7 +138,7 @@ class Account < ActiveRecord::Base
     end
   end
 
-  def primary_billing_card    
+  def primary_billing_card
     @primary_billing_card ||= begin
       cards = billing_cards.processable
       cards.present? ? (cards.find(&:primary?) || cards.first) : nil
@@ -152,7 +152,7 @@ class Account < ActiveRecord::Base
   def self.in_eu?(code)
     %w(AT BE BG HR CY CZ DK EE FI FR DE EL HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE).include?(code)
   end
-  
+
   def valid_top_up_amounts(ip = nil)
     if !fraud_safe?(ip)
       Payg::VALID_TOP_UP_AMOUNTS.first(1)
@@ -160,9 +160,13 @@ class Account < ActiveRecord::Base
       Payg::VALID_TOP_UP_AMOUNTS
     end
   end
-  
+
   def max_minfraud_score
     billing_cards.map{|card| card.fraud_score.round(2).to_f unless card.fraud_score.nil?}.compact.max
+  end
+
+  def coupon_expires_at
+    coupon_activated_at + coupon.duration_months.months
   end
 
   private

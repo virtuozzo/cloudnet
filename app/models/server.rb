@@ -91,12 +91,12 @@ class Server < ActiveRecord::Base
   def to_s
     "#{name}, #{hostname} (Belongs to: #{user})"
   end
-  
+
   def ip_requested
     ip_requested_cache = Rails.cache.read([Server::NEW_IP_REQUESTED_CACHE, id])
     ip_requested_cache.nil? ? 0 : ip_requested_cache
   end
-  
+
   def ip_requested=(count)
     if count > 0
       Rails.cache.write([Server::NEW_IP_REQUESTED_CACHE, id], count)
@@ -104,7 +104,7 @@ class Server < ActiveRecord::Base
       Rails.cache.delete([Server::NEW_IP_REQUESTED_CACHE, id])
     end
   end
-  
+
   def ip_addresses
     server_ip_addresses.count + ip_requested
   end

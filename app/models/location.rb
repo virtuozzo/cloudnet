@@ -37,6 +37,10 @@ class Location < ActiveRecord::Base
   def provider_label
     "#{provider} (#{city}), #{country}, #{country_name}"
   end
+  
+  def short_label
+    "#{provider}-#{city}".parameterize
+  end
 
   def hourly_price(memory = 512, cpu = 1, disk = 20)
     (memory * price_memory) + (cpu * price_cpu) + (disk * price_disk)

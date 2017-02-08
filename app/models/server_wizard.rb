@@ -87,7 +87,7 @@ class ServerWizard
   end
 
   def template
-    @template ||= Template.where(hidden: false, location_id: location_id).find_by_id(template_id) if location && template_id
+    @template ||= Template.where(location_id: location_id).find_by_id(template_id) if location && template_id
     @template
   end
 
@@ -160,30 +160,36 @@ class ServerWizard
   end
 
   def edit_server(old_server_specs)
-    @old_server_specs = old_server_specs
+    set_old_server_specs(old_server_specs)
     create_or_edit_server(:edit)
+  end
+
+  def resources_changed?
+    @resources_changed ||= server_name_changed_only? ? false : server_changed? || addons_changed? || ip_addresses_changed?
   end
 
   # Returns Server object for type = :create and true for :edit
   def create_or_edit_server(type = :create)
-    if type == :edit && (server_changed? || addons_changed?)
+    if type == :edit && resources_changed?
       # Issue a credit note for the server's old specs for the time remaining during this
       # invoicable month. We will then charge them for the newly resized server as if it were
       # new.
       @credit_note_for_time_remaining = @old_server_specs.create_credit_note_for_time_remaining
     end
-    # Generate invoice, use credit notes if any, finally charge payment receipts
-    charge_wallet
 
     if type == :create
+      # Generate invoice, use credit notes if any, finally charge payment receipts
+      charge_wallet
       # Build the server through the Onapp API
       request_server_build
       charging_paperwork
       @newly_built_server
     else
+      # Generate invoice, use credit notes if any, finally charge payment receipts
+      charge_wallet if resources_changed?
       # Edit the server through the Onapp API
       request_server_edit
-      charging_paperwork if server_changed? || addons_changed?
+      charging_paperwork if resources_changed?
       true
     end
   rescue WizardError
@@ -265,6 +271,14 @@ class ServerWizard
     changed ? old_server_cpu_mem : false
   end
 
+  def server_name_changed_only?
+    !template_reload &&
+    !disk_resize &&
+    @old_server_specs.cpus == cpus &&
+    @old_server_specs.memory == memory &&
+    @old_server_specs.name != name
+  end
+
   def old_server_cpu_mem
     { "cpus" => @old_server_specs.cpus,
       "memory" => @old_server_specs.memory,
@@ -278,6 +292,10 @@ class ServerWizard
 
   def server_changed?
     cpu_mem_changes || template_reload || disk_resize
+  end
+
+  def ip_addresses_changed?
+    @old_server_specs.ip_addresses != ip_addresses
   end
 
   def persisted?

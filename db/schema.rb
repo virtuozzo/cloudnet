@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161216125638) do
+ActiveRecord::Schema.define(version: 20170126095610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20161216125638) do
     t.string   "address4"
     t.string   "company_name"
     t.boolean  "auto_topup",                        default: true
+    t.boolean  "whitelisted",                       default: false
   end
 
   add_index "accounts", ["coupon_id"], name: "index_accounts_on_coupon_id", using: :btree
@@ -142,6 +143,7 @@ ActiveRecord::Schema.define(version: 20161216125638) do
     t.string   "error"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.integer  "failed_in_build",  default: 0
   end
 
   add_index "build_checker_data", ["build_result"], name: "index_build_checker_data_on_build_result", using: :btree

@@ -19,10 +19,14 @@ module BuildChecker
 
       def verify_vm_status
         case
-        when failed_transactions.present? then finish_task_error(:failed_transaction)
+        when failed_during_destroy? then finish_task_error(:failed_transaction)
         when delete_timeout_expired? then finish_task_error(:delete_timeout, timeout: DELETE_TIMEOUT)
         else update_task_to_monitor
         end
+      end
+
+      def failed_during_destroy?
+        failed_transactions.size > @task.failed_in_build
       end
 
       def delete_timeout_expired?
@@ -30,8 +34,9 @@ module BuildChecker
       end
 
       def finish_task_success
+        build_result = @task.build_result == "failed" ? :failed : :success
         @task.update(
-          build_result: :success,
+          build_result: build_result,
           deleted_at: Time.now,
           state: :finished
         )

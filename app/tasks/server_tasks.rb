@@ -88,7 +88,7 @@ class ServerTasks < BaseTasks
 
     disk_size = info['total_disk_size'].to_i
 
-    if (!server.no_refresh || force_update)
+    if (!server.no_refresh || force_update || docker_provision)
       server.update(
         built:                  info['built'],
         suspended:              info['suspended'],
@@ -262,11 +262,22 @@ class ServerTasks < BaseTasks
   end
 
   def prepare_invoice(server, old_server_specs)
+    # update bandwidth only if memory size changed (server edited)
+    # leave bandwidth intact if only location allowance was changed
+    update_bandwidth(server, old_server_specs) unless server.memory == old_server_specs.memory
     old_server_specs.create_credit_note_for_time_remaining
     server.charge_wallet
     server.charging_paperwork
     billing_activity(server, old_server_specs)
     AdminMailer.notify_automatic_invoice(server, old_server_specs).deliver_now
+  end
+
+  def update_bandwidth(server, old_server_specs)
+    wizard = ServerWizard.new
+    wizard.memory = server.memory
+    wizard.location = server.location
+    server.update_attribute(:bandwidth, wizard.bandwidth)
+    server.set_old_server_specs(old_server_specs)
   end
 
   def billing_activity(server, old_server_specs)

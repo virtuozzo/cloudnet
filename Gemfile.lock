@@ -219,6 +219,7 @@ GEM
       compass (~> 1.0.0)
       sass-rails (<= 5.0.1)
       sprockets (< 2.13)
+    concurrent-ruby (1.0.4)
     connection_pool (2.2.1)
     countries (0.11.3)
       currencies (~> 0.4.2)
@@ -360,6 +361,8 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    intercom (3.5.10)
+      json (>= 1.8)
     iso_country_codes (0.4.4)
     jasmine-core (2.3.0)
     jasmine-jquery-rails (2.0.3)
@@ -377,7 +380,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
-    json (1.8.3)
+    json (1.8.6)
     kaminari (0.15.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -591,12 +594,11 @@ GEM
       activesupport (>= 3.0)
     sexp_processor (4.4.4)
     shellany (0.0.1)
-    sidekiq (3.5.4)
-      celluloid (~> 0.17.2)
+    sidekiq (4.2.9)
+      concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
-      json (~> 1.0)
+      rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
-      redis-namespace (~> 1.5, >= 1.5.2)
     sidekiq-unique-jobs (4.0.18)
       sidekiq (>= 2.6)
       thor
@@ -745,6 +747,7 @@ DEPENDENCIES
   guard-rspec
   guard-sidekiq
   haml-rails (~> 0.5.3)
+  intercom (~> 3.5.10)
   iso_country_codes (~> 0.4.4)
   jasmine-jquery-rails
   jasmine-rails
@@ -779,6 +782,7 @@ DEPENDENCIES
   rails_best_practices
   rb-readline!
   redcarpet (~> 3.1.1)
+  redis-namespace
   responders (~> 2.0)
   roar-rails
   rspec-rails (~> 3.4.2)
@@ -787,7 +791,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-raven!
   sequenced (~> 1.6.0)
-  sidekiq (~> 3.2)
+  sidekiq (~> 4.2)
   sidekiq-unique-jobs
   sift (= 1.1.7.3)
   simplecov

@@ -147,7 +147,7 @@ module Billing
     end
 
     def ip_invoice_item(hours)
-      additional_ips = ip_addresses.to_i - 1
+      additional_ips = [ip_addresses.to_i, 1].max - 1
       {
         name: 'IP Address',
         unit_cost: location.price_ip_address,
@@ -290,6 +290,10 @@ module Billing
       credit_note.vat_exempt = invoice.vat_exempt?
       credit_note.tax_code   = invoice.tax_code
       credit_note.coupon_id = invoice.coupon_id
+    end
+
+    def set_old_server_specs(old_server_specs)
+      @old_server_specs = old_server_specs
     end
   end
 end

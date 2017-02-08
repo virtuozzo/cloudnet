@@ -14,16 +14,16 @@ module ServersHelper
       "#{pretty_total(without_vat, '$', precision)} (#{pretty_total(with_vat)} with EU VAT)"
     end
   end
-  
+
   def dummy_packages
     dummy_packages = [{id: 1, cpus: 1, memory: 512,  disk_size: 20, bandwidth: 100},
       {id: 2, cpus: 2, memory: 1024, disk_size: 40, bandwidth: 100},
       {id: 3, cpus: 4, memory: 2048, disk_size: 60, bandwidth: 100}].to_json
     JSON.parse(dummy_packages, object_class: OpenStruct)
   end
-  
+
   def activate_apps_tab?
     false
   end
-  
+
 end

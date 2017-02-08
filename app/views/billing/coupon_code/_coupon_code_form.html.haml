@@ -5,6 +5,7 @@
         .pure-u-1.pure-u-1.jg-coupon_code
           %strong Active Coupon:
           = current_user.account.coupon.description
+          = "which expires on #{current_user.account.coupon_expires_at.strftime('%d %b %Y')}"
   - else
     .jg-widget-form.pure-g.pure-u-1
       - if @message.present?

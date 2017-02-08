@@ -373,6 +373,12 @@ describe Account do
       card = FactoryGirl.create(:billing_card, account: user.account, fraud_verified: true, fraud_score: 100.0)
       expect(user.account.valid_top_up_amounts).to eq([Payg::VALID_TOP_UP_AMOUNTS.min])
     end
+    
+    it 'should approve if user is whitelisted' do
+      user.account.update_attribute(:whitelisted, true)
+      user.account.risky_cards_remaining = -1
+      expect(user.account.fraud_validation_reason('0.0.0.0')).to eq(0)
+    end
   end
   
   describe 'update forecasted revenue after coupon change' do

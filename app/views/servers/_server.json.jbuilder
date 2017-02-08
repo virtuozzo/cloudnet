@@ -16,6 +16,8 @@ json.extract!(
   :provisioner_role
 )
 
+json.bandwidth_info Billing::BillingBandwidth.new(server).bandwidth_info
+
 json.hourly_cost server.hourly_cost / Invoice::MILLICENTS_IN_DOLLAR
 json.monthly_cost server.monthly_cost / Invoice::MILLICENTS_IN_DOLLAR
 
