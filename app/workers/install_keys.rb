@@ -8,15 +8,15 @@ class InstallKeys
   
   class ProvisionerError < StandardError; end
     
-  def perform(server_id)
+  def perform(server_id, key_ids)
     @server = Server.find(server_id)
     @job_id = nil
     
     if server_booted? && server_has_ip? && no_pending_events?
-      @keys = formatted_keys
+      @keys = formatted_keys(key_ids)
       resp = send_keys_to_provisioner
     else
-      InstallKeys.perform_in(POLLING_TIME, server_id)
+      InstallKeys.perform_in(POLLING_TIME, server_id, key_ids)
       return
     end
     
@@ -36,8 +36,8 @@ class InstallKeys
   
   private
   
-  def formatted_keys
-    { 'ssh-keys': server.user.keys.map(&:key) }
+  def formatted_keys(key_ids)
+    { 'ssh-keys': server.user.keys.where(id: key_ids).map(&:key) }
   end
   
   def server_booted?

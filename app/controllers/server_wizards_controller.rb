@@ -11,6 +11,7 @@ class ServerWizardsController < ServerCommonController
     @wizard_object.current_step = 2 #if location_id_in_params?
     @wizard_object.ip_addresses = 1
     @wizard_object.addon_ids = []
+    @wizard_object.ssh_key_ids = []
     @packages = @wizard_object.packages
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
@@ -25,6 +26,7 @@ class ServerWizardsController < ServerCommonController
     @wizard_object.ip_addresses = 1
     @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip) if current_user
     @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
+    @wizard_object.ssh_key_ids = session[:server_wizard_params][:ssh_key_ids] = [] if @wizard_object.ssh_key_ids.nil?
 
     unless @wizard_object.provisioner_role.blank?
       provisioner_template = @wizard_object.location.provisioner_templates.first
