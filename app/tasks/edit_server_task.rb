@@ -16,7 +16,7 @@ class EditServerTask
     tasks_order.each do |task|
       log_task_process(task)
       verifier = CoreTransactionVerifier.new(@user.id, @server.id)
-      verifier.perform_transaction {send(task)}
+      verifier.perform_transaction(synchronous_call: synchronous_task?(task)) {send(task)}
     end
   ensure
     edit_state_off
@@ -126,6 +126,17 @@ class EditServerTask
 
     def template
       @template ||= Template.find(@template_id)
+    end
+
+    def synchronous_task?(task)
+      #call asynchronously if the change is in VM label only
+      task == :change_params && change_params_task_only_changes_label? ? false : true
+    end
+
+    def change_params_task_only_changes_label?
+      old_params = @old_params.symbolize_keys
+      changes =  params_options.delete_if {|k,v| old_params[k] == v }.count
+      changes == 1 ? true : false
     end
 
     def squall_params
