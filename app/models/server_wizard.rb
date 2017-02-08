@@ -157,9 +157,9 @@ class ServerWizard
     set_old_server_specs(old_server_specs)
     create_or_edit_server(:edit)
   end
-  
+
   def resources_changed?
-    server_changed? || ip_addresses_changed?
+    @resources_changed ||= server_name_changed_only? ? false : server_changed? || ip_addresses_changed?
   end
 
   # Returns Server object for type = :create and true for :edit
@@ -263,6 +263,14 @@ class ServerWizard
               @old_server_specs.memory != memory ||
               @old_server_specs.name != name
     changed ? old_server_cpu_mem : false
+  end
+
+  def server_name_changed_only?
+    !template_reload &&
+    !disk_resize &&
+    @old_server_specs.cpus == cpus &&
+    @old_server_specs.memory == memory &&
+    @old_server_specs.name != name
   end
 
   def old_server_cpu_mem
