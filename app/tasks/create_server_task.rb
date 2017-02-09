@@ -16,6 +16,7 @@ class CreateServerTask < BaseTask
       false
     elsif server
       server.monitor_and_provision
+      server.install_ssh_keys
       create_sift_events
       true
     else
