@@ -37,7 +37,7 @@ class InstallKeys
   private
   
   def formatted_keys(key_ids)
-    { 'ssh-keys': server.user.keys.where(id: key_ids).map(&:key) }
+    { 'ssh-keys' => server.user.keys.where(id: key_ids).map(&:key) }
   end
   
   def server_booted?
