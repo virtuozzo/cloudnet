@@ -45,7 +45,7 @@ class BandwidthChecker
 
   # 5 25 45 65
   def user_notification_threshold
-    NOTIFICATION_THRESHOLD_OFFSET_GB + NOTIFICATION_USER_AFTER_EXCEEDED_GB * 1024 * server.exceed_bw_user_notif
+    1024 * (NOTIFICATION_THRESHOLD_OFFSET_GB + NOTIFICATION_USER_AFTER_EXCEEDED_GB * server.exceed_bw_user_notif)
   end
 
   def admin_conditions_met?
