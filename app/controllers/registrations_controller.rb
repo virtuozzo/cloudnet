@@ -10,6 +10,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def edit
+    @key = Key.new
     super
   end
   

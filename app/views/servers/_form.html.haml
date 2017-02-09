@@ -42,6 +42,7 @@
 
 = hidden_field_tag :hourly
 = hidden_field_tag :monthly
+= render partial: 'servers/add_key_form' if ENV['DOCKER_PROVISIONER'].present? && current_user && !@server
 
 :javascript
   var mapbox_key = "#{KEYS[:mapbox][:token]}";

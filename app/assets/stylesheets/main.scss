@@ -689,18 +689,18 @@ body #payg-add-card .modal-dialog {
     width: 750px;
 }
 
-#magic-checkbox-collection {
+#addons-checkbox-collection, #ssh-keys-collection {
   padding-top: 15px;
 }
 
-#magic-checkbox-collection input { 
+#addons-checkbox-collection input, #ssh-keys-collection input { 
   padding: 0;
   margin: 0;
   vertical-align: bottom;
   position: relative;
 }
 
-#magic-checkbox-collection label { 
+#addons-checkbox-collection label, #ssh-keys-collection label { 
   display: block;
   padding-left: 45px;
   text-indent: -15px;
@@ -708,11 +708,15 @@ body #payg-add-card .modal-dialog {
   line-height: inherit;
 }
 
-#magic-checkbox-collection .magic-checkbox-item {
+#addons-checkbox-collection .magic-checkbox-item, #ssh-keys-collection .magic-checkbox-item {
     padding-left: 10px;
 }
 
 .tooltip-inner {
   max-width: 350px;
   word-break: break-all;
+}
+
+#jg-add-ssh-key span.help-block {
+  font-size: 14px;
 }
