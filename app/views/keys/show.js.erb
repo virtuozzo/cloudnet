@@ -1,0 +1,2 @@
+$('#ssh-keys-collection').append("<%= j render partial: 'servers/key_row', locals: { key: @key, default_selected: true } %>");
+$('#new-key-modal').modal_success();

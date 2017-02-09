@@ -6,10 +6,23 @@ class KeysController < ApplicationController
   
   def create
     @key = current_user.keys.new(key_params)
-    if @key.save
-      redirect_to :back, notice: 'SSH key was successfully added'
-    else
-      redirect_to :back, alert: 'Unable to add SSH key. Please try again.'
+    respond_to do |format|
+      begin
+        if @key.save
+          format.html { redirect_to :back, notice: 'SSH key was successfully added' }
+          format.json { render action: 'show', status: :created, location: @key }
+          format.js { render action: 'show', status: :created, location: @key }
+        else
+          format.html { redirect_to :back, alert: 'Please enter title and key' }
+          format.json { render json: @key.errors, status: :unprocessable_entity }
+          format.js { render json: @key.errors, status: :unprocessable_entity }
+        end
+      rescue StandardError => e
+        ErrorLogging.new.track_exception(e, extra: { current_user: current_user, source: 'KeysController#create'})
+        format.html { redirect_to :back, alert: 'Unable to add SSH key. Please try again.' }
+        format.json { render json: @key.errors, status: :unprocessable_entity }
+        format.js { render json: @key.errors, status: :unprocessable_entity }
+      end
     end
   end
   
