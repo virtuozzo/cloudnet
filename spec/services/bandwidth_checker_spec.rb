@@ -10,8 +10,8 @@ describe BandwidthChecker do
       allow(subject).to receive(:reported_bandwidth).and_return 0
     end
 
-    it 'user bandwidth threshold equals 5' do
-      expect(subject.user_notification_threshold).to eq 5
+    it 'user bandwidth threshold equals 5GB' do
+      expect(subject.user_notification_threshold).to eq 5 * 1024
     end
 
     it 'admin bandwidth threshold equals as declared' do
@@ -26,7 +26,7 @@ describe BandwidthChecker do
 
   context 'bandwidth exceeded' do
     before :each do
-      allow(subject).to receive(:paid_bandwidth).and_return(6)
+      allow(subject).to receive(:paid_bandwidth).and_return(6 * 1024)
       allow(subject).to receive(:reported_bandwidth).and_return 0
     end
 
