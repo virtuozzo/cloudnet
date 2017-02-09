@@ -1,0 +1,6 @@
+Added SSH keys successfully for server (ID: <%= activity.trackable_id %>) (Keys: <%= activity.parameters[:keys] %>)
+<% if activity.trackable %>
+  <%= link_to activity.trackable.name, activity.trackable %>
+<% else %>
+  which has since been removed
+<% end %>

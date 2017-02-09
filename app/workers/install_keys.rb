@@ -24,8 +24,13 @@ class InstallKeys
     when 200..209
       @job_id = resp.body
       status = wait_for_server_provisioned[:status]
-      raise(ProvisionerError, status) unless status == "Done"
-    else 
+      if status == "Done"
+        server.create_activity :added_ssh_key, owner: server.user, params: { keys: key_ids }
+      else
+        raise(ProvisionerError, status)
+      end
+    else
+      server.create_activity :failed_ssh_key, owner: server.user, params: { keys: key_ids, status: status }
       raise(ProvisionerError, resp.status)
     end
     

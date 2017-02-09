@@ -1,0 +1,6 @@
+Failed to add SSH key for server (ID: <%= activity.trackable_id %>) (Keys: <%= activity.parameters[:keys] %>) (Provisioner status: <%= activity.parameters[:status] %>)
+<% if activity.trackable %>
+  <%= link_to activity.trackable.name, activity.trackable %>
+<% else %>
+  which has since been removed
+<% end %>
