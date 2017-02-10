@@ -35,7 +35,7 @@ class BandwidthChecker
   end
 
   def min_hours_from_creation_or_due_date
-    [((Time.now - s.created_at) / 1.hour).round, billing_bandwidth.hours_since_last_due_date].min
+    [((Time.now - server.created_at) / 1.hour).round, billing_bandwidth.hours_since_last_due_date].min
   end
 
   def user_notifications_gap_met?
