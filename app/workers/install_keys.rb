@@ -37,7 +37,7 @@ class InstallKeys
   private
   
   def formatted_keys
-    { 'ssh-keys': server.user.keys.map(&:key) }
+    { 'ssh-keys' => server.user.keys.map(&:key) }
   end
   
   def server_booted?
