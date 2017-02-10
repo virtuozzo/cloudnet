@@ -31,7 +31,11 @@ class BandwidthChecker
   end
 
   def minimum_time_since_due_date?
-    billing_bandwidth.hours_since_last_due_date > NOTIFICATION_MIN_HOURS_SINCE_DUE_DATE
+    min_hours_from_creation_or_due_date > NOTIFICATION_MIN_HOURS_SINCE_DUE_DATE
+  end
+
+  def min_hours_from_creation_or_due_date
+    [((Time.now - s.created_at) / 1.hour).round, billing_bandwidth.hours_since_last_due_date].min
   end
 
   def user_notifications_gap_met?
