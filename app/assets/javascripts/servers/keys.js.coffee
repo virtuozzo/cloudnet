@@ -6,6 +6,15 @@ $(document).ready ->
   return
 
 (($) ->
+  
+  $('#server_wizard_os_type').on 'change', (e) ->
+    if ($(this).val().includes("windows"))
+      $('input[name="server_wizard[ssh_key_ids][]"]').attr 'checked', false
+      $('input[name="server_wizard[ssh_key_ids][]"]').attr 'disabled', true
+      $('a[id="new-ssh-key"]').attr 'disabled', true
+    else
+      $('input[name="server_wizard[ssh_key_ids][]"]').attr 'disabled', false
+      $('a[id="new-ssh-key"]').attr 'disabled', false
 
   $.fn.modal_success = ->
     # close modal

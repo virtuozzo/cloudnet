@@ -21,14 +21,15 @@ class ServerWizardsController < ServerCommonController
   end
 
   def create
+    session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard] && params[:server_wizard]["addon_ids"].nil?
+    session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard] && params[:server_wizard]["ssh_key_ids"].nil?
+    
     process_server_wizard
 
     return unless meets_minimum_server_requirements?
     create_task = CreateServerTask.new(@wizard_object, current_user)
     @wizard_object.ip_addresses = 1
     @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip) if current_user
-    @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if @wizard_object.addon_ids.nil?
-    @wizard_object.ssh_key_ids = session[:server_wizard_params][:ssh_key_ids] = [] if @wizard_object.ssh_key_ids.nil?
     @keys = current_user.keys if current_user
     @key = Key.new
 
