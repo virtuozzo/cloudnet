@@ -7,5 +7,21 @@
 <% if activity.trackable %>
   <%= link_to activity.trackable.name, activity.trackable %>
 <% else %>
-  which has since been removed
+  which has since been removed.
+<% end %>
+
+<% if activity.parameters[:old_cpus] %>
+  . Old parameters:
+  cpus: <%= activity.parameters[:old_cpus]%>,
+  memory: <%= activity.parameters[:old_memory]%>,
+  disk_size: <%= activity.parameters[:old_disk_size]%>,
+  name: <%= activity.parameters[:old_name]%>,
+  distro: <%= activity.parameters[:old_distro]%>
+
+  . New parameters:
+  cpus: <%= activity.parameters[:new_cpus]%>,
+  memory: <%= activity.parameters[:new_memory]%>,
+  disk_size: <%= activity.parameters[:new_disk_size]%>,
+  name: <%= activity.parameters[:new_name]%>,
+  distro: <%= activity.parameters[:new_distro]%>
 <% end %>
