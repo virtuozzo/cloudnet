@@ -51,7 +51,8 @@ module Billing
     end
 
     def forecasted_total_monthly_bandwidth_GB
-      ((free_bandwidth_since_last_due_date_MB + forecasted_free_bandwidth_MB) / 1024.0).round(2)
+      [((free_bandwidth_since_last_due_date_MB + forecasted_free_bandwidth_MB) / 1024.0).round(2),
+        server.bandwidth].min
     end
 
     def free_bandwidth_since_last_due_date_MB
