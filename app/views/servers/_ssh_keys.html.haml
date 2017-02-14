@@ -1,0 +1,15 @@
+- if ENV['DOCKER_PROVISIONER'].present? && current_user && !@server
+  .jg-widget-content
+    .jg-widget-header.pure-g.clearfix
+      %h2.jg-icon.icon-cloud.pure-u-1-2 Add SSH Keys
+      %ul.pure-u-1-2.jg-widget-controls
+        %li#new-ssh-key
+          = link_to 'New SSH Key', '#new-key-modal', 'data-toggle' => 'modal', 'class' => 'btn jg-back-button', 'id' => 'new-ssh-key'
+    .jg-widget-body
+      .jg-widget-form.pure-u-1.clearfix
+        .form-group.jg-inline.pure-u-1.pure-g
+          #ssh-keys-collection
+            - @keys.each do |key|
+              = render partial: 'servers/key_row', locals: {key: key}
+  
+  = javascript_include_tag "servers/keys"

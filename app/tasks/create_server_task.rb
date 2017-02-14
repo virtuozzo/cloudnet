@@ -16,7 +16,7 @@ class CreateServerTask < BaseTask
       false
     elsif server
       server.monitor_and_provision
-      # server.install_ssh_keys
+      server.install_ssh_keys(@wizard.ssh_key_ids) if ENV['DOCKER_PROVISIONER'].present? && !@wizard.ssh_key_ids.blank?
       create_sift_events
       true
     else

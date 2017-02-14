@@ -37,10 +37,12 @@
   = render partial: 'servers/location', locals: {f: f}
   = render partial: 'servers/details', locals: {f: f}
   = render partial: 'servers/template', locals: {f: f}
+  = render partial: 'servers/ssh_keys', locals: {f: f}
   = render partial: 'servers/resources', locals: {f: f}
 
 = hidden_field_tag :hourly
 = hidden_field_tag :monthly
+= render partial: 'servers/add_key_form' if ENV['DOCKER_PROVISIONER'].present? && current_user && !@server
 
 :javascript
   var mapbox_key = "#{KEYS[:mapbox][:token]}";

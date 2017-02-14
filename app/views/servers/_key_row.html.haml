@@ -1,0 +1,4 @@
+- default_selected ||= false
+.form-group.pure-u-md-1-4.magic-checkbox-item
+  = check_box_tag :ssh_key_ids, key.id, default_selected, name: 'server_wizard[ssh_key_ids][]', id: "ssh_key_ids_#{key.id}", class: 'magic-checkbox'
+  = label_tag "ssh_key_ids_#{key.id}", key.title, "class" => "bs-tooltip", "data-toggle" => "tooltip", "data-placement" => "top", "data-container" => "body", "title" => key.key

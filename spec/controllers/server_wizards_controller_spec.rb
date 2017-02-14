@@ -52,6 +52,24 @@ describe ServerWizardsController do
         expect(response).to redirect_to(server_path(Server.last.id))
       end
       
+      it 'should create server with SSH keys installed' do
+        ssh_key = FactoryGirl.create(:key)
+        expect(PaymentReceipt).to receive(:charge_account)
+          .with(@payment_receipts, @invoice.total_cost)
+          .and_return(Hash[@payment_receipts.collect { |p| [p.id, p.remaining_cost] }])
+        
+        session[:server_wizard_params] = {
+          cpus: @wizard.cpus,
+          memory: @wizard.memory,
+          disk_size: @wizard.disk_size,
+          location_id: @wizard.location.id
+        }
+        params = { server_wizard: { current_step: 2, name: @wizard.name, hostname: @wizard.hostname, template_id: @wizard.template_id, memory: @wizard.memory, cpus: @wizard.cpus, disk_size: @wizard.disk_size, ssh_key_ids: [ssh_key.id.to_s] }, template: @wizard.template_id}
+        expect {
+          post :create, params
+        }.to change(InstallKeys.jobs, :size).by(1)
+      end
+      
       it 'should create server and put in validation' do
         FactoryGirl.create(:billing_card, account: @current_user.account, fraud_score: 10.0, fraud_verified: true)
         RiskyCard.create(fingerprint: 'abcd12345', account: @current_user.account)

@@ -120,6 +120,6 @@ class ServerCommonController < ApplicationController
   end
 
   def wizard_params
-    params.require(:server_wizard).permit(:location_id, :os_distro_id, :template_id, :memory, :cpus, :disk_size, :bandwidth, :hostname, :name, :card_id, :ip_addresses, :provisioner_role)
+    params.require(:server_wizard).permit(:location_id, :os_distro_id, :template_id, :memory, :cpus, :disk_size, :bandwidth, :hostname, :name, :card_id, :ip_addresses, :provisioner_role, :ssh_key_ids)
   end
 end

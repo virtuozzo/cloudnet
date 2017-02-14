@@ -10,19 +10,26 @@ class ServerWizardsController < ServerCommonController
     @wizard_object.user = current_user
     @wizard_object.current_step = 2 #if location_id_in_params?
     @wizard_object.ip_addresses = 1
+    @wizard_object.ssh_key_ids = []
     @packages = @wizard_object.packages
+    @keys = current_user.keys if current_user
+    @key = Key.new
     return unless meets_minimum_server_requirements?
     send("step#{@wizard_object.current_step}".to_sym)
     set_event_name
   end
 
   def create
+    session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard] && params[:server_wizard]["ssh_key_ids"].nil?
+    
     process_server_wizard
 
     return unless meets_minimum_server_requirements?
     create_task = CreateServerTask.new(@wizard_object, current_user)
     @wizard_object.ip_addresses = 1
     @wizard_object.validation_reason = current_user.account.fraud_validation_reason(ip) if current_user
+    @keys = current_user.keys if current_user
+    @key = Key.new
 
     unless @wizard_object.provisioner_role.blank?
       provisioner_template = @wizard_object.location.provisioner_templates.first

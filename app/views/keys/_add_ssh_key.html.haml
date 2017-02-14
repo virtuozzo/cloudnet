@@ -1,14 +1,24 @@
+- modal ||= false
+- remote = modal ? true : false
 .jg-widget-body
-  = form_for :key, url: keys_path do |f|
+  = form_for @key, remote: remote, html: {role: :form, 'data-model' => 'key'} do |f|
+    - if @key.errors.any?
+      #error_explanation
+        %h2= pluralize(@key.errors.count, "error")
+        %ul
+          - @key.errors.full_messages.each do |msg|
+            %li= msg
     .jg-widget-form.pure-g.pure-u-1
       .form-group.pure-u-1.jg-inline
         .pure-u-1
-          = f.label :title, class: 'pure-u-1 jg-mandatory'
-          %span.jg-relative.field-container= f.text_field :title, class: 'pure-u-1'
+          = f.label :title, class: 'pure-u-1 jg-mandatory control-label'
+          %span.jg-relative.field-container= f.text_field :title, class: 'pure-u-1 form-control'
+          %span.help-block
       .form-group.pure-u-1.jg-inline
         .pure-u-1
-          = f.label :key, class: 'pure-u-1 jg-mandatory'
-          %span.jg-relative.field-container= f.text_area :key, class: 'pure-u-1'
+          = f.label :key, class: 'pure-u-1 jg-mandatory control-label'
+          %span.jg-relative.field-container= f.text_area :key, class: 'pure-u-1 form-control'
+          %span.help-block
     .jg-widget-footer.actions.clearfix
       %ul.jg-widget-controls
-        %li= f.button "Add SSH key", class: 'btn jg-submit-button'
+        %li= f.button "Add SSH Key", class: 'btn jg-submit-button'

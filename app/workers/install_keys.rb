@@ -8,15 +8,15 @@ class InstallKeys
   
   class ProvisionerError < StandardError; end
     
-  def perform(server_id)
+  def perform(server_id, key_ids)
     @server = Server.find(server_id)
     @job_id = nil
     
     if server_booted? && server_has_ip? && no_pending_events?
-      @keys = formatted_keys
+      @keys = formatted_keys(key_ids)
       resp = send_keys_to_provisioner
     else
-      InstallKeys.perform_in(POLLING_TIME, server_id)
+      InstallKeys.perform_in(POLLING_TIME, server_id, key_ids)
       return
     end
     
@@ -24,8 +24,13 @@ class InstallKeys
     when 200..209
       @job_id = resp.body
       status = wait_for_server_provisioned[:status]
-      raise(ProvisionerError, status) unless status == "Done"
-    else 
+      if status == "Done"
+        server.create_activity :added_ssh_key, owner: server.user, params: { keys: key_ids }
+      else
+        raise(ProvisionerError, status)
+      end
+    else
+      server.create_activity :failed_ssh_key, owner: server.user, params: { keys: key_ids, status: status }
       raise(ProvisionerError, resp.status)
     end
     
@@ -36,8 +41,8 @@ class InstallKeys
   
   private
   
-  def formatted_keys
-    { 'ssh-keys' => server.user.keys.map(&:key) }
+  def formatted_keys(key_ids)
+    { 'ssh-keys' => server.user.keys.where(id: key_ids).map(&:key) }
   end
   
   def server_booted?
