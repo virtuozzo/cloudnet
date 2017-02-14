@@ -10,7 +10,7 @@ class KeysController < ApplicationController
       begin
         if @key.save
           format.html { redirect_to :back, notice: 'SSH key was successfully added' }
-          format.json { render action: 'show', status: :created, location: @key }
+          format.json { render nothing: true, status: :no_content }
           format.js { render action: 'show', status: :created, location: @key }
         else
           format.html { redirect_to :back, alert: 'Please enter title and key' }

@@ -31,7 +31,29 @@ RSpec.describe KeysController, :type => :controller do
     it 'should not add SSH key' do
       post :create, key: {title: 'joes notebook'}
       expect(assigns(:key)).not_to be_valid
-      expect(flash[:alert]).to eq('Unable to add SSH key. Please try again.')
+      expect(flash[:alert]).to eq('Please enter title and key')
+    end
+    
+    context "with JS format" do      
+      it 'should add a new SSH key as JS' do
+        post :create, {key: {title: 'joes notebook', key: 'ssh-rsa aaa12345 joe@joes-notebook'}, format: :js}
+        expect(response.status).to eq(201)
+      end
+      
+      it 'should add a new SSH key as JS' do
+        post :create, {key: {title: 'joes notebook', key: ''}, format: :js}
+        expect(response.status).to eq(422)
+      end
+    end
+    
+    context "with JSON format" do
+      render_views
+      let(:json) { JSON.parse(response.body) }
+      
+      it 'should add a new SSH key as JSON and return nothing' do
+        post :create, {key: {title: 'joes notebook', key: 'ssh-rsa aaa12345 joe@joes-notebook'}, format: :json}
+        expect(response.status).to eq(204)
+      end
     end
   end
   
