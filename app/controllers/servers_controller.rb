@@ -45,7 +45,6 @@ class ServersController < ServerCommonController
     @packages = @wizard_object.packages
 
     if @server.no_refresh == false && @wizard.save
-      log_activity :edit
       actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
       edit_wizard = actions.prepare_edit(@server, session[:server_wizard_params])
@@ -53,6 +52,7 @@ class ServersController < ServerCommonController
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
       result = actions.schedule_edit(edit_wizard, old_server_specs)
       if result.build_errors.length == 0
+        log_activity :edit, old_specs: old_server_specs
         flash[:info] = 'Server scheduled for update'
         redirect_to server_path(@server)
         return
@@ -248,7 +248,21 @@ class ServersController < ServerCommonController
     @server = current_user.servers.find(params[:id])
   end
 
-  def log_activity(activity)
-    @server.create_activity activity, owner: current_user, params: { ip: ip, admin: real_admin_id }
+  def log_activity(activity, old_specs: nil)
+    @server.create_activity activity, owner: current_user,
+      params: {
+        ip: ip,
+        admin: real_admin_id,
+        old_disk_size: old_specs.try(:disk_size),
+        old_memory: old_specs.try(:memory),
+        old_cpus: old_specs.try(:cpus),
+        old_name: old_specs.try(:name),
+        old_distro: old_specs.try(:template).try(:name),
+        new_disk_size: @server.disk_size,
+        new_memory: @server.memory,
+        new_cpus: @server.cpus,
+        new_name: @server.name,
+        new_distro: @server.template.name
+      }
   end
 end

@@ -12,6 +12,7 @@ module Routes::V1
       end
 
       desc 'List all servers' do
+        detail "<br>Answer is paginated.<br>Please verify: X-Total, X-Total-Pages, X-Per-Page, X-Page, X-Next-Page (if exists), X-Prev-Page (if exists) headers"
         failure [[400, 'Bad Request'], [401, 'Unauthorized']]
       end
       paginate per_page: 10, max_per_page: 20, offset: false
@@ -128,7 +129,19 @@ module Routes::V1
             actions.update_edited_server(server, requested_params, edit_wizard)
             result = actions.schedule_edit(edit_wizard, old_server_specs)
             raise CreateError if result.build_errors.length > 0
-            log_activity :edit, server
+            log_activity :edit, server,
+              {
+                old_disk_size: old_server_specs.disk_size,
+                old_memory: old_server_specs.memory,
+                old_cpus: old_server_specs.cpus,
+                old_name: old_server_specs.name,
+                old_distro: old_server_specs.template.name,
+                new_disk_size: server.disk_size,
+                new_memory: server.memory,
+                new_cpus: server.cpus,
+                new_name: server.name,
+                new_distro: server.template.name
+              }
             present server, with: ServerRepresenter
           rescue CreateError
             error = {}
