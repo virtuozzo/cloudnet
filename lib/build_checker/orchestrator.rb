@@ -7,6 +7,7 @@ module BuildChecker
 
     Signal.trap("INT") { exit }
     at_exit do
+      logger.info "Start exit procedure"
       exit!(true) unless ActiveRecord::Base.connected?
       clear_pid
       if @@threads.blank?
@@ -43,7 +44,8 @@ module BuildChecker
       @@threads[:build]   = build_processor_start
       @@threads[:monitor] = vm_monitor_start
       @@threads[:cleaner] = cleaner_start
-      sleep
+      sleep 10 until BuildChecker.stopping?
+      exit
     end
 
     def queue_builder_start
@@ -90,12 +92,12 @@ module BuildChecker
     end
 
     def self.finish_builds
-      set_status(:stopping)
-      @@threads[:queue].exit
-      @@threads[:queue].join
+      set_status(:stopping) # in case of exit by signal trap
+      @@threads[:queue].exit rescue nil
+      @@threads[:queue].join rescue nil
       sleep 10 while tasks_to_finish?
-      @@threads.each {|_,thr| thr.exit }
-      @@threads.each {|_,thr| thr.join }
+      @@threads.each {|_,thr| thr.exit rescue nil }
+      @@threads.each {|_,thr| thr.join rescue nil }
       set_status(:stopped)
     end
 
