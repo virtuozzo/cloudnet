@@ -13,7 +13,7 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.stopped?
       flash[:warning] = 'Build checker is not running'
     elsif BuildChecker.stopping?
-      flash[:warning] = 'Build checker is stopping. Wait for finish all the tasks.'
+      flash[:warning] = 'Build checker is stopping. Wait to finish all the tasks.'
     else
       BuildChecker.status = "stopping"
     end
