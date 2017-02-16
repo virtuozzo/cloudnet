@@ -24,7 +24,7 @@ class UpdateFederationResources
     first_template = datacentre['relations'].first
     virtualization = first_template['image_template']['virtualization']
     return false unless virtualization
-    virtualization.split(',').include? 'remote'
+    virtualization.include? 'remote'
   end
 
   def loop_through_templates(datacentre)
