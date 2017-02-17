@@ -18,3 +18,9 @@ $ ->
       newValue = document.querySelector('input[name=concurrentBuilds]').value
       BuildCheckerConfiguration.concurrentBuilds(newValue)
 
+    $('input[name=queueSize]').on 'input', ->
+      $('#queueSizeValue').text(this.value)
+    $('input[name=queueSize]').mouseup ->
+      newValue = document.querySelector('input[name=queueSize]').value
+      BuildCheckerConfiguration.queueSize(newValue)
+

@@ -37,7 +37,7 @@ input[type=number]::-webkit-outer-spin-button {
 .status_tag.no.important{background: #E02E2E}
 
 .admin_build_checkers.active_admin {
-  input[name="concurrentBuilds"] {
+  input[type="range"] {
     position: relative;
     top: 4px;
     margin-left: 5px;

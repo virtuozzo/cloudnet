@@ -3,6 +3,7 @@ module BuildChecker
   PID_KEY = 'build_checker_pid'
   STATUS_KEY = 'build_checker_status' # running, stopped, stopping
   CONCURRENT_BUILDS = 'build_checker_concurrent_builds'
+  QUEUE_SIZE = 'build_checker_queue_size'
 
   class << self
     def running?
@@ -46,6 +47,15 @@ module BuildChecker
     def concurrent_builds=(number)
       number = [number.to_i, 5].min
       System.set(CONCURRENT_BUILDS, number)
+    end
+
+    def queue_size
+      System.get(QUEUE_SIZE).to_i
+    end
+
+    def queue_size=(number)
+      number = [number.to_i, 5].min
+      System.set(QUEUE_SIZE, number)
     end
 
     def number_of_processed_tasks

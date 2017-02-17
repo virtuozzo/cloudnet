@@ -5,7 +5,6 @@ module BuildChecker
     class QueueBuilder
       include BuildChecker::Data
       include BuildChecker::Logger
-      MAX_QUEUE_SIZE = 5
       at_exit do
         #exit! unless BuildChecker.running?
         ActiveRecord::Base.clear_active_connections!
@@ -57,7 +56,7 @@ module BuildChecker
 
       def empty_slot?
         sleep(rand(3..6))
-        BuildCheckerDatum.where(scheduled: true).count < MAX_QUEUE_SIZE
+        BuildCheckerDatum.where(scheduled: true).count < BuildChecker.queue_size
       end
     end
   end
