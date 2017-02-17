@@ -50,9 +50,10 @@ class IpAddressesController < ApplicationController
   
   def charge(ip_addresses)
     return true unless @server.ips_chargeable?
-    old_server_specs = Server.new @server.as_json
+    old_server_specs = Server.new @server.as_json(methods: :addon_ids)
     server_hash = @server.attributes.slice(*ServerWizard::ATTRIBUTES.map(&:to_s))
     @edit_wizard = ServerWizard.new server_hash
+    @edit_wizard.addon_ids = @server.addon_ids
     @edit_wizard.existing_server_id = @server.id
     @edit_wizard.card = current_user.account.billing_cards.first
     @edit_wizard.user = current_user
