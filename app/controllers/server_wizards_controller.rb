@@ -20,9 +20,11 @@ class ServerWizardsController < ServerCommonController
     set_event_name
   end
 
-  def create
-    session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard] && params[:server_wizard]["addon_ids"].nil?
-    session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard] && params[:server_wizard][:current_step] == "2" && params[:server_wizard]["ssh_key_ids"].nil?
+  def create    
+    if params[:server_wizard] && params[:server_wizard][:current_step] == "2"
+      session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard][:addon_ids].blank?
+      session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard][:ssh_key_ids].blank?
+    end
     
     process_server_wizard
 

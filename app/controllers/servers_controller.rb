@@ -38,14 +38,16 @@ class ServersController < ServerCommonController
         addon_ids: @server.addons.pluck(:id)
       }
     end
+    if params[:server_wizard] && params[:server_wizard][:current_step] == "2"
+      session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard][:addon_ids].blank?
+    end
     process_server_wizard
     @wizard_object.location_id = @server.location_id
     @wizard_object.submission_path = edit_server_path @server
     @wizard_object.existing_server_id = @server.id
     @wizard_object.ip_addresses = @server.ip_addresses
     @packages = @wizard_object.packages
-    @wizard_object.addon_ids = session[:server_wizard_params][:addon_ids] = [] if params[:server_wizard] && params[:server_wizard][:addon_ids].blank?
-
+    
     if @server.no_refresh == false && @wizard.save
       actions = ServerSupportActions.new(current_user)
       old_server_specs = Server.new @server.as_json
