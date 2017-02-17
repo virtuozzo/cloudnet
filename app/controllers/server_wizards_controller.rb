@@ -20,7 +20,7 @@ class ServerWizardsController < ServerCommonController
   end
 
   def create
-    session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard] && params[:server_wizard]["ssh_key_ids"].nil?
+    session[:server_wizard_params][:ssh_key_ids] = [] if params[:server_wizard] && params[:server_wizard][:current_step] == "2" && params[:server_wizard]["ssh_key_ids"].nil?
     
     process_server_wizard
 
