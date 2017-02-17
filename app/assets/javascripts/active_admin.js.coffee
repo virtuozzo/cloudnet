@@ -1,10 +1,20 @@
 #= require active_admin/base
 #= require shared/sockets
 #= require shared/page
+#= require build_checker/build_checker_configuration
+
 $ ->
   $('form').on 'focus', 'input[type=number]', (e) ->
-    $(this).on 'mousewheel.disableScroll', (e) -> 
+    $(this).on 'mousewheel.disableScroll', (e) ->
       e.preventDefault()
-  
-  $('form').on 'blur', 'input[type=number]', (e) -> 
+
+  $('form').on 'blur', 'input[type=number]', (e) ->
     $(this).off('mousewheel.disableScroll')
+
+  if PageIs.adminBuildChecker()
+    $('input[name=concurrentBuilds]').on 'input', ->
+      $('#concurrentBuildsValue').text(this.value)
+    $('input[name=concurrentBuilds]').mouseup ->
+      newValue = document.querySelector('input[name=concurrentBuilds]').value
+      BuildCheckerConfiguration.concurrentBuilds(newValue)
+

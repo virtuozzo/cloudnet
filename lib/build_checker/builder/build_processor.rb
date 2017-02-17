@@ -4,7 +4,6 @@ module BuildChecker
     class BuildProcessor
       include BuildChecker::Data
       include BuildChecker::Logger
-      MAX_CONCURRENT_TASKS = 2
       VERIFY_EVERY = 15.seconds
       at_exit do
         ActiveRecord::Base.clear_active_connections!
@@ -57,18 +56,7 @@ module BuildChecker
       end
 
       def empty_slot?
-        number_of_processed_tasks < MAX_CONCURRENT_TASKS
-      end
-
-      def number_of_processed_tasks
-        BuildCheckerDatum.where.not(state: non_processing_states).count
-      end
-
-      def non_processing_states
-        [
-          BuildCheckerDatum.states['scheduled'],
-          BuildCheckerDatum.states['finished']
-        ]
+        BuildChecker.number_of_processed_tasks < BuildChecker.concurrent_builds
       end
     end
   end

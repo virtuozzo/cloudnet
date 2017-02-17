@@ -174,6 +174,19 @@ describe ServerWizard do
     end
   end
 
+  it 'should validate ssh key install for Windows VMs' do
+    server_wizard.current_step = 2
+    server_wizard.ssh_key_ids = ["1"]
+    expect(server_wizard).to be_valid
+    
+    win_server_wizard = FactoryGirl.create(:server_wizard, :with_windows_template)
+    win_server_wizard.current_step = 2
+    expect(win_server_wizard).to be_valid
+    
+    win_server_wizard.ssh_key_ids = ["1"]
+    expect(win_server_wizard).not_to be_valid
+  end
+
   describe 'template limits' do
     before(:each) do
       server_wizard.current_step = 2

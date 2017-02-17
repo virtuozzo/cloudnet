@@ -501,6 +501,6 @@ class ServerWizard
   end
   
   def ssh_key_install
-    errors.add(:base, 'SSH keys are invalid for selected template') if os_type.include?("windows") && !ssh_key_ids.empty?
+    errors.add(:base, 'SSH keys are invalid for selected template') if !template.blank? && template.os_type.include?("windows") && !ssh_key_ids.blank?
   end
 end

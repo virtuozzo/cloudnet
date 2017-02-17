@@ -64,6 +64,13 @@ describe Server do
     server.location.hv_group_version = '4.0.0'
     expect(server.supports_multiple_ips?).to eq(false)
   end
+  
+  it 'should queue install keys' do
+    key = FactoryGirl.create(:key)
+    expect {
+      server.install_ssh_keys([key.id.to_s])
+    }.to change(InstallKeys.jobs, :size).by(1)
+  end
 
   describe 'Notifying of stuck states', type: :mailer  do
     def refresh_server

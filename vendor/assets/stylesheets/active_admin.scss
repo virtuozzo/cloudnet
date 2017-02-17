@@ -16,10 +16,10 @@
 //
 //   .status_tag { background: #6090DB; }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .admin_users.active_admin{
   th.col-balance_notifications a {
@@ -35,3 +35,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .status_tag.yes.important{background: #008000}
 .status_tag.no.important{background: #E02E2E}
+
+.admin_build_checkers.active_admin {
+  input[name="concurrentBuilds"] {
+    position: relative;
+    top: 4px;
+    margin-left: 5px;
+  }
+}

@@ -101,6 +101,13 @@ FactoryGirl.define do
     name 'Ubuntu 12.04 x64'
     association :location, factory: :location
     hidden false
+    
+    factory :windows_template do
+      os_type 'windows'
+      os_distro 'windows-2012'
+      onapp_os_distro 'windows'
+      name 'Windows 2012 x64'
+    end
   end
 
   factory :server do
@@ -144,6 +151,12 @@ FactoryGirl.define do
 
     after(:build) do |s|
       s.template = create(:template, location: s.location)
+    end
+    
+    trait :with_windows_template do
+      after(:build) do |s|
+        s.template = create(:windows_template, location: s.location)
+      end
     end
 
     trait :with_wallet do

@@ -17,7 +17,14 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
         li "Server time: #{Time.now}"
         li "Build Checker status: #{BuildChecker.running? ? (BuildChecker.stopping? ? 'Stopping' : 'Active') : 'Stopped'}"
         li "Number of templates for check: #{Template.where(build_checker: true).count}"
+        li "Number of active tests: #{BuildChecker.number_of_processed_tasks}"
         li "Number of locations with templates for test: #{}"
+        li "Maximum concurrent builds:" do
+          span "#{BuildChecker.concurrent_builds}", id: 'concurrentBuildsValue'
+          input type: 'hidden', name: 'serverConcurrentBuilds', value: BuildChecker.concurrent_builds
+          input type: 'range', name: 'concurrentBuilds',
+            min: 0, max: 5, value: BuildChecker.concurrent_builds
+        end
       end
     end
 
@@ -34,6 +41,11 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
     column :error
 
     actions
+  end
+
+  collection_action :concurrent_builds, method: :post do
+    BuildChecker.concurrent_builds = params['value']
+    render json: {serverValue: BuildChecker.concurrent_builds}
   end
 
 end

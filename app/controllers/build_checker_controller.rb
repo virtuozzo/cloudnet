@@ -13,9 +13,9 @@ class BuildCheckerController < ApplicationController
     if BuildChecker.stopped?
       flash[:warning] = 'Build checker is not running'
     elsif BuildChecker.stopping?
-      flash[:warning] = 'Build checker is stopping. Wait for finish all the tasks.'
+      flash[:warning] = 'Build checker is stopping. Wait to finish all the tasks.'
     else
-      Rails.env == 'development' ? stop_local_build_checker : stop_remote_build_checker
+      BuildChecker.status = "stopping"
     end
 
     redirect_to admin_build_checkers_path
@@ -43,25 +43,5 @@ class BuildCheckerController < ApplicationController
         Rails.application.config.database_configuration[Rails.env]
       )
       flash[:notice] = 'Build checker started'
-    end
-
-    def stop_remote_build_checker
-      # Using capistrano for daemon stop broadcast.
-      result = system("bundle exec cap #{Rails.env} build_checker:stop")
-
-      if result
-        flash[:notice] = 'Build checker stopping'
-      else
-        flash[:error] = 'Not able to execute stop command. Please refer to logs'
-      end
-    end
-
-    def stop_local_build_checker
-      Process.kill('INT', BuildChecker.pid)
-    rescue Errno::ESRCH
-      BuildChecker.clear_pid!
-      BuildChecker.status = :stopped
-    ensure
-      flash[:notice] = 'Build checker stopping'
     end
 end
