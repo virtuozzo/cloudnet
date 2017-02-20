@@ -94,7 +94,9 @@ module BuildChecker
     def self.finish_builds
       set_status(:stopping) # in case of exit by signal trap
       @@threads[:queue].exit rescue nil
+      @@threads[:build].exit rescue nil
       @@threads[:queue].join rescue nil
+      @@threads[:build].join rescue nil
       sleep 10 while tasks_to_finish?
       @@threads.each {|_,thr| thr.exit rescue nil }
       @@threads.each {|_,thr| thr.join rescue nil }
