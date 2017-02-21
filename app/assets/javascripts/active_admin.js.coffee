@@ -24,3 +24,8 @@ $ ->
       newValue = document.querySelector('input[name=queueSize]').value
       BuildCheckerConfiguration.queueSize(newValue)
 
+    $('input[name=sameTemplate]').on 'input', ->
+      $('#sameTemplateValue').text(this.value)
+    $('input[name=sameTemplate]').mouseup ->
+      newValue = document.querySelector('input[name=sameTemplate]').value
+      BuildCheckerConfiguration.sameTemplateGap(newValue)

@@ -16,3 +16,12 @@ class @BuildCheckerConfiguration
         serverValue = document.querySelector('input[name=serverQueueSize]').value
         document.querySelector('input[name=queueSize]').value = serverValue
         document.getElementById('queueSizeValue').innerText = serverValue
+
+  @sameTemplateGap: (value) ->
+    $.post 'build_checkers/same_template_gap',  {value: value}
+      .done (result) ->
+        document.querySelector('input[name=serverSameTemplate]').value = result.serverValue
+      .fail (result) ->
+        serverValue = document.querySelector('input[name=serverSameTemplate]').value
+        document.querySelector('input[name=sameTemplate]').value = serverValue
+        document.getElementById('sameTemplateValue').innerText = serverValue

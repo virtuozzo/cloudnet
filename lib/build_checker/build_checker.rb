@@ -4,6 +4,7 @@ module BuildChecker
   STATUS_KEY = 'build_checker_status' # running, stopped, stopping
   CONCURRENT_BUILDS = 'build_checker_concurrent_builds'
   QUEUE_SIZE = 'build_checker_queue_size'
+  SAME_TEMPLATE_GAP = 'build_checker_same_template_gap'
 
   class << self
     def running?
@@ -56,6 +57,15 @@ module BuildChecker
     def queue_size=(number)
       number = [number.to_i, 5].min
       System.set(QUEUE_SIZE, number)
+    end
+
+    def same_template_gap
+      System.get(SAME_TEMPLATE_GAP).to_i
+    end
+
+    def same_template_gap=(number)
+      number = [number.to_i, 1].max
+      System.set(SAME_TEMPLATE_GAP, number)
     end
 
     def number_of_processed_tasks
