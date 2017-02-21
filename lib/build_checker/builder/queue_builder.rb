@@ -5,7 +5,6 @@ module BuildChecker
     class QueueBuilder
       include BuildChecker::Data
       include BuildChecker::Logger
-      MAX_QUEUE_SIZE = 5
       at_exit do
         #exit! unless BuildChecker.running?
         ActiveRecord::Base.clear_active_connections!
@@ -49,15 +48,15 @@ module BuildChecker
       end
 
       def template_chooser
-        @template_chooser ||= BuildChecker::Chooser::TemplateChooser.config do |chooser|
-          chooser.time_gap_for_same_template = 5.hours
+        BuildChecker::Chooser::TemplateChooser.config do |chooser|
+          chooser.time_gap_for_same_template = BuildChecker.same_template_gap.hours
           chooser.time_gap_for_same_location = 1.minute
         end
       end
 
       def empty_slot?
         sleep(rand(3..6))
-        BuildCheckerDatum.where(scheduled: true).count < MAX_QUEUE_SIZE
+        BuildCheckerDatum.where(scheduled: true).count < BuildChecker.queue_size
       end
     end
   end

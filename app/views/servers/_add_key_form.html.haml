@@ -1,10 +1,8 @@
-.jg-widget-content
-  .jg-widget-body
-    #new-key-modal.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "new-key-label", role: "dialog", tabindex: "-1"}
-      .modal-dialog
-        .modal-content
-          .modal-header
-            %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
-            %h4#new-key-label.modal-title New SSH Key
-          .modal-body#jg-add-ssh-key
-            = render partial: 'keys/add_ssh_key', locals: {modal: true}
+#new-key-modal.modal.input-form.fade{"aria-hidden" => "true", "aria-labelledby" => "new-key-label", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#new-key-label.modal-title New SSH Key
+      .modal-body.jg-widget-content#jg-add-ssh-key
+        = render partial: 'keys/add_ssh_key', locals: {modal: true}

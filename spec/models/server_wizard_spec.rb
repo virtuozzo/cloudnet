@@ -174,7 +174,7 @@ describe ServerWizard do
     end
   end
 
-  it 'should validate ssh key install for Windows VMs' do
+  it 'should validate ssh key install for Windows and FreeBSD VMs' do
     server_wizard.current_step = 2
     server_wizard.ssh_key_ids = ["1"]
     expect(server_wizard).to be_valid
@@ -185,6 +185,13 @@ describe ServerWizard do
     
     win_server_wizard.ssh_key_ids = ["1"]
     expect(win_server_wizard).not_to be_valid
+    
+    fbsd_server_wizard = FactoryGirl.create(:server_wizard, :with_freebsd_template)
+    fbsd_server_wizard.current_step = 2
+    expect(fbsd_server_wizard).to be_valid
+    
+    fbsd_server_wizard.ssh_key_ids = ["1"]
+    expect(fbsd_server_wizard).not_to be_valid
   end
 
   describe 'template limits' do

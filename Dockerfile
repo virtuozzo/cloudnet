@@ -1,9 +1,7 @@
-FROM healthcareblocks/ruby:2.3.3
+FROM hackedunit/baseimage-ruby
 
 RUN apt-get update \
   && apt-get install -y \
-    curl \
-    git-core \
     libssl-dev \
     libpq-dev \
     nodejs \
@@ -18,6 +16,9 @@ WORKDIR /app
 
 ADD Gemfile /app
 ADD Gemfile.lock /app
+
+RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc
+RUN gem install bundler
 RUN bundle install --without development test
 
 ADD . /app

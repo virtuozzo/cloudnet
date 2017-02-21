@@ -19,11 +19,32 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
         li "Number of templates for check: #{Template.where(build_checker: true).count}"
         li "Number of active tests: #{BuildChecker.number_of_processed_tasks}"
         li "Number of locations with templates for test: #{}"
-        li "Maximum concurrent builds:" do
-          span "#{BuildChecker.concurrent_builds}", id: 'concurrentBuildsValue'
-          input type: 'hidden', name: 'serverConcurrentBuilds', value: BuildChecker.concurrent_builds
-          input type: 'range', name: 'concurrentBuilds',
-            min: 0, max: 5, value: BuildChecker.concurrent_builds
+        li do
+          columns do
+            column do
+              span "Maximum concurrent builds (recommended 2):"
+              span "#{BuildChecker.concurrent_builds}", id: 'concurrentBuildsValue'
+              br
+              span "Maximum scheduling queue (recommended 2):"
+              span "#{BuildChecker.queue_size}", id: 'queueSizeValue'
+              br
+              span "Min time before scheduling same template (hours):"
+              span "#{BuildChecker.same_template_gap}", id: 'sameTemplateValue'
+            end
+            column span: 3 do
+              input type: 'hidden', name: 'serverConcurrentBuilds', value: BuildChecker.concurrent_builds
+              input type: 'range', name: 'concurrentBuilds',
+                min: 0, max: 5, value: BuildChecker.concurrent_builds
+              br
+              input type: 'hidden', name: 'serverQueueSize', value: BuildChecker.queue_size
+              input type: 'range', name: 'queueSize',
+                min: 0, max: 5, value: BuildChecker.queue_size
+              br
+              input type: 'hidden', name: 'serverSameTemplate', value: BuildChecker.same_template_gap
+              input type: 'range', name: 'sameTemplate',
+                min: 1, max: 24, value: BuildChecker.same_template_gap
+            end
+          end
         end
       end
     end
@@ -48,4 +69,13 @@ ActiveAdmin.register BuildChecker::Data::BuildCheckerDatum, as: "BuildChecker" d
     render json: {serverValue: BuildChecker.concurrent_builds}
   end
 
+  collection_action :queue_size, method: :post do
+    BuildChecker.queue_size = params['value']
+    render json: {serverValue: BuildChecker.queue_size}
+  end
+
+  collection_action :same_template_gap, method: :post do
+    BuildChecker.same_template_gap = params['value']
+    render json: {serverValue: BuildChecker.same_template_gap}
+  end
 end

@@ -501,6 +501,10 @@ class ServerWizard
   end
   
   def ssh_key_install
-    errors.add(:base, 'SSH keys are invalid for selected template') if !template.blank? && template.os_type.include?("windows") && !ssh_key_ids.blank?
+    errors.add(:base, 'SSH keys are invalid for selected template') if !ssh_key_ids.blank? && !template.blank? && key_install_unsupported?
+  end
+  
+  def key_install_unsupported?
+    %w(windows freebsd).any? { |os| template.os_type.include? os }
   end
 end

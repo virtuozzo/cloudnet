@@ -108,6 +108,13 @@ FactoryGirl.define do
       onapp_os_distro 'windows'
       name 'Windows 2012 x64'
     end
+    
+    factory :freebsd_template do
+      os_type 'freebsd'
+      os_distro 'freebsd'
+      onapp_os_distro 'freebsd'
+      name 'FreeBSD 10.0 x64'
+    end
   end
 
   factory :server do
@@ -156,6 +163,12 @@ FactoryGirl.define do
     trait :with_windows_template do
       after(:build) do |s|
         s.template = create(:windows_template, location: s.location)
+      end
+    end
+    
+    trait :with_freebsd_template do
+      after(:build) do |s|
+        s.template = create(:freebsd_template, location: s.location)
       end
     end
 

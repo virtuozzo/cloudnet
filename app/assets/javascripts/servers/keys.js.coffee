@@ -8,7 +8,7 @@ $(document).ready ->
 (($) ->
   
   $('#server_wizard_os_type').on 'change', (e) ->
-    if ($(this).val().includes("windows"))
+    if ($(this).val().includes("windows") || $(this).val().includes("freebsd"))
       $('input[name="server_wizard[ssh_key_ids][]"]').attr 'checked', false
       $('input[name="server_wizard[ssh_key_ids][]"]').attr 'disabled', true
       $('a[id="new-ssh-key"]').attr 'disabled', true

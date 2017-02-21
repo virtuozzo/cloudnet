@@ -12,7 +12,7 @@ module BuildChecker
 
       def initialize
         @time_gap_for_same_template = 24.hours
-        @time_gap_for_same_location = 30.seconds
+        @time_gap_for_same_location = 1.minute
       end
 
       # TODO: return template_id with wait_time for pro-active scheduling
