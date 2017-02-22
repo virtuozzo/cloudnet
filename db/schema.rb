@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126095610) do
+ActiveRecord::Schema.define(version: 20170222201912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -403,8 +403,11 @@ ActiveRecord::Schema.define(version: 20170126095610) do
   create_table "server_addons", force: :cascade do |t|
     t.integer  "addon_id"
     t.integer  "server_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.datetime "notified_at"
+    t.datetime "processed_at"
+    t.datetime "deleted_at"
   end
 
   add_index "server_addons", ["addon_id"], name: "index_server_addons_on_addon_id", using: :btree

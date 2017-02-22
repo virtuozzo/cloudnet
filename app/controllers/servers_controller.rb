@@ -55,6 +55,7 @@ class ServersController < ServerCommonController
       edit_wizard.set_old_server_specs(old_server_specs)
       actions.update_edited_server(@server, session[:server_wizard_params], edit_wizard)
       result = actions.schedule_edit(edit_wizard, old_server_specs)
+      @server.process_addons if edit_wizard.addons_changed?
       if result.build_errors.length == 0
         log_activity :edit, old_specs: old_server_specs
         flash[:info] = 'Server scheduled for update'

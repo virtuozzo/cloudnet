@@ -28,7 +28,7 @@ class Server < ActiveRecord::Base
   has_many :server_ip_addresses, dependent: :destroy
   has_many :unscoped_server_ip_addresses, -> { unscope(where: :deleted_at) }, foreign_key: :server_id, class_name: "ServerIpAddress"
   has_many :server_addons, dependent: :destroy
-  has_many :addons, through: :server_addons
+  has_many :addons, through: :server_addons, dependent: :destroy
 
   validates :identifier, :hostname, :name, :user, presence: true
   validates :template, :location, presence: true
@@ -303,6 +303,10 @@ class Server < ActiveRecord::Base
   
   def install_ssh_keys(keys)
     InstallKeys.perform_in(MonitorServer::POLL_INTERVAL.seconds, id, keys)
+  end
+  
+  def process_addons
+    ProcessAddons.new(self).process
   end
 
   def supports_rebuild?
