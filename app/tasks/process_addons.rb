@@ -6,6 +6,7 @@ class ProcessAddons < BaseTask
   end
   
   def process
+    AddonTasks.new.perform(:process_task, server) #rescue nil
     SupportTasks.new.perform(:notify_addons_request, server.user, [server]) #rescue nil
   end
 end

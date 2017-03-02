@@ -6,6 +6,8 @@ class ServerAddon < ActiveRecord::Base
   belongs_to :addon
   belongs_to :server
   
+  serialize :addon_info
+  
   def reset_process
     update! notified_at: nil, processed_at: nil
   end

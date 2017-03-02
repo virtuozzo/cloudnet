@@ -29,6 +29,10 @@ defaults: &defaults
   intercom:
     app_id: <%= ENV["INTERCOM_APP_ID"] %>
     secret_key: <%= ENV["INTERCOM_SECRET_KEY"] %>
+  direct_admin:
+    user_id: <%= ENV["DIRECT_ADMIN_USER_ID"] %>
+    password: <%= ENV["DIRECT_ADMIN_PASSWORD"] %>
+    product_id: <%= ENV["DIRECT_ADMIN_PRODUCT_ID"] %>
 
 development:
   <<: *defaults

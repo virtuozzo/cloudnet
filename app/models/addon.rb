@@ -5,4 +5,8 @@ class Addon < ActiveRecord::Base
   
   scope :available, -> { where(hidden: false).order(:created_at) }
   
+  def self.available_tasks
+    { "DirectAdmin" => "DirectAdmin::License" }
+  end
+  
 end

@@ -22,7 +22,7 @@ ActiveAdmin.register Addon do
       input :name
       input :description
       input :price, label: "Price per hour (in millicents)"
-      input :task
+      input :task, as: :select, collection: Addon.available_tasks
       input :hidden
       input :request_support
     end
