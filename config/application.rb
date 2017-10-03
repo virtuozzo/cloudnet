@@ -54,12 +54,6 @@ module CloudNet
       g.test_framework :rspec
     end
 
-    config.middleware.insert_before 0, "Rack::Cors" do
-      allow do
-        origins '*'
-        resource '*', headers: :any, methods: :any
-      end
-    end
     config.middleware.insert_before 0, 'Rack::Attack'
 
     config.after_initialize do
