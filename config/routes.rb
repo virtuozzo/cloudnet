@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 CloudNet::Application.routes.draw do
 
+  get '/users/sign_up', to: redirect('/users/sign_in')
+
   constraints subdomain: /^api/ do
     mount GrapeSwaggerRails::Engine => '/docs'
     mount API => '/'
